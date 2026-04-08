@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thalassor — Advent of Ultima</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Chromatic Signature — Thalassor */
+  --realm-primary: #1a5276;
+  --realm-light: #7fb3d4;
+  --realm-accent: #a8d4ef;
+  --realm-glow: #5ba3cf;
+  --realm-deep: #0d2137;
+  --realm-abyss: #060e18;
+  --realm-surface: #c4dff0;
+  --realm-foam: #e8f1f8;
+
+  /* Neutrals */
+  --bg: #080c12;
+  --bg-card: #0a1220;
+  --bg-card-hover: #0e1a2e;
+  --text-primary: #d6e8f4;
+  --text-secondary: #8aa8c0;
+  --text-muted: #4a6a82;
+  --border: #1a3a54;
+  --border-light: #2a4f6e;
+
+  /* Typography */
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+
+  /* Spacing */
+  --section-gap: 5rem;
+  --content-max: 820px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* === BACKGROUND TEXTURE === */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(26,82,118,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 100%, rgba(91,163,207,0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* === LAYOUT === */
+.container {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+section {
+  margin-bottom: var(--section-gap);
+}
+
+/* === DIAMOND DIVIDER === */
+.divider {
+  text-align: center;
+  margin: 3.5rem 0;
+  position: relative;
+}
+
+.divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+.divider span {
+  position: relative;
+  background: var(--bg);
+  padding: 0 1.5rem;
+  color: var(--realm-glow);
+  font-size: 14px;
+  letter-spacing: 0.3em;
+}
+
+/* === HEADER === */
+.header {
+  text-align: center;
+  padding: 6rem 0 3rem;
+}
+
+.header-tag {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--realm-glow);
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeDown 1s ease 0.2s forwards;
+}
+
+.header-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  color: var(--realm-light);
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  opacity: 0;
+  animation: fadeUp 1.2s ease 0.4s forwards;
+  text-shadow: 0 0 60px rgba(127,179,212,0.15);
+}
+
+.header-subtitle {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.7s forwards;
+}
+
+.header-epigraph {
+  font-family: var(--font-body);
+  font-size: 1.35rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--realm-accent);
+  max-width: 500px;
+  margin: 0 auto;
+  opacity: 0;
+  animation: fadeUp 1s ease 1s forwards;
+}
+
+/* === SECTION HEADERS === */
+.section-label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--realm-glow);
+  margin-bottom: 0.75rem;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--realm-light);
+  margin-bottom: 1.5rem;
+  line-height: 1.3;
+}
+
+/* === IDENTITY CARD === */
+.identity-card {
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.identity-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--realm-glow), transparent);
+}
+
+.identity-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem 3rem;
+}
+
+.identity-item {
+  border-left: 2px solid var(--border);
+  padding-left: 1rem;
+}
+
+.identity-key {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.identity-value {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+/* === PROSE SECTIONS === */
+.prose {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 1.85;
+  color: var(--text-primary);
+}
+
+.prose p + p {
+  margin-top: 1.25rem;
+}
+
+/* === ACCORDION === */
+.accordion-item {
+  border: 1px solid var(--border);
+  margin-bottom: -1px;
+  background: var(--bg-card);
+  transition: background 0.3s ease;
+}
+
+.accordion-item:first-child { border-top-left-radius: 2px; border-top-right-radius: 2px; }
+.accordion-item:last-child { border-bottom-left-radius: 2px; border-bottom-right-radius: 2px; }
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.75rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.3s ease;
+}
+
+.accordion-header:hover {
+  background: var(--bg-card-hover);
+}
+
+.accordion-header-left {
+  flex: 1;
+}
+
+.accordion-name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--realm-light);
+}
+
+.accordion-tagline {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+.accordion-icon {
+  color: var(--realm-glow);
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+.accordion-item.active .accordion-icon {
+  transform: rotate(45deg);
+}
+
+.accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+
+.accordion-content {
+  padding: 0 1.75rem 1.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.accordion-content .detail-row {
+  margin-top: 1rem;
+}
+
+.detail-label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--realm-glow);
+  margin-bottom: 0.3rem;
+}
+
+.detail-text {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+
+/* === COLOR PALETTE === */
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.palette-swatch {
+  text-align: center;
+}
+
+.swatch-color {
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  border-radius: 2px;
+  margin-bottom: 0.75rem;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.swatch-name {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--realm-light);
+  margin-bottom: 0.2rem;
+}
+
+.swatch-hex {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.swatch-role {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+/* === DESIGN PRINCIPLES === */
+.principle-item {
+  border-left: 2px solid var(--realm-glow);
+  padding: 0.75rem 0 0.75rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.principle-item:last-child { margin-bottom: 0; }
+
+.principle-text {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  line-height: 1.65;
+}
+
+/* === HORROR BOX === */
+.horror-box {
+  border: 1px solid var(--realm-glow);
+  background: linear-gradient(135deg, rgba(13,33,55,0.8), rgba(6,14,24,0.9));
+  padding: 2.5rem;
+  position: relative;
+}
+
+.horror-box::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px; right: -1px; bottom: -1px;
+  background: linear-gradient(135deg, var(--realm-glow), transparent, var(--realm-primary));
+  z-index: -1;
+  opacity: 0.3;
+}
+
+.horror-box .section-label {
+  color: var(--realm-accent);
+}
+
+.horror-text {
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  font-weight: 400;
+  line-height: 1.85;
+  color: var(--realm-surface);
+}
+
+/* === FOOTER === */
+.footer {
+  text-align: center;
+  padding: 3rem 0 4rem;
+  border-top: 1px solid var(--border);
+}
+
+.footer-text {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 640px) {
+  body { font-size: 17px; }
+  .container { padding: 0 1.25rem; }
+  .header { padding: 4rem 0 2rem; }
+  .identity-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .identity-card { padding: 1.75rem; }
+  .palette-grid { grid-template-columns: repeat(2, 1fr); }
+  .accordion-header { padding: 1rem 1.25rem; }
+  .accordion-content { padding: 0 1.25rem 1.25rem; }
+  .horror-box { padding: 1.75rem; }
+  :root { --section-gap: 3.5rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-tag">Advent of Ultima · Moirai Codex</div>
+    <h1 class="header-title">Thalassor</h1>
+    <div class="header-subtitle">Water · Abundance, Flowing Freely</div>
+    <p class="header-epigraph">"The water heals. The healing is free. The goddess provides. The covenant holds. Everything else is commentary."</p>
+  </header>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- REALM IDENTITY CARD -->
+  <section class="reveal">
+    <div class="section-label">I</div>
+    <h2 class="section-title">Realm Identity</h2>
+    <div class="identity-card">
+      <div class="identity-grid">
+        <div class="identity-item">
+          <div class="identity-key">Element</div>
+          <div class="identity-value">Water</div>
+        </div>
+        <div class="identity-item">
+          <div class="identity-key">Patron Deity</div>
+          <div class="identity-value">Salacia, Goddess of Water</div>
+        </div>
+        <div class="identity-item">
+          <div class="identity-key">Exvisar</div>
+          <div class="identity-value">Saint Leif Sinclair</div>
+        </div>
+        <div class="identity-item">
+          <div class="identity-key">Population</div>
+          <div class="identity-value">~300 million across four nations</div>
+        </div>
+        <div class="identity-item">
+          <div class="identity-key">Chromatic Signature</div>
+          <div class="identity-value">Blue on white — Krenides cerulean, Crystata translucence, marble warmth, ocean depth</div>
+        </div>
+        <div class="identity-item">
+          <div class="identity-key">Material Hierarchy</div>
+          <div class="identity-value">Crystata (translucent) → Marble (warm) → Stone (functional)</div>
+        </div>
+        <div class="identity-item">
+          <div class="identity-key">Cultural Analogs</div>
+          <div class="identity-value">Hellenic Mediterranean, Renaissance Italian city-states, colonial maritime empires, Havana under Spain</div>
+        </div>
+        <div class="identity-item">
+          <div class="identity-key">Narrative Function</div>
+          <div class="identity-value">The cosmopolitan nexus — the baseline upon which contemporary Mystic culture is built. The West of this cosmos. The civilization every other realm defines itself against.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- THE LAND -->
+  <section class="reveal">
+    <div class="section-label">II</div>
+    <h2 class="section-title">The Land</h2>
+    <div class="prose">
+      <p>Thalassor is a planetary archipelago — two major continents and scattered island chains distributed across a world-ocean, connected by maritime routes and the Clairgate network. The planet is predominantly water. The Krenides originate from the First Spring in Salacica and flow through engineered channel systems across every settled region. The ocean itself is not Krenides — it is saltwater, vast, deep, and home to the Siren civilization that predates every humanoid settlement.</p>
+      <p>The climate is temperate to Mediterranean across the settled regions — warm coastlines, mild seasons, the kind of environment that produces outdoor market culture, open-air architecture, and a population that lives as much in public space as in private. The Krenides channels running through every city create a constant ambient sound — flowing water beneath the conversation, beneath the market noise, beneath the gulls. The architecture negotiates with water rather than resisting it — cantilevered structures over harbors, bridges that curve like surface tension, colonnades where the columns are channels of flowing Krenides rather than solid stone.</p>
+      <p>The planet is beautiful. Genuinely, functionally, structurally beautiful. That is not incidental to the civilization. It is the medium in which the civilization operates. And the ocean between the continents is not empty space — it is Siren territory. Every ship that crosses between landmasses is traversing someone else's domain, whether the surface dwellers acknowledge it or not.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- NATIONS / REGIONS -->
+  <section class="reveal">
+    <div class="section-label">III</div>
+    <h2 class="section-title">The Nations</h2>
+
+    <div class="accordion-item" data-accordion>
+      <div class="accordion-header">
+        <div class="accordion-header-left">
+          <div class="accordion-name">Salacica</div>
+          <div class="accordion-tagline">The capital continent — cosmopolitan, performative, the center of everything</div>
+        </div>
+        <div class="accordion-icon">+</div>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-content">
+          <div class="detail-row">
+            <div class="detail-label">Governing Philosophy</div>
+            <div class="detail-text">Abundance as mandate. The Sinclairs hold the Spring; the Temple holds the doctrine; the city holds the Symposium where every realm's business is conducted over wine. Salacica's diplomacy <em>is</em> its military advantage.</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Architecture &amp; Environment</div>
+            <div class="detail-text">The city descends from the Spire — the Sinclair palace in near-transparent Crystata — through the luminous Heights, the terraced marble districts, to the stone waterfront. Krenides flow through open channels in every district. Shrines line every waterway. Fountains double as prayer sites. The Temple of Salacia is more beautiful than the palace, because the dynasty would never visually outshine the goddess it claims to serve.</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Key Visual Details</div>
+            <div class="detail-text">Crystata refracting Krenides light into prisms. Blue thread woven into clothing hems. Water-drop motifs on doorframes. Patron sigils on workshop doors. The visual gradient <em>is</em> the social gradient — luminous at the top, warm in the middle, functional at the base. The wealth is part of the view from every tier.</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Atmospheric Read</div>
+            <div class="detail-text">Walking through Salacica feels like being inside a living painting where every person is simultaneously genuine and performing, and the performance <em>is</em> the genuine article.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item" data-accordion>
+      <div class="accordion-header">
+        <div class="accordion-header-left">
+          <div class="accordion-name">Amphitra</div>
+          <div class="accordion-tagline">The old world — maritime, bioluminescent, total when committed</div>
+        </div>
+        <div class="accordion-icon">+</div>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-content">
+          <div class="detail-row">
+            <div class="detail-label">Governing Philosophy</div>
+            <div class="detail-text">Strength remembered. Amphitra predates the Sinclair dynasty and carries the blockade doctrine as living heritage. The alliance is honored because it serves Amphitran interests, not because Amphitra has forgotten what it is capable of. The old pattern is dormant. It is not dead.</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Architecture &amp; Environment</div>
+            <div class="detail-text">Half-submerged cliff cities built into the water rather than on top of it. Streets become channels. Buildings descend below the waterline into functional submerged chambers. No clear boundary between terrestrial and aquatic space. The architecture originated in the sea and extended upward — the inverse of every other civilization's approach.</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Key Visual Details</div>
+            <div class="detail-text">Bioluminescence — veins tracing blue-white light beneath dark olive skin, shifting with emotional state. Gargantuan serpentine dragons. Sky-leviathan fleets. Boneships. Deep Rider Ligeia at the head of the most martially formidable navy in the civilization. Amphitrans glow when they feel — physiologically incapable of concealing emotion.</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Atmospheric Read</div>
+            <div class="detail-text">Standing in Amphitra feels like standing inside the ocean's memory of itself — ancient, patient, luminous in the dark, and quietly certain that everything built on the surface is temporary.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item" data-accordion>
+      <div class="accordion-header">
+        <div class="accordion-header-left">
+          <div class="accordion-name">The Syndicate Isles</div>
+          <div class="accordion-tagline">The colonial throughput — fragmented, pragmatic, praying you've got crystal</div>
+        </div>
+        <div class="accordion-icon">+</div>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-content">
+          <div class="detail-row">
+            <div class="detail-label">Governing Philosophy</div>
+            <div class="detail-text">Crystal is the only prayer that matters. The Isles are colonized by Salacican aristocratic houses — nominally Salacian, secular in practice. The Temple is present; its authority is thin. The governor's loyalty runs to his house, then the Synedrion, then the Exvisar, then the Temple whenever someone's watching. They pay heavy taxes to the Temple — cheaper than Cloud showing up.</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Architecture &amp; Environment</div>
+            <div class="detail-text">Scattered island clusters across a wide oceanic region. Colonial estates on cliffs above deep harbors. Port towns dense with throughput — warehouses, customs terminals, market wharves, and back channels that move what the front channels officially prohibit. Indigenous settlements persist in the interior hills and reef systems.</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Key Visual Details</div>
+            <div class="detail-text">Everything passes through. Ferridanian augmentations, Tenebrali narcotics, Luxenfallen labor, exotic wildlife, crystata of every grade. Katos fencing stolen goods from market stalls too small for humanoid vendors. Sky-Sirens nesting on cliffs. Governor's mansions that look like Salacican estates transplanted onto tropical geology. The ocean is Siren territory and the islanders know it.</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Atmospheric Read</div>
+            <div class="detail-text">The Isles feel like a port that exists because it has to — where everything in the cosmos passes through on its way to somewhere more important and less interesting, and the locals have made peace with being the view rather than the destination.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item" data-accordion>
+      <div class="accordion-header">
+        <div class="accordion-header-left">
+          <div class="accordion-name">The Mnemosyne Archipelago</div>
+          <div class="accordion-tagline">The memory — remote, silvered, listening to what the water holds</div>
+        </div>
+        <div class="accordion-icon">+</div>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-content">
+          <div class="detail-row">
+            <div class="detail-label">Governing Philosophy</div>
+            <div class="detail-text">The water remembers. The archivists tend it. The information belongs to the water, not to them. Mnemosyne does not volunteer what the water holds. It does not leverage its holdings for influence. Unless someone asks. The distinction between volunteering and responding to inquiry has governed Mnemosynean practice for centuries.</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Architecture &amp; Environment</div>
+            <div class="detail-text">Remote islands surrounded by vast oceans. Smaller settlements, lower density, dispersed across an archipelago physically distant from everything. The ambient sound is the water — without the competition of urban noise, the Krenides' voice dominates. Deep archives where the water's memory is tended. Gardens where centuries of history live in the roots.</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Key Visual Details</div>
+            <div class="detail-text">A faint silvery quality to the skin — almost imperceptible. The sense of a person standing slightly behind still water, not quite fully present. Few Clairgate terminals, operated with deliberate restraint. The quietest, most withdrawn nation. The archivists know what everyone has done. The quiet may be custodianship. It may be xenophobia. Mnemosyne does not clarify.</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Atmospheric Read</div>
+            <div class="detail-text">Mnemosyne feels like the pause before someone tells you the truth — the silence that contains everything, offered to no one, available to anyone willing to sit with the water long enough to hear it.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item" data-accordion>
+      <div class="accordion-header">
+        <div class="accordion-header-left">
+          <div class="accordion-name">The Sirens of the Sea and Sky</div>
+          <div class="accordion-tagline">The indigenous civilization — ancient, sapient, and tired of the noise on their roof</div>
+        </div>
+        <div class="accordion-icon">+</div>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-content">
+          <div class="detail-row">
+            <div class="detail-label">Civilization</div>
+            <div class="detail-text">Fully sapient. Two distinct races — Sea-Sirens (humanoid above, aquatic below, passive method, the one-way door beneath the waves) and Sky-Sirens (bird body, woman's head, not harpies, will correct you violently, active abduction). They share a single subaquatic civilization that predates every humanoid settlement. Whatever exists in the deep, the Sirens coexist with it.</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Primary Grievance</div>
+            <div class="detail-text">Stop doing war on their roof. Every naval engagement happens on the ceiling of their civilization. They have been living beneath the surface for longer than Thalassor has existed. Nobody asked whether anyone lives under it.</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Alliances</div>
+            <div class="detail-text">Amphitra maintains the oldest formal defense alliance — generations of coexistence, mutual benefit, amphibious training, deep-water secrets. Cloud Sinclair maintains an independent channel through Lupe Volantis, bypassing Amphitran primacy — a strategic asset and a diplomatic powder keg.</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Atmospheric Read</div>
+            <div class="detail-text">The Sirens are the reminder that the surface world is a guest on a planet it doesn't own, and the landlord has been patient but patience is not the same as permission.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- THE PEOPLE -->
+  <section class="reveal">
+    <div class="section-label">IV</div>
+    <h2 class="section-title">The People</h2>
+    <div class="prose">
+      <p>Thalassans are a Mediterranean-analog population — olive-skinned, dark-haired, with an aquatic refinement that increases with mystical attainment and exposure to the Krenides. The water transforms. A lifetime of bathing in the Krenides produces a gradual luminosity in those with mystical attunement — clarity of skin, slower aging, brighter eyes. The effect compounds across generations in Crystata-saturated environments. At the highest tiers, the body itself becomes translucent at the edges — a visual echo of the material hierarchy, Crystata made flesh.</p>
+      <p>The Nihila — those without mystical attunement — age normally, look ordinary. The biological divide is aesthetic, not mortal. Standing in a room full of Thalassans, you can read the social hierarchy in the skin. The Crystata-tier aristocrat glows. The marble-district merchant is handsome and healthy. The stone-district dockworker is weathered but whole. The Nihila fishmonger looks human in a room where everyone else looks like they are becoming something more than human. The Krenides heal them all equally. The Krenides do not make them all luminous.</p>
+      <p>The Amphitran body is distinct — bioluminescent veins tracing patterns beneath dark olive skin that shift with emotional state. The Mnemosynean body carries a faint silvery quality, almost imperceptible, as though standing behind still water. The Isles population is the most physically diverse, reflecting generations of colonial mixing. In a room full of people from every realm, the Thalassan reads as composed, socially fluid, performing ease as a native competence — the specific body language of a civilization where reading the room is a survival skill refined to an art.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- FASHION -->
+  <section class="reveal">
+    <div class="section-label">V</div>
+    <h2 class="section-title">Fashion &amp; Material Culture</h2>
+    <div class="prose">
+      <p>Thalassan dress encodes status, affiliation, and devotional sincerity in every garment. The governing principle is fluidity — draped silhouettes, layered translucencies, fabrics that move like water. The material hierarchy reads at a glance: Crystata-tier garments incorporate actual crystata thread, catching and refracting light, making the wearer appear to be dressed in the surface tension of the Krenides themselves. Marble-tier dress favors clean white and blue linen, well-made, modest, beautiful in the specific way that competence without extravagance is beautiful. Stone-tier clothing is practical, durable, and blue thread woven into the hems is the devotional marker that unifies all three tiers.</p>
+      <p>Patron sigils appear on clothing at the marble tier and above — discreet embroidery indicating affiliation. At the Symposium level, the sigils become fashion statements, and the absence of a patron sigil communicates as loudly as its presence. Status at a glance is luminosity and translucency. Poverty at a glance is opacity and weight — heavier fabrics, darker tones, the absence of light in the clothing mirroring the absence of luminosity in the body.</p>
+      <p>The Amphitrans dress for amphibious life — close-fitting garments that function in air and water. The Isles favor tropical practicality and cosmetic myst-application — the body itself as a commercial instrument. The Allodas quarter introduces Tenebrali elements into the street — darker fabrics, masks visible as cultural practice, bioluminescent accents from window-box plants that glow in the evening.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- POWER -->
+  <section class="reveal">
+    <div class="section-label">VI</div>
+    <h2 class="section-title">Power</h2>
+    <div class="prose">
+      <p>Thalassor's relationship to force is defined by containment. The kinetic layer — the ambient awareness that escalation past the social threshold means someone with magic ends the conversation — underlies every interaction at every tier. The civilization has built its institutions specifically to ensure that the kinetic layer remains a layer rather than a surface.</p>
+      <p>The most dangerous thing in the room at the Symposium is the host. Cloud Sinclair carries Clairmancy — the ability to open a portal beneath your feet and send you somewhere you don't survive. He carries Elysium — a god-killing trident he held in silence for years while pouring wine. His war game record demonstrates a doctrine that treats distance as a suggestion: locate the target, open the gate, deliver the resolution directly. Combined arms, overwhelming tempo, and personal assassination conducted through infrastructure that was built for diplomacy. In Thalassor, the weapon you can see is never the one that kills you.</p>
+      <p>The dueling system formalizes the kinetic layer at the Crystata tier — personal, officiated, never to the death, terms sworn on wine. A Crystata-tier Mystic is their own champion. The marble tier hires champions for disputes that exceed the social layer. The stone tier just fights, and the Squalls contain it. The Azure Guard — living Crystata armor that retracts into a shoulder crest shaped like a shark — deploys when the Conductor's hand is required directly. They are Cloud's instrument. Their loyalty is to him.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- MATERIAL PALETTE -->
+  <section class="reveal">
+    <div class="section-label">VII</div>
+    <h2 class="section-title">Material Palette</h2>
+    <div class="palette-grid">
+      <div class="palette-swatch">
+        <div class="swatch-color" style="background: linear-gradient(135deg, #7fb3d4, #a8d4ef);"></div>
+        <div class="swatch-name">Krenides Cerulean</div>
+        <div class="swatch-hex">#7FB3D4</div>
+        <div class="swatch-role">Sacred water, healing channels, divine presence</div>
+      </div>
+      <div class="palette-swatch">
+        <div class="swatch-color" style="background: linear-gradient(135deg, #c4dff0, #e8f1f8);"></div>
+        <div class="swatch-name">Crystata Translucence</div>
+        <div class="swatch-hex">#C4DFF0</div>
+        <div class="swatch-role">Aristocratic glow, divine mandate, the Spire</div>
+      </div>
+      <div class="palette-swatch">
+        <div class="swatch-color" style="background: linear-gradient(135deg, #1a5276, #0d2137);"></div>
+        <div class="swatch-name">Abyssal Blue</div>
+        <div class="swatch-hex">#1A5276</div>
+        <div class="swatch-role">Ocean depth, Amphitran heritage, Siren territory</div>
+      </div>
+      <div class="palette-swatch">
+        <div class="swatch-color" style="background: linear-gradient(135deg, #f5f0e8, #e8ddd0);"></div>
+        <div class="swatch-name">Marble Warm</div>
+        <div class="swatch-hex">#F5F0E8</div>
+        <div class="swatch-role">Middle-tier architecture, Mediterranean warmth, daily life</div>
+      </div>
+      <div class="palette-swatch">
+        <div class="swatch-color" style="background: linear-gradient(135deg, #8aa8c0, #4a6a82);"></div>
+        <div class="swatch-name">Stone Harbor</div>
+        <div class="swatch-hex">#8AA8C0</div>
+        <div class="swatch-role">Working districts, docks, functional beauty</div>
+      </div>
+      <div class="palette-swatch">
+        <div class="swatch-color" style="background: linear-gradient(135deg, #5ba3cf, #3d8ab8);"></div>
+        <div class="swatch-name">Sinclair Azure</div>
+        <div class="swatch-hex">#5BA3CF</div>
+        <div class="swatch-role">Azure Guard, Sinclair authority, Oinomantic glow</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- DESIGN PRINCIPLES -->
+  <section class="reveal">
+    <div class="section-label">VIII</div>
+    <h2 class="section-title">Design Principles</h2>
+    <div class="principle-item">
+      <div class="principle-text"><strong>Every surface should negotiate with water.</strong> Architecture curves rather than corners. Edges catch light like surface tension. Materials appear wet or translucent at the upper tiers and warm and dry at the lower tiers. The visual language of Thalassor is fluid — nothing is rigid, nothing is angular, nothing resists the current.</div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-text"><strong>The social hierarchy must be legible in the material.</strong> Crystata refracts. Marble reflects. Stone absorbs. A frame should communicate tier through material translucency before a single character appears. The wealth is part of the view. The gradient is the civilization.</div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-text"><strong>Beauty is structural, not decorative.</strong> Thalassor is beautiful because the conditions that produced it are beautiful — healing water, Mediterranean climate, a thousand years of patronage-funded art. The beauty is not applied. It is emergent. Every visual element should feel inevitable rather than designed.</div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-text"><strong>Light comes from the water, not the sky.</strong> The Krenides glow. The channels catch light from below. The ambient illumination in Thalassan environments radiates upward — from channels, from fountains, from the Crystata that refracts the sacred water's luminescence. Thalassor is lit from beneath. The sky provides warmth. The water provides light.</div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-text"><strong>The weapon you can see is never the one that kills you.</strong> Visual threat in Thalassor is always concealed beneath beauty. The Azure Guard's living Crystata armor retracts into an ornate shoulder crest. Cloud's trident is carried where no one sees it. Arabella's capabilities live behind her eyes. Every dangerous element in Thalassor's visual language should read as beautiful first and lethal on second glance.</div>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- THE HORROR -->
+  <section class="reveal">
+    <div class="horror-box">
+      <div class="section-label">IX</div>
+      <h2 class="section-title">The Horror</h2>
+      <p class="horror-text">The water heals everyone. The goddess provides. The bathhouses work. The schools teach. The patronage provides. The floor is high. And in the Crystata Heights, the wealthiest houses in the civilization are conducting blood rituals, sacrificing Nihila children, and running a eugenic program whose endgame is the extinction of everyone the water was supposed to protect. Their bodies are incinerated and sent off-world through the Clairgates so the water never carries the evidence. The Mnemosynean archivists cannot hear what the water never received. At street level, it's a conspiracy theory — too implausible in a civilization that works this well. The matchmaker in the stone districts is a Mavarran poppet running an illegal sex trade behind a community service, neutralizing Squall investigations by planting false memories in undercover officers. The wine merchant in the marble districts has been cultivating your neighborhood for seven years and the cultivation is working. The Shik'piris in the Symposium wine is distilled from the stolen joy of enslaved Luxenfallen children in industrial extraction facilities that everyone believes are crystata mines. The civilization is mostly good. The horror lives in the margins. Not as the hidden truth that reveals the beauty was fake — but as the irreducible remainder of human behavior operating inside a system that functions well enough that no one with the power to stop it has sufficient reason to pay the cost.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-text">Advent of Ultima · Moirai Codex · April 2026</div>
+  </footer>
+
+</div>
+
+<script>
+// Accordion
+document.querySelectorAll('[data-accordion]').forEach(function(item) {
+  var header = item.querySelector('.accordion-header');
+  header.addEventListener('click', function() {
+    var isActive = item.classList.contains('active');
+
+    // Close all
+    document.querySelectorAll('[data-accordion]').forEach(function(other) {
+      other.classList.remove('active');
+      other.querySelector('.accordion-body').style.maxHeight = null;
+    });
+
+    // Open clicked if it wasn't active
+    if (!isActive) {
+      item.classList.add('active');
+      var body = item.querySelector('.accordion-body');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+  });
+});
+
+// Scroll reveal
+var reveals = document.querySelectorAll('.reveal');
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+reveals.forEach(function(el) { observer.observe(el); });
+</script>
+
+</body>
+</html>
