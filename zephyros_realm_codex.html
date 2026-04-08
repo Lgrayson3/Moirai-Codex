@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zephyros — Realm of Wind | Advent of Ultima</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deepest: #0a110a;
+  --bg-deep: #0f1a0f;
+  --bg-card: #131f13;
+  --bg-card-hover: #1a2b1a;
+  --bg-accent: rgba(74, 158, 74, 0.06);
+
+  --green-dark: #2D5F2D;
+  --green-mid: #3A7D3A;
+  --green-light: #4A9E4A;
+  --green-bright: #6BBF6B;
+  --green-glow: #8FD98F;
+  --green-pale: #c8eac8;
+
+  --gold: #B8960B;
+  --gold-light: #D4B44A;
+  --gold-pale: #E8D68A;
+
+  --silver: #A8B8C0;
+  --silver-light: #C8D4DA;
+
+  --text-primary: #D4DED4;
+  --text-secondary: #9AAE9A;
+  --text-muted: #6A826A;
+  --text-bright: #E8F0E8;
+
+  --prismatic-1: #8FD98F;
+  --prismatic-2: #6BBFBF;
+  --prismatic-3: #BF8FD9;
+  --prismatic-4: #D9BF6B;
+
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 2rem;
+  --space-lg: 3rem;
+  --space-xl: 5rem;
+  --space-xxl: 8rem;
+
+  --max-width: 900px;
+  --border-radius: 2px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deepest);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+/* ===== ATMOSPHERIC BACKGROUND ===== */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(74, 158, 74, 0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 80% at 80% 90%, rgba(184, 150, 11, 0.03) 0%, transparent 70%),
+    radial-gradient(ellipse 100% 50% at 50% 50%, rgba(74, 158, 74, 0.02) 0%, transparent 80%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===== AETHER PARTICLES ===== */
+.aether-particles {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+.aether-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--green-glow);
+  border-radius: 50%;
+  opacity: 0;
+  animation: aether-drift linear infinite;
+}
+@keyframes aether-drift {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: 0.4; }
+  90% { opacity: 0.15; }
+  100% { transform: translateY(100vh) translateX(30px); opacity: 0; }
+}
+
+/* ===== LAYOUT ===== */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+  position: relative;
+  z-index: 2;
+}
+
+section {
+  padding: var(--space-xl) 0;
+}
+
+/* ===== DIAMOND DIVIDER ===== */
+.diamond-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-lg) 0;
+  opacity: 0.5;
+}
+.diamond-divider::before,
+.diamond-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--green-dark), transparent);
+}
+.diamond-divider .diamond {
+  width: 8px;
+  height: 8px;
+  background: var(--green-mid);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: var(--text-bright);
+}
+
+.section-title {
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  color: var(--green-bright);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: var(--space-md);
+  position: relative;
+  padding-bottom: var(--space-sm);
+}
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(to right, var(--green-mid), transparent);
+}
+
+.prose {
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+}
+.prose + .prose { margin-top: calc(-1 * var(--space-sm)); }
+
+.prose em {
+  color: var(--green-pale);
+  font-style: italic;
+}
+.prose strong {
+  color: var(--text-bright);
+  font-weight: 500;
+}
+
+/* ===== HEADER ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-xl) var(--space-md);
+  position: relative;
+}
+
+.hero-tag {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-md);
+  animation: fadeIn 1.5s ease-out 0.2s both;
+}
+
+.hero-realm {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 10vw, 7rem);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--green-bright);
+  line-height: 1;
+  margin-bottom: var(--space-sm);
+  text-shadow: 0 0 80px rgba(107, 191, 107, 0.3), 0 0 160px rgba(107, 191, 107, 0.1);
+  animation: fadeIn 1.5s ease-out 0.5s both;
+}
+
+.hero-subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--text-secondary);
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-lg);
+  animation: fadeIn 1.5s ease-out 0.8s both;
+}
+
+.hero-epigraph {
+  max-width: 600px;
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--green-pale);
+  line-height: 1.8;
+  opacity: 0.8;
+  animation: fadeIn 1.5s ease-out 1.1s both;
+}
+.hero-epigraph::before { content: '\201C'; }
+.hero-epigraph::after { content: '\201D'; }
+
+.hero-scroll {
+  position: absolute;
+  bottom: var(--space-lg);
+  animation: fadeIn 1.5s ease-out 1.6s both, gentle-bob 3s ease-in-out infinite;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-family: var(--font-display);
+}
+.hero-scroll span {
+  display: block;
+  margin-top: 8px;
+  font-size: 1.2rem;
+  animation: gentle-bob 2s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes gentle-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* ===== IDENTITY CARD ===== */
+.identity-card {
+  background: var(--bg-card);
+  border: 1px solid var(--green-dark);
+  border-radius: var(--border-radius);
+  padding: var(--space-lg);
+  position: relative;
+  overflow: hidden;
+}
+.identity-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--green-dark), var(--green-bright), var(--gold), var(--green-bright), var(--green-dark));
+}
+
+.identity-card h2 {
+  font-size: 0.7rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-md);
+}
+
+.identity-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm) var(--space-lg);
+}
+
+.identity-item {
+  padding: var(--space-xs) 0;
+  border-bottom: 1px solid rgba(45, 95, 45, 0.2);
+}
+.identity-label {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 4px;
+}
+.identity-value {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-weight: 400;
+}
+.identity-value em {
+  color: var(--green-pale);
+}
+.identity-item.full-width {
+  grid-column: 1 / -1;
+}
+
+/* ===== NATIONS ACCORDION ===== */
+.nation-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.nation-item {
+  border: 1px solid rgba(45, 95, 45, 0.25);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+.nation-item.active {
+  border-color: var(--green-mid);
+}
+.nation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: background 0.3s ease;
+  user-select: none;
+}
+.nation-header:hover {
+  background: var(--bg-card-hover);
+}
+.nation-header h3 {
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  color: var(--green-bright);
+}
+.nation-header .nation-tagline {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--text-muted);
+  margin-left: auto;
+  margin-right: var(--space-sm);
+}
+.nation-toggle {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--green-mid);
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+.nation-item.active .nation-toggle {
+  transform: rotate(45deg);
+}
+.nation-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease, padding 0.3s ease;
+  background: var(--bg-deep);
+}
+.nation-body-inner {
+  padding: var(--space-md);
+}
+.nation-body-inner .prose {
+  font-size: 0.95rem;
+  margin-bottom: var(--space-sm);
+}
+.nation-detail {
+  margin-top: var(--space-sm);
+}
+.nation-detail-label {
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--green-mid);
+  margin-bottom: 4px;
+}
+
+/* ===== COLOR SWATCHES ===== */
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+}
+.swatch {
+  background: var(--bg-card);
+  border: 1px solid rgba(45, 95, 45, 0.2);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.swatch:hover {
+  transform: translateY(-2px);
+  border-color: var(--green-mid);
+}
+.swatch-color {
+  height: 80px;
+  position: relative;
+}
+.swatch-info {
+  padding: var(--space-sm);
+}
+.swatch-name {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-bright);
+  display: block;
+}
+.swatch-hex {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: block;
+  margin: 2px 0 6px;
+}
+.swatch-desc {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ===== DESIGN PRINCIPLES ===== */
+.principle {
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid rgba(45, 95, 45, 0.15);
+}
+.principle:last-child { border-bottom: none; }
+.principle-number {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 6px;
+}
+.principle-text {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+.principle-text em { color: var(--green-pale); }
+
+/* ===== SCROLL ANIMATIONS ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 700px) {
+  body { font-size: 16px; }
+  .identity-grid { grid-template-columns: 1fr; }
+  .palette-grid { grid-template-columns: repeat(2, 1fr); }
+  .nation-header { flex-wrap: wrap; gap: 4px; }
+  .nation-header .nation-tagline {
+    order: 3;
+    width: 100%;
+    margin: 0;
+    font-size: 0.8rem;
+  }
+  section { padding: var(--space-lg) 0; }
+  .container { padding: 0 var(--space-sm); }
+  .identity-card { padding: var(--space-md); }
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  text-align: center;
+  padding: var(--space-xl) 0 var(--space-lg);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+}
+.footer span {
+  font-family: var(--font-display);
+  letter-spacing: 0.2em;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+
+<!-- AETHER PARTICLES -->
+<div class="aether-particles" id="aetherParticles"></div>
+
+<!-- ===== HEADER ===== -->
+<header class="hero">
+  <div class="hero-tag">Advent of Ultima — Realm Codex</div>
+  <h1 class="hero-realm">Zephyros</h1>
+  <div class="hero-subtitle">Air · Cognition · Social Gravity — Blessed by Iles, the Breath of All That Lives</div>
+  <p class="hero-epigraph">Every inhale feels like hope. Every exhale, relief. The wind is gentle. And you can almost hear the Goddess clearly if you're still enough — but even if you're not, she is felt.</p>
+  <div class="hero-scroll">Descend<span>⌄</span></div>
+</header>
+
+<main class="container">
+
+  <!-- ===== IDENTITY CARD ===== -->
+  <section class="reveal">
+    <div class="identity-card">
+      <h2>Realm Identity</h2>
+      <div class="identity-grid">
+        <div class="identity-item">
+          <span class="identity-label">Element</span>
+          <span class="identity-value">Air and Wind — breath, language, comprehension, resonance</span>
+        </div>
+        <div class="identity-item">
+          <span class="identity-label">Patron Deity</span>
+          <span class="identity-value"><em>Iles, the Breath of All That Lives</em> — Goddess of Air, Language, and Comprehension</span>
+        </div>
+        <div class="identity-item">
+          <span class="identity-label">Exvisar</span>
+          <span class="identity-value"><em>Aeon, Warden of the Wind</em> — whose rare utterances and silences set the tempo of the entire Realm</span>
+        </div>
+        <div class="identity-item">
+          <span class="identity-label">Population</span>
+          <span class="identity-value">Moderate, planetary-scale civilization across multiple continents</span>
+        </div>
+        <div class="identity-item">
+          <span class="identity-label">Chromatic Signature</span>
+          <span class="identity-value">Greens, golds, silvers, and prismatic refractions. Faint yellow-green Aetheric myst drifting down from the stratosphere like luminous pollen.</span>
+        </div>
+        <div class="identity-item">
+          <span class="identity-label">Material Hierarchy</span>
+          <span class="identity-value">Living Flowers > Ancient Trees > Moonstone > Crystal > Woven Textiles > Common Stone</span>
+        </div>
+        <div class="identity-item full-width">
+          <span class="identity-label">Cultural Analogs</span>
+          <span class="identity-value">The intellectual density of the Athenian agora, the cathedral beauty of medieval Christendom, the communal intimacy of a village where everyone knows your name, the quiet authority of a civilization that has never needed to raise its voice.</span>
+        </div>
+        <div class="identity-item full-width">
+          <span class="identity-label">Narrative Function</span>
+          <span class="identity-value">The place where the audience rests before the storm. Paradise that makes the coming war terrible. The test: not "is it detailed?" but "would you grieve if it burned?"</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="diamond-divider"><span class="diamond"></span></div>
+
+  <!-- ===== THE LAND ===== -->
+  <section class="reveal">
+    <h2 class="section-title">The Land</h2>
+    <p class="prose">Zephyros is a planet. An entire world suffused with the breath of a Goddess who is the air itself. Lush, saturated greenery in every direction — rolling farmland, dense forests, meadows thick with wildflowers beneath open skies full of singing dragons. The little ones sound like birdsong. The great ones carry voices that travel for miles, and the inversion is part of the beauty: the massive creatures produce the most delicate sound.</p>
+    <p class="prose">Moonstone streets refract light omnidirectionally, casting spectrums and rainbows across silvered filigree, lace, and art that decorates every building. The architectural influence is Luxanian — someone traveled to the Realm of Light, was moved by what they saw, and brought that vision home. The result is a world that appears perpetually illuminated from within. The air shimmers faintly, especially near gardens and sacred sites, where the Aether is dense with accumulated knowledge.</p>
+    <p class="prose">There is no hunting. Everyone is vegetarian. The farming economy is enormous. The dragons evolved for beauty and resonance rather than aggression — the violent ones died off long ago because violence had no function here. All animals have evolved for peace. Mouse-like creatures skitter about collecting seeds. Hearthfoxes — elemental kitsune of any element, tricky and mischievous — play with children in the streets. The children swear the foxes can talk. Grown-ups never hear them speak, but they remember a time when they thought they could.</p>
+    <p class="prose">The ecology is what happens when natural selection operates in a world where the divine medium is gentleness itself. The civilization is quiet because the most precious things in it — the knowledge gardens — break when you are loud. <em>The gentleness is not temperamental. It is architectural.</em></p>
+  </section>
+
+  <div class="diamond-divider"><span class="diamond"></span></div>
+
+  <!-- ===== NATIONS ===== -->
+  <section class="reveal">
+    <h2 class="section-title">Nations & Regions</h2>
+    <div class="nation-accordion" id="nationAccordion">
+
+      <!-- GRAN ORNEA -->
+      <div class="nation-item">
+        <div class="nation-header" onclick="toggleNation(this)">
+          <h3>Gran Ornea & Auraeas</h3>
+          <span class="nation-tagline">The Heartland</span>
+          <span class="nation-toggle">+</span>
+        </div>
+        <div class="nation-body">
+          <div class="nation-body-inner">
+            <p class="prose">The green, fertile heartland. The Verdant Plains stretch wide and generous, dotted with farming communities, villages, and cities where the fruit merchant asks about your mother and when you tell him she's sick, anyone who cares picks it up on the Aether, and neighbors reach out with care packages, a discount, a hug. Even in the largest cities, you feel at home.</p>
+            <p class="prose">Constant gossip and chatter on the wind. People exchanging information, talking about people, talking to people. Ideally all true. Markets full of the finest textiles in all the Realms. Fashion everywhere — the people dress beautifully because aesthetics are a form of honest expression.</p>
+            <div class="nation-detail">
+              <div class="nation-detail-label">Sacred Infrastructure</div>
+              <p class="prose">Above the plains, the <strong>Cloisters</strong> hang — bright, silent cathedrals of moonstone and glass perched on skyline castles, connected by luminous wind-paths. Only Oracles may enter. The restriction isn't secrecy — it's sanctification. One uninitiated voice would shatter the quality of silence required to hear Iles directly.</p>
+            </div>
+            <div class="nation-detail">
+              <div class="nation-detail-label">School of Magic</div>
+              <p class="prose"><em>The Cloisters of Gran Ornea — Silent Breath (Psychic).</em> Breath occlusion, silent communion, thread-listening. Wind is silence as much as sound. Breath's true essence is the pause. "To know is to listen. To speak without pause is to blind oneself to the universe."</p>
+            </div>
+            <div class="nation-detail">
+              <div class="nation-detail-label">Atmosphere</div>
+              <p class="prose"><em>A world of moonstone and gossip and children chasing hearthfoxes, where the most powerful beings in the Realm sit in glass cathedrals above the clouds and listen to the Goddess in silence.</em></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CRYSTAL ISLES -->
+      <div class="nation-item">
+        <div class="nation-header" onclick="toggleNation(this)">
+          <h3>The Crystal Isles</h3>
+          <span class="nation-tagline">The Harmonics</span>
+          <span class="nation-toggle">+</span>
+        </div>
+        <div class="nation-body">
+          <div class="nation-body-inner">
+            <p class="prose">A scattered archipelago of floating islands drifting across the Zephyrosian seas. Crystalline, semi-transparent, built entirely for acoustics — every plaza doubles as a stage. Bridges of glass connecting isles. Windchime spires ringing perpetually with music that is simultaneously architecture and prayer. The light through these structures creates prismatic effects that paint the air itself with color. The Isles look like they're singing, even from a distance.</p>
+            <div class="nation-detail">
+              <div class="nation-detail-label">Governance</div>
+              <p class="prose">Choral Councils where representatives sing arguments and votes are cast as layered chords. The most harmonious resolution becomes law. Families arranged into choirs. Children learn harmony before arithmetic. Lies are inaudible — the Isles reject deceit like a discordant note.</p>
+            </div>
+            <div class="nation-detail">
+              <div class="nation-detail-label">School of Magic</div>
+              <p class="prose"><em>Harmonics of Resonance — Resonant Song (Elegant).</em> Voice-sculpting, warding harmonies, choral invocation. Fiacre's own warding magic — densely layered wind-barriers that resound with healing — is harmonic in origin. "To exist is to be heard. To be forgotten is to be unmade."</p>
+            </div>
+            <div class="nation-detail">
+              <div class="nation-detail-label">Vulnerability</div>
+              <p class="prose">The most vulnerable point in all of Zephyros. A culture of consensus means a lie wrapped in beauty can pass unnoticed. A perfect chorus doesn't prove truth — it proves unity of sound. A single corrupted Isle can hum in dissonance for years before anyone notices the songs sound strange.</p>
+            </div>
+            <div class="nation-detail">
+              <div class="nation-detail-label">Atmosphere</div>
+              <p class="prose"><em>Floating crystal and perpetual song, where beauty is worship and the most dangerous thing is a harmony so perfect it hides a lie.</em></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- URONOIA -->
+      <div class="nation-item">
+        <div class="nation-header" onclick="toggleNation(this)">
+          <h3>Uronoia & The Temples of Tempest</h3>
+          <span class="nation-tagline">The Storm</span>
+          <span class="nation-toggle">+</span>
+        </div>
+        <div class="nation-body">
+          <div class="nation-body-inner">
+            <p class="prose">Jagged peaks perpetually crowned with stormclouds, rising above the clouds themselves. The wind is fierce. The dragons fly <em>below</em> you. The horizon's floor is a bed of clouds. Above, an attuned Mystic can almost see the myst crackling in the air — yellow and green, what people call the Aether. It is not the Goddess herself, but it is hers. Mistake it for your own at your own risk.</p>
+            <p class="prose">This is one of the few places on Zephyros where a person could actually die young. The Stormcallers are not warriors — they are monks preparing for a war they pray never comes. They bond with dragons the way a falconer bonds with a bird of prey. The monks do not welcome tourists.</p>
+            <div class="nation-detail">
+              <div class="nation-detail-label">School of Magic</div>
+              <p class="prose"><em>Temples of Tempest — Wind & Storm (Martial).</em> Storm-breath, sigilstorm duels, storm-forging. Led by Wind Abbots who rise through mastery of Ventus. "To be is to endure motion. Stillness without choice is death; storm is proof of life."</p>
+            </div>
+            <div class="nation-detail">
+              <div class="nation-detail-label">The Gonlan</div>
+              <p class="prose"><strong>Xal-Uron</strong> lives here among the stormclouds — black, streaked with gold, serpentine, blotting out the visible sky. And above Xal-Uron, above the stratosphere: <strong>Aeralithe</strong>, child of Aracice and Iles, shedding the Aetheric particles that cascade down through Xal-Uron into the golden lightning that keeps the Realm just.</p>
+            </div>
+            <div class="nation-detail">
+              <div class="nation-detail-label">Atmosphere</div>
+              <p class="prose"><em>Storm-gray robes in the gale, dragons below, two Gonlans above, and monks who train in wind that could kill them because someone has to be ready for the day the silence breaks.</em></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIAS -->
+      <div class="nation-item">
+        <div class="nation-header" onclick="toggleNation(this)">
+          <h3>Maias & The Grand Garden of Meliadas</h3>
+          <span class="nation-tagline">The Keepers</span>
+          <span class="nation-toggle">+</span>
+        </div>
+        <div class="nation-body">
+          <div class="nation-body-inner">
+            <p class="prose">West of Auraeas across a great sea. A separate continent with its own governance, sharing the overarching civilizational framework under Iles. The relationship is like Germany and Switzerland under the Holy Roman Empire — distinct nations, shared faith. Maias's identity is custodial: the continent that holds the oldest living knowledge in the world.</p>
+            <div class="nation-detail">
+              <div class="nation-detail-label">The Grand Garden</div>
+              <p class="prose">The oldest, deepest, most knowledge-dense repository on the planet. Vast, luminous garden-temples where every bed, every vine, every ancient tree holds a different branch of understanding. The air shimmers with accumulated knowledge — denser, richer, almost visible. Walking into the Grand Garden of Meliadas feels like walking into a living mind. The knowledge isn't shelved. It's blooming.</p>
+            </div>
+            <div class="nation-detail">
+              <div class="nation-detail-label">The Templar</div>
+              <p class="prose">Near Meliadas: a genuinely good school in a genuinely peaceful world. Students study agriculture, rhetoric, history, philosophy, the harmonic arts, the science of tending knowledge gardens. The campus where Alciel arrives. The school where the burning question — <em>why was Aracice exiled?</em> — has been the defining debate topic for twenty years.</p>
+            </div>
+            <div class="nation-detail">
+              <div class="nation-detail-label">Atmosphere</div>
+              <p class="prose"><em>Where the cosmos comes to learn, in gardens that have been breathing for centuries, on a continent that measures its worth not in power but in what it has kept alive.</em></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="diamond-divider"><span class="diamond"></span></div>
+
+  <!-- ===== THE PEOPLE ===== -->
+  <section class="reveal">
+    <h2 class="section-title">The People</h2>
+    <p class="prose">A Zephyrosian standing in a room full of people from other Realms reads as <em>still</em>. Not passive — composed. Where a Ferridanian carries the physicality of augmentation and a Pyrtheran radiates solar intensity, the Zephyrosian carries a quality of attention so focused it feels like being listened to by the room itself. They are watching you the way the wind watches: without weight, but with total presence.</p>
+    <p class="prose">Myst manifests in the eyes and veins as a faint yellow-green luminescence — the color of Aeralithe's shed scales, alive in the bodies of those who breathe the Goddess's air. It intensifies during communion, debate, or emotional peaks. A Zephyrosian in a passionate argument glows from within, the Aetheric light tracing the veins of their hands and throat as their conviction rises. In ordinary moments, it's barely perceptible — a warmth behind the eyes, a shimmer in the skin that catches light at certain angles.</p>
+    <p class="prose">They are beautiful in the way a garden is beautiful — not constructed or performed but grown into. Fashion is a major cultural force, and the textiles are the finest in the Realms. They dress with care because aesthetics are a form of honest expression. A Zephyrosian's appearance communicates taste, community, attunement — what frequencies you're tuned to is legible in how you carry yourself.</p>
+    <p class="prose">Their honesty is the most disorienting quality. They cannot lie on their own soil and rarely learn to off it. They tell you what they see and mean it. They ask how you are and want the answer. To a Thalassori, this is naive. To a Ferridanian, it is soft. To anyone who has been lied to their entire life, <em>it is the most dangerous and seductive thing they've ever encountered.</em></p>
+  </section>
+
+  <div class="diamond-divider"><span class="diamond"></span></div>
+
+  <!-- ===== FASHION ===== -->
+  <section class="reveal">
+    <h2 class="section-title">Fashion & Material Culture</h2>
+    <p class="prose">Beauty in Zephyros isn't vanity — it's another form of honest expression, another way the culture says <em>we care about how things look because beauty is a kind of truth</em>. The textiles are the Realm's second-largest export: whatever their equivalents to silk, lace, cotton, and wool, they're the finest in all the Realms. Fashion is as much a cultural force as debate.</p>
+    <p class="prose">The governing principle of dress is <strong>earned lightness</strong>. Fabric flows. Layers are sheer and luminous. Nothing is armored, nothing is heavy. The silhouette reads as open — breath passing through cloth the way wind passes through the Aether. Lace is the prestige textile: intricate, labor-intensive, beautiful and structurally delicate, requiring the same care as a knowledge garden.</p>
+    <p class="prose"><strong>Status at a glance:</strong> A well-connected Mystic wears fabrics that catch and refract light — prismatic weaves that shimmer with the same spectral quality as the moonstone architecture. The complexity of the weave signals sophistication. An Oracle wears white, unadorned, perfectly cut — the absence of decoration communicating a status beyond decoration. Stormcallers: storm-gray with wind-sigil embroidery. Crystal Isle choristers: glass-fiber weaves that hum when they move.</p>
+    <p class="prose"><strong>Poverty at a glance:</strong> A Nihila farmer wears practical cloth, well-made but unadorned. It doesn't shimmer. It doesn't refract. It communicates competence and honest labor, and in Zephyros, that is respected — but the absence of prismatic light in your clothing tells everyone in the market exactly where you stand. The textile hierarchy is the class system made visible in the way fabric catches the sun.</p>
+  </section>
+
+  <div class="diamond-divider"><span class="diamond"></span></div>
+
+  <!-- ===== POWER ===== -->
+  <section class="reveal">
+    <h2 class="section-title">Power</h2>
+    <p class="prose">Zephyros does not carry weapons. Carrying implies intent. Intent triggers Fulguror. The most dangerous thing in a room full of Zephyrosians is <em>the room itself</em> — the air, the Aether, the Goddess who is the medium everyone exists within. Violence is not punished. It is prevented. The moment intent crystallizes, the storm answers.</p>
+    <p class="prose">A Zephyrosian does not read as dangerous on a battlefield because Zephyrosians do not go to battlefields. They have no military in the conventional sense. The Stormcallers of Uronoia are monks, not soldiers. Their combat training exists for a war they pray never comes. The only offensive capability most Zephyrosians carry abroad is a Ventus escort — someone who can practice pure elemental wind manipulation. The protocol, if necessary: remove the breath from the lungs of the violent. No weapon drawn. No spectacle. You just stop breathing. Nobody saw anything happen because nothing visible did.</p>
+    <p class="prose">The true power of Zephyros is informational. The Aether works off-world. A Zephyrosian abroad is a live node in the most comprehensive real-time intelligence network in the cosmos, receiving through channels no one can intercept, detect, or even perceive. Flowers planted on a foreign balcony function as living dead drops on frequencies only the gardener and her contact know. The knowledge gardens of Meliadas are the most secure archives in existence. <em>The most dangerous Zephyrosian in the cosmos is a quiet woman who likes gardens.</em></p>
+  </section>
+
+  <div class="diamond-divider"><span class="diamond"></span></div>
+
+  <!-- ===== MATERIAL PALETTE ===== -->
+  <section class="reveal">
+    <h2 class="section-title">Material Palette</h2>
+    <div class="palette-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background: linear-gradient(135deg, #2D5F2D, #3A7D3A);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Verdant Deep</span>
+          <span class="swatch-hex">#2D5F2D → #3A7D3A</span>
+          <span class="swatch-desc">The Verdant Plains, forest canopy, the living green of the knowledge gardens. The base color of the civilization.</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: linear-gradient(135deg, #B8960B, #D4B44A);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Fulguror Gold</span>
+          <span class="swatch-hex">#B8960B → #D4B44A</span>
+          <span class="swatch-desc">Golden lightning. Xal-Uron's streaks. Divine justice made visible. The color of the Goddess's enforcement.</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: linear-gradient(135deg, #A8B8C0, #D4DEE4);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Moonstone Silver</span>
+          <span class="swatch-hex">#A8B8C0 → #D4DEE4</span>
+          <span class="swatch-desc">Moonstone streets, filigree, the Cloisters' glass. The Luxanian legacy made Zephyrosian — light carried in stone.</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: linear-gradient(135deg, #6BBF6B, #8FD98F);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Aether Myst</span>
+          <span class="swatch-hex">#6BBF6B → #8FD98F</span>
+          <span class="swatch-desc">The yellow-green of Aeralithe's shed scales. Visible Aetheric particles. The glow in a Mystic's eyes and veins during communion.</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: linear-gradient(135deg, #6BBFBF, #8FD9D9, #BF8FD9, #D9BF6B); background-size: 400% 400%; animation: prismatic-shift 8s ease infinite;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Prismatic Refraction</span>
+          <span class="swatch-hex">Spectral</span>
+          <span class="swatch-desc">The rainbow light cast by crystalline architecture and moonstone streets. Not a single color but all colors passing through perfect structure.</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: linear-gradient(135deg, #1a1a1a, #2a3a2a); position: relative; overflow: hidden;">
+          <div style="position:absolute;inset:0;background:radial-gradient(circle at 30% 40%, rgba(107,191,107,0.15), transparent 60%);"></div>
+        </div>
+        <div class="swatch-info">
+          <span class="swatch-name">Storm Obsidian</span>
+          <span class="swatch-hex">#1A1A1A + green glow</span>
+          <span class="swatch-desc">Uronoia's stormclouds. Xal-Uron's black hide. The darkness above the peaks before the Aether becomes visible. Used sparingly — the shadow that makes the light sacred.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="diamond-divider"><span class="diamond"></span></div>
+
+  <!-- ===== DESIGN PRINCIPLES ===== -->
+  <section class="reveal">
+    <h2 class="section-title">Design Principles</h2>
+
+    <div class="principle">
+      <span class="principle-number">Principle I</span>
+      <p class="principle-text">Every visual element should feel <em>grown, not built</em>. Architecture curves like branches. Streets meander like streams. The Crystal Isles drift like seeds. Nothing on Zephyros should read as engineered — even the most sophisticated structures should appear to have emerged naturally from a world that rewards organic beauty over imposed geometry. If it could have been designed in Ferridane, it doesn't belong here.</p>
+    </div>
+
+    <div class="principle">
+      <span class="principle-number">Principle II</span>
+      <p class="principle-text">The silhouette must read as <em>open</em>. Breath passing through cloth. Wind passing through architecture. Light passing through crystal. Nothing is sealed, armored, or enclosed. Negative space is as important as positive form. A Zephyrosian character's silhouette should always have visible air moving through it — flowing fabric, open collars, loose hair, gestures that seem to invite the wind in rather than keep it out.</p>
+    </div>
+
+    <div class="principle">
+      <span class="principle-number">Principle III</span>
+      <p class="principle-text"><em>Verticality is social grammar.</em> The higher the frame, the closer to divinity. Cloisters above clouds. Stormcallers on peaks. Dragons in upper currents. The Plains are the democratic middle. Every composition should use altitude to communicate proximity to divine order — and the camera should always know which direction is up.</p>
+    </div>
+
+    <div class="principle">
+      <span class="principle-number">Principle IV</span>
+      <p class="principle-text">Light should feel <em>omnidirectional</em>. No single light source. Moonstone refracts. Crystal transmits. Prismatic architecture scatters rainbows. The visual effect is a world illuminated from within — warm, diffuse, slightly magical. Harsh shadows are rare except in Uronoia, where the storm layer introduces the only dramatic chiaroscuro on the planet. The contrast between Uronoia's darkness and the Plains' luminosity should be visually shocking.</p>
+    </div>
+
+    <div class="principle">
+      <span class="principle-number">Principle V</span>
+      <p class="principle-text">The Aether must be <em>felt before it is seen</em>. Do not render it as a glowing overlay. Render it as the faint shimmer in the air near gardens. The warmth behind a Mystic's eyes. The way fabric moves when there's no wind. The way a flower seems to lean toward a speaking scholar. The audience should spend episodes in Zephyros before they consciously notice that the air is alive — and when they do notice, the realization should feel like breathing in for the first time.</p>
+    </div>
+  </section>
+
+  <div class="diamond-divider"><span class="diamond"></span></div>
+
+  <footer class="footer">
+    <span>Advent of Ultima</span><br>
+    Realm Codex — Zephyros<br>
+    <em style="color: var(--green-mid); font-size: 0.75rem;">Iles sees all things. It is wise to be observant.</em>
+  </footer>
+
+</main>
+
+<style>
+@keyframes prismatic-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+</style>
+
+<script>
+// Aether particles
+(function() {
+  const container = document.getElementById('aetherParticles');
+  const count = 25;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'aether-particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (12 + Math.random() * 20) + 's';
+    p.style.animationDelay = (Math.random() * 15) + 's';
+    p.style.width = (1 + Math.random() * 2) + 'px';
+    p.style.height = p.style.width;
+    container.appendChild(p);
+  }
+})();
+
+// Nation accordion
+function toggleNation(header) {
+  const item = header.parentElement;
+  const body = item.querySelector('.nation-body');
+  const isActive = item.classList.contains('active');
+
+  // Close all
+  document.querySelectorAll('.nation-item').forEach(function(ni) {
+    ni.classList.remove('active');
+    ni.querySelector('.nation-body').style.maxHeight = '0';
+  });
+
+  // Open clicked if it wasn't already open
+  if (!isActive) {
+    item.classList.add('active');
+    body.style.maxHeight = body.scrollHeight + 'px';
+  }
+}
+
+// Scroll reveal
+(function() {
+  var reveals = document.querySelectorAll('.reveal');
+
+  function checkReveal() {
+    var windowHeight = window.innerHeight;
+    reveals.forEach(function(el) {
+      var top = el.getBoundingClientRect().top;
+      if (top < windowHeight - 80) {
+        el.classList.add('visible');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', checkReveal);
+  window.addEventListener('resize', checkReveal);
+  // Initial check
+  setTimeout(checkReveal, 100);
+})();
+</script>
+
+</body>
+</html>
