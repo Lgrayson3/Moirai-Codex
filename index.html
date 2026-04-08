@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moirai Codex — Advent of Ultima</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #080a10;
+  --bg-card: #0e1118;
+  --bg-card-hover: #141820;
+  --text-primary: #d8dce8;
+  --text-secondary: #8a90a4;
+  --text-muted: #505468;
+  --gold: #c9a84c;
+  --gold-dim: #8a7235;
+  --border-subtle: #1a1e2a;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.75;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(201, 168, 76, 0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 20% 100%, rgba(100, 140, 200, 0.03) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(160, 80, 160, 0.03) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+::selection {
+  background: rgba(201, 168, 76, 0.3);
+  color: #fff;
+}
+
+header {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 6rem 2rem 3rem;
+  max-width: 800px;
+}
+
+header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+header .subtitle {
+  font-family: var(--font-display);
+  font-size: clamp(0.85rem, 2vw, 1.05rem);
+  font-weight: 400;
+  color: var(--text-secondary);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+header p {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  max-width: 560px;
+  margin: 0 auto;
+  font-style: italic;
+}
+
+.realms {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 900px;
+  width: 100%;
+  padding: 2rem 2rem 6rem;
+}
+
+.realm-card {
+  display: block;
+  text-decoration: none;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 2rem 1.8rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.realm-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.realm-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--gold-dim);
+  transform: translateY(-3px);
+}
+
+.realm-card:hover::before {
+  opacity: 1;
+}
+
+.realm-card h2 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
+
+.realm-card .element {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.realm-card p {
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+/* Pyrthera - Fire */
+.realm-card.pyrthera::before { background: linear-gradient(90deg, #8B2500, #D4952A, #8B2500); }
+.realm-card.pyrthera h2 { color: #E8B84B; }
+.realm-card.pyrthera .element { color: #C45A1C; }
+.realm-card.pyrthera p { color: #A89880; }
+.realm-card.pyrthera:hover { border-color: rgba(196, 90, 28, 0.4); }
+
+/* Thalassor - Water */
+.realm-card.thalassor::before { background: linear-gradient(90deg, #1a5276, #5ba3cf, #1a5276); }
+.realm-card.thalassor h2 { color: #a8d4ef; }
+.realm-card.thalassor .element { color: #5ba3cf; }
+.realm-card.thalassor p { color: #8aa8c0; }
+.realm-card.thalassor:hover { border-color: rgba(91, 163, 207, 0.4); }
+
+/* Tenebralis - Shadow */
+.realm-card.tenebralis::before { background: linear-gradient(90deg, #3d1f5c, #9B59B6, #3d1f5c); }
+.realm-card.tenebralis h2 { color: #c89fe0; }
+.realm-card.tenebralis .element { color: #9B59B6; }
+.realm-card.tenebralis p { color: #9a8fb0; }
+.realm-card.tenebralis:hover { border-color: rgba(155, 89, 182, 0.4); }
+
+/* Zephyros - Wind */
+.realm-card.zephyros::before { background: linear-gradient(90deg, #2D5F2D, #4A9E4A, #2D5F2D); }
+.realm-card.zephyros h2 { color: #8FD98F; }
+.realm-card.zephyros .element { color: #4A9E4A; }
+.realm-card.zephyros p { color: #9AAE9A; }
+.realm-card.zephyros:hover { border-color: rgba(74, 158, 74, 0.4); }
+
+footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0 2rem 4rem;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Moirai Codex</h1>
+  <div class="subtitle">Advent of Ultima</div>
+  <p>Four realms. Four elements. Choose your path and discover the lore within.</p>
+</header>
+
+<div class="realms">
+  <a href="pyrthera_realm_codex.html" class="realm-card pyrthera">
+    <h2>Pyrthera</h2>
+    <div class="element">Realm of Fire</div>
+    <p>A land of molten rivers and ember storms, where the forge-born shape destiny from living flame.</p>
+  </a>
+
+  <a href="thalassor_realm_page.html" class="realm-card thalassor">
+    <h2>Thalassor</h2>
+    <div class="element">Realm of Water</div>
+    <p>Abyssal depths and coral spires conceal ancient currents that bind the tides of fate.</p>
+  </a>
+
+  <a href="tenebralis_one_pager.html" class="realm-card tenebralis">
+    <h2>Tenebralis</h2>
+    <div class="element">Realm of Shadows</div>
+    <p>Where light surrenders, the shadow-weavers chart unseen threads across the veil of twilight.</p>
+  </a>
+
+  <a href="zephyros_realm_codex.html" class="realm-card zephyros">
+    <h2>Zephyros</h2>
+    <div class="element">Realm of Wind</div>
+    <p>Sky-citadels drift among prismatic gales, home to those who read prophecy in the shifting winds.</p>
+  </a>
+</div>
+
+<footer>The Codex Awaits</footer>
+
+</body>
+</html>
