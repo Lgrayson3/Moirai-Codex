@@ -3,723 +3,336 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pyrthera — Advent of Ultima</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<title>Pyrthera — Advent of Ultima · Realm Codex</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --ember: #8B2500;
-  --molten: #C45A1C;
-  --amber: #D4952A;
-  --gold: #E8B84B;
-  --flame: #F0C75E;
-  --ash: #A89070;
-  --bg-deep: #0A0604;
-  --bg-card: #120C08;
-  --bg-elevated: #1A110A;
-  --text-primary: #E8DCC8;
-  --text-secondary: #A89880;
-  --text-muted: #6B5E50;
-  --text-accent: var(--gold);
-  --border-subtle: rgba(200, 160, 100, 0.1);
-  --border-active: rgba(200, 160, 100, 0.3);
-  --font-display: 'Cinzel', serif;
-  --font-body: 'Cormorant Garamond', serif;
-  --section-gap: 6rem;
-  --content-max: 860px;
-  --page-pad: clamp(1.5rem, 5vw, 4rem);
+  --ember: #8B1A1A;
+  --amber: #C4702B;
+  --gold: #D4A843;
+  --solar: #F5E6C8;
+  --obsidian: #0D0B09;
+  --obs-mid: #1A1612;
+  --obs-light: #2A2319;
+  --ash: #3D3128;
+  --txt: #E8DCC8;
+  --txt2: #A89880;
+  --txt3: #7A6E5E;
+  --bdr: rgba(212,168,67,.12);
+  --bdr2: rgba(212,168,67,.2);
+  --hd: 'Cinzel', serif;
+  --bd: 'Cormorant Garamond', serif;
+  --gap: clamp(4rem,8vw,7rem);
+  --w: min(54rem,90vw);
+  --ww: min(66rem,92vw);
 }
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; font-size: 18px; }
-body {
-  background: var(--bg-deep);
-  color: var(--text-primary);
-  font-family: var(--font-body);
-  font-weight: 400;
-  line-height: 1.75;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(139, 37, 0, 0.08) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 40% at 30% 100%, rgba(196, 90, 28, 0.05) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 50% at 80% 50%, rgba(212, 149, 42, 0.03) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
-}
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 1;
-}
-main { position: relative; z-index: 2; }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--obsidian);color:var(--txt);font-family:var(--bd);font-size:clamp(1.05rem,1.8vw,1.2rem);line-height:1.78;font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(139,26,26,.07) 0%,transparent 70%),radial-gradient(ellipse 60% 40% at 30% 100%,rgba(196,112,43,.04) 0%,transparent 60%)}
 
-.divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin: var(--section-gap) auto;
-  max-width: var(--content-max);
-  padding: 0 var(--page-pad);
-}
-.divider::before, .divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border-active), transparent);
-}
-.divider .diamond {
-  width: 8px;
-  height: 8px;
-  background: var(--gold);
-  transform: rotate(45deg);
-  flex-shrink: 0;
-  opacity: 0.6;
-}
+.dd{display:flex;align-items:center;justify-content:center;gap:1rem;margin:var(--gap) auto;max-width:var(--w);opacity:.4}
+.dd::before,.dd::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.dd i{width:7px;height:7px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;font-style:normal}
 
-.section-label {
-  font-family: var(--font-display);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 0.75rem;
-}
-.section-title {
-  font-family: var(--font-display);
-  font-size: clamp(1.6rem, 4vw, 2.2rem);
-  font-weight: 400;
-  color: var(--text-accent);
-  line-height: 1.3;
-  margin-bottom: 2rem;
-}
-.section-content {
-  max-width: var(--content-max);
-  margin: 0 auto;
-  padding: 0 var(--page-pad);
-}
+.header{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;overflow:hidden}
+.header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 100% 70% at 50% 30%,rgba(139,26,26,.1) 0%,transparent 70%);pointer-events:none}
+.ht{font-family:var(--hd);font-size:clamp(.6rem,1.1vw,.75rem);letter-spacing:.35em;text-transform:uppercase;color:var(--txt3);margin-bottom:2rem;animation:fd 1.2s ease-out both}
+.h1{font-family:var(--hd);font-size:clamp(3.5rem,10vw,8rem);font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:linear-gradient(180deg,var(--solar) 0%,var(--gold) 50%,var(--amber) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.05;animation:fu 1.4s ease-out .2s both}
+.hs{font-family:var(--hd);font-size:clamp(.72rem,1.3vw,.9rem);letter-spacing:.3em;text-transform:uppercase;color:var(--amber);margin-top:1.5rem;animation:fu 1.4s ease-out .4s both}
 
-/* HERO */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 4rem var(--page-pad);
-  position: relative;
-}
-.hero::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 200px;
-  background: linear-gradient(to top, var(--bg-deep), transparent);
-  pointer-events: none;
-}
-.hero-tag {
-  font-family: var(--font-display);
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.5em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 2rem;
-}
-.hero-realm {
-  font-family: var(--font-display);
-  font-size: clamp(3rem, 10vw, 7rem);
-  font-weight: 700;
-  line-height: 1;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, var(--ember), var(--molten), var(--amber), var(--gold), var(--flame));
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: shimmer 8s ease-in-out infinite;
-}
-@keyframes shimmer {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-.hero-subtitle {
-  font-family: var(--font-display);
-  font-size: clamp(0.75rem, 2vw, 1rem);
-  font-weight: 400;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-  margin-bottom: 3rem;
-}
-.hero-epigraph {
-  font-family: var(--font-body);
-  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-  font-style: italic;
-  color: var(--text-secondary);
-  max-width: 640px;
-  line-height: 1.7;
-}
-.hero-epigraph .attribution {
-  display: block;
-  font-style: normal;
-  font-size: 0.8em;
-  color: var(--text-muted);
-  margin-top: 0.75rem;
-}
+.s{max-width:var(--w);margin:0 auto;padding:0 1.5rem;position:relative;z-index:1}
+.sl{font-family:var(--hd);font-size:clamp(.58rem,.95vw,.7rem);letter-spacing:.4em;text-transform:uppercase;color:var(--txt3);margin-bottom:.75rem}
+.st{font-family:var(--hd);font-size:clamp(1.7rem,3.8vw,2.6rem);font-weight:600;letter-spacing:.05em;color:var(--solar);margin-bottom:2rem;line-height:1.2}
+.s p{margin-bottom:1.4rem}
+.s p:last-child{margin-bottom:0}
+.s h3{font-family:var(--hd);font-size:clamp(.92rem,1.7vw,1.1rem);font-weight:600;letter-spacing:.04em;color:var(--gold);margin:2rem 0 .7rem}
+.s h3:first-of-type{margin-top:0}
 
-/* IDENTITY CARD */
-.identity-card { max-width: var(--content-max); margin: 0 auto; padding: 0 var(--page-pad); }
-.identity-card .card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  padding: clamp(2rem, 5vw, 3rem);
-  position: relative;
-}
-.identity-card .card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--ember), var(--molten), var(--amber), var(--gold), var(--flame), var(--gold), var(--amber), var(--molten), var(--ember));
-}
-.identity-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 1.5rem 2rem;
-}
-.identity-item .label {
-  font-family: var(--font-display);
-  font-size: 0.55rem;
-  font-weight: 600;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 0.3rem;
-}
-.identity-item .value {
-  font-family: var(--font-body);
-  font-size: 1.05rem;
-  font-weight: 500;
-  color: var(--text-primary);
-  line-height: 1.5;
-}
-.identity-item.full-width { grid-column: 1 / -1; }
+.cw{max-width:var(--w);margin:0 auto;padding:0 1.5rem;position:relative;z-index:1}
+.cd{border:1px solid var(--bdr2);background:linear-gradient(135deg,rgba(26,22,18,.9),rgba(42,35,25,.55));padding:clamp(2rem,4vw,3rem);position:relative}
+.cd::before{content:'';position:absolute;inset:5px;border:1px solid rgba(212,168,67,.07);pointer-events:none}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(15.5rem,1fr));gap:1.4rem 2.4rem}
+.cf{padding-bottom:1rem;border-bottom:1px solid rgba(212,168,67,.06)}
+.cf:last-child{border-bottom:none}
+.cf.fw{grid-column:1/-1}
+.cl{font-family:var(--hd);font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}
+.cv{font-size:1.05rem;line-height:1.6}
 
-/* PROSE */
-.prose p { margin-bottom: 1.25rem; font-size: 1.05rem; }
-.prose p:last-child { margin-bottom: 0; }
+.aw{max-width:var(--w);margin:0 auto;padding:0 1.5rem;position:relative;z-index:1}
+.ai{border-top:1px solid var(--bdr)}
+.ai:last-child{border-bottom:1px solid var(--bdr)}
+.ah{display:flex;align-items:center;justify-content:space-between;padding:1.4rem 0;cursor:pointer;user-select:none;transition:color .3s}
+.ah:hover{color:var(--gold)}
+.al{display:flex;flex-direction:column;gap:.2rem}
+.an{font-family:var(--hd);font-size:clamp(1.1rem,2.3vw,1.45rem);font-weight:600;letter-spacing:.04em;color:var(--solar);transition:color .3s}
+.ah:hover .an{color:var(--gold)}
+.at{font-style:italic;font-size:.9rem;color:var(--txt3)}
+.ag{width:22px;height:22px;position:relative;flex-shrink:0;margin-left:1rem}
+.ag::before,.ag::after{content:'';position:absolute;background:var(--gold);transition:transform .4s,opacity .3s}
+.ag::before{width:13px;height:1px;top:50%;left:50%;transform:translate(-50%,-50%)}
+.ag::after{width:1px;height:13px;top:50%;left:50%;transform:translate(-50%,-50%)}
+.ai.on .ag::after{transform:translate(-50%,-50%) rotate(90deg);opacity:0}
+.ab{max-height:0;overflow:hidden;transition:max-height .6s cubic-bezier(.16,1,.3,1)}
+.ac{padding:.5rem 0 2.5rem}
+.ac p{margin-bottom:1.2rem;line-height:1.75}
+.ad{font-family:var(--hd);font-size:.58rem;letter-spacing:.35em;text-transform:uppercase;color:var(--amber);margin-top:1.6rem;margin-bottom:.45rem}
+.aa{font-style:italic;color:var(--txt2);border-left:2px solid var(--amber);padding-left:1.2rem;margin-top:1.4rem}
 
-/* NATIONS ACCORDION */
-.nations-container { max-width: var(--content-max); margin: 0 auto; padding: 0 var(--page-pad); }
-.nation { border-bottom: 1px solid var(--border-subtle); }
-.nation:first-child { border-top: 1px solid var(--border-subtle); }
-.nation-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.5rem 0;
-  cursor: pointer;
-  user-select: none;
-  transition: color 0.3s ease;
-}
-.nation-header:hover { color: var(--text-accent); }
-.nation-name {
-  font-family: var(--font-display);
-  font-size: clamp(1rem, 2.5vw, 1.3rem);
-  font-weight: 500;
-  letter-spacing: 0.05em;
-}
-.nation-philosophy {
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  font-style: italic;
-  color: var(--text-secondary);
-  margin-left: 1rem;
-}
-.nation-toggle {
-  width: 28px;
-  height: 28px;
-  border: 1px solid var(--text-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: all 0.3s ease;
-}
-.nation.active .nation-toggle { border-color: var(--text-accent); transform: rotate(45deg); }
-.nation-toggle svg { width: 12px; height: 12px; stroke: currentColor; stroke-width: 2; fill: none; }
-.nation-body {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.nation.active .nation-body { max-height: 2000px; }
-.nation-content { padding: 0 0 2rem 0; }
-.nation-detail { margin-bottom: 1.25rem; }
-.nation-detail .detail-label {
-  font-family: var(--font-display);
-  font-size: 0.55rem;
-  font-weight: 600;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--molten);
-  margin-bottom: 0.25rem;
-}
-.nation-detail .detail-text { font-size: 1rem; color: var(--text-primary); line-height: 1.7; }
-.nation-atmosphere {
-  font-style: italic;
-  color: var(--text-secondary);
-  padding-left: 1rem;
-  border-left: 2px solid var(--amber);
-  margin-top: 1.5rem;
-}
+.pw{max-width:var(--ww);margin:0 auto;padding:0 1.5rem;position:relative;z-index:1}
+.pg{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));gap:1.2rem}
+.sw{display:flex;flex-direction:column;gap:.6rem}
+.sc{width:100%;aspect-ratio:1;border:1px solid rgba(212,168,67,.1)}
+.sn{font-family:var(--hd);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--solar)}
+.sh{font-size:.82rem;color:var(--txt3);font-variant-numeric:tabular-nums}
+.sd{font-size:.82rem;color:var(--txt2);line-height:1.5}
 
-/* PALETTE */
-.palette-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 1rem;
-  max-width: var(--content-max);
-  margin: 0 auto;
-  padding: 0 var(--page-pad);
-}
-.swatch { text-align: center; }
-.swatch-color {
-  width: 100%;
-  aspect-ratio: 1;
-  margin-bottom: 0.75rem;
-  border: 1px solid var(--border-subtle);
-  position: relative;
-  overflow: hidden;
-}
-.swatch-color::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%, rgba(0,0,0,0.15) 100%);
-}
-.swatch-name {
-  font-family: var(--font-display);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--text-primary);
-  margin-bottom: 0.2rem;
-}
-.swatch-hex { font-family: var(--font-body); font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.3rem; }
-.swatch-role { font-family: var(--font-body); font-size: 0.8rem; font-style: italic; color: var(--text-secondary); line-height: 1.4; }
+.hb{max-width:var(--w);margin:0 auto;padding:0 1.5rem;position:relative;z-index:1}
+.hi{border:1px solid var(--ember);background:linear-gradient(135deg,rgba(139,26,26,.07),rgba(13,11,9,.95));padding:clamp(2rem,4vw,3rem);position:relative}
+.hi::before{content:'';position:absolute;inset:5px;border:1px solid rgba(139,26,26,.12);pointer-events:none}
+.hl{font-family:var(--hd);font-size:.58rem;letter-spacing:.4em;text-transform:uppercase;color:var(--ember);margin-bottom:1.2rem}
+.hi p{font-size:clamp(1.02rem,1.7vw,1.12rem);line-height:1.85}
 
-/* PRINCIPLES */
-.principles-list { max-width: var(--content-max); margin: 0 auto; padding: 0 var(--page-pad); }
-.principle { display: flex; gap: 1.5rem; margin-bottom: 2rem; align-items: baseline; }
-.principle-number {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--ember);
-  opacity: 0.4;
-  flex-shrink: 0;
-  line-height: 1;
-  min-width: 2rem;
-  text-align: right;
-}
-.principle-text { font-size: 1.05rem; line-height: 1.7; }
-.principle-text strong { color: var(--text-accent); font-weight: 600; }
+.footer{text-align:center;padding:4rem 1.5rem 3rem;position:relative;z-index:1}
+.ft{font-family:var(--hd);font-size:.58rem;letter-spacing:.4em;text-transform:uppercase;color:var(--txt3)}
 
-/* HORROR BOX */
-.horror-box { max-width: var(--content-max); margin: 0 auto; padding: 0 var(--page-pad); }
-.horror-inner {
-  border: 1px solid var(--ember);
-  padding: clamp(2rem, 5vw, 3rem);
-  position: relative;
-  background: linear-gradient(135deg, rgba(139, 37, 0, 0.06), transparent);
-}
-.horror-inner::before, .horror-inner::after {
-  content: '';
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  border: 1px solid var(--ember);
-  transform: rotate(45deg);
-  background: var(--bg-deep);
-}
-.horror-inner::before { top: -7px; left: 2rem; }
-.horror-inner::after { bottom: -7px; right: 2rem; }
-.horror-inner p { font-size: 1.1rem; line-height: 1.8; }
-
-/* FOOTER */
-.footer { text-align: center; padding: 4rem var(--page-pad); margin-top: var(--section-gap); }
-.footer-line { width: 60px; height: 1px; background: var(--border-active); margin: 0 auto 2rem; }
-.footer-text {
-  font-family: var(--font-display);
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.4em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  line-height: 2.2;
-}
-
-/* ANIMATIONS */
-.fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
-.fade-in.visible { opacity: 1; transform: translateY(0); }
-
-/* RESPONSIVE */
-@media (max-width: 640px) {
-  html { font-size: 16px; }
-  :root { --section-gap: 4rem; }
-  .identity-grid { grid-template-columns: 1fr; }
-  .nation-header { flex-wrap: wrap; gap: 0.5rem; }
-  .nation-philosophy { margin-left: 0; width: 100%; order: 3; }
-  .palette-grid { grid-template-columns: repeat(3, 1fr); }
-  .principle { flex-direction: column; gap: 0.5rem; }
-  .principle-number { text-align: left; }
-}
+@keyframes fu{from{opacity:0;transform:translateY(1.5rem)}to{opacity:1;transform:translateY(0)}}
+@keyframes fd{from{opacity:0;transform:translateY(-1rem)}to{opacity:1;transform:translateY(0)}}
+.rv{opacity:0;transform:translateY(1.5rem);transition:opacity .8s ease-out,transform .8s ease-out}
+.rv.v{opacity:1;transform:translateY(0)}
+@media(max-width:600px){.cg{grid-template-columns:1fr}.pg{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
-<main>
 
-  <section class="hero">
-    <div class="hero-tag">Advent of Ultima · Realm Codex</div>
-    <h1 class="hero-realm">Pyrthera</h1>
-    <div class="hero-subtitle">Fire · Transformation · Sensation · Truth</div>
-    <div class="hero-epigraph">
-      "What you call the Advent is a Trial of Flame for the Gods themselves. Nothing is more sacred, and thus it demands honor."
-      <span class="attribution">— Sol'Kheret, the Sun Blossom</span>
-    </div>
-  </section>
+<header class="header">
+  <div class="ht">Advent of Ultima · Realm Codex</div>
+  <h1 class="h1">Pyrthera</h1>
+  <div class="hs">Fire &ensp;·&ensp; Transformation &ensp;·&ensp; Becoming</div>
+</header>
 
-  <div class="divider"><span class="diamond"></span></div>
+<!-- 1. IDENTITY CARD -->
+<div class="dd"><i></i></div>
+<section class="cw rv">
+  <div class="sl">I. Realm Identity</div>
+  <div class="cd"><div class="cg">
+    <div class="cf"><div class="cl">Element</div><div class="cv">Fire — transformation, sensation, truth, renewal</div></div>
+    <div class="cf"><div class="cl">Population</div><div class="cv">1–3 million across three nations</div></div>
+    <div class="cf"><div class="cl">Chromatic Signature</div><div class="cv">Red-Gold — deep ember through molten amber to liquid gold</div></div>
+    <div class="cf"><div class="cl">Material Hierarchy</div><div class="cv">Obsidian › Sandstone › Myst-Glass</div></div>
+    <div class="cf fw"><div class="cl">Cultural Analogs</div><div class="cv">West and North African civilizations (communal warmth, oral tradition, embodied spirituality, the body as living text) · Caribbean and Black American expressive culture (volume as social calibration, honesty as currency, beauty that does not ask permission) · Sacred traditions in which feast, dance, and combat are a single unbroken act of worship</div></div>
+    <div class="cf fw"><div class="cl">Role in the Story</div><div class="cv">The healthiest civilization in the cosmos — functionally, theologically, and statistically validated by the divine order — whose thousand-year war against the realm of Shadows is dismissed by every other power because of the register in which its leader delivers the diagnosis.</div></div>
+  </div></div>
+</section>
 
-  <section class="identity-card fade-in">
-    <div class="section-label">Realm Identity</div>
-    <div class="card">
-      <div class="identity-grid">
-        <div class="identity-item">
-          <div class="label">Element</div>
-          <div class="value">Fire — transformation, sensation, truth, renewal</div>
-        </div>
-        <div class="identity-item">
-          <div class="label">Patron Deity</div>
-          <div class="value">Hestia, Goddess of Flame and Hearth</div>
-        </div>
-        <div class="identity-item">
-          <div class="label">Exvisar</div>
-          <div class="value">Sol'Kheret — the Sun Blossom, Warden of the Seven Suns</div>
-        </div>
-        <div class="identity-item">
-          <div class="label">Population</div>
-          <div class="value">1–3 million across three nations</div>
-        </div>
-        <div class="identity-item">
-          <div class="label">Chromatic Signature</div>
-          <div class="value">Red-Gold — deep ember through molten amber to liquid gold</div>
-        </div>
-        <div class="identity-item">
-          <div class="label">Material Hierarchy</div>
-          <div class="value">Obsidian › Sandstone › Myst-Glass</div>
-        </div>
-        <div class="identity-item full-width">
-          <div class="label">Cultural Analogs</div>
-          <div class="value">West & North African civilizations · Caribbean and Black American expressive culture · MMA's holistic physicality · Sacred hedonism of feast-dance-fight traditions</div>
-        </div>
-        <div class="identity-item full-width">
-          <div class="label">Narrative Function</div>
-          <div class="value">The moral compass the audience doesn't recognize as a moral compass until it's too late. The civilization that is right about everything and dismissed for how it says it.</div>
-        </div>
-      </div>
-    </div>
-  </section>
+<!-- 2. DIVINE COVENANT -->
+<div class="dd"><i></i></div>
+<section class="s rv">
+  <div class="sl">II. The Divine Covenant</div>
+  <h2 class="st">Hestia, Goddess of Flame and Hearth</h2>
+  <p>Hestia is a being made entirely of fire. She possesses every flame that has ever existed, including the one she created: the Golden Flame, a fire that dissolves the ego — the constructed self, the sustained false narrative, the lie a person maintains about who they are. In a cosmos where the most dangerous enemy operates through the systematic manipulation of identity, Hestia's creation is the natural predator of the entire Mavarran civilization. The Golden Flame does not search or discriminate. It reaches for what is false. If truth exists underneath, the person survives, healed. If nothing exists underneath — if the subject is hollow or clings to the false self past the point of severance — the Flame continues through the mind and everything it is composed of, reducing the whole to ash. This outcome is called Sarcax.</p>
+  <p>To imagine Hestia, imagine Sol'Kheret ten times larger and composed of fire itself. She is the goddess of the hearth — the fire at the center of the home, the one the family gathers around — and she is as terrifying as she is warm. The two qualities are not in tension. She is a mother who loves her children completely and will let them fail, because failure is how one learns. She watches her people endure the Trial of Flame and feels pride. She watches them build shelter for strangers and feels pride. She watches them sit in silence for a year absorbing nothing but filtered sunlight and feels pride. Three expressions of her fire. The diversity is the design.</p>
+  <p>Her blessing to the Pyrtheran people is Solar Synthesis: the metabolic ability to convert stellar radiation into vitality, myst, and emotional resilience. This is the same class of divine gift as Mavarra's Pansilion, Salacia's Krenides, or Edgerinne's blessing of flesh-metal integration. It is the patron's gift to her people, the biological foundation of everything the culture became. Under seven suns, it renders them functionally inexhaustible.</p>
+</section>
 
-  <div class="divider"><span class="diamond"></span></div>
+<!-- 3. THE EXVISAR -->
+<div class="dd"><i></i></div>
+<section class="s rv">
+  <div class="sl">III. The Exvisar</div>
+  <h2 class="st">Sol'Kheret — The Sun Blossom</h2>
+  <p>Sol'Kheret is the most beloved Exvisar in Pyrtheran history. Her titles include Warden of the Seven Suns, Torchmother of Becoming, the Ember Queen, and Invictar Solis — the Unconquered of the Sun. She is a Shaman Queen: a sovereign who governs her civilization and a shaman who channels the goddess Hestia through her own body. She sees the kafer — the visible spiritual aura — of those before her, perceives the interior state of hearts and egos, and administers the Golden Flame as a means of mystical healing through spiritual intervention.</p>
+  <p>She is a former Templar who underwent the Branding of the Golden Flame — the full application, the one that leaves most recipients mindless. It hardly changed her. The Flame went through and found so little falsehood that she emerged almost exactly as she entered. Then Hestia descended and accepted the formalized ritual duel that determines the Exvisarship: fourteen days of the full Sacred Braid — fighting, dancing, lovemaking — with the goddess, while keeping every torch in the court lit. One passage for each of the seven suns. She maintained every torch for the duration. She is Exvisar not because she survived a fight with a goddess, but because she fought a goddess and still tended the fire.</p>
+  <p>In appearance: dark-skinned, statuesque, hair braided with sunfire and gemstones, seven pupils in her eyes. Her body is the most extensively branded in the realm. In her Court — the roofless obsidian amphitheater called the Court of Becoming — she sits on the floor because the floor is already hers. The drums, the torches, the dueling, the cooking, the branding, the tantra — these are the instruments of her shamanic practice and the texture of daily life and the community's gathering and the spiritual maintenance of her people, all at once, on the same floor, under open sky. When she raises a hand, the drums stop. When the drums stop, the world stops with them.</p>
+  <p>She has been at war with Tenebralis for the duration of her reign. She is the only member of the Exvisarelim with her sights set on the Realm of Shadows — not as a political adversary but as a spiritual sickness she can see with the clarity the Golden Flame grants her. The limited trade agreements she maintains with Thalassor and Zephyros exist almost entirely to keep one specific outpost supplied. Beyond that, she wants nothing from the other realms and does not consider them allies.</p>
+</section>
 
-  <section class="section-content prose fade-in">
-    <div class="section-label">The Land</div>
-    <div class="section-title">Seven Suns and the Furnace Below</div>
-    <p>Seven suns. Not metaphorical. Seven stellar bodies in staggered orbit, a minimum of three visible at any given hour, all seven blazing simultaneously at peak alignment. This is the foundational fact. Everything else is a consequence.</p>
-    <p>The heat is not atmospheric — it is lethal. A non-Pyrtheran stepping through a Clairgate into open air would begin cooking in minutes. Exposed skin burns. Eyes blur. Breathing feels like inhaling from an open kiln. Survival requires continuous myst-shielding: expensive, draining, imperfect. The longer you stay, the more myst you burn keeping yourself alive. Pyrthera tires its visitors by existing.</p>
-    <p>For Pyrtherans, the opposite. Solar Synthesis converts that same killing radiation into vitality, myst, and emotional resilience. At peak alignment they describe euphoric saturation — every cell singing, every sense sharpened, the boundary between physical pleasure and spiritual clarity dissolved. They don't endure the heat. They feast on it. They are never tired. Never depleted. Never still. Sol'Kheret dueled Hestia for fourteen days because that is what her biology permits.</p>
-    <p>The realm is the border. No walls, no checkpoints. The seven suns are the immigration policy. You cannot invade Pyrthera — your army drains before reaching the first city. Every non-Pyrtheran who stands in the Court of Becoming paid a physical cost to be there. The land noticed.</p>
-    <p>The soundscape: open desert, roaring heat, blazing fires close and distant, the crackle of every brazier. Wind. Insects. The ambient sound is the inside of a fire. The whole realm sounds like it is burning, because it is. This is why Pyrtherans are loud — not culturally, biologically. Their baseline volume is calibrated to be heard over a world that crackles.</p>
-  </section>
+<!-- 4. THE LAND -->
+<div class="dd"><i></i></div>
+<section class="s rv">
+  <div class="sl">IV. The Land</div>
+  <h2 class="st">Seven Suns</h2>
+  <p>Seven stellar bodies occupy staggered orbits above Pyrthera. A minimum of three are visible at any hour. At peak alignment, all seven blaze simultaneously. For any non-Pyrtheran organism, the heat constitutes active lethality: exposed skin burns within minutes, vision blurs, respiration becomes the sensation of inhaling from an open kiln. Survival requires continuous myst-shielding — expensive, draining, imperfect. For Pyrtherans, the same radiation is food. More suns means more energy. At peak alignment, they describe euphoric saturation: every sense sharpened, the boundary between physical pleasure and spiritual clarity dissolved. Sol'Kheret dueled Hestia for fourteen days because her biology permits it.</p>
+  <p>The ambient soundscape is the interior of a fire. Roaring heat, crackling stone, wind, the buzz of solar-fed insects, distant combustion. Pyrtheran vocal volume is a biological calibration to this environment — their baseline speaking register must carry over a world that crackles at ambient level.</p>
+  <p>Three principal zones occupy the main continent, connected by the River of Flames — a magma flow that runs from the Ashen Vale through Khet and down into the Freeholds of Rhylos. This is the central artery of Pyrtheran civilization: the lifeblood of the world made literally visible as molten rock.</p>
+  <p>Khet sits in the middle: open desert under the full unobstructed blaze of all seven suns. Crimson dunes, black glass mesas, oasis-citadels of sandstone and obsidian. Rhylos occupies the lowlands where the River of Flames spreads into the Ignition Rift — canyons split by magma rivers, volcanoes in sustained eruption, settlements on basalt arches spanning lava flows. The Ashen Vale occupies the high ground — dormant volcanic mountains where suspended ash filters the suns into perpetual amber twilight, cities carved into mountain interiors. Other continents and islands exist but are sparsely populated. Three million people on an entire planet means most of the land is wild, sun-scorched, and occupied by the solar-fed megafauna that constitute the planet's apex ecology.</p>
+  <p>Pyrthera maintains no walls, checkpoints, or immigration infrastructure. The seven suns are the only border it has ever required.</p>
+</section>
 
-  <div class="divider"><span class="diamond"></span></div>
+<!-- 5. NATIONS -->
+<div class="dd"><i></i></div>
+<div class="aw rv">
+  <div class="sl">V. The Three Nations</div>
+  <h2 class="st" style="max-width:var(--w);margin-bottom:2.5rem">Under the Hestian Faith</h2>
 
-  <section class="fade-in">
-    <div class="section-content">
-      <div class="section-label">The Three Nations</div>
-      <div class="section-title">Denominations of a Single Flame</div>
-    </div>
-    <div class="nations-container">
-      <div class="nation active">
-        <div class="nation-header" onclick="toggleNation(this)">
-          <div>
-            <div class="nation-name">The Emberate of Khet</div>
-            <div class="nation-philosophy">Becoming Through Trial</div>
-          </div>
-          <div class="nation-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="0" x2="6" y2="12"/><line x1="0" y1="6" x2="12" y2="6"/></svg></div>
-        </div>
-        <div class="nation-body">
-          <div class="nation-content">
-            <div class="nation-detail">
-              <div class="detail-label">Geography</div>
-              <div class="detail-text">The Sunscar Desert. Crimson dunes, black glass mesas, canyons under the full blaze of all seven suns. Oasis-Citadels built around natural wells and myst-springs — architecture of sandstone and obsidian, angled and faceted to catch the suns. Every surface is a solar collector. Every shadow is rare.</div>
-            </div>
-            <div class="nation-detail">
-              <div class="detail-label">Sacred Art</div>
-              <div class="detail-text">The Path of the Golden Crucible. Pure solar myst, externally applied. The Golden Flame — a metaphysical solvent for ego, not combustion for flesh. Branding as spiritual healing. The Trial of Flame as judicial practice, religious rite, and communal medicine administered simultaneously.</div>
-            </div>
-            <div class="nation-detail">
-              <div class="detail-label">Life</div>
-              <div class="detail-text">Hunters. The megafauna of the Sunscar are solar-fed reptilian apex predators — terrifyingly beautiful, fast enough to bring down sauropod-scale herbivores. The hunt is simultaneously sacred, sporting, and sometimes fatal. What they bring home, the whole community eats. The bonfire after is where life happens.</div>
-            </div>
-            <div class="nation-detail">
-              <div class="detail-label">Key Visuals</div>
-              <div class="detail-text">Maximum exposed branded skin. Solar gold and obsidian black. Hunter's belts. Firesilk wraps in golds and reds. Horse-sized hunting companions sleeping against the house, warming the walls, letting the children climb.</div>
-            </div>
-            <div class="nation-atmosphere">The post-hunt bonfire. Drums. Meat on heated stone. The community gathered in the square. Kids bringing kindling. Someone's already started a duel and someone else is placing bets. This is a Tuesday.</div>
-          </div>
-        </div>
-      </div>
+  <div class="ai" data-n>
+    <div class="ah" onclick="T(this)"><div class="al"><div class="an">The Emberate of Khet</div><div class="at">Becoming Through Trial — Fire as Judgment and Memory</div></div><div class="ag"></div></div>
+    <div class="ab"><div class="ac">
+      <div class="ad">Geography</div>
+      <p>The open desert at the center of the main continent, under the full unobstructed blaze of all seven suns. Crimson dunes, mesas of black glass, canyons where light is inescapable. Oasis-Citadels built around natural wells and myst-springs, their architecture sandstone and obsidian, roofless, every surface angled to catch and hold light. Public spaces are floored in mirror-polished obsidian that reflects the suns upward. The Court of Becoming — Sol'Kheret's roofless amphitheater — is here.</p>
+      <div class="ad">School of Magic</div>
+      <p>The Path of the Golden Crucible. Solar myst channeled as transformative heat, both physical and metaphysical. The Ignis Judicium — the Golden Flame — is the foundational art: a metaphysical solvent that burns ego, not flesh. Solar Forging imbues objects with solar myst. The Aegis of the Seven Suns projects shields of solidified sunlight. The most common personal combat application is setting one's fists aflame or breathing fire — fire-breathing is a difficult and respected technique requiring sustained lung capacity, and a true fire-breather is considered extraordinary at home and abroad.</p>
+      <div class="ad">Life</div>
+      <p>Khetians are hunters. The megafauna of the desert are solar-fed reptilian apex predators of enormous scale — creatures other realms would classify as dragons. A Khetian hunt is a coordinated tactical engagement against prey that is as fast, as inexhaustible, and as dangerous as the hunters themselves. Horse-sized reptilian hunting companions are bonded to families across generations — they sleep against the house wall and keep it warm, and children grow up climbing on them. Post-hunt bonfires are the primary mechanism of civic life: communal cooking, dueling, debate, music, courtship, drinking, and wagering, all occurring simultaneously. These gatherings last for days.</p>
+      <div class="ad">Visual Details</div>
+      <p>Maximum exposed dark skin. Minimal firesilk wraps in golds and reds. Golden brands at highest density. Hunter's belts carrying weapons and crystata orb-bombs. Solar-absorptive bone from great kills worked into tools and weaponry. The loudest and most immediately legible Pyrtheran silhouette. When the broader cosmos uses the word "Pyrtheran," they typically mean Khetian.</p>
+      <p class="aa">Ten people carrying a carcass that blazes with refracted light across the dunes at sunset, drums already building behind them, children running ahead, someone heating the stone slabs. Tonight will be enormous.</p>
+    </div></div>
+  </div>
 
-      <div class="nation">
-        <div class="nation-header" onclick="toggleNation(this)">
-          <div>
-            <div class="nation-name">The Freeholds of Rhylos</div>
-            <div class="nation-philosophy">Becoming Through Flow</div>
-          </div>
-          <div class="nation-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="0" x2="6" y2="12"/><line x1="0" y1="6" x2="12" y2="6"/></svg></div>
-        </div>
-        <div class="nation-body">
-          <div class="nation-content">
-            <div class="nation-detail">
-              <div class="detail-label">Geography</div>
-              <div class="detail-text">The Ignition Rift. Vast canyons split by rivers of magma, volcanoes in gentle constant eruption. Settlements on massive basalt arches spanning lava flows, or carved into cliffsides. The air shimmers with heat haze and carries the low rumble of the earth.</div>
-            </div>
-            <div class="nation-detail">
-              <div class="detail-label">Sacred Art</div>
-              <div class="detail-text">The Dance of the Molten Heart. Percussive, grounded dance that sways the flow of lava and shapes stone. They learned it because the alternative was dying. The theology came after.</div>
-            </div>
-            <div class="nation-detail">
-              <div class="detail-label">Life</div>
-              <div class="detail-text">Pastoral. Volcanic-adapted megafauna that follow the magma flows the way terrestrial animals follow water. Herding means walking alongside through corridors between active volcanic flows. Mutualism, not domestication — if the herder gets it wrong, the magma does not care.</div>
-            </div>
-            <div class="nation-detail">
-              <div class="detail-label">Key Visuals</div>
-              <div class="detail-text">Denser draping, earthtone firesilk. Builder's tools. Organic cities grown from rock. The Forge-Temples. And the obsidian citadels built for the Glacian refugees — cold inside, shaped with their most sacred art, for nothing.</div>
-            </div>
-            <div class="nation-atmosphere">A Rhylian man sees a woman across the fire and starts drumming differently. Not for her. Near her. The rhythm shifts and she either moves toward it or she does not. The dance is the conversation.</div>
-          </div>
-        </div>
-      </div>
+  <div class="ai" data-n>
+    <div class="ah" onclick="T(this)"><div class="al"><div class="an">The Freeholds of Rhylos</div><div class="at">Becoming Through Flow — Fire as Covenant and Ecology</div></div><div class="ag"></div></div>
+    <div class="ab"><div class="ac">
+      <div class="ad">Geography</div>
+      <p>The lowlands where the River of Flames spreads into the Ignition Rift. Canyons and plateaus split by rivers of magma, volcanoes in sustained gentle eruption. The air shimmers with heat haze and carries the low rumble of the earth. Settlements built on massive basalt arches spanning the lava flows, or carved into cliff faces. The architecture is organic — cities that appear grown from the rock rather than constructed, shaped by the Dance of the Molten Heart. The Obsidian Citadels built for the Glacian refugees are here: cold inside, designed for someone else's comfort.</p>
+      <div class="ad">School of Magic</div>
+      <p>The Dance of the Molten Heart. Geothermal myst channeled through percussive, grounded movement to influence magma flow, shape stone, and synchronize group action to the planet's geological pulse. Magma-Weaving, Stone-Shaping, and Heart-Drumming are the primary applications. The art is relational — fire is not commanded but partnered with. The magma dancers who built the Glacian citadels practice this school.</p>
+      <div class="ad">Life</div>
+      <p>Pastoral. Rhylians herd volcanic-adapted megafauna that follow magma flows the way terrestrial animals follow water. The herder reads the flows and guides the herd through safe corridors between active eruptions. This is mutualism, not domestication — if the herder reads the flow wrong, the magma does not wait and the animals do not care. The Dance of the Molten Heart was developed as a survival necessity before it became a theology. Rhylians are also the realm's master architects and stonemasons.</p>
+      <div class="ad">Visual Details</div>
+      <p>Denser firesilk draping than Khet, in earthtone golds and volcanic reds. Builder's tools alongside weapons. Bodies shaped by stonework. Architecture spanning rivers of glowing magma. The Obsidian Citadels — given freely, cold inside, asked for nothing.</p>
+      <p class="aa">A man shifts his drumming near a woman at the fire. Not for her. Near her. She either moves toward the rhythm or she doesn't. The community sees. Nobody speaks.</p>
+    </div></div>
+  </div>
 
-      <div class="nation">
-        <div class="nation-header" onclick="toggleNation(this)">
-          <div>
-            <div class="nation-name">The Ashen Vale</div>
-            <div class="nation-philosophy">Becoming Through Insight</div>
-          </div>
-          <div class="nation-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="0" x2="6" y2="12"/><line x1="0" y1="6" x2="12" y2="6"/></svg></div>
-        </div>
-        <div class="nation-body">
-          <div class="nation-content">
-            <div class="nation-detail">
-              <div class="detail-label">Geography</div>
-              <div class="detail-text">Dormant volcanoes where ash filters the seven suns into perpetual hazy twilight. Cities carved inside the mountains, illuminated by bioluminescent fungi and geothermal vents. The only Pyrtheran landscape that has shadows.</div>
-            </div>
-            <div class="nation-detail">
-              <div class="detail-label">Sacred Art</div>
-              <div class="detail-text">The Ash-Sight. The study of the moment of combustion — the spark — and the memory of it — the ash. Perception, psychic reading, retrieval of past heat. The underlying code of fire that both Khet and Rhylos interact with blindly.</div>
-            </div>
-            <div class="nation-detail">
-              <div class="detail-label">Life</div>
-              <div class="detail-text">Ascetic. The people of the Vale don't eat. The sun is enough. They have refined Solar Synthesis to the point where food, drink, and perhaps even physical contact become unnecessary. Not deprivation — sufficiency.</div>
-            </div>
-            <div class="nation-detail">
-              <div class="detail-label">Key Visuals</div>
-              <div class="detail-text">Robed, covered — the one Pyrtheran silhouette that conceals, and that concealment is itself the statement. Pale ash-amber eyes. Bioluminescent interiors. The stillness of a people who have stopped needing.</div>
-            </div>
-            <div class="nation-atmosphere">Two people meditating near each other in a bioluminescent cave. A shared silence that becomes specific. Somehow everyone around them knows.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <div class="ai" data-n>
+    <div class="ah" onclick="T(this)"><div class="al"><div class="an">The Ashen Vale</div><div class="at">Becoming Through Insight — Fire as Perception and Potential</div></div><div class="ag"></div></div>
+    <div class="ab"><div class="ac">
+      <div class="ad">Geography</div>
+      <p>Dormant volcanic mountains where suspended ash filters the seven suns into perpetual amber twilight. Cities carved into mountain interiors, illuminated by bioluminescent fungi and geothermal vents. The light is softer here — diffused, contemplative, settling on the skin like memory. The River of Flames originates in these highlands before descending through Khet and into the Ignition Rift.</p>
+      <div class="ad">School of Magic</div>
+      <p>The Ash-Sight, formally called Cinerix. The art of reading the residue of combustion — perceiving futures, pasts, and the truth of souls from the patterns left in sacred ash. Where the Golden Crucible burns away the false and the Molten Heart shapes the new, the Ash-Sight reads what fire has already done. Key applications include Ember-Vision (perceiving the kafer and interior state of another), Cinder-Recall (retrieving the heat of a past moment from its residue), and Ash-Cloak (reducing one's spiritual visibility to near-imperceptibility).</p>
+      <div class="ad">Life</div>
+      <p>The people of the Ashen Vale do not eat. They have refined Solar Synthesis until conventional nutrition is unnecessary. The ash-filtered light is dimmer, but sufficient for people who have learned to need almost nothing. This is not deprivation — it is sufficiency. Their asceticism represents the most radical theological position within Pyrthera. They supply the realm's most sought-after oracles and strategists and serve as neutral mediators between Khet and Rhylos.</p>
+      <div class="ad">Visual Details</div>
+      <p>The one Pyrtheran silhouette that conceals: robed, covered, the concealment itself the statement. Pale ashen amber eyes. The fewest brands of the three nations, though those they carry tend to be the oldest and the hardest to read. A stillness that unsettles even other Pyrtherans.</p>
+      <p class="aa">Two people meditating near each other in a bioluminescent cave. A shared silence that becomes specific. Everyone around them knows something has begun.</p>
+    </div></div>
+  </div>
+</div>
 
-  <div class="divider"><span class="diamond"></span></div>
+<!-- 6. THE PEOPLE -->
+<div class="dd"><i></i></div>
+<section class="s rv">
+  <div class="sl">VI. The People</div>
+  <h2 class="st">Standing in the Sun</h2>
+  <p>The Pyrtheran phrase "standing in the sun" describes the practice of being fully present for whatever the moment contains — whether it is destroying you or filling you with joy. The suns do literally rejuvenate them; the phrase is simultaneously physiological instruction and spiritual philosophy. Pain is sacred. Pleasure is sacred. Neither diminishes the other. The person who can hold both at once, without using the good to numb the bad or the bad to dismiss the good, is the person who has Become.</p>
+  <p>Pyrtherans are loud — biologically calibrated to carry over an environment that sounds like the interior of a fire. They are direct — not from ideological commitment to candor but because lying is physiologically detectable through the kafer and socially futile in a population of three million where reputation is face-to-face. They are deeply spiritual people — shamanic, passionate, indomitable. They worship Hestia and the seven suns with an intensity that can appear at a glance like sun-worship itself, and Sol'Kheret in a room functions as something close to an eighth sun.</p>
+  <p>They are, demonstrably, the happiest people in the cosmos. Their spiritual practice produces the result it claims to produce and you can see it on them. They are also a people at war, and in a population this small over a thousand years, everyone knows someone who has served at the Hearth of Luxania. The bonfire at home means what it means because they know what the dark looks like. They choose the light not as a response to the dark but because the light was always what they were.</p>
 
-  <section class="section-content prose fade-in">
-    <div class="section-label">The People</div>
-    <div class="section-title">What the Sun Grew</div>
-    <p>Dark-skinned. Not olive, not tan — dark. Skin designed across generations to absorb maximum solar radiation. Bodies that never stop moving, never stop being fed, never stop being tested. They don't look like athletes. They look like something the sun grew.</p>
-    <p>The brands are the first thing you see. Golden marks on dark skin — not scars but records. Each brand is the mark left when a falsehood was removed from the soul. The most branded person in the room is the most clear, the most healed, the one with the least distance between who they are and who they pretend to be. Under the suns, against dark skin, the marks catch light and hold it. A branded Pyrtheran in motion is a body illuminated by its own history.</p>
-    <p>The kafer — the visible aura of spiritual and emotional state — radiates from every Pyrtheran as a heat-haze or corona. Every Pyrtheran can read it. Your soul's weather is public information. Lying is futile before you even open your mouth.</p>
-    <p>Eyes burn red-gold across the spectrum: deep ember in Khet, shifting magma-red in Rhylos, pale ashen amber in the Vale. Standing in a room full of people from other Realms, a Pyrtheran is the wrong color, the wrong volume, and the wrong amount of visible skin. They stand out because they refuse to blend in — not as a statement, but because blending in would require being false.</p>
-  </section>
+  <h3>Physical Transformation</h3>
+  <p>Generations of Solar Synthesis have produced a population that is dark-skinned (maximizing solar absorption), statuesque, and shaped by lifetimes of continuous physical engagement. Reflexes and perception are directly fueled by solar intake. Under seven suns, they are inexhaustible — capable of sustained activity for days without rest. The golden brands glow against dark skin under sunlight: a body illuminated by its own history. The kafer — the heat-haze corona of spiritual state — radiates from every Pyrtheran body and is legible to every other Pyrtheran. Eyes burn in the red-gold myst spectrum: precise judging gold in Khet, deep shifting magma-red in Rhylos, pale ashen amber in the Vale.</p>
+  <p>In a room full of people from other realms, a Pyrtheran is immediately distinct. Warm spectrum in a cool-spectrum room. Branded skin in semi-translucent firesilk. The wrong volume, the wrong amount of visible skin, the wrong palette. They do not adjust, because adjustment would require performance, and performance is dishonesty.</p>
+</section>
 
-  <div class="divider"><span class="diamond"></span></div>
+<!-- 7. SCHOOLS OF MAGIC -->
+<div class="dd"><i></i></div>
+<section class="s rv">
+  <div class="sl">VII. Schools of Magic</div>
+  <h2 class="st">The Threefold Fire</h2>
+  <p>Three schools corresponding to the three nations, each representing a distinct claim about what fire is. All draw on the same solar myst. All are legitimate expressions of the Hestian faith. Sol'Kheret is the only living practitioner acknowledged to have mastered all three.</p>
 
-  <section class="section-content prose fade-in">
-    <div class="section-label">Fashion & Material Culture</div>
-    <div class="section-title">Skin Is a Solar Panel</div>
-    <p>Covering skin is choosing to go hungry. Everything a Pyrtheran wears exists to magnify light, secure a tool, or display the brands. The base textile is firesilk — glass-fiber weave, semi-translucent, prismatic. Under seven suns it shifts and refracts, the fabric glowing along its threads. Dyed in golds, reds, and greens for solar absorption, or left colorless to illuminate the brands beneath. In Pyrthera it's common. In Thalassor it's a luxury import. A Thalassori aristocrat wearing firesilk at a Symposium is wearing Pyrtheran underwear as haute couture.</p>
-    <p>The silhouette is minimal. Sashes, wraps, bands. A draped saree-like wrap — one shoulder bare, midriff exposed, legs visible in motion. Belts carrying tools and weapons. Bangles and armbands of gold. Strands of firesilk woven into hair with rubies and emeralds. No armor — ever. The most dangerous Pyrtheran on a battlefield looks like they're dressed for a festival, because there is no distinction between those two states.</p>
-    <p>Status reads through the brands first — number, intricacy, and placement tell a spiritual biography. Then the gems, the quality of the firesilk, the craftsmanship of metalwork. A merchant-warrior heir like Serket Ashbloom wears crystata orbs on her belt — the most precious substance in the Thalassori hierarchy, filled with napalm and worn as accessories. <em>I'm beautiful and I explode.</em></p>
-  </section>
+  <h3>The Path of the Golden Crucible (Khet)</h3>
+  <p>Fire as judgment and memory. The Ignis Judicium — the Golden Flame — is the foundational art. A metaphysical solvent that burns ego and leaves truth. Additional arts include Solar Forging and the Aegis of the Seven Suns. The most common personal combat expressions are flame-wreathed fists and fire-breathing. Fire-breathing requires exceptional lung capacity and sustained control; a true fire-breather is rare and celebrated. This school produces the branding ritual and the Trial of Flame.</p>
 
-  <div class="divider"><span class="diamond"></span></div>
+  <h3>The Dance of the Molten Heart (Rhylos)</h3>
+  <p>Fire as creation and circulation. Geothermal myst channeled through percussive, rhythmic movement. Magma-Weaving, Stone-Shaping, Heart-Drumming. The most physically grounded school. Responsible for Pyrthera's architecture, including the Glacian citadels.</p>
 
-  <section class="section-content prose fade-in">
-    <div class="section-label">Power</div>
-    <div class="section-title">Every Fighter Is Their Own Martial Art</div>
-    <p>There is a shared vocabulary — striking, grappling, blade work, ranged combat. Everyone learns the fundamentals. But what you do with the alphabet, where your body naturally goes under pressure — that is yours. Your martial art is your self expressed through combat. The comparison is MMA: a shared framework deployed through individual expression.</p>
-    <p>Weapons are chosen, not assigned. Multiple weapons mastered is the norm. Against Ferridane you study the formations. Against Thalassor you account for the shared consciousness. Against a Pyrtheran there is no system to study. Every single one is a unique problem you have never seen before.</p>
-    <p>The most dangerous thing in the room is not a weapon. It is Sol'Kheret's word. Antaka — the capacity to drop a sun on your homeland — makes conventional military doctrine irrelevant. Any realm that declares war on Pyrthera will bathe in eternal sunlight before they earn the honor of bleeding on Hestia's sands. Internal conflicts are settled through personal combat: if it's not worth your own blood, it's not worth anyone's.</p>
-  </section>
+  <h3>The Ash-Sight / Cinerix (Ashen Vale)</h3>
+  <p>Fire as information. Reading the residue of combustion: what the spark reveals and what the ash remembers. Ember-Vision, Cinder-Recall, Ash-Cloak. The most subtle school. Prolonged practice produces a stillness and detachment that other Pyrtherans find eerie.</p>
 
-  <div class="divider"><span class="diamond"></span></div>
+  <h3>The Black Flame</h3>
+  <p>Carried by one being: Tein-Enhotep, the Last Androsphinx. The Black Flame is the only fire in existence that truly destroys matter and energy. What it touches is gone — not transformed, not reduced, not burned to ash. Gone. Permanently removed from existence. Tein-Enhotep breathed it five thousand years ago to annihilate the Androsphinx species, which had been the apex predators of Pyrthera, keeping the human population in the position of prey. He has not used it in millennia. He has not met a foe that warranted it.</p>
 
-  <section class="fade-in">
-    <div class="section-content">
-      <div class="section-label">Material Palette</div>
-      <div class="section-title">The Chromatic Signature</div>
-    </div>
-    <div class="palette-grid">
-      <div class="swatch">
-        <div class="swatch-color" style="background: #8B2500;"></div>
-        <div class="swatch-name">Ember</div>
-        <div class="swatch-hex">#8B2500</div>
-        <div class="swatch-role">Deep fire, the Khetian base, obsidian scoring</div>
-      </div>
-      <div class="swatch">
-        <div class="swatch-color" style="background: #C45A1C;"></div>
-        <div class="swatch-name">Molten</div>
-        <div class="swatch-hex">#C45A1C</div>
-        <div class="swatch-role">Magma, Rhylian earth, volcanic glass</div>
-      </div>
-      <div class="swatch">
-        <div class="swatch-color" style="background: #D4952A;"></div>
-        <div class="swatch-name">Amber</div>
-        <div class="swatch-hex">#D4952A</div>
-        <div class="swatch-role">Solar warmth, firesilk dye, spiced wine</div>
-      </div>
-      <div class="swatch">
-        <div class="swatch-color" style="background: #E8B84B;"></div>
-        <div class="swatch-name">Gold</div>
-        <div class="swatch-hex">#E8B84B</div>
-        <div class="swatch-role">The brands, divine fire, Hestia's light</div>
-      </div>
-      <div class="swatch">
-        <div class="swatch-color" style="background: #F0C75E;"></div>
-        <div class="swatch-name">Flame</div>
-        <div class="swatch-hex">#F0C75E</div>
-        <div class="swatch-role">Peak alignment, euphoric saturation, Golden Flame at full burn</div>
-      </div>
-      <div class="swatch">
-        <div class="swatch-color" style="background: #A89070;"></div>
-        <div class="swatch-name">Ash</div>
-        <div class="swatch-hex">#A89070</div>
-        <div class="swatch-role">The Vale, spent fire, memory, the quiet after</div>
-      </div>
-    </div>
-  </section>
+  <h3>Antaka</h3>
+  <p>The ability to collapse the distance between a planet and its sun — to force a star out of its orbital position and bring it into contact with a world. Six people hold this power: Sol'Kheret and her five Torchbearers. A seventh — the Archangel Fiacre — was taught the art by Sol'Kheret during a diplomatic visit, in what was framed as a drunken contest of strength but functioned as a declaration of trust. Antaka is not a weapon. It is an extinction event. Its existence constitutes nuclear deterrence at planetary scale.</p>
+</section>
 
-  <div class="divider"><span class="diamond"></span></div>
+<!-- 8. FASHION -->
+<div class="dd"><i></i></div>
+<section class="s rv">
+  <div class="sl">VIII. Fashion &amp; Material Culture</div>
+  <h2 class="st">The Body Receives the Light</h2>
+  <p>Skin is a solar panel. Covering it blocks the fuel source. Everything a Pyrtheran wears exists to magnify light, secure a tool, or display the brands. Firesilk — a glass-fiber weave, semi-translucent and prismatic — is the base textile. Under multiple suns it shifts and refracts along its threads. Dyed in golds, reds, and greens for solar absorption, or left colorless to illuminate the brands beneath. In Pyrthera it is common and practical. In Thalassor it is a luxury import sold as "warmth without weight."</p>
+  <p>The silhouette is minimal: sashes, wraps, bands. Draped saree-like construction — one shoulder bare, midriff exposed, legs visible in motion. Belts carry tools and weapons. Bangles and armbands of gold-toned metal. Firesilk strands woven into hair alongside rubies, emeralds, and crystata. The body is visible through semi-translucent fabric. No armor under any circumstances — armor blocks sunlight, reducing speed, reflexes, and myst regeneration.</p>
+  <p>Status reads through brands first, then through quality of metalwork, gems, and firesilk. A merchant-warrior's daughter carries crystata orbs on her belt — her family's trade goods repurposed as incendiary weapons, swaying at her hip. Poverty looks like less ornamentation but not less exposure. Even the poorest Pyrtheran stands in the sun with their brands visible, because brands are free and light is free.</p>
+</section>
 
-  <section class="fade-in">
-    <div class="section-content">
-      <div class="section-label">Production Directives</div>
-      <div class="section-title">Design Principles</div>
-    </div>
-    <div class="principles-list">
-      <div class="principle">
-        <div class="principle-number">I</div>
-        <div class="principle-text"><strong>Every visual element should radiate, not reflect.</strong> Thalassor's beauty is reflective — crystata catching light, water carrying shimmer. Pyrthera's beauty is emissive. The brands glow. The firesilk holds. The skin absorbs and converts. Nothing borrows light. Everything generates its own.</div>
-      </div>
-      <div class="principle">
-        <div class="principle-number">II</div>
-        <div class="principle-text"><strong>The silhouette must read as unarmored, unafraid, and in motion.</strong> Minimal fabric. Maximum visible skin. No helmets, no plate, no shields. A Pyrtheran at rest should look like they're between two activities, not pausing from one. The energy never stops.</div>
-      </div>
-      <div class="principle">
-        <div class="principle-number">III</div>
-        <div class="principle-text"><strong>Every environment should feel like the inside of a fire.</strong> The crackle is ambient. The heat haze distorts distant objects. Light comes from multiple directions simultaneously. Shadows are rare, thin, and temporary. A correctly rendered Pyrtheran scene should make the audience feel warm.</div>
-      </div>
-      <div class="principle">
-        <div class="principle-number">IV</div>
-        <div class="principle-text"><strong>The spectacle is genuine, not curated.</strong> Pyrtherans are flashy the way a bonfire is flashy — not performing, just outputting. The distinction between Thalassori beauty (designed to be seen) and Pyrtheran beauty (impossible not to see) must be legible in every frame.</div>
-      </div>
-      <div class="principle">
-        <div class="principle-number">V</div>
-        <div class="principle-text"><strong>The audience must want to follow them home.</strong> Before the audience understands the theology or the politics, they must fall in love with these people. With the volume. With the honesty. With the girl who walked in like she owned the place. The pull must be visceral before it is intellectual.</div>
-      </div>
-    </div>
-  </section>
+<!-- 9. WEAPONS -->
+<div class="dd"><i></i></div>
+<section class="s rv">
+  <div class="sl">IX. Weapons &amp; the Relationship to Force</div>
+  <h2 class="st">The Personal Art</h2>
+  <p>Every Pyrtheran develops a personal martial identity. A shared vocabulary of fundamental techniques exists, but how an individual combines and deploys them under pressure is theirs alone — as personal as their brands, as unique as their history of Becoming. Copying another practitioner's style is a form of spiritual dishonesty. The closest external analogy is mixed martial arts: a shared framework within which every fighter constitutes a unique tactical problem.</p>
+  <p>Weapons are chosen through preference and trade. Mastery of multiple weapons is standard. The most common magical combat expression is not ranged projection but close-quarters fire: fists set aflame or fire breathed at proximity. A Pyrtheran fight is intimate by nature — the fire comes from the places where contact and breath happen.</p>
+  <p>External military conflict is rendered largely theoretical by Antaka. Internal disputes are resolved through personal combat between the principals. A ruler who sends a champion rather than fighting personally accepts permanent reputational cost. Duels are the primary civic mechanism for dispute resolution — officiated, spectated, wagered upon, accompanied by musicians and communal cooking. The duel resolves the dispute; the gathering around it feeds the community.</p>
+  <p>Pyrtheran mercenaries are the most sought-after combatants in the universe. On a battlefield, a Pyrtheran presents as unarmored, sun-fed, dressed for a celebration, and moving at a speed non-solar-adapted opponents cannot track.</p>
+</section>
 
-  <div class="divider"><span class="diamond"></span></div>
+<!-- 10. RELATIONS -->
+<div class="dd"><i></i></div>
+<section class="s rv">
+  <div class="sl">X. Relationship to the Other Realms</div>
+  <h2 class="st">The Thousand-Year Verdict</h2>
+  <p>When Luxania fell — when Erebus murdered Aether, God of Light, and the Tenebrali occupation began — Pyrthera showed up. Angels descended and informed the Exvisar. Torchbearers carried the torch to Luxenfall and established a sanctuary — a Hearth — at Thavriel, the sky-city of the Astral Navigators, the Luminacy that had originally discovered the connections between the realms. Thavriel sits on a floating island accessible only by the Skysteps. It was chosen for the strategic advantage of the high ground. The symbolism proved incidental.</p>
+  <p>Thalassor did not come. The Sinclairs controlled the Clairgates — infrastructure built from stolen Luxanian Astral Navigator technology — and did not open them. Ferridane declared it not their problem: the Luxanians should have built swords instead of light bridges. Zephyros offered intelligence and supplies but would not fight. Pyrthera bled alone.</p>
+  <p>Then the cosmos sat down at the table with the occupiers. Thalassor resumed trade. The Rewritten — Luxenfallen whose minds had been restructured by Tenebrali Oneironauts — began appearing in Thalassori ports and Ferridanian markets as traded goods. Pyrthera judged this. Not with anger. With the clarity of the Golden Flame applied at civilizational scale. The cosmos was carrying a lie it refused to have burned away. To remain at the table was to become complicit, and complicity in falsehood is the one thing Pyrtheran theology cannot accommodate structurally.</p>
+  <p>The Hearth has been held for a thousand years. Pyrtherans rotate through Thavriel on active deployment, operating in lightless conditions that starve their Solar Synthesis, fighting rewritten Luxenfallen sent at the walls by the Tenebrali occupation — victims turned into weapons and aimed at the one place still trying to protect their people. Sometimes the weapons are children. The stories the veterans bring home are the stories of every soldier who has tried to save a population while fighting through it. In a community of three million over a millennium, everyone knows someone who has been there.</p>
+  <p>The Hearth is the only place in the cosmos that still calls the realm Luxania. Everyone else uses Luxenfall — the name of the corpse.</p>
+  <p>Sol'Kheret's trade agreements with other realms exist to keep Thavriel supplied. Beyond that, she wants nothing. The other Exvisars are, in her assessment: a profiteer (Thalassor), a pragmatist (Ferridane), and a witness who will not act (Zephyros). All three are aware of the situation. All three have chosen their version of inaction. All three have opinions about how Sol'Kheret conducts her war.</p>
+</section>
 
-  <section class="fade-in">
-    <div class="section-content">
-      <div class="section-label">The Horror</div>
-      <div class="section-title">What's Underneath the Beauty</div>
-    </div>
-    <div class="horror-box">
-      <div class="horror-inner">
-        <p>The horror is not in Pyrthera. The horror is in the cosmos's reaction to it. A civilization of three million people figured out how to live honestly, completely, and in genuine communion with their Goddess — and the rest of the cosmos would rather drink the souls of tortured children than admit that the loud people with the brands and the bonfires had the answer all along. Sol'Kheret screamed the truth for years. She warned them about Vex Mavarra. She offered the merciful option when she could have dropped a sun. And the room chose the quiet, reasonable liar over the screaming, correct prophet — every single time — because her volume was more offensive than their crimes. The horror is that Pyrthera is right, has always been right, and being right was never enough.</p>
-      </div>
-    </div>
-  </section>
+<!-- 11. LEADERSHIP -->
+<div class="dd"><i></i></div>
+<section class="s rv">
+  <div class="sl">XI. Leadership &amp; Governance</div>
+  <h2 class="st">The Warbrand and the Sun Blossom</h2>
+  <p>Pyrtheran social structure is a meritocracy of proven excellence: what one has endured, mastered, and given. The hierarchy ascends from Ashbearers (laborers, farmers, craftspeople — the productive ground), through the Perpetually Becoming (mystics on continuous pilgrimages of self-refinement), to Stellarchs (judges and flamewardens who officiate duels and administer minor Trials), to the five Torchbearers (each personally selected and branded by Sol'Kheret, each capable of wielding Antaka, each drawn from a different nation to represent the synthesis), to the Exvisar herself.</p>
+  <p>The Exvisarship is earned through a specific sequence: surviving the full Branding of the Golden Flame, then defeating Hestia in the fourteen-day duel of the Sacred Braid while maintaining the ceremonial torches. This has been the formal mechanism for as long as the title has existed. Before it existed, Pyrthera was governed by sovereigns of different character — including Tein-Enhotep, who ruled Khet five thousand years ago as a conqueror-king called the Warbrand. His kingdom was the foundation of what Khet is today. The culture Sol'Kheret tends — the Sacred Braid, the feasting, the integration of pleasure alongside pain — represents the evolution of a civilization that began under the Warbrand as a war-forged empire freed from predation by the annihilation of the Androsphinx species.</p>
+  <p>Tein-Enhotep remains alive and present in Sol'Kheret's Court. The Warbrand and the Sun Blossom coexist: the mountain who cleared the world and the shaman who tends the garden that grew in the clearing. She shows him something like deference. He thinks she is rambunctious. He chalks it up to youth.</p>
+</section>
 
-  <footer class="footer">
-    <div class="footer-line"></div>
-    <div class="footer-text">
-      Advent of Ultima · Moirai Codex<br>
-      Pyrthera — Realm of Fire<br>
-      April 2026
-    </div>
-  </footer>
+<!-- 12. PALETTE -->
+<div class="dd"><i></i></div>
+<div class="pw rv">
+  <div class="sl">XII. Material Palette</div>
+  <h2 class="st" style="max-width:var(--w);margin-bottom:2.5rem">The Chromatic Signature</h2>
+  <div class="pg">
+    <div class="sw"><div class="sc" style="background:#8B1A1A"></div><div class="sn">Ember Deep</div><div class="sh">#8B1A1A</div><div class="sd">Obsidian holding a day's heat. The deepest register of Pyrtheran fire. Brand-scars at twilight.</div></div>
+    <div class="sw"><div class="sc" style="background:#C4702B"></div><div class="sn">Molten Amber</div><div class="sh">#C4702B</div><div class="sd">Magma rivers in the Ignition Rift. Rhylian firesilk at midday. The warmth that feeds.</div></div>
+    <div class="sw"><div class="sc" style="background:#D4A843"></div><div class="sn">Golden Flame</div><div class="sh">#D4A843</div><div class="sd">The brands. The Flame that dissolves ego. Hestia's signature. Sacred, still, humming.</div></div>
+    <div class="sw"><div class="sc" style="background:#F5E6C8"></div><div class="sn">Solar White</div><div class="sh">#F5E6C8</div><div class="sd">Peak alignment. All seven suns blazing. The color of being full.</div></div>
+    <div class="sw"><div class="sc" style="background:#0D0B09"></div><div class="sn">Obsidian</div><div class="sh">#0D0B09</div><div class="sd">The mirror-stone. Court floors and arena surfaces. Holds heat and memory.</div></div>
+    <div class="sw"><div class="sc" style="background:#3D3128"></div><div class="sn">Ash Warm</div><div class="sh">#3D3128</div><div class="sd">The Ashen Vale at twilight. Spent fire. The residue after the Flame has finished.</div></div>
+  </div>
+</div>
 
-</main>
+<!-- 13. DYSFUNCTION -->
+<div class="dd"><i></i></div>
+<section class="s rv">
+  <div class="sl">XIII. Societal Dysfunction</div>
+  <h2 class="st">The Structural Vulnerabilities</h2>
+  <p>Pyrthera's civilization operates on trust — the ambient condition of a population small enough that reputation is personal, honest enough that the kafer makes deception visible, and theologically committed to the Golden Flame's capacity to burn away what is false. Vex Mavarra demonstrated during the Mavarran Incursion that this foundation can be compromised: she appeared in the Court of Becoming, mimicked Pyrtheran behavior, spoke through the mouths of Torchbearers, and proved that assets existed inside the most secure space in the realm. The Golden Flame can burn what is present; it cannot inoculate against what arrives tomorrow. Trust in Pyrthera has shifted from a settled condition to one requiring continuous re-verification, and the act of re-verification is itself corrosive to the trust it seeks to restore.</p>
+  <p>Simultaneously, Pyrthera bears the suspicion of the broader cosmos for the destruction of Glacia. Everyone in the realms knows that six people hold the power of Antaka. Someone called the sun down on Glacia twenty years ago. The Oracles of Zephyros could exonerate Pyrthera and refuse to do so. The actual perpetrator — Raiwata, the Sun Caller, the Apex Archdevil of Hel — remains unnamed by anyone with the authority to be believed. Sol'Kheret is the cosmos's most correct diagnostician and its most convenient suspect, prosecuting a war against Tenebralis while carrying the unresolved accusation of an atrocity committed by the thing she should be hunting.</p>
+  <p>The Hearth rotation carries its own cost. A millennium of sending people into a lightless warzone and receiving them back carrying memories that the Sacred Braid can hold but not erase produces a population for whom the knowledge of the dark is universal and permanent. Pyrthera is not broken by this. But it is shaped by it in ways that the theology of Becoming — which holds that both pain and pleasure are sacred — can accommodate without fully addressing.</p>
+</section>
+
+<!-- 14. GONLAN -->
+<div class="dd"><i></i></div>
+<div class="hb rv">
+  <div class="hi">
+    <div class="hl">XIV. The Gonlan and the Trialkeeper</div>
+    <p>Pyrthera is home to two Gonlan — primordial draconic beings, children of Aracice the Star-Eater. <strong>Pyralithe</strong>, the Gonlan of the Upper Sky, is the transcendent solar flame above. <strong>Agnivar</strong>, the Gonlan of the Volcanic Heart, is composed of lava bones and dragon glass — a being of the deep earth. Between them they represent Pyrthera's two elemental registers: the fire that falls from above and the fire that rises from below. Both are in mourning at the start of the series — children of a murdered god, feeling the sickness from Hel spread through worlds their father built.</p>
+    <p>Residing in Pyrthera but predating its civilization by millennia is <strong>Tein-Enhotep, the Last Androsphinx</strong> — once called the Warbrand, sovereign of Khet five thousand years ago. He annihilated his own species with the Black Flame to free the Pyrtheran people from predation. His brands are not personal spiritual biography but historical record: entire wars and eras inscribed on his body. Branded down his spine, in a script only the gods can read, is the record of the First War — the foundational conflict of the cosmos, dictated to him by Nyx, Aracice, and Hestia. The gods who won that war sealed Nyx — the only being who could translate the record — to prevent her from reading it to her son Alciel, the Dragonson. The truth of the cosmos has been walking in the open on an Androsphinx's spine for five thousand years, untouchable and unreadable, waiting for a translator who is locked away.</p>
+    <p>Tein-Enhotep is humorless, immovable, and carries honor for the fallen rather than grief. He trained Alciel in the discipline of the martial. He stands beside the Dragonson as godfather, bodyguard, and keeper of a promise made to his oldest friend: Aracice, the Dragon-God, who asked him to look after the boy. Tein-Enhotep said yes because he is the only person alive who knows what Alciel is about to become. The Last Androsphinx mentoring the Last God. Both carrying the weight of being the final member of a category that used to have more names in it.</p>
+  </div>
+</div>
+
+<div class="dd"><i></i></div>
+<footer class="footer"><div class="ft">Advent of Ultima &ensp;·&ensp; Moirai Codex &ensp;·&ensp; April 2026</div></footer>
 
 <script>
-function toggleNation(header) {
-  var nation = header.closest('.nation');
-  var wasActive = nation.classList.contains('active');
-  var nations = document.querySelectorAll('.nation');
-  for (var i = 0; i < nations.length; i++) {
-    nations[i].classList.remove('active');
-  }
-  if (!wasActive) {
-    nation.classList.add('active');
-  }
-}
-
-var observer = new IntersectionObserver(function(entries) {
-  entries.forEach(function(entry) {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-var fadeElements = document.querySelectorAll('.fade-in');
-for (var i = 0; i < fadeElements.length; i++) {
-  observer.observe(fadeElements[i]);
-}
+function T(h){var i=h.closest('.ai'),b=i.querySelector('.ab'),a=i.classList.contains('on');document.querySelectorAll('.ai').forEach(function(n){n.classList.remove('on');n.querySelector('.ab').style.maxHeight='0'});if(!a){i.classList.add('on');b.style.maxHeight=b.scrollHeight+'px'}}
+(function(){var e=document.querySelectorAll('.rv'),o=new IntersectionObserver(function(s){s.forEach(function(x){if(x.isIntersecting){x.target.classList.add('v');o.unobserve(x.target)}})},{threshold:.08,rootMargin:'0px 0px -30px 0px'});e.forEach(function(el){o.observe(el)})})();
 </script>
 </body>
 </html>
