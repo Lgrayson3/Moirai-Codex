@@ -7,33 +7,32 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg-deep: #0a0710;
-  --bg-card: #110e18;
-  --bg-hover: #1a1525;
-  --bg-highlight: #1c1428;
-  --purple-dark: #3d1f5c;
-  --purple-mid: #6B2D8B;
+  --bg-deep: #08060d;
+  --bg-card: #0f0c17;
+  --bg-hover: #161220;
+  --bg-highlight: #1a1428;
+  --purple-dark: #2d1545;
+  --purple-core: #6B2D8B;
   --purple-accent: #9B59B6;
   --purple-light: #c89fe0;
   --purple-ghost: #e8d5f0;
-  --violet-glow: #7c3aed;
   --gold-vein: #c9a84c;
-  --gold-dim: #8a7235;
-  --blue-water: #4a90b8;
+  --gold-dim: #7a6530;
+  --blue-water: #4a8fb8;
   --blue-biolum: #6ec6e6;
-  --text-primary: #d8d0e0;
+  --amber-fire: #d4873a;
+  --text-primary: #d4cce0;
   --text-secondary: #9a8fb0;
-  --text-dim: #6b6080;
-  --border-subtle: #2a2035;
-  --border-accent: #3d1f5c;
+  --text-dim: #605575;
+  --border-subtle: #221a30;
+  --border-accent: #2d1545;
   --font-display: 'Cinzel', serif;
   --font-body: 'Cormorant Garamond', serif;
-  --max-width: 860px;
-  --section-gap: 5rem;
+  --max-width: 880px;
+  --section-gap: 4.5rem;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { scroll-behavior: smooth; }
 
 body {
@@ -42,753 +41,682 @@ body {
   font-family: var(--font-body);
   font-size: 19px;
   font-weight: 400;
-  line-height: 1.75;
+  line-height: 1.78;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-::selection {
-  background: var(--purple-mid);
-  color: var(--purple-ghost);
+::selection { background: var(--purple-core); color: var(--purple-ghost); }
+
+/* === BELLADONNA POLLEN PARTICLES === */
+#pollen-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
 }
 
-/* === BACKGROUND TEXTURE === */
+/* === AMBIENT GRADIENTS === */
 body::before {
   content: '';
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background:
-    radial-gradient(ellipse at 20% 50%, rgba(107,45,139,0.06) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 30%, rgba(74,144,184,0.04) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 90%, rgba(61,31,92,0.08) 0%, transparent 40%);
+    radial-gradient(ellipse at 15% 45%, rgba(107,45,139,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 25%, rgba(74,143,184,0.04) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 95%, rgba(45,21,69,0.1) 0%, transparent 35%);
   pointer-events: none;
   z-index: 0;
 }
 
-.page-container {
-  position: relative;
-  z-index: 1;
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
+.page { position: relative; z-index: 1; max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem; }
 
 /* === DIAMOND DIVIDERS === */
-.diamond-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin: var(--section-gap) 0;
-  opacity: 0.5;
+.divider {
+  display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+  margin: var(--section-gap) 0; opacity: 0.45;
 }
-.diamond-divider::before,
-.diamond-divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px;
   background: linear-gradient(to right, transparent, var(--purple-dark), transparent);
 }
-.diamond-divider span {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  background: var(--purple-accent);
-  transform: rotate(45deg);
-  flex-shrink: 0;
+.divider span {
+  width: 7px; height: 7px; background: var(--purple-accent);
+  transform: rotate(45deg); flex-shrink: 0;
 }
 
 /* === HEADER === */
-.realm-header {
-  text-align: center;
-  padding: 6rem 0 2rem;
+.header { text-align: center; padding: 5.5rem 0 1.5rem; }
+.header .tag {
+  font-family: var(--font-display); font-size: 0.6rem;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--purple-accent); display: block; margin-bottom: 2rem;
 }
-.realm-header .tag {
+.header h1 {
   font-family: var(--font-display);
-  font-size: 0.65rem;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: var(--purple-accent);
-  margin-bottom: 2rem;
-  display: block;
+  font-size: clamp(2.6rem, 8vw, 4.2rem);
+  font-weight: 700; color: var(--purple-light);
+  letter-spacing: 0.1em; line-height: 1.1; margin-bottom: 0.6rem;
+  text-shadow: 0 0 80px rgba(155,89,182,0.15);
 }
-.realm-header h1 {
-  font-family: var(--font-display);
-  font-size: clamp(2.8rem, 8vw, 4.5rem);
-  font-weight: 700;
-  color: var(--purple-light);
-  letter-spacing: 0.08em;
-  line-height: 1.1;
-  margin-bottom: 0.5rem;
-  text-shadow: 0 0 60px rgba(155,89,182,0.2);
-}
-.realm-header .subtitle {
-  font-family: var(--font-display);
-  font-size: 0.8rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 2.5rem;
-}
-.realm-header .epigraph {
-  font-family: var(--font-body);
-  font-size: 1.15rem;
-  font-style: italic;
-  color: var(--text-secondary);
-  max-width: 580px;
-  margin: 0 auto;
-  line-height: 1.8;
-}
-.realm-header .epigraph .attribution {
-  display: block;
-  font-style: normal;
-  font-size: 0.85rem;
-  color: var(--text-dim);
-  margin-top: 0.5rem;
-  letter-spacing: 0.05em;
+.header .sub {
+  font-family: var(--font-display); font-size: 0.75rem;
+  letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim);
 }
 
-/* === SECTION TITLES === */
-.section-title {
+/* === SECTION FRAMEWORK === */
+.sec-num {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--purple-accent); display: block; margin-bottom: 0.4rem;
+}
+.sec-title {
   font-family: var(--font-display);
-  font-size: clamp(1.3rem, 3.5vw, 1.6rem);
-  font-weight: 600;
-  color: var(--purple-light);
-  letter-spacing: 0.06em;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.75rem;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-weight: 600; color: var(--purple-light);
+  letter-spacing: 0.05em; margin-bottom: 1.4rem;
+  padding-bottom: 0.7rem;
   border-bottom: 1px solid var(--border-accent);
 }
-.section-label {
-  font-family: var(--font-display);
-  font-size: 0.6rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--purple-accent);
-  margin-bottom: 0.5rem;
-  display: block;
+.sub-head {
+  font-family: var(--font-display); font-size: 0.9rem;
+  font-weight: 600; color: var(--purple-light);
+  letter-spacing: 0.03em; margin-top: 1.5rem; margin-bottom: 0.5rem;
 }
 
 /* === PROSE === */
-.prose p {
-  margin-bottom: 1.25rem;
-  color: var(--text-primary);
-}
+.prose p { margin-bottom: 1.2rem; }
 .prose p:last-child { margin-bottom: 0; }
 .prose strong { color: var(--purple-light); font-weight: 600; }
 .prose em { color: var(--text-secondary); }
 
 /* === IDENTITY CARD === */
-.identity-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 2px;
-  padding: 2.5rem;
-  position: relative;
-  overflow: hidden;
+.id-card {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: 2px; padding: 2.2rem; position: relative; overflow: hidden;
 }
-.identity-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
+.id-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
   background: linear-gradient(to right, var(--purple-dark), var(--purple-accent), var(--purple-dark));
 }
-.identity-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.25rem 2rem;
+.id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem 2rem; }
+.id-item .lbl {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--purple-accent); margin-bottom: 0.2rem;
 }
-.identity-item .label {
-  font-family: var(--font-display);
-  font-size: 0.6rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--purple-accent);
-  margin-bottom: 0.25rem;
-}
-.identity-item .value {
-  font-family: var(--font-body);
-  font-size: 1rem;
-  color: var(--text-primary);
-  line-height: 1.6;
-}
-.identity-item.full-width {
-  grid-column: 1 / -1;
-}
+.id-item .val { font-size: 0.95rem; color: var(--text-primary); line-height: 1.6; }
+.id-item.wide { grid-column: 1 / -1; }
 
 /* === ACCORDION === */
-.accordion { margin-top: 1.5rem; }
-.accordion-item {
-  border: 1px solid var(--border-subtle);
-  margin-bottom: -1px;
-  background: var(--bg-card);
-  overflow: hidden;
-  transition: background 0.3s ease;
+.acc {}
+.acc-item {
+  border: 1px solid var(--border-subtle); margin-bottom: -1px;
+  background: var(--bg-card); overflow: hidden;
 }
-.accordion-item:first-child { border-radius: 2px 2px 0 0; }
-.accordion-item:last-child { border-radius: 0 0 2px 2px; }
-.accordion-trigger {
-  width: 100%;
-  background: none;
-  border: none;
-  padding: 1.25rem 1.5rem;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: var(--font-display);
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--purple-light);
-  letter-spacing: 0.04em;
-  text-align: left;
-  transition: background 0.2s ease, color 0.2s ease;
+.acc-item:first-child { border-radius: 2px 2px 0 0; }
+.acc-item:last-child { border-radius: 0 0 2px 2px; }
+.acc-btn {
+  width: 100%; background: none; border: none;
+  padding: 1.1rem 1.4rem; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--font-display); font-size: 0.9rem;
+  font-weight: 600; color: var(--purple-light);
+  letter-spacing: 0.04em; text-align: left;
+  transition: background 0.2s;
 }
-.accordion-trigger:hover { background: var(--bg-hover); }
-.accordion-trigger .arrow {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
+.acc-btn:hover { background: var(--bg-hover); }
+.acc-btn .hint {
+  font-family: var(--font-body); font-size: 0.82rem;
+  font-weight: 400; color: var(--text-dim); font-style: italic; margin-left: 0.8rem;
+}
+.acc-btn .arr {
+  width: 7px; height: 7px;
   border-right: 1.5px solid var(--purple-accent);
   border-bottom: 1.5px solid var(--purple-accent);
-  transform: rotate(45deg);
-  transition: transform 0.3s ease;
-  flex-shrink: 0;
-  margin-left: 1rem;
+  transform: rotate(45deg); transition: transform 0.3s;
+  flex-shrink: 0; margin-left: 1rem;
 }
-.accordion-item.open .accordion-trigger .arrow {
-  transform: rotate(-135deg);
-}
-.accordion-trigger .region-element {
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  font-weight: 400;
-  color: var(--text-dim);
-  font-style: italic;
-  margin-left: 1rem;
-}
-.accordion-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease;
-}
-.accordion-inner {
-  padding: 0 1.5rem 1.5rem;
-}
-.accordion-inner .atmosphere {
-  font-family: var(--font-body);
-  font-style: italic;
-  font-size: 0.95rem;
-  color: var(--purple-accent);
-  margin-bottom: 1rem;
-  padding-left: 1rem;
+.acc-item.open .acc-btn .arr { transform: rotate(-135deg); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.acc-inner { padding: 0 1.4rem 1.4rem; }
+.acc-inner .atm {
+  font-style: italic; font-size: 0.92rem; color: var(--purple-accent);
+  margin-bottom: 0.8rem; padding-left: 0.8rem;
   border-left: 2px solid var(--purple-dark);
 }
-.accordion-inner .detail-label {
-  font-family: var(--font-display);
-  font-size: 0.55rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--gold-vein);
-  margin-top: 1rem;
-  margin-bottom: 0.25rem;
+.acc-inner .dlbl {
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--gold-vein); margin-top: 0.8rem; margin-bottom: 0.2rem;
 }
-.accordion-inner p {
-  font-size: 0.95rem;
-  line-height: 1.7;
-  color: var(--text-secondary);
-}
+.acc-inner p { font-size: 0.92rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 0.6rem; }
 
 /* === SWATCHES === */
-.swatch-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-top: 1.5rem;
+.sw-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-top: 1.2rem; }
+.sw { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 2px; overflow: hidden; }
+.sw-color { height: 72px; }
+.sw-info { padding: 0.6rem 0.8rem; }
+.sw-name {
+  font-family: var(--font-display); font-size: 0.58rem;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-primary); margin-bottom: 0.1rem;
 }
-.swatch {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.swatch-color {
-  height: 80px;
-  position: relative;
-}
-.swatch-info {
-  padding: 0.75rem 1rem;
-}
-.swatch-name {
-  font-family: var(--font-display);
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text-primary);
-  margin-bottom: 0.15rem;
-}
-.swatch-hex {
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  color: var(--text-dim);
-  margin-bottom: 0.35rem;
-}
-.swatch-desc {
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-}
+.sw-hex { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0.25rem; }
+.sw-desc { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.45; }
 
-/* === DESIGN PRINCIPLES === */
-.principle {
-  padding: 1.25rem 0;
-  border-bottom: 1px solid var(--border-subtle);
-}
-.principle:last-child { border-bottom: none; }
-.principle-number {
-  font-family: var(--font-display);
-  font-size: 0.6rem;
-  letter-spacing: 0.2em;
-  color: var(--purple-accent);
-  text-transform: uppercase;
-  margin-bottom: 0.35rem;
-}
-.principle p {
-  font-size: 1rem;
-  color: var(--text-primary);
-  line-height: 1.7;
-}
-
-/* === HORROR BOX === */
-.horror-box {
-  background: var(--bg-highlight);
-  border: 1px solid var(--purple-dark);
+/* === HIGHLIGHT BOX === */
+.highlight-box {
+  background: var(--bg-highlight); border: 1px solid var(--purple-dark);
   border-left: 3px solid var(--purple-accent);
-  padding: 2rem 2.5rem;
-  margin-top: 1.5rem;
-  position: relative;
+  padding: 1.8rem 2.2rem; margin-top: 1.2rem; position: relative;
 }
-.horror-box::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(ellipse at 50% 0%, rgba(155,89,182,0.05) 0%, transparent 70%);
+.highlight-box::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(155,89,182,0.04) 0%, transparent 70%);
   pointer-events: none;
 }
-.horror-box p {
-  position: relative;
-  font-size: 1.05rem;
-  line-height: 1.85;
-  color: var(--text-primary);
+.highlight-box p { position: relative; font-size: 1rem; line-height: 1.8; }
+
+/* === PRINCIPLE BLOCKS === */
+.princ { padding: 1rem 0; border-bottom: 1px solid var(--border-subtle); }
+.princ:last-child { border-bottom: none; }
+.princ-n {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.2em; color: var(--purple-accent); text-transform: uppercase; margin-bottom: 0.3rem;
 }
+.princ p { font-size: 0.95rem; line-height: 1.7; }
 
 /* === FOOTER === */
-.realm-footer {
-  text-align: center;
-  padding: 4rem 0 3rem;
-  font-family: var(--font-display);
-  font-size: 0.55rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--text-dim);
+.footer {
+  text-align: center; padding: 3.5rem 0 2.5rem;
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim);
 }
-.realm-footer span { color: var(--purple-accent); }
+.footer span { color: var(--purple-accent); }
+
+/* === FADE === */
+.fi { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fi.vis { opacity: 1; transform: translateY(0); }
 
 /* === RESPONSIVE === */
 @media (max-width: 640px) {
   body { font-size: 17px; }
-  .identity-grid { grid-template-columns: 1fr; }
-  .swatch-grid { grid-template-columns: repeat(2, 1fr); }
-  .identity-card { padding: 1.5rem; }
-  .realm-header { padding: 4rem 0 1rem; }
-  :root { --section-gap: 3.5rem; }
-  .horror-box { padding: 1.5rem; }
-  .accordion-trigger { padding: 1rem 1.25rem; }
-  .accordion-inner { padding: 0 1.25rem 1.25rem; }
-}
-
-/* === FADE-IN === */
-.fade-in {
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
+  .id-grid { grid-template-columns: 1fr; }
+  .sw-grid { grid-template-columns: repeat(2, 1fr); }
+  .id-card { padding: 1.4rem; }
+  .header { padding: 3.5rem 0 1rem; }
+  :root { --section-gap: 3rem; }
+  .highlight-box { padding: 1.2rem 1rem; }
 }
 </style>
 </head>
 <body>
 
-<div class="page-container">
+<canvas id="pollen-canvas"></canvas>
 
-  <!-- ===== HEADER ===== -->
-  <header class="realm-header fade-in">
+<div class="page">
+
+  <!-- 1. HEADER -->
+  <header class="header fi">
     <span class="tag">Advent of Ultima · Moirai Codex</span>
     <h1>Tenebralis</h1>
-    <div class="subtitle">Shadow · The Negation of Consequence</div>
-    <div class="epigraph">
-      "You are free to be whomever you want to be. You can be someone else tomorrow, and tomorrow, and tomorrow."
-      <span class="attribution">— The Promise of Tenebralis</span>
-    </div>
+    <div class="sub">Shadow · The Negation of Consequence</div>
   </header>
 
-  <div class="diamond-divider"><span></span></div>
+  <div class="divider"><span></span></div>
 
-  <!-- ===== REALM IDENTITY ===== -->
-  <section class="fade-in">
-    <span class="section-label">I</span>
-    <h2 class="section-title">Realm Identity</h2>
-    <div class="identity-card">
-      <div class="identity-grid">
-        <div class="identity-item">
-          <div class="label">Element</div>
-          <div class="value">Shadow — as the hidden, the obfuscated, the place the light can't reach, the darkness of the abyss</div>
+  <!-- 2. REALM IDENTITY CARD -->
+  <section class="fi">
+    <span class="sec-num">I</span>
+    <h2 class="sec-title">Realm Identity</h2>
+    <div class="id-card">
+      <div class="id-grid">
+        <div class="id-item">
+          <div class="lbl">Element</div>
+          <div class="val">Shadow — the hidden, the obfuscated, the place the light cannot reach, the darkness of the abyss</div>
         </div>
-        <div class="identity-item">
-          <div class="label">Patron Deity</div>
-          <div class="value">Erebus, God of Darkness (nominal). In practice, the Mavarrans revere Vex Mavarra herself.</div>
+        <div class="id-item">
+          <div class="lbl">Population</div>
+          <div class="val">Fewer than 500,000 Mavarrans, plus an enslaved Luxenfallen workforce of uncertain size</div>
         </div>
-        <div class="identity-item">
-          <div class="label">Exvisar</div>
-          <div class="value">Vex Mavarra — Sovereign of Within, Warden of Masks</div>
+        <div class="id-item">
+          <div class="lbl">Chromatic Signature</div>
+          <div class="val">Deep indigo through bruised violet — the cold blue of a bruise, not of flame. Myst manifests in eyes and veins as near-black violet.</div>
         </div>
-        <div class="identity-item">
-          <div class="label">Population</div>
-          <div class="value">&lt;500,000 Mavarrans + enslaved Luxenfallen of uncertain number</div>
+        <div class="id-item">
+          <div class="lbl">Material Hierarchy</div>
+          <div class="val">Polished onyx (native) · Gold veining (natural) · Luxanian crystata (imported, stolen) · Ferridanian fire crystata (purchased)</div>
         </div>
-        <div class="identity-item">
-          <div class="label">Chromatic Signature</div>
-          <div class="value">Deep indigo to bruised violet — the cold blue of a bruise, not fire. Myst manifests as near-black violet.</div>
+        <div class="id-item wide">
+          <div class="lbl">Cultural Analogs</div>
+          <div class="val">The social dynamics of Los Angeles — an industry town built on the commodification of identity. The engineered consequence-free architecture of Las Vegas. The permanent public excess of New Orleans during Carnival. All three simultaneously, all the time, carved into a lightless abyss.</div>
         </div>
-        <div class="identity-item">
-          <div class="label">Material Hierarchy</div>
-          <div class="value">Polished onyx · Gold veining · Imported Luxanian crystata · Ferridanian fire crystata</div>
-        </div>
-        <div class="identity-item full-width">
-          <div class="label">Cultural Analogs</div>
-          <div class="value">Los Angeles (the industry of identity), Las Vegas (engineered consequence-free zone), New Orleans during Carnival (the permanent public excess). Carved into an abyss.</div>
-        </div>
-        <div class="identity-item full-width">
-          <div class="label">Narrative Function</div>
-          <div class="value">Primary ideological antagonist. Exports moral decay. Imports souls. Must seduce the audience before revealing the cost. The civilization that answered "why bother?" honestly and said: <em>we wouldn't. And look how free we are.</em></div>
+        <div class="id-item wide">
+          <div class="lbl">Role in the Series</div>
+          <div class="val">The primary ideological antagonist of the Advent cycle. Tenebralis operates not as a military threat but as an ideological contagion — exporting the philosophy of the Shim'zillai through cultural artifacts, social rituals, vice economies, and the infrastructure of hospitality. Its specific danger lies in the plausibility of its permission. No other realm offers a more seductive justification for doing what a person already wished to do.</div>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="diamond-divider"><span></span></div>
+  <div class="divider"><span></span></div>
 
-  <!-- ===== THE LAND ===== -->
-  <section class="fade-in">
-    <span class="section-label">II</span>
-    <h2 class="section-title">The Land</h2>
+  <!-- 3. THE DIVINE COVENANT -->
+  <section class="fi">
+    <span class="sec-num">II</span>
+    <h2 class="sec-title">The Divine Covenant</h2>
     <div class="prose">
-      <p>There is no sky. The mountain closes overhead. An abyss of uncertain depth opens below. Tempora — the only habitable space on a planet that would kill everything inside it if the walls came down — exists inside a hollow carved out of the interior of a mountain. A city built into the walls of rock that has never seen natural light. Up is stone. Down is darkness. The inhabited space is the wall, and the wall curves away in every direction.</p>
+      <p>The nominal patron deity of Tenebralis is <strong>Erebus, God of Darkness</strong>. His domain encompasses all forms of darkness — physical, spiritual, and cognitive. His gift to the realm is the Shade: a dampening field that obscures Tenebralis from the divine surveillance maintained by other gods. Within the Shade, actions that would otherwise trigger divine attention or intervention remain unobserved. Erebus does not govern his people. He provides the conditions under which they govern themselves — or, more precisely, the conditions under which they are free to do as they choose without divine consequence.</p>
 
-      <p>The planet's surface belongs to things that hunt by cognition. Amorphous masses of dark protoplasm that absorb organic matter on contact — common as deer, if deer were shapeless and all-consuming. Nameless shapes under the fog line, faster than eye-tracking, smarter than they should be. A falcon-like predator whose mirrored feathers broadcast the secret truths of its nearest target into the air. And the apex entities — beings so vast, so cognitively alien, that perceiving one is itself an injury to the mortal mind. They do their narrative work by existing, not by appearing.</p>
+      <p>In daily practice, however, the Mavarran population does not worship Erebus. They revere <strong>Vex Mavarra</strong>, their Exvisar, as the living embodiment of their cultural doctrine. The distinction between civil authority and divine authority has collapsed in Tenebralis: the Exvisar is the doctrine, the doctrine is the culture, and the culture is the closest thing the population has to a theology. Erebus permits this because it allows him to remain even deeper in shadow — a convenient arrangement for both parties.</p>
 
-      <p>The native stone is onyx: black, reflective, opaque. Gold veining runs through it, catching whatever light source dominates. The architecture is subtractive — buildings are negative space left when stone is removed, following the method of Petra or the Ajanta Caves. Walls are polished to high gloss. Every surface in Tempora is a mirror of a kind. Buildings follow the logic of stone removal — organic, curved, responsive. Doorways are irregular. Rooms are not rectangular.</p>
-
-      <p>Atropa Belladonna — deadly nightshade — carpets every horizontal surface with the density of grass. Deep waxy green leaves, small pendant purple flowers that glow faintly in the bioluminescent water's light. Paths are channels cleared through this carpet, maintained by Luxenfallen slaves. Untraveled areas become impassable within weeks. The Mavarrans metabolize its alkaloids from before birth and are immune. Everyone else is being quietly poisoned from the moment they arrive.</p>
-
-      <p>The water is bioluminescent — cold blue-white, generating its own light. It enters the habitable zone from fissures in the upper stone and falls through the city in a sequence of cascading waterfalls. The sound of falling water is constant. It carries belladonna alkaloids in solution. Sustained exposure in visitors produces heightened suggestibility, dissolution of short-term memory formation, and a general reduction in threat-assessment accuracy. The city drugs you through the tap water. The Mavarrans don't notice. To them it's just water.</p>
-
-      <p>Constant fog. The waterfalls generate mist with nowhere to escape. It reduces visibility to roughly ten feet. In a city of half a million shapeshifters where violence is casual and disappearances are unremarkable, ten-foot visibility means everything happens in a private bubble. The fog carries belladonna particulates. You're not just drinking it. You're breathing it. And the longer you stay, the less clearly you think, and none of it feels like impairment. It feels like relaxation. Like letting go.</p>
+      <p>Three additional gods are entangled with Tenebralis through the Temple complex in the deep terraces of Tempora. <strong>Ishtar, Goddess of Love, Sex, and Fertility</strong>, whose Temple houses the Aesthetes' soul-rendering operations — desire taken to its theological conclusion, the beloved consumed entirely. <strong>Wizaer, God of Mind and Memory</strong>, whose Temple hosts the Second Birth ceremony — the Oneironaut practice of memory surgery legitimated as a divine act. And <strong>Ma'at, Goddess of Truth</strong>, whose seat in the Temple complex was occupied and emptied by Vex — the pillar of absolute Truth surgically replaced with the jurisdiction of subjective, fragmented Secrets. Ishtar and Wizaer chose their alignment willingly. Ma'at was betrayed.</p>
     </div>
   </section>
 
-  <div class="diamond-divider"><span></span></div>
+  <div class="divider"><span></span></div>
 
-  <!-- ===== REGIONS ===== -->
-  <section class="fade-in">
-    <span class="section-label">III</span>
-    <h2 class="section-title">The Vertical City</h2>
+  <!-- 4. THE EXVISAR -->
+  <section class="fi">
+    <span class="sec-num">III</span>
+    <h2 class="sec-title">The Exvisar</h2>
     <div class="prose">
-      <p>Tempora is not a city with districts. It is a city with <em>depths</em>. The social geography is vertical — carved into the walls of an abyss, descending from light to dark, from spectacle to silence, from the party to the processing floor.</p>
-    </div>
-    <div class="accordion">
+      <p><strong>Vex Mavarra. Sovereign of Within. Warden of Masks. Mother of Secrets.</strong></p>
 
-      <div class="accordion-item">
-        <button class="accordion-trigger">
-          The Upper Terraces <span class="region-element">The Social City</span>
-          <span class="arrow"></span>
-        </button>
-        <div class="accordion-content">
-          <div class="accordion-inner">
-            <div class="atmosphere">"LA meets Vegas meets Bourbon Street. The party never stops. The drinks are flowing and the faces are gorgeous and somewhere in the crowd someone is doing something unspeakable."</div>
-            <div class="detail-label">Environment</div>
-            <p>Brightest, most populated, most curated. The densest concentration of Luxanian crystata produces a warm gold luminescence. The combined palette: cold blue from water, deep violet from flowers, warm gold from crystata, flickering amber from Ferridanian fire — all on reflective black stone. Visibility is at its maximum. This is what visitors see. This is what Tenebralis exports as its image.</p>
-            <div class="detail-label">Function</div>
-            <p>The symposiums, the Veiled Houses, the performance-front commerce, the bars and social clubs and theaters. The Curators operate here. The Pansirru — the mirror-raptor that hunts liars — forces symposiums to relocate when sighted nearby. The Sarrith — glass-winged insects that feed on insecurity — congregate on uncovered mirrors.</p>
-            <div class="detail-label">Visual Key</div>
-            <p>Warm-toned, reflective, dense. Aposematic fashion in saturated colors against polished black onyx. Fog thinner here. Crowds of impossible beauty — because everyone designed themselves to be beautiful tonight. Ambient sound of waterfalls and music and half a million people performing.</p>
-          </div>
-        </div>
-      </div>
+      <p>No Mavarran recalls a prior Exvisar. There was no succession. She was simply there. Her true name is Mavarra Vex — the inversion to "Vex Mavarra" is a game she authored, a structural feature of mistaken intimacy embedded in how she is addressed. The population named themselves after her ("Mavarran") without knowing the etymology. The celebrated scholar "Val Ravemar," credited with translating the Shim'zillai into its current popular form, is an anagram of her name. She is the author of the doctrine, its translator, and its cultural authority. The entire epistemic chain of the civilization is her work.</p>
 
-      <div class="accordion-item">
-        <button class="accordion-trigger">
-          The Middle Terraces <span class="region-element">The Residential City</span>
-          <span class="arrow"></span>
-        </button>
-        <div class="accordion-content">
-          <div class="accordion-inner">
-            <div class="atmosphere">"Where children are kept. Where the fog thickens. Where the stone reveals its raw nature."</div>
-            <div class="detail-label">Environment</div>
-            <p>Quieter. Fog thicker. Residences carved deeper into rock, away from social visibility. Less maintained. More revealing of the stone's raw nature — the gold veining more prominent where the polish gives way. The Temple of Wizaer, where the Second Birth ceremony is performed, occupies this tier. The Oneironaut cloisters — abyssal libraries where the waking world and the Dreamscape blur — are hidden here.</p>
-            <div class="detail-label">Function</div>
-            <p>Where most Mavarrans actually live. Where the children spend sixteen unmasked years behind walls. Where the mask comes off during daylight hours — the only zone where real faces exist in the waking world. Private. Interior. The life the upper terraces don't show.</p>
-            <div class="detail-label">Visual Key</div>
-            <p>Cooler-toned. Less crystata, more bioluminescent water glow. Fog cuts visibility further. Narrower passages. The architecture more organic, more cave-like. The flowers press in closer where maintenance is less frequent.</p>
-          </div>
-        </div>
-      </div>
+      <p>Vex Mavarra is not a monarch in any conventional sense. She predates the current Mavarran civilization and exists more as a condition than an entity. She is distributed — present in every shadow, physical, psychological, and spiritual. She has no stable physical form and is not subject to conventional spatial laws. She cannot be targeted, purified, or removed by any means currently understood in the nine realms. When she does take physical form, no two accounts describe the same appearance. What remains consistent: a quality of stillness that reads as dangerous, the absence of the micro-movements that indicate biological self-regulation, and a sense that the space immediately around her is different in temperature or pressure.</p>
 
-      <div class="accordion-item">
-        <button class="accordion-trigger">
-          The Lower Terraces <span class="region-element">The Quiet</span>
-          <span class="arrow"></span>
-        </button>
-        <div class="accordion-content">
-          <div class="accordion-inner">
-            <div class="atmosphere">"Population drops away. Belladonna grows unchecked. Violet glow dominant. Sound is the cascading water and nothing else."</div>
-            <div class="detail-label">Environment</div>
-            <p>The gold light of Luxanian crystata is absent. The warm amber of Ferridanian fire does not reach. What remains is the bioluminescence: cold blue water, deep violet flowers. The city becomes monochrome. Navigation depends on familiarity, not sight. Access is not forbidden. It is simply not publicly discussed.</p>
-            <div class="detail-label">Function</div>
-            <p>The transition zone. The boundary between city and wild becomes indeterminate. The Luxenfallen perimeter watch — composed entirely of enslaved empaths reprogrammed to a single directive — occupies this space. Things come up from below. Things come down from above. The La'Sumu — the nameless things — probe the perimeter.</p>
-            <div class="detail-label">Visual Key</div>
-            <p>Monochrome blue-violet. Near-total fog. Bioluminescent Luxenfallen bodies providing ambient light from stolen divine heritage — the conquered realm's light illuminating the transition zone of the civilization that destroyed it.</p>
-          </div>
-        </div>
-      </div>
+      <p>Her primary mode of engagement is not action but permission. She finds what a person already wants to do and removes the restraint — the conscience, the shame, the inhibition, the memory of why they decided not to. She dissolves the architecture of refusal. What remains is a person acting on their own desires with full agency and zero friction. The civilization of Tenebralis is her creation entirely: built from scriptures she wrote, minds she shaped, families she bred, and stories she told through mouths that do not know they are speaking for her.</p>
 
-      <div class="accordion-item">
-        <button class="accordion-trigger">
-          The Depths <span class="region-element">The Abyss</span>
-          <span class="arrow"></span>
-        </button>
-        <div class="accordion-content">
-          <div class="accordion-inner">
-            <div class="atmosphere">"The Aesthetes operate here. The rendering chambers are in the deep. Things come up from the depths."</div>
-            <div class="detail-label">Environment</div>
-            <p>The abyss itself. Where the boundary between Tempora and wild is no longer meaningful. Twenty-five thousand Aesthetes — the only organized institution in a civilization of individuals — operate the Temple of Ishtar, the rendering chambers where the Pashar'etem is performed, and the bridge to Hel that their millennia of Thanatonautica constructed. Raiwata — the demon god of chaos — has established a pocket of literal Hel in the deep, worse than anything in the living realms.</p>
-            <div class="detail-label">Function</div>
-            <p>The abattoir. The soul-rendering facility. The bridge between the living and the dead. The space where the Etemmu — the cognitive apex predator that is the real sovereign of Tenebralis — exists. The Aesthetes serve it because service is the only survivable proximity. Above, the party. Below, the machinery. The whole city runs on what happens in the deep, and nobody on the upper terraces discusses it.</p>
-            <div class="detail-label">Visual Key</div>
-            <p>No imported light. No crystata. The only illumination is what rises from below — and what rises from below is not bioluminescence. It is something else.</p>
-          </div>
-        </div>
-      </div>
-
+      <p>She has mastered every phase of existence a being can pass through — predation, conquest, empire, divinity without the title — and arrived at the far side of absolute freedom, where the only remaining occupation is authorship. She considers herself an artist. She considers her people artists in training. She wrote one world. Her endgame is all of them.</p>
     </div>
   </section>
 
-  <div class="diamond-divider"><span></span></div>
+  <div class="divider"><span></span></div>
 
-  <!-- ===== THE PEOPLE ===== -->
-  <section class="fade-in">
-    <span class="section-label">IV</span>
-    <h2 class="section-title">The People</h2>
+  <!-- 5. THE LAND -->
+  <section class="fi">
+    <span class="sec-num">IV</span>
+    <h2 class="sec-title">The Land</h2>
     <div class="prose">
-      <p>The Mavarrans are not humans with aesthetic modifications. They are a species that evolved inside a mountain with no sky, in permanent hallucinogenic darkness, surrounded by predators that hunt by perception. Their culture of deception is not philosophical — it is a biological survival strategy Vex Mavarra refined into civilization.</p>
+      <p>Tenebralis is almost entirely uninhabitable. The surface, the upper altitudes, and the deep are claimed by organisms that evolved in permanent darkness under Erebus's domain — cognitive predators that hunt by perceiving their prey clearly, shapeless protoplasmic masses that absorb on contact, and apex entities of such cognitive scale that proximity to one constitutes a neurological injury. There is no known habitable exterior geography. The entire Mavarran population lives within a single artificially lit interior cavity: Tempora.</p>
 
-      <p><strong>Skin:</strong> Translucent. Ghost-pale, with visible vasculature beneath. In bioluminescent light, the movement of blood is apparent below the surface. In direct sunlight abroad, the effect reads as unsettling — beautiful in the manner of deep-sea organisms that carry a quality of evolved beauty in an environment hostile to outside observation.</p>
+      <p>Tempora exists inside a hollow carved out of an interior mountain. There is no sky. The mountain closes overhead. An abyss of uncertain depth opens below. The city is built into the walls of rock, extending both laterally into the stone and vertically up and down the walls, with the abyss forming the central axis. The sense of orientation is radically different from surface cities. Up is stone. Down is darkness. The inhabited space is the wall, and the wall curves away in every direction.</p>
 
-      <p><strong>Eyes:</strong> Non-blinking. In ten feet of visibility, the microsecond of a blink is a survival liability. Pupils are large and extremely light-reactive, calibrated for near-darkness. The uncanny quality of eye contact with a Mavarran is consistently noted by foreign observers: the absence of the blink reflex reads, at the limbic level, as predatory.</p>
+      <p>The native stone is onyx — black, reflective, opaque — with gold veining that catches whatever light source dominates. The architecture is subtractive: buildings are negative space left when stone is removed, following the method of Petra or the Ajanta Caves. Walls are polished to high gloss, producing a city where every surface is a mirror of a kind, reflecting distorted versions of whatever passes before it.</p>
 
-      <p><strong>Features:</strong> Angular bone structure. Pointed ears. Sharp-planed face geometry. Retractable claws — functional, present in children and adults. The Mavarran baseline is conventionally beautiful by outside standards, but only because generations of the Aesthetes' judgment eliminated everything coded as ugly or weak. The remaining population are the survivors of an aesthetic culling that operated for centuries.</p>
+      <p>Atropa Belladonna — deadly nightshade — carpets every horizontal surface with the density and ubiquity of grass. Deep waxy green leaves with small, pendant purple flowers that glow faintly in the bioluminescent light. Paths are channels cleared through this carpet, maintained by enslaved Luxenfallen. The Mavarrans metabolize belladonna alkaloids from before birth and are functionally immune. Visitors are not.</p>
 
-      <p><strong>Poison Immunity:</strong> Mavarrans metabolize belladonna alkaloids from before birth. Most conventional poisons register below threshold. This is the origin of the Shik'piris trade: standard narcotics have no effect. The substances that achieve intoxication in Mavarrans are derived from rendered suffering — emotional material extracted from other beings at sufficient concentration and purity to penetrate the Mavarran baseline. They need other people's pain to get high because nothing else is strong enough.</p>
-
-      <p>But you will almost never see any of this. The Pansilion — the Veilborn Mask — covers it. Inside Tempora, where there is no sunrise, the Pansilion never deactivates. A Mavarran in public is always shifted, always masked, always wearing a face assembled from the beauty standards of every realm they've observed, taken apart, and remixed. The Mavarrans have no native beauty rooted in their own form. They look at their actual appearance — translucent, clawed, unblinking — and consistently choose to be someone else.</p>
-
-      <p><strong>The Luxenfallen</strong> are the other population. Silicon-based biology. Crystalline tissue. Skin ranging from fully transparent to pearlescent. Eyes larger than any other species: black, reflective, like polished obsidian. They are bioluminescent — the remnant of Luxania's connection to divine light. In Tempora, they are the workforce, the perimeter watch, the infrastructure. Their stolen light illuminates the civilization that destroyed them. The visual contrast is constant and total. Fluid, self-designed Mavarrans in assembled impossible beauty. Fixed-form, crystalline Luxenfallen with too-large eyes doing every piece of work that sustains the city.</p>
+      <p>The water is bioluminescent — cold blue-white, the city's only native light source. It enters from fissures in the upper stone and falls through the city in cascading waterfalls of varying scale. The sound of falling water is constant, functioning as ambient acoustic cover. The water carries trace belladonna alkaloids; sustained consumption by non-Mavarran species produces mild hallucinogenic effects, heightened suggestibility, and dissolution of short-term memory formation. Constant fog generated by the waterfalls reduces ground-level visibility to approximately ten feet under standard conditions, and carries belladonna particulates in aerosol suspension.</p>
     </div>
   </section>
 
-  <div class="diamond-divider"><span></span></div>
+  <div class="divider"><span></span></div>
 
-  <!-- ===== FASHION ===== -->
-  <section class="fade-in">
-    <span class="section-label">V</span>
-    <h2 class="section-title">Fashion & Material Culture</h2>
+  <!-- 6. INTERACTIVE REGIONS -->
+  <section class="fi">
+    <span class="sec-num">V</span>
+    <h2 class="sec-title">The Vertical City</h2>
+    <div class="prose"><p>Tempora has no districts. It has depths. The social geography is vertical, descending from light to dark, from spectacle to silence, from the party to the processing floor.</p></div>
+    <div class="acc">
+
+      <div class="acc-item">
+        <button class="acc-btn">The Upper Terraces<span class="hint">The Social City</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">The brightest, most populated, most curated tier. This is what visitors see. This is what Tenebralis exports as its image.</div>
+          <div class="dlbl">Environment</div>
+          <p>Maximum concentration of Luxanian crystata produces warm gold luminescence against the reflective onyx. The combined chromatic palette at any given moment: cold blue from water, deep violet from belladonna, warm gold from stolen Luxanian light, flickering amber-orange from Ferridanian fire crystata — all on polished black stone with gold veining that shifts depending on which light source dominates. Fog is thinnest here; visibility approaches its maximum of ten feet.</p>
+          <div class="dlbl">Function</div>
+          <p>The symposiums, Veiled Houses, performance-front commerce, bars, social clubs, theaters, and restaurants. The Curators of the Court of Masks operate from this tier. The Pansirru — a falcon-like predator whose mirrored feathers broadcast the secrets of its targets — forces symposiums to relocate when sighted. Glass-winged Sarrith insects congregate on uncovered mirrors, feeding on reflected insecurities.</p>
+          <div class="dlbl">Visual Key</div>
+          <p>Warm-toned. Dense. Reflective. Aposematic fashion in saturated colors against polished black. Crowds of assembled impossible beauty — because every face was designed tonight. Constant ambient sound: falling water, music, the hum of performance.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn">The Middle Terraces<span class="hint">The Residential City</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">Where children are kept. Where the fog thickens. Where the stone reveals its raw nature.</div>
+          <div class="dlbl">Environment</div>
+          <p>Quieter. Fog thicker. Residences carved deeper into the rock face, away from social visibility. Less maintained surfaces reveal the stone's raw character — gold veining more prominent where the polish gives way. The Temple of Wizaer, site of the Second Birth ceremony, occupies this tier. Oneironaut cloisters — described as abyssal libraries where the waking world and the Dreamscape blur — are hidden here.</p>
+          <div class="dlbl">Function</div>
+          <p>Where the majority of the population actually resides. Where children spend sixteen unmasked years behind walls — the only zone where real faces exist in the waking world. During daylight hours when the Pansilion is biologically inactive, parents revert to their birth form in private. The domestic life of Tenebralis happens here, out of sight.</p>
+          <div class="dlbl">Visual Key</div>
+          <p>Cooler-toned. Bioluminescent water glow dominant, less crystata warmth. Narrower passages. Architecture more organic, more cave-like. Belladonna presses closer where maintenance is less frequent.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn">The Lower Terraces<span class="hint">The Quiet</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">Population drops away. Violet glow dominant. Sound is the cascading water and nothing else.</div>
+          <div class="dlbl">Environment</div>
+          <p>No Luxanian crystata. No Ferridanian fire. The warm light sources that make the upper terraces habitable are absent. What remains is native bioluminescence: cold blue water, deep violet flowers. The city becomes monochrome. Navigation depends on familiarity, not sight.</p>
+          <div class="dlbl">Function</div>
+          <p>The transition zone. The boundary between inhabited city and wild is indeterminate here. The Luxenfallen perimeter watch — composed entirely of enslaved empaths reprogrammed to a single behavioral directive — occupies this space. The La'Sumu, nameless things faster than eye-tracking, probe the perimeter from below and above.</p>
+          <div class="dlbl">Visual Key</div>
+          <p>Monochrome blue-violet. Near-total fog. Bioluminescent Luxenfallen bodies providing ambient light — the conquered realm's divine heritage illuminating the transition zone of the civilization that destroyed it.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn">The Depths<span class="hint">The Abyss</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">The Aesthetes operate here. The rendering chambers are in the deep. Things come up from the depths.</div>
+          <div class="dlbl">Environment</div>
+          <p>The abyss. Where the distinction between city and wild ceases to be meaningful. The twenty-five thousand Aesthetes maintain the Temple of Ishtar, the rendering chambers where the Pashar'etem is performed, and — through centuries of Thanatonautica practice — the bridge they constructed between the living realms and the dead. A pocket of literal Hel exists in the deep, established by Raiwata after his transit through the channel the Aesthetes built.</p>
+          <div class="dlbl">Function</div>
+          <p>The processing floor. Soul-rendering, Damq'eth construction, and the maintenance of the interface between Tenebralis and Hel. The Etemmu — a cognitive apex predator of incomprehensible scale — exists in the deep. The Aesthetes serve it because service is the only survivable proximity. The rest of the population believes Vex manages the Etemmu. She does not. She is simply the one mind it has never been able to perceive.</p>
+          <div class="dlbl">Visual Key</div>
+          <p>No imported light. No crystata. The only illumination rises from below, and what rises from below is not bioluminescence.</p>
+        </div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- 7. THE PEOPLE -->
+  <section class="fi">
+    <span class="sec-num">VI</span>
+    <h2 class="sec-title">The People</h2>
     <div class="prose">
-      <p><strong>The governing principle is aposematic: warning coloration.</strong> Poison dart frogs. Coral snakes. The most brightly colored organisms in nature are the most dangerous to touch. The expectation from outside is that a civilization of shadows would dress in shadow. This expectation is wrong. Mavarrans are not hiding. They cannot be held accountable for what they display. The bright coloration is warning, invitation, and confidence that you can afford to be seen.</p>
+      <p>The Mavarrans are a species that evolved inside a mountain in permanent hallucinogenic darkness, surrounded by predators that hunt by perception. Their culture of deception is not a philosophical position — it is a biological survival strategy refined into civilization. The Pansilion, the masks, the fluid identity — these are the behavioral adaptations of a prey species that learned to hide from things that would devour any mind they could clearly perceive.</p>
 
-      <p><strong>Dress like a flower that blooms for one night.</strong> Assembled from stolen beauty. Designed to attract. Discarded at dawn. The operative metaphor for Mavarran fashion practice. A flower's evolutionary strategy is attraction — every petal, every color, every scent exists to draw another organism closer. Mavarran fashion takes the aesthetic grammar of another culture, identifies what made it seductive, and wears it more boldly than the originators dared.</p>
+      <p>The primary ideology of the civilization is <strong>freedom</strong>. The Shim'zillai — the foundational scripture — is structured as a sequence of liberations: you may take, you may wear, you may release, you may delight, you may change, you may move unseen, you may speak, you may set down the weight, you may become someone new entirely. Read as doctrine, it is the most progressive philosophy in the cosmos. Applied without limit across centuries in a civilization with no moral floor, it produces Tempora.</p>
 
-      <p><strong>The single exception: operational black.</strong> Unsaturated, unremarkable, without iridescence or ornamentation. When a Mavarran dresses in actual black, they are not hunting. They are working. Bright coloration is for when you want to be seen. Black is for when you cannot afford to be. Black is Isin'sartu wear. Black is the most dangerous color a Mavarran can wear, and it is worn precisely when that danger needs no advertisement.</p>
+      <p>The average contemporary Mavarran is not a grand schemer. Most keep their heads down, run legitimate businesses, attend the parties on the upper terraces, purchase memory coins for entertainment and pornography, and avoid antagonizing anyone above their weight class. They have done the math: they are not powerful enough to get away with anything ambitious, not connected enough to survive the blowback, and not stupid enough to generate attention they cannot control. Their version of "chilled out" is still, by the standards of any other realm, a deeply predatory baseline — but most of them, most of the time, are just people navigating a system that rewards performance and punishes visibility.</p>
 
-      <p><strong>Physical masks</strong> — as opposed to the Pansilion's shapeshifting — are crafted objects: myst-infused material that helps anchor a specific identity for an evening. Craftsmanship is substantial. The quality of the mask communicates social standing. Removing a mask for another person is an act of intimacy more significant than most physical contact — trust bordering on suicidal by the culture's own risk assessment.</p>
+      <p>The character of the civilization as perceived by outsiders is the translation layer: the sustained, disciplined performance of normalcy that Mavarrans maintain when operating abroad. Every moment of charm, every warm smile, every attentive conversation is an act of will exerted against a default baseline that would be criminal-to-monstrous by any other civilization's standards. The smile costs effort. Not guilt — effort. They are the most sober people in any room they supply narcotics to, and every intoxicated interlocutor is an open book.</p>
 
-      <p><strong>The orchid</strong> is Vex Mavarra's personal sigil. Rare, visually striking, structurally complex, and severely toxic when ingested. To be given an orchid is simultaneously an expression of immense favor and a quiet threat. The distinction is not always apparent before the test begins.</p>
+      <p><strong>Physiology:</strong> Translucent skin with visible vasculature beneath. Non-blinking eyes, large-pupilled, calibrated for near-darkness — the absence of the blink reflex reads at the limbic level as predatory. Retractable claws. Angular bone structure, pointed ears, sharp-planed face geometry. Poison-immune from metabolizing belladonna alkaloids in utero. Conventionally beautiful by outside standards, but this beauty is the product of centuries of aesthetic culling by the Aesthetes — the survivors of a selection process that eliminated everything coded as weak or ugly.</p>
 
-      <p><strong>Status at a glance:</strong> Saturation and complexity of the chosen form. The most powerful Mavarrans wear the most elaborate presentations because they can afford the attention. The average Mavarran copies this season's face because everyone else is. <strong>Poverty at a glance:</strong> The Poppets in the stone districts of foreign cities, wearing faces built to someone else's specification for money. Functional. Adequate. The mask equivalent of fast fashion.</p>
+      <p>In practice, this form is almost never visible. The Pansilion covers it. Inside Tempora, where there is no sunrise to force reversion, a Mavarran can remain shifted for decades without returning to their birth form. The Mavarrans have no native beauty standard rooted in their own appearance. They assemble their beauty from the aesthetic grammar of every other realm they have observed, identifying what made it seductive and wearing it more boldly than the originators dared.</p>
+
+      <p><strong>The Luxenfallen</strong> are the realm's second population. A silicon-based species with crystalline tissue underlying organic structure. Skin ranges from fully transparent to pearlescent. Eyes are larger than any other known species: black, reflective, with no visible iris distinction. They are inherently bioluminescent — a biological remnant of Luxania's connection to divine light. In Tempora, they constitute the city's entire workforce, boundary patrol, and infrastructure maintenance corps. Their light illuminates the civilization that conquered them.</p>
     </div>
   </section>
 
-  <div class="diamond-divider"><span></span></div>
+  <div class="divider"><span></span></div>
 
-  <!-- ===== POWER ===== -->
-  <section class="fade-in">
-    <span class="section-label">VI</span>
-    <h2 class="section-title">Power</h2>
+  <!-- 8. SCHOOLS OF MAGIC -->
+  <section class="fi">
+    <span class="sec-num">VII</span>
+    <h2 class="sec-title">Schools of Magic</h2>
     <div class="prose">
-      <p>The most dangerous thing in the room is never the one that looks dangerous. The Mavarrans carry no visible weapons because they do not need them. The Pansilion reshapes bone — their body is the weapon. The claws are retractable and rarely deployed because deployment is inelegant. The real arsenal is cognitive.</p>
+      <p><strong>The Pansilion</strong> <em>(pan-SIL-ee-on; Akkadian pānu "face" + ṣillu "shadow")</em> — the Veilborn Mask. Universal. Every Mavarran possesses this ability, which manifests at sixteen during the Second Birth ceremony. It permits complete biological reshaping of face, body, bone structure, mass, and voice from dusk until sunrise. Inside Tenebralis, where no sunrise occurs, the Pansilion is permanent. Abroad, the sun strips it involuntarily every morning — an experience consistently described as humiliating and physically unpleasant. The Pansilion is not illusion. It is actual biological transformation.</p>
 
-      <p><strong>The Pansilion</strong> is universal. Every Mavarran has it. It manifests at sixteen during the Second Birth ceremony. Inside Tempora, it is permanent — no sunrise to force reversion. Abroad, the sun strips it every morning, an involuntary humiliation that produces elaborate dawn protocols. The Pansilion reshapes the body entirely — bone, face, voice, mass. This is actual biological transformation, not illusion.</p>
+      <p><strong>Oneironautica</strong> <em>(Alak'shud; ah-lack-SHUD; Akkadian alāku "to walk" + šuttu "dream")</em> — the art of the Dreamwalker. Possessed by approximately one to five percent of the population. Crystal Class Mystics. Oneironauts can enter the subconscious mind of a target directly through eye contact while the target is awake, moving at just under the speed of a synapse. The practitioner experiences the interior of another person's mind as a vast library — browsable, readable, with individual memories available for examination, relocation, or removal. Capacities can be permanently severed. Memories can be extracted and minted into physical objects called memory coins. The art also encompasses the Second Birth ceremony performed on children at sixteen.</p>
 
-      <p><strong>Oneironautica</strong> is the nuclear option. One to five percent of the population. Crystal Class Mystics. They can enter the subconscious mind directly through eye contact, moving at just under synaptic speed. Arabella describes it as strolling through a vast library. They can sever capacities permanently, extract memories, rewrite interior lives. An Oneironaut who makes eye contact with you has already been inside your head and left before you finish your sentence. They work through layers of proxies and hide what they are, because a known Oneironaut is either owned by someone powerful enough to protect them or dead.</p>
+      <p><strong>Memory Coins</strong> <em>(Shik'piris product; shick-PEER-iss)</em> — physical objects produced by Oneironauts from extracted memories. Cloudy grey, slightly luminous, approximately the size and weight of a half-dollar coin. When compressed in the hand, the contained memory is experienced at full sensory fidelity as though the holder were the original subject. The market ranges from entertainment and romance to pornography, blackmail material, and intelligence product. The bulk of trade is entertainment and pornography. Addiction to memory coins — termed "lost in the coins" — is a documented condition in populations with sustained access.</p>
 
-      <p><strong>Memory coins</strong> — cloudy grey, slightly luminous, like a half-dollar full of mercury — are the weaponized output. Squeeze one and the memory rushes in at full sensory fidelity. Most are entertainment or pornography. Some are blackmail. Some are dropped on the street for someone to find. The economy runs on them.</p>
+      <p><strong>Ak'lethem</strong> <em>(ah-KLETH-em; Akkadian akālu "to consume" + etemmu "spirit")</em> — the Soul-Eating. The Aesthetes' defining practice. The power to reach into a living being and remove what makes them specifically that person while leaving the body operational. The body continues. The person does not. The resulting state is called Etemesh — a docile, vacant shell. Rendered souls are separated into component emotional materials (fear, pain, joy, love) and refined into poisons, paralytics, narcotics, and luxury goods, or incorporated into Damq'eth construction.</p>
 
-      <p><strong>Ak'lethem</strong> — the soul-rendering — is the Aesthetes' art. They reach into a living being and remove what makes them specifically that person, while leaving the body operational. The body continues. The person does not. The resulting emotional material — fear, pain, joy, love — is distilled into poisons, paralytics, narcotics, and luxury goods. A childhood fear rendered into paralytic freezes the body while the knife goes in. The fear isn't the weapon. It's a step in a process.</p>
+      <p><strong>Thanatonautica</strong> — the experimental practice of walking beyond the stillness of death into the realms of the dead. Practiced by the Aesthetes in the deep over centuries. This discipline produced the channel through which Raiwata transited from Hel into the living realms. Some Aesthetes have witnessed the Eighth Circle of Hel with their own eyes.</p>
 
-      <p><strong>On a battlefield, a Mavarran doesn't read.</strong> There is no Mavarran military. There is no Mavarran army. If an enemy reaches Tempora, the lights go out and it becomes Isin'sartu — immediately. Half a million sadistic shapeshifters in the dark, practicing the most creative ways they've spent the year dreaming about killing each other. What comes back through the Clairgates is not the army that went in. It is a vector.</p>
+      <p><strong>The Dreamscape</strong> is not a school of magic but a shared metaphysical environment. All Mavarrans enter the Dreamscape during sleep, where the Pansilion is inactive and all participants appear in their true form. It functions as a second city — a social space with its own dynamics, crimes, and power structures, populated by unmasked faces. The connection between a person's dreaming face and their waking mask is the central informational challenge of the civilization.</p>
     </div>
   </section>
 
-  <div class="diamond-divider"><span></span></div>
+  <div class="divider"><span></span></div>
 
-  <!-- ===== MATERIAL PALETTE ===== -->
-  <section class="fade-in">
-    <span class="section-label">VII</span>
-    <h2 class="section-title">Material Palette</h2>
-    <div class="swatch-grid">
-      <div class="swatch">
-        <div class="swatch-color" style="background: linear-gradient(135deg, #110e18, #1a1525);"></div>
-        <div class="swatch-info">
-          <div class="swatch-name">Abyssal Onyx</div>
-          <div class="swatch-hex">#110E18</div>
-          <div class="swatch-desc">The native stone. Polished to mirror gloss. Every surface reflects. The architectural ground of the entire city.</div>
-        </div>
+  <!-- 9. FASHION -->
+  <section class="fi">
+    <span class="sec-num">VIII</span>
+    <h2 class="sec-title">Fashion & Material Culture</h2>
+    <div class="prose">
+      <p>The governing principle of Mavarran fashion is <strong>aposematic</strong>: warning coloration. The brightest organisms in nature are the most dangerous to touch. The expectation from outside the culture is that a civilization of shadows would dress in shadow. This expectation is incorrect. Mavarrans are not hiding. They cannot be held accountable for what they display. Bright coloration functions simultaneously as warning, invitation, and demonstration that you can afford to be seen.</p>
+
+      <p><strong>The operative metaphor:</strong> dress like a flower that blooms for one night. Assembled from stolen beauty. Designed to attract. Discarded at dawn. Mavarran fashion design involves taking the aesthetic grammar of another culture, identifying what made it seductive, and wearing it more boldly than the originators dared. No fashion element in Tempora is native. Everything is imported, disassembled, and remixed.</p>
+
+      <p><strong>The exception:</strong> operational black. Unsaturated, unremarkable, without iridescence or ornamentation. When a Mavarran wears actual black, they are not hunting. They are working. Bright coloration is for when you want to be seen. Black is for when you cannot afford to be. Black is Isin'sartu wear. It is the most dangerous color a Mavarran can present, worn precisely when that danger needs no advertisement.</p>
+
+      <p><strong>Physical masks</strong> — crafted objects distinct from the Pansilion's biological shapeshifting — are myst-infused material that helps anchor a specific identity for an evening. The quality of the mask communicates social standing. Removing a physical mask for another person is an act of intimacy more significant than most physical contact — trust bordering on suicidal by the culture's own risk assessment.</p>
+
+      <p><strong>Status at a glance:</strong> Saturation, complexity, and audacity of the chosen presentation. The most powerful Mavarrans wear the most elaborate forms. <strong>Poverty at a glance:</strong> The Poppets in stone districts of foreign cities, wearing faces built to someone else's specification for pay. Functional. Adequate. The mask equivalent of fast fashion.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- 10. WEAPONS AND FORCE -->
+  <section class="fi">
+    <span class="sec-num">IX</span>
+    <h2 class="sec-title">Weapons & the Relationship to Force</h2>
+    <div class="prose">
+      <p>There is no Mavarran army. There is no Mavarran military. The concept of organized force projection is foreign to a civilization that eliminated institutional structures in favor of individual capability and social network calculus.</p>
+
+      <p>The Pansilion reshapes bone. The body is the weapon. Retractable claws are functional but rarely deployed — deployment is inelegant. The real arsenal is cognitive: Oneironautica can dismantle a target's capacity for violence through a single moment of eye contact. Memory extraction removes the evidence. Emotional distillates — fear rendered from children's memories during the Second Birth — function as paralytics that freeze the body while the killing stroke is delivered. The paralytic is not the weapon. It is a step in a process.</p>
+
+      <p>Mavarrans carry no visible weapons because they do not need them. A Mavarran standing unarmed in a room full of armed warriors from other realms is not the least dangerous person present. The soft power is not compensation for physical limitation. It is the preferred expression of a species entirely capable of direct violence that finds it less interesting.</p>
+
+      <p>If an enemy force reaches Tempora, the city's response is immediate and total: the lights go out. The Isin'sartu activates. Half a million shapeshifters trained by annual survival culling operate in complete darkness against invaders who have never experienced ten-foot visibility, fog, or a population for whom killing each other creatively is an annual tradition. The city stops performing civilization and becomes what it actually is. What returns through the Clairgates is not the army that entered. It is a vector.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- 11. RELATIONSHIP TO OTHER REALMS -->
+  <section class="fi">
+    <span class="sec-num">X</span>
+    <h2 class="sec-title">Relationship to the Other Realms</h2>
+    <div class="prose">
+      <p><strong>Thalassor:</strong> Home base for operations abroad. The cosmopolitan nexus is the most permissive operating environment outside Tempora. Mavarrans are embedded at every tier of Thalassori society: Crystal Class Oneironauts in the Crystata Heights serving the wealthiest clientele, Marble Class merchants and hospitality operators in the marble districts, and Stone Class Poppets providing matchmaking and identity services in the stone districts. The masquerade ball tradition in Thalassor is Mavarran infrastructure — seeded, popularized, and maintained until it became a legitimate cultural institution. The Symposium circuit normalizes Tenebrali product through repeated exposure in a beautiful social context. Thalassor is the distribution network. The Sinclairs maintain strategic non-intervention regarding Luxenfall because Tenebralis keeping Luxenfall broken serves Sinclair interests.</p>
+
+      <p><strong>Ferridane:</strong> The dismissal is the cover. Ferridanian soldiers categorize Mavarrans as dissolute layabouts and proceed to underestimate them comprehensively. A Mavarran operator reads this dismissal as an intelligence windfall. The Ferridanian on leave carries enormous structural pressure from the most rigid honor code in the cosmos; a single evening with a Mavarran presenting as a beautiful stranger at a tavern produces a complete intelligence file. The Godmind project — Ferridane's attempt at portal independence — was a Vex manipulation from inception. The Aesthetes use Ferridane as an unwitting chaos engine for their own objectives.</p>
+
+      <p><strong>Pyrthera:</strong> Hostile territory. Sol'Kheret's Inquisition identifies and destroys Mavarran operators with the precision of a civilization that has understood the threat correctly since before most other realms acknowledged it existed. Pyrtheran physiology, culture, and theological orientation generate specific resistances to every primary Mavarran approach. Mavarrans mostly avoid Pyrthera. It is the one realm where the standard operational toolkit fails reliably. Sol'Kheret refers to Vex Mavarra publicly as "Nightwhore." She has done so since the gates opened.</p>
+
+      <p><strong>Zephyros:</strong> The training ground. Truth is ambient in Zephyros — the Aether carries honest information passively through the environment. Every Mavarran tool is neutralized to some degree by this ambient truth. Young operators treat Zephyros as a proving ground: those who can operate there can operate anywhere. Additionally, Mavarran agents have been documented shaping Zephyrosian philosophical discourse by holding sustained intellectual relationships with scholars through multiple different faces — one Mavarran, wearing four identities, directing a philosopher's published work toward conclusions that serve Mavarran epistemological goals without the philosopher's awareness.</p>
+
+      <p><strong>Luxenfall:</strong> The occupied territory. Formerly Luxania, the Realm of Light. Conquered approximately one thousand years ago through psychological warfare rather than military invasion. The Lightwells — sensory deprivation facilities where captured Luxanians have their emotions harvested as raw mystic fuel — remain operational. The surface narrative presented to other realms describes humanitarian relocation and employment. The docks in every trading port tell a different story.</p>
+
+      <p><strong>The Exvisarelim:</strong> Vex Mavarra holds one of five seats at the only inter-realm governing body in existence. She has occupied this seat since the body's formation, wearing a different face at every meeting. She is delighted to be included.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- 12. GOVERNANCE -->
+  <section class="fi">
+    <span class="sec-num">XI</span>
+    <h2 class="sec-title">Leadership & Governance</h2>
+    <div class="prose">
+      <p>There are no laws in Tenebralis. The Shim'zillai states that everything is permitted. The doctrine states that nothing carries weight. Everything is allowed. Everything has a price. These statements are not in tension.</p>
+
+      <p>In the absence of legislation, the civilization operates on <strong>three rules</strong>:</p>
+
+      <p><strong>Rule One: Do not do anything you cannot get away with.</strong> No authority will intervene on a victim's behalf. But the victim — or the victim's owner, patron, or allies — will pursue personal redress with no legal ceiling on the response. Before crossing anyone: trace the social graph. Identify who benefits from their safety and what those people are capable of. This calculation replaces moral reasoning entirely.</p>
+
+      <p><strong>Rule Two: Do not antagonize the Aesthetes.</strong> Twenty-five thousand strong, organized, and the only institution in a civilization of individuals. They own the Temple complex, the deep terraces, the Second Birth ceremony, and the Court of Masks proceedings. They are the board. Everyone else is playing on it.</p>
+
+      <p><strong>Rule Three: Do not shine through the Shade.</strong> Erebus dims the divine signal. The ambient activity of Mavarran daily life stays below the threshold that would trigger divine intervention. Something cosmically loud — egregious enough to pierce the dampening — brings attention Tenebralis cannot afford. This rule is enforced proactively. Curator intelligence networks monitor for divine signal leakage. Mavarrans abroad who become sloppy receive warnings. If warnings are insufficient, the problem is resolved by other means.</p>
+
+      <p>The <strong>Court of Masks</strong> handles formal disputes. Accusation requires invoking the target's Shum'katim — their hidden true name — which initiates a trial that ends in soul-death for either the accuser or the accused. Pursuing accountability is as dangerous as the original offense. The alternative: wait for the Isin'sartu. Find them in the dark.</p>
+
+      <p>The <strong>Isin'sartu</strong> — the Festival of Lies — is the only calendrical event in a civilization with no sky and no seasons. Six days of preparation followed by a seventh day of total darkness, when Erebus reclaims all borrowed light and legal amnesty is absolute. The Pansilion becomes irrelevant in total darkness. The social hierarchy collapses. What operates is the cave creature underneath — instinct replacing performance, kinesthetic memory replacing visual social knowledge. Every survivor carries the private knowledge of what they were willing to become when the framework was absent. This is never discussed. It is always operative. Every soul that falls goes to Vex.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- 13. MATERIAL PALETTE -->
+  <section class="fi">
+    <span class="sec-num">XII</span>
+    <h2 class="sec-title">Material Palette</h2>
+    <div class="sw-grid">
+      <div class="sw">
+        <div class="sw-color" style="background:linear-gradient(135deg,#0f0c17,#1a1525)"></div>
+        <div class="sw-info"><div class="sw-name">Abyssal Onyx</div><div class="sw-hex">#0F0C17</div>
+        <div class="sw-desc">Native stone. Polished to mirror gloss. Every surface reflects. The architectural ground of the entire city.</div></div>
       </div>
-      <div class="swatch">
-        <div class="swatch-color" style="background: linear-gradient(135deg, #3d1f5c, #6B2D8B);"></div>
-        <div class="swatch-info">
-          <div class="swatch-name">Belladonna Violet</div>
-          <div class="swatch-hex">#6B2D8B</div>
-          <div class="swatch-desc">The flowers. The chromatic constant. Deep purple glow on every surface, faintly luminous, shifting in air currents from the waterfalls.</div>
-        </div>
+      <div class="sw">
+        <div class="sw-color" style="background:linear-gradient(135deg,#2d1545,#6B2D8B)"></div>
+        <div class="sw-info"><div class="sw-name">Belladonna Violet</div><div class="sw-hex">#6B2D8B</div>
+        <div class="sw-desc">The flowers. The chromatic constant. Deep purple glow on every surface, faintly luminous, the one thing that never changes.</div></div>
       </div>
-      <div class="swatch">
-        <div class="swatch-color" style="background: linear-gradient(135deg, #4a90b8, #6ec6e6);"></div>
-        <div class="swatch-info">
-          <div class="swatch-name">Bioluminescent Blue</div>
-          <div class="swatch-hex">#6EC6E6</div>
-          <div class="swatch-desc">The water. The only native light source. Cold, steady, blue-white. The acoustic constant beneath the visual one.</div>
-        </div>
+      <div class="sw">
+        <div class="sw-color" style="background:linear-gradient(135deg,#4a8fb8,#6ec6e6)"></div>
+        <div class="sw-info"><div class="sw-name">Bioluminescent Blue</div><div class="sw-hex">#6EC6E6</div>
+        <div class="sw-desc">The water. The only native light source. Cold, steady, blue-white. The sound before the color.</div></div>
       </div>
-      <div class="swatch">
-        <div class="swatch-color" style="background: linear-gradient(135deg, #8a7235, #c9a84c);"></div>
-        <div class="swatch-info">
-          <div class="swatch-name">Stolen Gold</div>
-          <div class="swatch-hex">#C9A84C</div>
-          <div class="swatch-desc">Luxanian crystata light. Warm gold luminescence harvested from the conquered Realm of Light. The imported warmth that makes Tempora habitable.</div>
-        </div>
+      <div class="sw">
+        <div class="sw-color" style="background:linear-gradient(135deg,#7a6530,#c9a84c)"></div>
+        <div class="sw-info"><div class="sw-name">Stolen Gold</div><div class="sw-hex">#C9A84C</div>
+        <div class="sw-desc">Luxanian crystata light. Warm gold harvested from the conquered Realm of Light. The imported warmth that makes Tempora habitable.</div></div>
       </div>
-      <div class="swatch">
-        <div class="swatch-color" style="background: linear-gradient(135deg, #d45a20, #e89040);"></div>
-        <div class="swatch-info">
-          <div class="swatch-name">Ferridanian Amber</div>
-          <div class="swatch-hex">#E89040</div>
-          <div class="swatch-desc">Fire crystata. Purchased combustion energy. Flickering, alive, closer to candlelight. Used in domestic spaces and symposiums where Luxanian light feels too institutional.</div>
-        </div>
+      <div class="sw">
+        <div class="sw-color" style="background:linear-gradient(135deg,#b8612a,#d4873a)"></div>
+        <div class="sw-info"><div class="sw-name">Ferridanian Amber</div><div class="sw-hex">#D4873A</div>
+        <div class="sw-desc">Fire crystata. Purchased combustion. Flickering, alive, closer to candlelight. Used where Luxanian light feels too institutional.</div></div>
       </div>
-      <div class="swatch">
-        <div class="swatch-color" style="background: linear-gradient(135deg, #c89fe0, #e8d5f0);"></div>
-        <div class="swatch-info">
-          <div class="swatch-name">Ghost Translucent</div>
-          <div class="swatch-hex">#E8D5F0</div>
-          <div class="swatch-desc">The Mavarran true form, visible only in children and in the Dreamscape. Translucent skin with vasculature beneath. The face beneath the mask.</div>
-        </div>
+      <div class="sw">
+        <div class="sw-color" style="background:linear-gradient(135deg,#c89fe0,#e8d5f0)"></div>
+        <div class="sw-info"><div class="sw-name">Ghost Translucent</div><div class="sw-hex">#E8D5F0</div>
+        <div class="sw-desc">The Mavarran true form. Visible only in children and in the Dreamscape. Translucent skin with vasculature beneath. The face under the mask.</div></div>
       </div>
     </div>
   </section>
 
-  <div class="diamond-divider"><span></span></div>
+  <div class="divider"><span></span></div>
 
-  <!-- ===== DESIGN PRINCIPLES ===== -->
-  <section class="fade-in">
-    <span class="section-label">VIII</span>
-    <h2 class="section-title">Design Principles</h2>
-    <div class="principle">
-      <div class="principle-number">Principle I</div>
-      <p>Every visual element should seduce before it disturbs. The audience falls in love with Tempora before they understand what it costs. The city is gorgeous. The people are stunning. The atmosphere is electric. The horror is underneath, not on the surface — and the surface must be genuinely, irresistibly beautiful.</p>
-    </div>
-    <div class="principle">
-      <div class="principle-number">Principle II</div>
-      <p>The silhouette must read as assembled, not inherited. Nothing about a Mavarran's appearance comes from their birth form. Every visual element — face, body, clothing, coloration — is chosen, constructed, stolen, remixed. The design language is collage at the level of the body. No two Mavarrans look alike because no two Mavarrans are drawing from the same source material tonight.</p>
-    </div>
-    <div class="principle">
-      <div class="principle-number">Principle III</div>
-      <p>Every light source in Tempora is either stolen or imported. The bioluminescent water is native but cold. Every warm light — the gold of Luxanian crystata, the amber of Ferridanian fire — is purchased from another civilization. The city's beauty is not its own. This should be legible in every frame: warmth borrowed, beauty assembled, comfort manufactured from the labor and heritage of others.</p>
-    </div>
-    <div class="principle">
-      <div class="principle-number">Principle IV</div>
-      <p>The fog is a character. Ten-foot visibility defines every composition. Figures emerge from and dissolve into mist. Background detail is perpetually obscured. The frame is always incomplete — the viewer, like the inhabitants, sees only the immediate bubble and must infer the rest. What you can't see is always more important than what you can.</p>
-    </div>
-    <div class="principle">
-      <div class="principle-number">Principle V</div>
-      <p>The Luxenfallen are always visible and always working. In every frame that contains the city, the crystalline, bioluminescent bodies of the enslaved population should be present — maintaining paths, standing perimeter watch, carrying materials. Their light is the city's ambient glow. Their labor is the city's infrastructure. They are the most honest visual element in Tempora: the one thing that isn't performing.</p>
+  <!-- 14. SOCIETAL DYSFUNCTION -->
+  <section class="fi">
+    <span class="sec-num">XIII</span>
+    <h2 class="sec-title">Societal Dysfunction</h2>
+    <div class="prose">
+      <p>Tenebralis has eliminated every mechanism by which a civilization self-corrects. There is no law. There is no institutional accountability. There is no collective memory — the Shim'zillai's fourth axiom, "What forgets, is free," has been operationalized at the civilizational level through the Second Birth ceremony, which erases every Mavarran's childhood at sixteen and replaces it with curated alternatives. There is no intergenerational continuity of experience — each generation begins from a manufactured baseline with no access to the unedited past.</p>
+
+      <p>The consequence is structural freefall. Each generation's behavioral baseline drifts further from recognizable norms, compounding without any mechanism to arrest the drift. The escalation is invisible from inside because no one retains the experiential memory of an earlier standard. A Mavarran three hundred years into this process occupies a behavioral position that would be incomprehensible to a Mavarran from the first generation, but neither party is available for comparison — the first generation's memories were rendered into narcotics centuries ago.</p>
+
+      <p>The population is small and shrinking. Most Mavarrans abort, because a child represents sixteen years of unmasked vulnerability in a home with no accountability — a strategic liability in a civilization where caring about anything is an exploitable weakness. Children who survive to sixteen undergo the Second Birth, contributing their childhood suffering to the narcotics supply chain. Children whose Pansilion does not manifest during the ceremony do not leave the Temple. The Aesthetes take custody.</p>
+
+      <p>The civilization consumes its own future and considers this rational. Its primary export is the permission to stop caring. Its primary import is souls.</p>
     </div>
   </section>
 
-  <div class="diamond-divider"><span></span></div>
+  <div class="divider"><span></span></div>
 
-  <!-- ===== THE HORROR ===== -->
-  <section class="fade-in">
-    <span class="section-label">IX</span>
-    <h2 class="section-title">The Horror</h2>
-    <div class="horror-box">
-      <p>A thousand years ago, they ate a civilization alive and called it a cultural faux pas. Everything you see today is evolutionary adaptation from that starting point. The charm is real in the sense that it functions. But it is not directed at you as a human being. It is directed at you as a situation. You are an environment they are navigating. You are material — fuckable, edible, useful, or useless. The warm smile at the bar and the thing that has your friend sitting in a dark room choosing someone else's memories over his own life come from the same place. The same supply chain. The same people. The civilization's primary ideology is freedom, and freedom taken to its absolute conclusion — across centuries, without constraint, without accountability, without a single mechanism that says <em>this far and no further</em> — produces a world where the narrator's refusal to linger is the world's refusal to care, rendered in tone. They are no longer slaughtering civilizations while wearing their faces and calling it an oopsie. That doesn't mean more powerful and sinister forces aren't still doing smaller versions of that. This is Tenebralis chilled out.</p>
+  <!-- 15. THE GONLAN -->
+  <section class="fi">
+    <span class="sec-num">XIV</span>
+    <h2 class="sec-title">Noctivex — The Gonlan of Tenebralis</h2>
+    <div class="highlight-box">
+      <p><strong>Noctivex</strong> is the Primal Gonlan of the Realm of Shadows. Eyeless. Many-winged. Coiled in shadow. Its scales are vantablack — a surface that absorbs all light and reflects none, rendering its body a moving void in any visual field. It drinks minds: proximity to Noctivex produces progressive cognitive dissolution, not through any active predatory behavior, but as a passive effect of existing near something operating at a scale the mortal nervous system was not built to process. It eclipses all light within its radius. It is Alciel Aquilon Karai's maternal inheritance made flesh — the form drawn from his mother Nyx's domain, the Goddess of Night sealed behind the Veil of the Life-Blind.</p>
     </div>
   </section>
 
-  <div class="diamond-divider"><span></span></div>
+  <div class="divider"><span></span></div>
 
-  <!-- ===== FOOTER ===== -->
-  <footer class="realm-footer fade-in">
+  <!-- 16. FOOTER -->
+  <footer class="footer fi">
     Advent of Ultima <span>·</span> Moirai Codex <span>·</span> Tenebralis <span>·</span> April 2026
   </footer>
 
 </div>
 
+<!-- === SCRIPTS === -->
 <script>
-// === ACCORDION ===
-document.querySelectorAll('.accordion-trigger').forEach(trigger => {
-  trigger.addEventListener('click', () => {
-    const item = trigger.parentElement;
-    const content = item.querySelector('.accordion-content');
+// Accordion
+document.querySelectorAll('.acc-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const body = item.querySelector('.acc-body');
     const isOpen = item.classList.contains('open');
-
-    // Close all
-    document.querySelectorAll('.accordion-item').forEach(i => {
+    document.querySelectorAll('.acc-item').forEach(i => {
       i.classList.remove('open');
-      i.querySelector('.accordion-content').style.maxHeight = null;
+      i.querySelector('.acc-body').style.maxHeight = null;
     });
-
-    // Open clicked if it was closed
     if (!isOpen) {
       item.classList.add('open');
-      content.style.maxHeight = content.scrollHeight + 'px';
+      body.style.maxHeight = body.scrollHeight + 'px';
     }
   });
 });
 
-// === FADE IN ON SCROLL ===
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+// Fade in on scroll
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.fi').forEach(el => obs.observe(el));
 
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+// Belladonna pollen particle system
+(function() {
+  const canvas = document.getElementById('pollen-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  const COUNT = 60;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Pollen {
+    constructor() { this.reset(true); }
+    reset(init) {
+      this.x = Math.random() * W;
+      this.y = init ? Math.random() * H : -10;
+      this.r = Math.random() * 2.2 + 0.6;
+      this.vx = (Math.random() - 0.5) * 0.3;
+      this.vy = Math.random() * 0.35 + 0.08;
+      this.drift = Math.random() * Math.PI * 2;
+      this.driftSpeed = Math.random() * 0.003 + 0.001;
+      this.driftAmp = Math.random() * 0.4 + 0.1;
+      // color: mix of violet and faint gold
+      const isGold = Math.random() < 0.15;
+      if (isGold) {
+        this.color = `rgba(201,168,76,${Math.random() * 0.25 + 0.05})`;
+      } else {
+        const hue = 270 + Math.random() * 20 - 10;
+        const sat = 40 + Math.random() * 30;
+        const lum = 50 + Math.random() * 20;
+        const alpha = Math.random() * 0.3 + 0.05;
+        this.color = `hsla(${hue},${sat}%,${lum}%,${alpha})`;
+      }
+      this.pulsePhase = Math.random() * Math.PI * 2;
+      this.pulseSpeed = Math.random() * 0.01 + 0.005;
+    }
+    update() {
+      this.drift += this.driftSpeed;
+      this.pulsePhase += this.pulseSpeed;
+      this.x += this.vx + Math.sin(this.drift) * this.driftAmp;
+      this.y += this.vy;
+      if (this.y > H + 10 || this.x < -20 || this.x > W + 20) this.reset(false);
+    }
+    draw() {
+      const pulse = 1 + Math.sin(this.pulsePhase) * 0.3;
+      const r = this.r * pulse;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+      // subtle glow
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, r * 2.5, 0, Math.PI * 2);
+      const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, r * 2.5);
+      g.addColorStop(0, this.color);
+      g.addColorStop(1, 'transparent');
+      ctx.fillStyle = g;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < COUNT; i++) particles.push(new Pollen());
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
 </script>
 
 </body>
