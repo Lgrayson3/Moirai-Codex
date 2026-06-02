@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Theomachy — The War Over Who Rules Reality · Advent of Ultima</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0a0506;
+  --bg-card: #150809;
+  --bg-hover: #1e0a0b;
+  --bg-highlight: #190809;
+  --blood-deep: #3a0e0e;
+  --blood-core: #8a1f1c;
+  --blood-accent: #b62f29;
+  --blood-light: #d8554a;
+  --blood-glow: #e0655a;
+  --ash: #d9c9c2;
+  --text-primary: #d6c5be;
+  --text-secondary: #ad8d86;
+  --text-dim: #7c5c58;
+  --border-subtle: #2a1211;
+  --border-accent: #421818;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --max-width: 880px;
+  --section-gap: 4.5rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--blood-core); color: var(--ash); }
+
+#cinder-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.6;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 18% 8%, rgba(182,47,41,0.10) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 32%, rgba(138,31,28,0.08) 0%, transparent 46%),
+    radial-gradient(ellipse at 50% 99%, rgba(58,14,14,0.30) 0%, transparent 46%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page { position: relative; z-index: 1; max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem; }
+
+.divider {
+  display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+  margin: var(--section-gap) 0; opacity: 0.6;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--blood-core), transparent);
+}
+.divider span {
+  width: 7px; height: 7px; background: var(--blood-accent);
+  transform: rotate(45deg); flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(216,85,74,0.55);
+}
+
+/* ---------- Header ---------- */
+.header { text-align: center; padding: 5.5rem 0 1.5rem; }
+.header .tag {
+  font-family: var(--font-display); font-size: 0.6rem;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--blood-light); display: block; margin-bottom: 2rem;
+}
+.header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.7rem, 8.5vw, 4.6rem);
+  font-weight: 900;
+  background: linear-gradient(160deg, #f0e2dc 0%, var(--blood-light) 45%, var(--blood-core) 92%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.09em; line-height: 1.05; margin-bottom: 0.7rem;
+  filter: drop-shadow(0 0 55px rgba(182,47,41,0.3));
+}
+.header .sub {
+  font-family: var(--font-display); font-size: 0.78rem;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-dim);
+  line-height: 1.9;
+}
+.header .epigraph {
+  font-style: italic; font-size: 1.12rem; color: var(--text-secondary);
+  max-width: 33rem; margin: 1.9rem auto 0; line-height: 1.72;
+}
+
+/* ---------- Movements ---------- */
+.sec-num {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--blood-light); display: block; margin-bottom: 0.4rem;
+}
+.sec-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 3vw, 1.65rem);
+  font-weight: 700; color: var(--ash);
+  letter-spacing: 0.05em; margin-bottom: 1.5rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--border-accent);
+}
+.sub-head {
+  font-family: var(--font-display); font-size: 0.95rem;
+  font-weight: 600; color: var(--ash);
+  letter-spacing: 0.03em; margin-top: 1.9rem; margin-bottom: 0.6rem;
+}
+.sub-head .ds { color: var(--blood-light); font-weight: 400; margin-right: 0.5rem; }
+
+.prose p { margin-bottom: 1.2rem; }
+.prose p:last-child { margin-bottom: 0; }
+.prose strong { color: var(--ash); font-weight: 600; }
+.prose em { color: var(--text-secondary); }
+.lead-cap::first-letter {
+  font-family: var(--font-display); float: left;
+  font-size: 3.6rem; line-height: 0.82; font-weight: 700;
+  color: var(--blood-light); margin: 0.12rem 0.6rem 0 0;
+}
+
+/* ---------- Highlight ---------- */
+.highlight-box {
+  background: var(--bg-highlight); border: 1px solid var(--blood-deep);
+  border-left: 3px solid var(--blood-accent);
+  padding: 1.8rem 2.2rem; margin: 1.5rem 0; position: relative;
+}
+.highlight-box::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(216,85,74,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.highlight-box p { position: relative; font-size: 1.02rem; line-height: 1.84; }
+.highlight-box p + p { margin-top: 1rem; }
+.highlight-box strong { color: var(--blood-light); }
+
+/* ---------- Scripture ---------- */
+.scripture {
+  text-align: center; font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2.5vw, 1.3rem); font-weight: 600;
+  color: var(--ash); letter-spacing: 0.05em; line-height: 1.55;
+  margin: 2.2rem auto; max-width: 36rem;
+  text-shadow: 0 0 45px rgba(216,85,74,0.25);
+}
+.scripture .src {
+  display: block; font-family: var(--font-body); font-style: italic;
+  font-size: 0.82rem; font-weight: 400; letter-spacing: 0.04em;
+  color: var(--text-dim); margin-top: 1rem;
+}
+
+/* ---------- Accordions ---------- */
+.acc-item {
+  border: 1px solid var(--border-subtle); margin-bottom: -1px;
+  background: var(--bg-card); overflow: hidden;
+}
+.acc-item:first-child { border-radius: 2px 2px 0 0; }
+.acc-item:last-child { border-radius: 0 0 2px 2px; }
+.acc-btn {
+  width: 100%; background: none; border: none;
+  padding: 1.15rem 1.4rem; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--font-display); font-size: 0.92rem;
+  font-weight: 600; color: var(--ash);
+  letter-spacing: 0.04em; text-align: left;
+  transition: background 0.2s;
+}
+.acc-btn:hover { background: var(--bg-hover); }
+.acc-btn .lead { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.2rem 0.8rem; }
+.acc-btn .hint {
+  font-family: var(--font-body); font-size: 0.85rem;
+  font-weight: 400; color: var(--text-dim); font-style: italic;
+}
+.acc-btn .arr {
+  width: 7px; height: 7px;
+  border-right: 1.5px solid var(--blood-light);
+  border-bottom: 1.5px solid var(--blood-light);
+  transform: rotate(45deg); transition: transform 0.3s;
+  flex-shrink: 0; margin-left: 1rem;
+}
+.acc-item.open .acc-btn .arr { transform: rotate(-135deg); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.6s ease; }
+.acc-inner { padding: 0 1.4rem 1.5rem; }
+.acc-inner p { font-size: 0.95rem; line-height: 1.78; color: var(--text-secondary); margin-bottom: 0.8rem; }
+.acc-inner p:last-child { margin-bottom: 0; }
+.acc-inner p strong { color: var(--ash); }
+
+/* ---------- Ledger ---------- */
+.ledger { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 2px; padding: 1.6rem 1.9rem; margin-top: 1.4rem; position: relative; overflow: hidden; }
+.ledger::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, var(--blood-deep), var(--blood-accent), var(--blood-deep)); }
+.ledger .lrow { padding: 0.7rem 0; border-bottom: 1px solid var(--border-subtle); display: flex; gap: 1rem; align-items: baseline; }
+.ledger .lrow:last-child { border-bottom: none; }
+.ledger .lk {
+  font-family: var(--font-display); font-size: 0.62rem; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--blood-light); flex: 0 0 9.5rem;
+}
+.ledger .lv { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; }
+.ledger .lv strong { color: var(--ash); font-weight: 600; }
+
+/* ---------- Footer ---------- */
+.footer {
+  text-align: center; padding: 3.5rem 0 2.8rem;
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim);
+}
+.footer span { color: var(--blood-light); }
+
+.fi { opacity: 0; transform: translateY(14px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.fi.vis { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 640px) {
+  body { font-size: 17px; }
+  .header { padding: 3.5rem 0 1rem; }
+  :root { --section-gap: 3rem; }
+  .highlight-box { padding: 1.3rem 1.2rem; }
+  .lead-cap::first-letter { font-size: 3rem; }
+  .ledger .lrow { flex-direction: column; gap: 0.2rem; }
+  .ledger .lk { flex: none; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="cinder-canvas"></canvas>
+
+<div class="page">
+
+  <header class="header fi">
+    <span class="tag">Advent of Ultima · The Chronicle</span>
+    <h1>The Theomachy</h1>
+    <div class="sub">The War Over Who Rules Reality · From the First War to the Advent</div>
+    <p class="epigraph">&ldquo;Your Dominion has been measured. The Thrones Eternal are but dust. It is as it must be.&rdquo;</p>
+  </header>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ I. THE FIRST WAR ============ -->
+  <section class="fi">
+    <span class="sec-num">Movement I</span>
+    <h2 class="sec-title">The First War &mdash; The Building of Hel</h2>
+    <div class="prose">
+      <p class="lead-cap">Before anyone&rsquo;s living memory. Before Raiwata was the Demon King. Before the Gonlan. The divine bloodline had branched far from the primordials, and the younger gods did what children often do: they looked at those who made them and wanted to surpass them, to overtake them, to rule reality in their place. The First War was fought over that single question &mdash; who gets to rule reality &mdash; and the winners won.</p>
+      <p>For the crime of trying to overturn the Order of the Gods, the defeated were not killed. They were sentenced. A realm was built for the purpose of their punishment: <strong>Hel</strong>, the Ninefold Abyss, deliberately constructed and artfully torturous, running since before time was counted. And the sentence was made hereditary. All the offspring of the defeated would be born into it, and none of them would be granted the divine touch &mdash; the soul&rsquo;s living interface with the cosmos, the thing that makes myst and deusas possible. The descendants did not rebel. The descendants do not even know there was a rebellion. The sentence was never revisited, never appealed, never reconsidered.</p>
+    </div>
+    <div class="highlight-box">
+      <p>This is the foundation beneath everything that follows. The entire cosmic order &mdash; every Realm with its element and its patron deity, every Mystic and every deusa, every god seated on a throne &mdash; is the <strong>victors&rsquo; world</strong>: the territory the winners kept and the spoils they distributed to their favored children, administered across ages so vast the original war has passed entirely out of memory. The gods who rule are the gods who won.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ II. THE LOSER'S WORLD ============ -->
+  <section class="fi">
+    <span class="sec-num">Movement II</span>
+    <h2 class="sec-title">The Loser&rsquo;s World &mdash; Terrae and the Eight Billion</h2>
+    <div class="prose">
+      <p>There was a second sentence, quieter than the first. <strong>Terrae</strong> &mdash; Earth &mdash; was stripped of myst, of element, of patron, of every connection that lets a soul reach the divine, and given to the descendants of the defeated. The world of the Godless and the Forsaken. Eight billion souls, every human being who has ever lived, born with the full capacity for magic onto a world where magic does not exist, and none of them with any frame of reference for what was withheld. They are classified as soulless &mdash; not because they lack souls, but because the divine order defines the soul by its relationship to the divine, and theirs was severed.</p>
+      <p>And so, upon death, every one of them goes to Hel. Not judged. Not weighed. Not found wanting. Sent down automatically, every generation, forever. Eight billion souls who already belong, by default, to whatever rules the abyss.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ III. RAIWATA ============ -->
+  <section class="fi">
+    <span class="sec-num">Movement III</span>
+    <h2 class="sec-title">The Refining of Raiwata</h2>
+    <div class="prose">
+      <p>Hel was built to produce suffering, and over a span of time sufficient to refine suffering into a philosophy and a philosophy into a god, it produced <strong>Raiwata</strong>. He conquered his own hell. He became the Apex Archdevil &mdash; the being whose single operating principle is that creatures who care about things carry a weakness he can exploit. He did not become that in a vacuum. He became that in a prison engineered to break everything put into it, and he was the thing that did not break.</p>
+    </div>
+    <div class="highlight-box">
+      <p>His calculation is the simplest and most brutal in the cosmos: <strong>why wait for an army of eight billion to die and come to me, when I could have them now?</strong> The gods, in building their punishment, had quietly handed the Demon King an entire world&rsquo;s population as a feature of the system &mdash; an army accumulating in the dark for longer than anyone can remember, needing only to be collected.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ IV. THE PROPHECY ============ -->
+  <section class="fi">
+    <span class="sec-num">Movement IV</span>
+    <h2 class="sec-title">The Prophecy of Ultima</h2>
+    <div class="scripture">
+      &ldquo;Your Dominion has been measured. Nine threads weave a shroud for this age. Three suns will fall, and the second will rise to meet you. The Thrones Eternal are but dust. It is as it must be.&rdquo;
+      <span class="src">&mdash; Algol, Avatar of Lachesis, the Measurer, before the assembled Pantheon</span>
+    </div>
+    <div class="prose">
+      <p>Algol predates all the gods and will never die. When the Measurer stood in Dystan and spoke, the gods did not hear a riddle. They heard the end of their age. The Realms had outgrown the old ways; the turning had begun; and the gods, who had blessed and shepherded mortals for as long as time has been time, were told plainly that their dominion had been weighed and found finite.</p>
+      <p>What moved through the Pantheon was fear &mdash; fear of obsolescence, fear of their own death, fear of what would become of the Realms once they were gone. They fractured, not into clean factions but into postures: the elementals reading it as the natural turning of a cycle; the warriors seeing targets to be located and managed; Dozu, the God of Magic, watching mortals build power outside his permission and beginning to go mad; the silent ones &mdash; Death, Truth, Life &mdash; saying nothing at all, which was the most unsettling answer of them. And one fear, acted upon, became the engine of everything the prophecy foretold.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ V. THE EXILE ============ -->
+  <section class="fi">
+    <span class="sec-num">Movement V</span>
+    <h2 class="sec-title">The Exile of the Dragon</h2>
+    <div class="prose">
+      <p>The prophecy whispered that the son of <strong>Aracice</strong>, the Dragon &mdash; Star-Eater, God of Order, God-King of Glacia, head of the Exvisarelim &mdash; would be the one to unmake the divine peace. So the Pantheon moved against him before his son could be born. They could not defeat him at the heart of his power. They offered him a choice instead: exile, or war.</p>
+      <p>He chose exile. A war among gods would have fractured the Pantheon, slain gods, emptied domains, and pulled the sky down on everyone beneath it. So the Dragon let himself be bound and sent to Terrae, the magic-poor world of the Godless and the Forsaken &mdash; and on that dead world he ruled from Atlantis, sovereign of its Parliament, and he raised his son every single day for a deed the son was born to carry. He chose peace now to buy his son a tomorrow, and the whole cosmos with him.</p>
+    </div>
+    <div class="highlight-box">
+      <p>In their fear, the gods believed they were managing a threat. They were clearing a path. They had taken the one being who had mastered the absorption of a falling star, and set him alone, defenseless, on the very world where the Demon King&rsquo;s eight billion waited.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ VI. THE FIRST SUN ============ -->
+  <section class="fi">
+    <span class="sec-num">Movement VI</span>
+    <h2 class="sec-title">The Escape and the Second Sun</h2>
+    <div class="prose">
+      <p>From his abyss, Raiwata found a crack in the walls of reality and cut his way through it, and the first thing he saw of the outside cosmos was the silent crystalline majesty of <strong>Glacia</strong> &mdash; the Star-Eater&rsquo;s Cradle, the most beautiful civilization ever made. He did not see a civilization. He saw a bauble.</p>
+      <p>With the casual curiosity of a child testing its strength, he invoked his deusa, <strong>Antaka</strong>, the Sun-Calling. He took hold of the system&rsquo;s star and commanded it to fall. This was not a spell against the Realm; it was an astronomical event visited upon it. Glacia was unmade on the celestial-mechanical level &mdash; the <strong>Mahāgaldr</strong>, the second of the three foretold suns to fall, for Luxania, the Realm of Light, had already lost its own: its god Aether slain by Erebus and its sky sealed by Tenebralis in permanent eclipse, the first sun gone dark before Glacia&rsquo;s ever fell. And the one being who could have absorbed the falling star was a world away, in exile. Raiwata never learned the Realm&rsquo;s name. He took a single trophy out of the wreckage, a Glacian queen, carried her from her dead world and made her bear him a child &mdash; the child who would become Anberlyn &mdash; and he moved on, having learned his first lesson: that worlds, like everything else, can be broken.</p>
+    </div>
+    <div class="highlight-box">
+      <p>The destruction of Glacia, the exile of the Dragon, and what came next on Terrae were never three events. They were one campaign: remove the Star-Eater to the forsaken world, kill him there, and collect the army that had been accumulating in the dark since before time was counted. On the day the Dragon&rsquo;s son was born, Glacia died. The fingers pointed at Pyrthera, for only six beings hold the power of Antaka and five of them are Sol&rsquo;Kheret&rsquo;s. The true hand was never named. Nobody had located the Sun-Caller. The threat that made every other quarrel in the cosmos feel like arguing over furniture in a burning house had no name and no face.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ VII. POINT ZERO ============ -->
+  <section class="fi">
+    <span class="sec-num">Movement VII</span>
+    <h2 class="sec-title">Point Zero &mdash; The Murder of the Dragon</h2>
+    <div class="prose">
+      <p class="lead-cap">The hunt followed the Dragon to Terrae. The Infernal Plague had been bleeding into the living Realms for years &mdash; demonic flesh grafted onto the tortured, fields gone barren, the wildlife and even the Gonlan in mourning &mdash; and now it closed on the forsaken world entire. The defense gathered at Atlantis. And Raiwata invoked Antaka once more, calling Terrae&rsquo;s own sun down upon it: the third of the three suns to fall.</p>
+      <p>The Dragon was given his final test. To fight the Sun-Caller and let the star fall, annihilating his son and the imperfect world he had come to protect &mdash; or to turn his back on his murderer and perform his greatest feat one last time, to become the Star-Eater again and catch the falling sun on his own body, knowing it would leave him defenseless. He turned from Raiwata. He opened his soul and took the cataclysm into himself, breaking the weapon and saving them all. And in the moment of his greatest mercy, Raiwata struck him down from behind. The Star-Eater was murdered at the height of his compassion, his peace shattered by a betrayal his noble nature could not compute.</p>
+      <p>Most of the gathered escaped through the Clairgates. <strong>Uriel</strong> did not &mdash; a Pyrtheran soul displaced to the forsaken world, who struck first in vengeance for the Dragon and fell shortly after, down into Hel. And <strong>Nyx</strong>, the Goddess of Night, the Dragon&rsquo;s consort, won from the gods one final year &mdash; a single sun&rsquo;s cycle &mdash; to arm her son, her word both the threat and the bargain that bought the time. At its end she passed beyond the Veil of the Life-Blind into Oblivion, leaving her son one charge: go to Zephyros. Far away, in the same hour of the world, <strong>Fiacre</strong> took the trident Elysium from the God of War and hollowed Leviathan&rsquo;s mind with his own weapon &mdash; leaving him blind and simple, alive but unable to bring war to any conclusion.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ VIII. THE SON ============ -->
+  <section class="fi">
+    <span class="sec-num">Movement VIII</span>
+    <h2 class="sec-title">The Emergence of the Son</h2>
+    <div class="prose">
+      <p>The twenty-year silence broke when <strong>Alciel</strong>, son of the Dragon and the Goddess of Night, the Second Sun, walked into Zephyros and was taken to the Cloisters, where Algol spoke him the whole prophecy. He could not understand it. If he is a natural-born god, why is he not in Dystan? Why do the gods not make war on the Sun-Caller for the murder of his father?</p>
+      <p>The answer, when the war finally hands it to him, is the whole indictment. The gods did not avenge the Dragon because the apparatus they would have sent against devils was already fully spent &mdash; the Lamina Ex Deorum had broken upon Fiacre&rsquo;s shield, Leviathan included, having judged her the more direct threat. And beneath that, the truer reason: <strong>Raiwata did their work for them, unbidden.</strong> They had feared the prophecy and exiled the God of Order to neutralize it, and when the Sun-Caller finished the job they had only begun, it served them. His father was not failed by an overwhelmed Pantheon. His father was convenient to it.</p>
+      <p>And here the prophecy completes itself in him. Three suns will fall &mdash; Luxania&rsquo;s, then Glacia&rsquo;s, then Terrae&rsquo;s &mdash; <em>and the second will rise to meet you.</em> Alciel is Glacia&rsquo;s own sun, the second of the three, born the very day it was called down. He is the fallen sun of his own realm, risen. The Second Sun.</p>
+    </div>
+    <div class="scripture">
+      &ldquo;I am not come to claim a throne. I have come to name them false. And if you will not rise to meet me&hellip; then I will rise to meet you.&rdquo;
+      <span class="src">&mdash; Alciel, to the empty heavens; and Aeralithe descended to answer it</span>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ IX. THE LAW OF SUCCESSION ============ -->
+  <section class="fi">
+    <span class="sec-num">Movement IX</span>
+    <h2 class="sec-title">The Law of Succession &mdash; What the War Is</h2>
+    <div class="prose">
+      <p class="lead-cap">Here is the engine beneath the whole Theomachy. A <strong>Divine Aspect</strong> is the divine part of a god&rsquo;s soul &mdash; the thing that makes a god the god of its domain. The domains themselves are neutral. And the aspects can move. The gods need not die to be succeeded; what the prophecy named as the Thrones turning to dust is the aspects passing, one by one, to mortals grown powerful enough to bear them. Some gods will go to war to prevent that hand-off. And one will try to devour the table out from under all of them.</p>
+    </div>
+    <div class="acc">
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Inheritance <span class="hint">the aspect passes whole</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>This is the oldest and gentlest path, and the Realm of Steel was born from it: Edgerinne is the diamond the earth-god Brokkae became when stone had been stone long enough. She did not reject her father&rsquo;s domain; she fulfilled it so completely she became something new, and he receded into the bedrock to become the foundation she stands on. The new emerges from within the old, not as rebellion or replacement but as fulfillment. It is why Edgerinne, of all the gods, can look at the Dragon&rsquo;s son and name him <strong>no longer the Son, but the Dragon.</strong></p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Replacement <span class="hint">the domain rewritten</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Saint Cloud Sinclair did a thing the cosmos had no category for. He dropped the god Sanguine into one of Pyrthera&rsquo;s suns, cooked and bled the god, distilled his divine essence from his own blood into wine, drank it, and became the God of <strong>Wine</strong> &mdash; then gave the immortal vintage to the lowest of Thalassor first, defeating the very logic of Blood and bloodline in the act of taking the throne. A domain can be not only succeeded but rewritten by the nature of the one who takes it.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Precipitation <span class="hint">a new domain from a broken bearer</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Fiacre did not take War. She hobbled its bearer. Knowing what a god is, she did not kill Leviathan; she left him blind and simple, and War with a crippled bearer can resolve into nothing &mdash; and war that cannot resolve is something like peace. The domain of Peace settled upon her by her actions, her nature, and the worshippers who name her the Goddess of Peace. A new condition precipitated out of the wound she made.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Devouring <span class="hint">the violation of all three</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Raiwata is the corruption of the law. He killed the Dragon and took the Aspect of <strong>Order</strong> into himself &mdash; and twisted it to Chaos by his nature, for the aspect is neutral and he is not. He does not inherit, replace, or precipitate. He consumes what he kills and leaves the domain in ruin. The Heralds inherit. The Demon King devours.</p>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ X. THE GATHERING ============ -->
+  <section class="fi">
+    <span class="sec-num">Movement X</span>
+    <h2 class="sec-title">The Gathering Storm</h2>
+    <div class="prose">
+      <p>The Son walked the Realms and gathered what his father had scattered. He communed with the guardian Gonlan of each world, being recognized as the lost brother and coming home; he took up the guardianship of murdered Luxenfall, where the Battle of the Second Sun set a new star in an eclipsed sky and the broken Solarith was restored, because a people twice abandoned must be twice protected. He reminded every Exvisar who they were. The standoff of five unassailable Realms did not break by force &mdash; it broke because the buried truth was forced into the open, and a coalition formed where there had only been mutual deterrence and willful ignorance. A wall, upon which the darkness would break.</p>
+      <p>The war with the Realm of Steel went kinetic, and the full might of Steelheart came down by the will of Edgerinne; the Clairgates closed, and Dozu, mad with the prophecy, Nihilated any who professed sympathy &mdash; all save Sol&rsquo;Kheret, who stood under Hestia&rsquo;s protection, so that it was known at least one goddess was for the Advent. And when the Son went to end the war by drowning a continent, the Realm of Steel woke a synthetic god to stop him &mdash; <strong>Bahamut</strong>, who refused the shape she was given, named herself <strong>Tiamat</strong>, and joined herself to the Dragonson instead. Then Alciel held against Edgerinne herself in a sacred duel, and the Goddess of the Blade named him the Dragon.</p>
+    </div>
+    <div class="ledger">
+      <div class="lrow"><span class="lk">For the Advent</span><span class="lv"><strong>Two goddesses</strong> &mdash; Sol&rsquo;Kheret under Hestia&rsquo;s protection; Edgerinne, who named him the Dragon</span></div>
+      <div class="lrow"><span class="lk">Dead to it</span><span class="lv"><strong>Three gods</strong> &mdash; the pattern of falling thrones: Sanguine, and the others the war claims as it turns</span></div>
+      <div class="lrow"><span class="lk">Hobbled</span><span class="lv"><strong>Leviathan</strong> &mdash; the God of War, left blind and simple, his domain unable to resolve</span></div>
+      <div class="lrow"><span class="lk">Joined</span><span class="lv"><strong>Tiamat</strong> &mdash; a synthetic deity, the Diamond Gonlan, in union with the Dragonson</span></div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ XI. THE VOIDING OF DEATH ============ -->
+  <section class="fi">
+    <span class="sec-num">Movement XI</span>
+    <h2 class="sec-title">The Voiding of Death</h2>
+    <div class="prose">
+      <p>Then Raiwata made the move the whole campaign had been building toward. He convinced the mad Dozu that <strong>Kaos</strong>, the God of Death, was conspiring with the Advent &mdash; and they moved first. Death was killed, and the Aspect of Death fell into no one&rsquo;s hands, borne by nobody, cast aside. When an aspect is killed and left unheld, the domain it governed falls into ruin.</p>
+      <p>Order, taken and twisted to Chaos. Death, gone and replaced with nothing. This is <strong>Mortem Mortem</strong> &mdash; the death of Death &mdash; and its consequence is exactly what a torturer would want: a cosmos that can neither be broken nor die, held in eternal fear and despair, unkillable and inescapable. Death does not stick. You cannot kill your way to victory when killing no longer functions. On this hinge the Pantheon&rsquo;s schism hardens past mending &mdash; the patron goddesses of the living Realms turning against a God of Magic lost to obsession and a God of Darkness who was evil from the first.</p>
+    </div>
+    <div class="prose">
+      <p>And the road to the gods had already been cut. When Uriel clawed out of Hel, he burned the Prime Court of Dystan to the ground and severed the means by which mortal prayer reaches the divine &mdash; so that after the Red Wolf&rsquo;s fire, no prayer is answered, because none can arrive. He left one survivor to carry the words: <em>the Red Wolf did this.</em></p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ XII. TENEBRALIS ============ -->
+  <section class="fi">
+    <span class="sec-num">Movement XII</span>
+    <h2 class="sec-title">Tenebralis &mdash; The Head of the God</h2>
+    <div class="prose">
+      <p class="lead-cap">Every road ran to the Realm of Masks. There the Advent was turned upside down by a place built of lies, where the faces change without warning and some of them belong to the Advent itself. They marched to the Temple of Ishtar, told it housed a weapon that could kill a god. There was no weapon &mdash; the rumor had been seeded decades before by the Womb of All Lies. The Temple itself was the weapon, a place that takes the deepest buried thing in a soul and makes it realer than reality. They walked out of it broken, having learned they could barely face themselves, and they had not yet met a god. Eloah, the Source made flesh, was lost there to the hollowing the Realm calls Etemesh, and her brother gathered what was left of her into himself.</p>
+      <p>The end came in the deepest reach of the abyss, beneath the Shade of Erebus, where no god can see what another does. Four gods came to murder the Dragonson there &mdash; Erebus, whose Shade hid the deed; Dozu, who reached to sever him from the Source; Brokkae; and Raiwata, who cast his legs into Hel. The God survived by wearing the smallest of his shapes, the man, because the man bled slowest.</p>
+      <p>Then his son moved. <strong>Ayin</strong>, the God of Judgement, the true Ultima, called Erebus&rsquo;s own weapon out of the god&rsquo;s hand and took the god&rsquo;s head with it before his father&rsquo;s blood had cooled. He met Dozu and told the God of Magic his permission was no longer required. And the Realms came &mdash; every seat of the Exvisarelim, the United Lamina of Ferridane as one, the Free Birds, the Azure Guard, the Torchbearers, the Red Wolves. The Oracles cast the murder upon the wind and the aether, and the hidden killing became the most public reckoning in the history of the Realms. The Red Wolf carried the Dragon out of the dark, back to the Realm of Hestia, and the father passed his gathered forms to his son &mdash; the wound staying with the carrier, the wholeness moving on.</p>
+    </div>
+    <div class="scripture">
+      &ldquo;We have walked far enough, my son. Take flight.&rdquo;
+      <span class="src">&mdash; Aracice&rsquo;s son, to his own</span>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ XIII. THE TURNING ============ -->
+  <section class="fi">
+    <span class="sec-num">Movement XIII</span>
+    <h2 class="sec-title">The Turning</h2>
+    <div class="prose">
+      <p>The First War asked who gets to rule reality, and the winners answered it and built a world on the answer, and held that world across ages on the strength of a sentence no one alive remembers passing. The Theomachy is that question asked again &mdash; not by a rival pantheon this time, but by the order itself coming to the end of its age. The aspects move to the worthy. The thrones turn to dust. The gods who blessed and shepherded mortals since time was time face the obsolescence and the death they feared, and some go to war to stop the turning, and one tries to devour everything rather than let it pass.</p>
+      <p>The same shape held the whole way down. Exiling the father made the son. The strike against the son made the martyr. The martyr made the Advent. A natural-born god who could have fought alone chose to build instead &mdash; to gather his father&rsquo;s scattered legacy into one being, to remind the Realms who they were, and to become the bridge the coalition crosses, and then be gone. He looked at his own obsolescence and did not flinch from it: the question was never whether he and his become gods. The question was whether the world survives when the gods do not. The Age of Gods ends. The Age of Men begins.</p>
+    </div>
+    <div class="scripture">
+      Three suns will fall, and the second will rise to meet you.
+      <span class="src">&mdash; the Prophecy of Ultima, fulfilled</span>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <footer class="footer">
+    <span>&diams;</span>&nbsp;&nbsp;Advent of Ultima &nbsp;·&nbsp; The Theomachy &nbsp;&nbsp;<span>&diams;</span>
+  </footer>
+
+</div>
+
+<script>
+// ---------- Accordions ----------
+document.querySelectorAll('.acc-btn').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var item = btn.parentElement;
+    var body = item.querySelector('.acc-body');
+    if (item.classList.contains('open')) {
+      body.style.maxHeight = null;
+      item.classList.remove('open');
+    } else {
+      item.classList.add('open');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+  });
+});
+window.addEventListener('resize', function () {
+  document.querySelectorAll('.acc-item.open .acc-body').forEach(function (body) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+  });
+});
+
+// ---------- Fade-in on scroll ----------
+var obs = new IntersectionObserver(function (entries) {
+  entries.forEach(function (e) {
+    if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fi').forEach(function (el) { obs.observe(el); });
+
+// ---------- Rising cinders ----------
+(function () {
+  var canvas = document.getElementById('cinder-canvas');
+  var ctx = canvas.getContext('2d');
+  var sparks = [];
+  var W, H;
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  var COUNT = Math.min(50, Math.floor(window.innerWidth / 24));
+  for (var i = 0; i < COUNT; i++) { sparks.push(newSpark(Math.random() * H)); }
+  function newSpark(y) {
+    var heat = Math.random();
+    // deep blood-red to ember spectrum
+    var r = 150 + Math.floor(heat * 90);
+    var g = 25 + Math.floor(heat * 55);
+    var b = 22 + Math.floor(heat * 18);
+    return {
+      x: Math.random() * W,
+      y: y,
+      r: 0.6 + Math.random() * 1.6,
+      sp: 0.18 + Math.random() * 0.55,
+      drift: (Math.random() - 0.5) * 0.32,
+      a: 0.25 + Math.random() * 0.5,
+      tw: Math.random() * Math.PI * 2,
+      col: [r, g, b]
+    };
+  }
+  function tick() {
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < sparks.length; i++) {
+      var s = sparks[i];
+      s.y -= s.sp;
+      s.x += s.drift + Math.sin(s.tw) * 0.18;
+      s.tw += 0.022;
+      if (s.y < -10) { sparks[i] = newSpark(H + 10); continue; }
+      var flicker = s.a * (0.6 + 0.4 * Math.sin(s.tw * 1.8));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + s.col[0] + ',' + s.col[1] + ',' + s.col[2] + ',' + flicker + ')';
+      ctx.shadowBlur = 7;
+      ctx.shadowColor = 'rgba(' + s.col[0] + ',' + s.col[1] + ',' + s.col[2] + ',' + (flicker * 0.85) + ')';
+      ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+</script>
+
+</body>
+</html>

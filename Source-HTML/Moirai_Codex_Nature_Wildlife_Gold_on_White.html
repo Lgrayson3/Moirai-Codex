@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moirai Codex — Nature &amp; Wildlife of the Realms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Marcellus&family=Spectral+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+  /* ============================================================
+     THE TOKENS — change these, and the whole document changes.
+     This is the entire house style. Everything below references it.
+     ============================================================ */
+  :root{
+    /* Ground & ink — never pure white, never pure black */
+    --paper:#FBF7EE;
+    --paper-2:#F6F0E2;
+    --ink:#2B2317;
+    --ink-soft:#5A4E3A;
+    --rule:#E4D8BE;
+
+    /* Gold — the primary accent and the color of headings */
+    --gold:#9A7B1F;          /* text-weight gold */
+    --gold-bright:#C9A227;   /* accent / gradient gold */
+    --gold-pale:#E9DCB0;
+    --gold-glow:rgba(201,162,39,.18);
+
+    /* The prism — one light, seven readings. Thin accents ONLY. */
+    --zephyros:#8AA63A;   --zephyros-pale:#D8E3B0;
+    --pyrthera:#C7572B;   --pyrthera-pale:#F0C39A;
+    --thalassor:#2E6FA3;  --thalassor-pale:#A9CBE4;
+    --ferridane:#A66A2E;  --ferridane-pale:#E0C394;
+    --tenebralis:#6A3D9A; --tenebralis-pale:#C8B0E2;
+    --luxenfall:#C9A227;  --luxenfall-pale:#EBDCA6;
+    --glacia:#5C97B8;     --glacia-pale:#BDDCE8;
+
+    --prism:linear-gradient(90deg,
+      var(--tenebralis) 0%, var(--thalassor) 17%, var(--glacia) 30%,
+      var(--zephyros) 45%, var(--luxenfall) 60%, var(--ferridane) 74%,
+      var(--pyrthera) 100%);
+
+    --maxw:760px;
+  }
+
+  /* ============================================================
+     THE SYSTEM — copy this block verbatim into any new piece.
+     ============================================================ */
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Spectral",Georgia,serif;font-weight:400;
+    font-size:19px;line-height:1.72;-webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;overflow-x:hidden;
+  }
+  body::before{ /* warm vignette + corner prismatic light-leaks */
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(120% 80% at 8% -5%, rgba(106,61,154,.05), transparent 45%),
+      radial-gradient(120% 80% at 105% 110%, rgba(199,87,43,.05), transparent 45%),
+      radial-gradient(140% 90% at 100% 0%, rgba(46,111,163,.04), transparent 40%),
+      radial-gradient(100% 100% at 50% 40%, transparent 60%, rgba(43,35,23,.05));
+  }
+  body::after{ /* fine paper grain */
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  }
+  .ribbon{position:fixed;top:0;left:0;right:0;height:5px;z-index:60;
+    background:var(--prism);background-size:200% 100%;animation:drift 22s linear infinite;}
+  @keyframes drift{0%{background-position:0 0;}100%{background-position:200% 0;}}
+
+  nav.codex-nav{position:sticky;top:5px;z-index:55;background:rgba(251,247,238,.86);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);}
+  nav.codex-nav ul{list-style:none;margin:0 auto;padding:.55rem .9rem;display:flex;
+    flex-wrap:wrap;gap:.2rem .9rem;justify-content:center;max-width:1040px;}
+  nav.codex-nav a{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-soft);text-decoration:none;padding:.15rem 0;
+    border-bottom:1.5px solid transparent;transition:.25s;white-space:nowrap;}
+  nav.codex-nav a:hover{color:var(--gold);border-bottom-color:currentColor;}
+
+  main{position:relative;z-index:1;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.4rem;}
+
+  header.mast{text-align:center;padding:5.5rem 1.4rem 3rem;position:relative;}
+  .eyebrow{font-family:"Marcellus",serif;font-size:.82rem;letter-spacing:.42em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 1.6rem;text-indent:.42em;}
+  h1.title{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(2.7rem,8vw,5.1rem);
+    line-height:.98;margin:0;letter-spacing:-.01em;color:var(--ink);font-variation-settings:"opsz" 144;}
+  h1.title .gilt{background:linear-gradient(95deg,var(--gold) 0%,var(--gold-bright) 45%,#EFD27A 60%,var(--gold) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;}
+  .subtitle{font-family:"Spectral",serif;font-weight:300;font-style:italic;
+    font-size:clamp(1.05rem,2.6vw,1.35rem);color:var(--ink-soft);margin:1.5rem auto 0;max-width:38ch;line-height:1.5;}
+  .mast-mark{margin:2.4rem auto 0;width:min(420px,80%);}
+  .mast-mark .bar{height:3px;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  .mast-epi{font-family:"Fraunces",serif;font-style:italic;font-weight:300;
+    font-size:clamp(1.15rem,3vw,1.6rem);color:var(--gold);margin:2.6rem auto 0;max-width:32ch;line-height:1.4;}
+  .mast-epi span{display:block;color:var(--ink-soft);font-size:.7em;font-style:normal;
+    font-family:"Spectral";letter-spacing:.05em;margin-top:.5rem;}
+
+  .diadiv{display:flex;align-items:center;justify-content:center;gap:1rem;margin:3.4rem 0;}
+  .diadiv .line{height:1px;flex:1;max-width:120px;background:linear-gradient(90deg,transparent,var(--gold-pale),var(--gold));}
+  .diadiv .line.r{background:linear-gradient(90deg,var(--gold),var(--gold-pale),transparent);}
+  .diadiv .gem{font-size:.9rem;color:var(--gold);letter-spacing:.4em;text-indent:.4em;}
+
+  section{padding:1.5rem 0;position:relative;}
+  .sec-eyebrow{font-family:"Marcellus",serif;font-size:.78rem;letter-spacing:.32em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 .5rem;}
+  h2{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(1.9rem,5vw,2.9rem);
+    line-height:1.05;margin:.2rem 0 1.2rem;color:var(--ink);letter-spacing:-.01em;font-variation-settings:"opsz" 80;}
+  h2 .uline{display:block;height:3px;width:108px;margin-top:.7rem;border-radius:2px;
+    background:var(--prism);background-size:200% 100%;animation:drift 16s linear infinite;}
+  h3{font-family:"Fraunces",serif;font-weight:500;font-style:italic;font-size:clamp(1.25rem,3.4vw,1.6rem);
+    margin:2.2rem 0 .6rem;color:var(--ink);font-variation-settings:"opsz" 40;}
+  h4{font-family:"Marcellus",serif;font-weight:400;font-size:1.02rem;letter-spacing:.04em;margin:1.6rem 0 .35rem;color:var(--gold);}
+  p{margin:0 0 1.15rem;}
+  p a{color:var(--gold);}
+  strong{font-weight:600;color:var(--ink);}
+  .lead{font-size:1.12rem;}
+  .lead::first-letter{font-family:"Fraunces",serif;font-weight:400;float:left;font-size:4.4rem;
+    line-height:.72;padding:.32rem .55rem 0 0;color:var(--gold);font-variation-settings:"opsz" 144;}
+
+  .spectrum{margin:2rem auto;border:1px solid var(--rule);border-radius:14px;overflow:hidden;
+    background:var(--paper-2);box-shadow:0 1px 0 #fff inset, 0 14px 36px -28px rgba(43,35,23,.45);}
+  .spectrum .top{height:8px;background:var(--prism);background-size:180% 100%;animation:drift 20s linear infinite;}
+  .spectrum .rows{padding:.4rem .2rem;}
+  .spec-row{display:grid;grid-template-columns:14px 1fr;gap:.9rem;align-items:start;
+    padding:.7rem 1.1rem;border-bottom:1px solid var(--rule);}
+  .spec-row:last-child{border-bottom:none;}
+  .spec-row .swatch{width:14px;height:14px;border-radius:50%;margin-top:.45rem;
+    box-shadow:0 0 0 3px var(--paper-2),0 0 0 4px currentColor;}
+  .spec-row .nm{font-family:"Marcellus",serif;letter-spacing:.06em;font-size:1.05rem;}
+  .spec-row .nm small{display:block;font-family:"Spectral";font-style:italic;letter-spacing:0;
+    color:var(--ink-soft);font-size:.86rem;margin-top:.15rem;font-weight:300;}
+
+  .realm{--accent:var(--gold);--accent-pale:var(--gold-pale);margin:3rem auto;border:1px solid var(--rule);
+    border-radius:16px;background:linear-gradient(180deg,#fff,var(--paper));
+    box-shadow:0 20px 50px -40px rgba(43,35,23,.6);overflow:hidden;position:relative;}
+  .realm > .crown{height:7px;background:linear-gradient(90deg,var(--accent),var(--accent-pale),var(--accent));}
+  .realm-head{padding:1.8rem 1.6rem 1.3rem;border-bottom:1px solid var(--rule);
+    background:radial-gradient(120% 140% at 100% -20%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%);}
+  .realm-head .kicker{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 .4rem;display:flex;align-items:center;gap:.6rem;}
+  .realm-head .kicker .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);}
+  .realm-head h2{margin:.1rem 0 .55rem;font-size:clamp(2rem,6vw,3rem);}
+  .realm-head h2 .uline{display:none;}
+  .realm-meta{font-family:"Marcellus",serif;font-size:.8rem;letter-spacing:.05em;color:var(--ink-soft);
+    display:flex;flex-wrap:wrap;gap:.4rem 1.3rem;margin-top:.5rem;}
+  .realm-meta b{color:var(--accent);font-weight:400;}
+  .realm-essence{font-style:italic;color:var(--ink-soft);font-weight:300;margin:.9rem 0 0;font-size:1.04rem;}
+  .realm-body{padding:.4rem 1.6rem 1.7rem;}
+
+  details.thread{border-bottom:1px solid var(--rule);}
+  details.thread:last-of-type{border-bottom:none;}
+  details.thread > summary{list-style:none;cursor:pointer;padding:1.15rem .2rem 1rem;display:flex;
+    align-items:center;gap:.85rem;font-family:"Fraunces",serif;font-size:1.15rem;font-weight:500;color:var(--ink);}
+  details.thread > summary::-webkit-details-marker{display:none;}
+  details.thread > summary .ico{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--accent);
+    color:var(--accent);display:grid;place-items:center;font-family:"Spectral";font-size:1rem;transition:.3s;
+    background:color-mix(in srgb,var(--accent) 6%,transparent);}
+  details.thread[open] > summary .ico{transform:rotate(45deg);}
+  details.thread > summary .lbl small{display:block;font-family:"Marcellus";font-size:.66rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);font-weight:400;margin-top:.15rem;}
+  .thread-body{padding:.1rem .3rem 1.5rem 0;}
+  @media(min-width:540px){.thread-body{padding-left:3.5rem;}}
+
+  .vignette{margin:1.5rem 0;padding:1.1rem 1.3rem;border-left:3px solid var(--accent);
+    background:color-mix(in srgb,var(--accent) 5%,var(--paper-2));border-radius:0 10px 10px 0;}
+  .vignette .tag{font-family:"Marcellus";font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin:0 0 .4rem;}
+  .vignette p{font-style:italic;font-weight:300;margin:0;color:var(--ink);font-size:1.02rem;line-height:1.6;}
+
+  .pull{margin:2.4rem auto;text-align:center;max-width:32ch;}
+  .pull q{font-family:"Fraunces",serif;font-style:italic;font-weight:300;quotes:none;
+    font-size:clamp(1.3rem,3.6vw,1.8rem);line-height:1.34;color:var(--gold);display:block;}
+  .pull cite{display:block;font-style:normal;font-family:"Marcellus";font-size:.74rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ink-soft);margin-top:1rem;}
+
+  .feature{margin:2.2rem 0;padding:1.4rem 1.5rem;border:1px solid var(--rule);border-radius:14px;
+    background:linear-gradient(180deg,#fff,var(--paper));box-shadow:0 14px 40px -36px rgba(43,35,23,.5);}
+  .feature h3{margin-top:.2rem;}
+
+  footer{text-align:center;padding:4rem 1.4rem 5rem;margin-top:2rem;position:relative;z-index:1;}
+  footer .bar{height:3px;width:min(420px,80%);margin:0 auto 2.4rem;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  footer .candle{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.3rem,4vw,2rem);
+    color:var(--gold);line-height:1.35;margin:0 auto;max-width:26ch;}
+  footer .ma{font-family:"Marcellus";font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-top:2.4rem;}
+  footer .ma small{display:block;letter-spacing:.05em;text-transform:none;font-family:"Spectral";font-style:italic;font-weight:300;margin-top:.5rem;color:var(--ink-soft);}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;}
+    .ribbon,.spectrum .top,.realm>.crown,h2 .uline,.mast-mark .bar,footer .bar{animation:none;}
+  }
+  @media(max-width:540px){body{font-size:18px;}nav.codex-nav ul{gap:.15rem .7rem;}
+    .realm-body,.realm-head{padding-left:1.1rem;padding-right:1.1rem;}}
+
+  /* ============================================================
+     SPEC-ONLY HELPERS (not part of the reusable system —
+     used here to document and demonstrate it)
+     ============================================================ */
+  .codeblock{margin:1.4rem 0;border:1px solid var(--rule);border-radius:12px;overflow:hidden;
+    background:#2B2317;box-shadow:0 16px 40px -34px rgba(43,35,23,.7);}
+  .codeblock .cb-head{display:flex;align-items:center;gap:.6rem;padding:.6rem 1rem;background:#221B11;
+    border-bottom:1px solid #3a3020;font-family:"Marcellus";font-size:.68rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--gold-bright);}
+  .codeblock .cb-head .gem{color:var(--gold);}
+  .codeblock pre{margin:0;padding:1.1rem 1.2rem;overflow-x:auto;}
+  .codeblock code{font-family:"SFMono-Regular",ui-monospace,"Cascadia Code","Menlo",monospace;
+    font-size:.8rem;line-height:1.65;color:#EBDCA6;white-space:pre;}
+  .codeblock code .c{color:#9c8a63;font-style:italic;}     /* comment */
+  .codeblock code .v{color:#8AB6D6;}                        /* value/var */
+  .codeblock code .k{color:#D9A441;}                        /* key */
+
+  .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:.7rem;margin:1.4rem 0;}
+  .sw{border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:#fff;}
+  .sw .chip{height:54px;}
+  .sw .lab{padding:.45rem .6rem;font-family:"Marcellus";font-size:.66rem;letter-spacing:.05em;color:var(--ink);}
+  .sw .lab small{display:block;font-family:"SFMono-Regular",monospace;letter-spacing:0;color:var(--ink-soft);font-size:.66rem;margin-top:.1rem;}
+
+  .note{margin:1.5rem 0;padding:1rem 1.2rem;border-radius:10px;border:1px dashed var(--gold);
+    background:color-mix(in srgb,var(--gold) 6%,var(--paper-2));}
+  .note .t{font-family:"Marcellus";font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:0 0 .35rem;}
+  .note p{margin:0;font-size:.98rem;}
+
+  .twocol{display:grid;gap:1rem;margin:1.6rem 0;}
+  @media(min-width:620px){.twocol{grid-template-columns:1fr 1fr;}}
+  .card-rule{border:1px solid var(--rule);border-radius:12px;padding:1.1rem 1.2rem;background:linear-gradient(180deg,#fff,var(--paper));}
+  .card-rule.do{border-color:color-mix(in srgb,var(--zephyros) 50%,var(--rule));}
+  .card-rule.dont{border-color:color-mix(in srgb,var(--pyrthera) 45%,var(--rule));}
+  .card-rule h4{margin-top:0;}
+  .card-rule.do h4{color:var(--zephyros);}
+  .card-rule.dont h4{color:var(--pyrthera);}
+  .card-rule ul{margin:.3rem 0 0;padding-left:1.1rem;}
+  .card-rule li{margin:.4rem 0;font-size:.97rem;}
+
+  .demo{border:1px dashed var(--rule);border-radius:12px;padding:1.2rem;margin:1.3rem 0;background:var(--paper);}
+  .demo > .demo-tag{font-family:"Marcellus";font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 .9rem;}
+
+  .typescale > div{margin:.6rem 0;border-bottom:1px dotted var(--rule);padding-bottom:.6rem;}
+  .typescale .rolelab{font-family:"SFMono-Regular",monospace;font-size:.7rem;color:var(--ink-soft);display:block;margin-bottom:.15rem;}
+
+
+  /* ============================================================
+     NATURE & WILDLIFE CONVERSION HELPERS
+     ============================================================ */
+  .codex-note{font-family:"Marcellus",serif;font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-top:1rem;}
+  .front-meta{font-family:"Marcellus",serif;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-top:1.1rem;}
+  .front-meta b{color:var(--gold);font-weight:400;}
+  .category-intro{font-family:"Marcellus",serif;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin:.4rem 0 1rem;}
+  .entry{padding:.25rem 0 1.2rem;}
+  .entry h4{font-size:1.08rem;margin:1.35rem 0 .25rem;color:var(--accent);}
+  .entry h4:first-child{margin-top:.45rem;}
+  .taxon{font-style:italic;color:var(--ink-soft);font-size:.98rem;margin:.15rem 0 .65rem;line-height:1.55;}
+  .entry p{margin-bottom:.95rem;}
+  .incipit{font-family:"Fraunces",serif;font-style:italic;font-weight:300;color:var(--gold);font-size:1.18rem;line-height:1.48;margin:1.2rem 0 1.6rem;}
+  .realm-summary{margin:1rem 0 0;display:grid;gap:.5rem;}
+  .realm-pill{border:1px solid var(--rule);background:linear-gradient(180deg,#fff,var(--paper));border-radius:999px;padding:.4rem .85rem;font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.08em;color:var(--ink-soft);}
+  .realm-pill b{color:var(--gold);font-weight:400;}
+  .foundational-grid{display:grid;gap:1.1rem;margin:1.6rem 0;}
+  @media(min-width:700px){.foundational-grid{grid-template-columns:1fr 1fr;}}
+  .feature.compact{margin:0;padding:1.15rem 1.25rem;}
+  .feature.compact h3{font-size:1.35rem;margin:.1rem 0 .65rem;}
+  .feature.compact p:last-child{margin-bottom:0;}
+  .living-doc{font-style:italic;color:var(--ink-soft);text-align:center;max-width:42ch;margin:2rem auto 0;}
+  .section-card{margin:2.8rem auto;border:1px solid var(--rule);border-radius:16px;background:linear-gradient(180deg,#fff,var(--paper));box-shadow:0 20px 50px -42px rgba(43,35,23,.62);overflow:hidden;}
+  .section-card .card-crown{height:7px;background:var(--prism);background-size:180% 100%;animation:drift 20s linear infinite;}
+  .section-card .card-inner{padding:1.6rem;}
+  .section-card .card-inner > p:last-child{margin-bottom:0;}
+  .plague-card{--accent:var(--tenebralis);--accent-pale:var(--tenebralis-pale);}
+  .plague-card .card-crown{background:linear-gradient(90deg,var(--tenebralis),var(--gold),var(--zephyros));}
+  .quiet-rule{height:1px;background:linear-gradient(90deg,transparent,var(--rule),transparent);margin:2rem 0;}
+  @media(print){
+    nav.codex-nav,.ribbon{position:static;}
+    details.thread{display:block;}
+    details.thread > summary .ico{display:none;}
+    details.thread:not([open]) .thread-body{display:block;}
+    .reveal{opacity:1 !important;transform:none !important;}
+  }
+
+</style>
+</head>
+<body>
+<div class="ribbon" aria-hidden="true"></div>
+<nav class="codex-nav" aria-label="Sections"><ul><li><a href="#foundations">Foundations</a></li><li><a href="#zephyros">Zephyros</a></li><li><a href="#ferridane">Ferridane</a></li><li><a href="#thalassor">Thalassor</a></li><li><a href="#pyrthera">Pyrthera</a></li><li><a href="#tenebralis">Tenebralis</a></li><li><a href="#plague">Plague</a></li></ul></nav>
+<main>
+
+<header class="mast">
+  <p class="eyebrow">Advent of Ultima · Moirai Codex</p>
+  <h1 class="title">Nature &amp; Wildlife<br>of the <span class="gilt">Realms</span></h1>
+  <p class="subtitle">A comprehensive reference to elemental ecology, liminal species, predators, companions, Gonlans, and the sickness moving through the living worlds.</p>
+  <p class="front-meta">Worldbuilding Reference · <b>March 2026</b></p>
+  <div class="mast-mark"><div class="bar"></div></div>
+  <p class="mast-epi">The animals and wildlife and even the Gonlan seem to be in mourning — but for what?<span>— The State of the Realms at the Opening of Book One</span></p>
+</header>
+<section id="foundations" class="wrap reveal">
+<p class="sec-eyebrow">I · Foundational Principles</p>
+<h2>Foundational Principles<span class="uline"></span></h2>
+<p class="lead">Every Realm’s fauna is shaped by its governing divine element. The element functions as the foundational environmental pressure — the equivalent of sunlight in a terrestrial food chain. Each Realm’s biological baseline is distinct enough that a creature native to one Realm could never be mistaken for one from another.</p>
+<div class="spectrum" aria-label="Realm biological baselines"><div class="top"></div><div class="rows">
+<div class="spec-row" style="color:var(--pyrthera)"><span class="swatch"></span><span class="nm">Pyrthera<small>Everything is enormous and adapted to extreme heat. No normal animals. Seven suns means the food chain never got pruned.</small></span></div>
+<div class="spec-row" style="color:var(--ferridane)"><span class="swatch"></span><span class="nm">Ferridane<small>Every native animal is crystal-integrated, Vital Current charged, and soma-woven by default. Animal magic expresses exclusively as electricity, flame, or wind. No naming ability. The Sacred Arts are biomimicry — the clans named themselves after the beasts.</small></span></div>
+<div class="spec-row" style="color:var(--thalassor)"><span class="swatch"></span><span class="nm">Thalassor<small>Wildlife glows blue or bluish and is more intelligent than it should be. The Krenides water has been in the food chain since before civilization.</small></span></div>
+<div class="spec-row" style="color:var(--zephyros)"><span class="swatch"></span><span class="nm">Zephyros<small>All wildlife is peaceful and herbivorous. Some can talk or seem able to. Ecology evolved in the presence of Aether and the total absence of violence.</small></span></div>
+<div class="spec-row" style="color:var(--tenebralis)"><span class="swatch"></span><span class="nm">Tenebralis<small>The entire ecology operates on one principle: what knows you can eat you. Be unknowable.</small></span></div>
+</div></div>
+<div class="foundational-grid">
+<div class="feature compact">
+<h3>The Dragon Spectrum</h3>
+<p>Dragons are the bird equivalent across all Realms. The size range is continuous: from palm-sized Chanteliers on Zephyrosian rooftops to atmospheric Gonlans indistinguishable from weather. On Ferridane, any dragon up to vulture-sized is classified as an Axipter; anything larger is properly a dragon. Every Gonlan is a child of Aracice, the Star-Eater. Alciel Aquilon Karai is the half-sibling of every Gonlan alive.</p>
+</div>
+<div class="feature compact">
+<h3>Creatures and Terrae</h3>
+<p>Animals wander through Clairgates because Clairgates are doors. Additionally, Mystics have retired on Terrae throughout history and told stories. A Ferridanian veteran in ancient Greece describing the Vastas is the origin of the minotaur legend. The creatures are the originals. The legends are the copies.</p>
+</div>
+<div class="feature compact">
+<h3>Clairgate Trackers and Wildlife Divisions</h3>
+<p>Thalassor maintains fully staffed Tracker and Wildlife divisions responsible for managing creatures that wander through the Clairgate network. Given the intelligence and danger level of many species across the Realms, this is considered prestigious and demanding work — well-funded, well-trained, and never short of assignments. The divisions maintain a comprehensive bestiary cataloging every species that has ever come through a gate, cross-referenced by realm of origin, threat level, and incident history.</p>
+</div>
+</div>
+</section><div class="diadiv wrap reveal"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div><div class="wrap"><article id="zephyros" class="realm reveal" style="--accent:var(--zephyros);--accent-pale:var(--zephyros-pale)">
+<div class="crown"></div>
+<div class="realm-head">
+<p class="kicker"><span class="dot"></span>II · Realm Wildlife</p>
+<h2>Zephyros</h2>
+<div class="realm-meta">
+<span>Linguistic roots <b>French, Latin, Frankish/Germanic.</b></span>
+<span>Taxonomic threads <b>4</b></span>
+</div>
+<p class="realm-essence">Aether ecology; peaceful, herbivorous, and strange enough to feel almost conversational.</p>
+</div>
+<div class="realm-body">
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Between Animal And Human<small>Near-human and liminal species</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>Belviper — The Gorgons</h4>
+<p class="taxon">Belviper (bel-VY-per; French belle + vipère, “beautiful serpent”)</p>
+<p>A lady-sized serpentine creature with a face that reads as human-adjacent — striking bone structure and proportions that register as beautiful even across species lines. Vertical slit pupils that do not track like a person’s. No eye contact behavior, no speech, no human prosocial instincts. Serpentine tendrils in place of hair move constantly and independently, tasting the air or sensing vibration. She may produce clicks, hisses, or low resonant sounds, but these are not language and are not directed at observers.</p>
+<p>The Belviper is an animal with a humanoid face, not a person with animal features. She wanders into Zephyrosian towns the way a bear wanders into a campground — not hostile, not visiting, just moving through space that happens to overlap with yours. She investigates market stalls, picks up objects, examines children with flat, complete, unreadable attention, and moves on when bored. Every person in the vicinity holds very still, because her defining biological trait is a Birth Domain Deusa: crystallization.</p>
+<p>Under stress or by reflex, the Belviper’s gaze converts living tissue to crystal. This is permanent, irreversible, and tantamount to death. The crystallized person is gone. The Belviper does not orient her emotional life around this fact. An accidental crystallization elicits something equivalent to “oops.” She has no more grief about it than a person who accidentally runs over a squirrel. It is a defense mechanism, and she is an animal that possesses it, and that is the whole of it.</p>
+<p>Zephyrosian towns kindly ask visiting Belvipers to put on sunglasses, or at least a hat. The Belviper generally complies because she finds the custom amusing and does not mind. She does not understand why humans are frightened. She also does not care, because their fear is their problem. There are places in the deep forests where circles of crystal figures stand in clearings, perfectly preserved. These are graves.</p>
+<p>Over the course of nine books, one notably intelligent Belviper learns something like communication. She collects shiny things, interesting flowers, and tiny hats for her snake-hair. She is the exception, remarkable precisely because no other Belviper has ever done this.</p>
+</div>
+</div></details>
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Social Creatures<small>Companions, neighbors, mischief-makers</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>Flambelin — The Hearthfoxes</h4>
+<p class="taxon">Flambelin (FLAM-beh-lin; French flambe + Germanic -lin, “little flames”)</p>
+<p>Elemental kitsune. Small, mischievous, universally beloved. They steal small things and bring back different small things. They start tiny fires for no reason and look enormously pleased with themselves. They curl up at the foot of a person’s bed and shift element with their mood — warm when content, crackling with static when excited, cool and misty when sleepy. They are not useful. They are not sacred. They are delightful, and everyone wants one.</p>
+</div>
+<div class="entry">
+<h4>Graindoux — The Seed-Collectors</h4>
+<p class="taxon">Graindoux (gran-DOO; French graine + doux, “sweet seed-gatherers”)</p>
+<p>Mouse-like creatures found in every ecosystem on Zephyros — plains, forests, crystal isles. They collect seeds with apparent deliberate intent and redistribute them in patterns that suggest gardening. Nobody has confirmed this. The Oracles smile when asked, which on Zephyros constitutes evidence.</p>
+</div>
+</div></details>
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Neutral Creatures<small>Ambient fauna and phenomena</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>Chanteliers — The Birdsong Dragons</h4>
+<p class="taxon">Chanteliers (shahn-teh-LYEHR; French chanter + l’air, “air-singers”)</p>
+<p>The baseline of the dragon class. Bird-sized dragons that perch on rooftops and wheel through the sky in flocks that catch the Aetheric shimmer. Their vocalizations are melodic, layered, and responsive to each other in patterns that may be conversation or music — the distinction may not matter on Zephyros. They are the sparrows of this world, the ambient wildlife, the thing you stop noticing until a morning comes when they are quiet and the silence feels wrong.</p>
+</div>
+<div class="entry">
+<h4>Voiceleste — The Singing Dragons</h4>
+<p class="taxon">Voiceleste (vwah-seh-LEST; French voix + Latin caelestis, “heavenly voices”)</p>
+<p>Larger dragons that drift through the upper air currents, singing with voices that carry for miles. They are not communicating in the functional sense; the song is simply what they do, the way wind makes sound passing through a canyon. The Crystal Isles’ choral culture did not develop in silence. It developed under a sky that was already singing.</p>
+</div>
+</div></details>
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Mythic Creatures<small>Gonlans, legends, and impossible things</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>The Dreaming Woods</h4>
+<p>The forests of Zephyros move. Not often, not far, but a clearing you knew will be different when you return. The trees rearrange themselves in response to shifts in the Aether, to conversations at frequencies below hearing. The Oracles say the trees are dreaming, and when they dream, they walk. They have never walked toward anyone. They walk toward sunlight, toward water, toward each other. Settlements at the forest’s edge have been gently, inexorably nudged aside over generations. The Zephyrosians do not fight this. They move the village. When a forest moves, it moves with the slow unstoppable force of a glacier.</p>
+</div>
+<div class="entry">
+<h4>Aeralithe — Gonlan of the Upper Atmosphere</h4>
+<p>Child of Aracice and Iles. Lives above the stratosphere. Indistinguishable from weather at its scale. Its movements cause eclipses, storms, and weather events. A brutal winter means Aeralithe has moved on. The Aetheric particles visible on the highest peaks — yellow-green myst drifting downward like luminous snow — are shed from Aeralithe’s scales. Only Algol has seen Aeralithe in its entirety, from its back. The Zephyrosian eschatological promise — the Carrying — holds that Aeralithe will descend and carry the faithful to the next world.</p>
+</div>
+<div class="entry">
+<h4>Xal-Uron — Gonlan of the Storm Layer</h4>
+<p>Black, streaked with gold, serpentine. If you see Xal-Uron, it is blotting out the entire visible sky. Lives among the stormclouds of Uronoia. Arranges the raw Aetheric energy shed by Aeralithe into lightning, including Fulguror, the golden lightning that enforces divine law. The Stormcallers of Uronoia practice an echo of an echo of an echo of Xal-Uron’s work. The monks walk into storms seeking communion. Xal-Uron is the realm’s first line of defense. Together with Aeralithe, the two form a divine cascade: Aeralithe generates raw energy; Xal-Uron channels it into enforceable power.</p>
+</div>
+</div></details>
+</div>
+</article></div><div class="wrap"><article id="ferridane" class="realm reveal" style="--accent:var(--ferridane);--accent-pale:var(--ferridane-pale)">
+<div class="crown"></div>
+<div class="realm-head">
+<p class="kicker"><span class="dot"></span>III · Realm Wildlife</p>
+<h2>Ferridane</h2>
+<div class="realm-meta">
+<span>Linguistic roots <b>Latin.</b></span>
+<span>Taxonomic threads <b>4</b></span>
+</div>
+<p class="realm-essence">Crystal-integrated bodies, Vital Current instincts, and beasts that taught the clans their names.</p>
+</div>
+<div class="realm-body">
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Between Animal And Human<small>Near-human and liminal species</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>Sagittans — The Centaurs</h4>
+</div>
+<div class="entry">
+<h4>Sagittans (sah-GIT-tahns; Latin sagittarius, “archer”)</h4>
+<p>A species that appears to be evolving toward humanoid sapience. Intelligent, powerful, and strangely civilized. Crystal-integrated and Vital Current charged in a wild, untrained way — swifter and smarter than you want them to be. Organized in formations and strategies that do not follow any Ferridanian military doctrine. Very adept at ranged combat with spears and bows. Likely to spit fire at close range.</p>
+<p>Sagittans are territorial and want to be left alone. Their weapons mark a border, not aggression. A patrol that approaches gets one warning. A civilization that fights everything, that considers war a philosophy and pressure a sacrament, looked at the Sagittans and decided to leave them be. That assessment was paid for in Ferridanian casualties during early contact.</p>
+<p>Their wild magic is what makes them truly dangerous. Ferridanian Mystics train their Vital Current use through academies and institutional frameworks. The Sagittans never attended an academy. Their Current use developed along entirely independent lines, producing abilities that trained Mystics cannot predict or model. No comfortable engagement range exists: at distance, they shoot you; up close, they burn you; in between, they are faster than you, so they choose which option you receive.</p>
+<p>The Hero’s Journey route specifically skirts Sagittan territory — close enough to see boundary markers, far enough that nobody crosses. Every few years, an overconfident contestant takes a shortcut through Sagittan land. The race organizers do not go looking for them.</p>
+</div>
+<div class="entry">
+<h4>Vastas — The Minotaurs</h4>
+<p class="taxon">Vastas (VAHS-tahs; Latin vastare, “to lay waste”)</p>
+<p>A hybridized species — something bovine and something humanoid, merged at some point in Ferridane’s deep or recent past. The result possesses just enough intelligence to be cruel but not enough to be reasoned with. They manufacture crude weapons. They establish camps with rudimentary social hierarchy. They take women. They eat things that frighten most men. Orc-like in nature — organized enough to constitute a persistent threat, not organized enough to form a political entity.</p>
+<p>The Ferridanian military treats Vastas as an infestation that cannot be fully cleared because the Outlands are too vast and the Vastas breed in the spaces between patrols. Every generation of Ferridanian soldiers has Vastas stories. None of them are good stories.</p>
+<p>The Hero’s Journey does not deliberately route through Vastas territory. However, the Vastas deliberately migrate toward the path when the Midway Banquet is being established. They are smart enough to recognize the annual pattern: a long trail of individual humans walking through the Outlands, converging on a massive gathering of food, drink, and people. The perimeter security at the Midway Banquet is not ceremonial — it is a genuine military deployment to keep the Vastas at bay while contestants feast. Some years the migration is light and manageable. Some years it is heavy and the contestant casualty count spikes. The Journey continues regardless, because the danger is the point.</p>
+</div>
+</div></details>
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Predators<small>Threat ecology and hunting pressure</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>Felicis — The Great Cats</h4>
+<p>The apex predator of the central plains. Crystal-integrated and soma-woven, with a mane of living flame and lightning — a corona of gold and white fire crackling with arcs of electricity that extends the kill radius well beyond the animal’s physical body. The spectrum of Felicis runs from the recognizable lion silhouette with crystalline growths and a burning mane to, at the extreme end of crystal saturation, a creature made entirely of crystallized fire.</p>
+<p>The Felidae clan saw the Felicis and named themselves after it. Not the other way around. The entire Felidae identity — the golden lion aesthetic, the synthesis of power, the aspiration to apex dominance — is an attempt to become what the Felicis already is. A Felicis silhouetted on a ridge at dusk, its mane blazing against the sky, is the most beautiful and terrifying thing most Ferridanians will ever see. It is the reason an entire clan exists.</p>
+</div>
+<div class="entry">
+<h4>Lykons — The Wolves</h4>
+<p>Pack hunters of the northern ranges and Outlands. Crystal-integrated along the spine, skull, and joints, capable of discharging concussive electrical bursts from crystal nodes. The spectrum runs from conventional crystal-spined wolves to, at extreme saturation, creatures made entirely of crystallized lightning.</p>
+<p>The defining feature is the howl. When a Lykon pack howls, the sound travels not just through air but through the crystal lattice in the bedrock. You feel it in your bones before you hear it with your ears. The Old Lykaion monks in their mountain temples feel the wolves singing through the stone and sing back. This is the origin of the communion between the Lykaion clan and the wolf — call and response, not domestication. The wolves sang first. The people answered. The Lykaion named themselves after the Lykons.</p>
+</div>
+<div class="entry">
+<h4>Axipters — The Raptors</h4>
+<p>Crystal-laced feathered dragons up to vulture-sized. Anything larger than vulture-scale is classified as a proper dragon by Ferridanian standards. Their crystal integration allows them to perceive the Vital Current the way some terrestrial birds perceive magnetic fields. They navigate by energy flow and can detect disruptions in the Myst-Grid before instruments register the fault.</p>
+<p>The Axipitre clan named themselves after the Axipters. An Axipitre engineer who bonds with an Axipter gains a creature that feels where the Current runs strong, where it is disrupted, where something has gone wrong — the raptor turns its head toward the problem before anyone else knows it exists. The relationship is collaborative: two species that both understand the Current, working together because both are better for it.</p>
+</div>
+<div class="entry">
+<h4>The Bull-Creatures</h4>
+<p>Massive, solitary, territorial. Crystal horns channel the Vital Current, making a direct charge not merely physically devastating but magically disruptive. They do not bluff. A bull-creature that lowers its head at you is communicating with perfect clarity what is about to happen, extending you the courtesy of a warning it is not obligated to give. The Ferridanian cultural respect for directness and honest combat may trace back to this animal. It never lied to you. It showed you what it was and then it was that thing.</p>
+</div>
+<div class="entry">
+<h4>The Chimera</h4>
+<p>Creatures where multiple crystal types have fused into a single organism, producing compound Vital Current abilities that are unpredictable and unique. No two chimera are alike. They represent the apex of the Outlands ecology and are present along the Hero’s Journey route as natural obstacles. Each one has a territory, a pattern, and a life; contestants pass through, they do not exterminate.</p>
+</div>
+</div></details>
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Neutral And Food Animals<small>Herds, livestock, and mutualism</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>The Stags</h4>
+<p>Crystal antler growths that catch forge-light and refract it into prismatic patterns across the ground. Herds moving through a valley at sunset look like the land itself is glittering. Children collect shed crystal fragments from the antler-molt the way Earth children collect interesting rocks. Some fragments still hold a faint charge — a child puts one under their pillow and it hums warm through the night.</p>
+</div>
+<div class="entry">
+<h4>Livestock</h4>
+<p>Crystal-integrated herbivores that graze on mineral-rich vegetation and develop crystata deposits over their lifetimes. Ranching on Ferridane is simultaneously agriculture and mining. The meat feeds the family; the crystals sell at market.</p>
+</div>
+</div></details>
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Mythic Creatures<small>Gonlans, legends, and impossible things</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>Bahamut — The Diamond Gonlan</h4>
+<p>The Gonlan of Ferridane. A being of immense power whose existence was co-opted by the Godmind project — installed in the Atrium of Steelheart with Crex’s stolen God-Eyes (Deusaex-Wizaer) set into its skull. Uriel burned the Atrium to retrieve the eyes, exposing the Godmind project to the entire Realm via the Nexus. Aurelius Vorn did not know about Bahamut and now sees the scale of the betrayal behind his back.</p>
+</div>
+<div class="entry">
+<h4>The Steel Menagerie</h4>
+<p>Axipitre-built autonomous constructs in heraldic beast forms — wolves, hawks, lions — Awakened with the Vital Current via the Art of Transfusion. Not fauna. Engineering. But modeled directly on the real animals and animated by the same Current those animals channel naturally.</p>
+</div>
+</div></details>
+</div>
+</article></div><div class="wrap"><article id="thalassor" class="realm reveal" style="--accent:var(--thalassor);--accent-pale:var(--thalassor-pale)">
+<div class="crown"></div>
+<div class="realm-head">
+<p class="kicker"><span class="dot"></span>IV · Realm Wildlife</p>
+<h2>Thalassor</h2>
+<div class="realm-meta">
+<span>Linguistic roots <b>Greek and Latin.</b></span>
+<span>Taxonomic threads <b>5</b></span>
+</div>
+<p class="realm-essence">Blue-glowing intelligence in the water, from catlike companions to sovereign things below the hull.</p>
+</div>
+<div class="realm-body">
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Between Animal And Human<small>Near-human and liminal species</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>The Sirens — Two Races</h4>
+<p>Fully sapient. Ancient. They maintain their own civilization beneath the waves, entirely independent of Thalassan Mystic society. They coexist with the vast and dangerous things in the deep ocean. Mysterious and romanticized by surface-dwellers. The Thalassans have always known about them — the Sirens are a fact of life, not a recent discovery.</p>
+</div>
+<div class="entry">
+<h4>The Sea-Sirens</h4>
+<p>The classical silhouette: humanoid from the waist up, aquatic from the waist down. They do not walk ashore. They lounge on coastal rocks and shoreline, sunning themselves and singing. They are passive in method — they do not chase, do not pursue, do not come to you. They exist on the rock, beautiful and singing, and the fisherman steers closer because he cannot help it, and then he is in the water, and then he is gone. The Sea-Siren never moved. She did not have to.</p>
+<p>Sometimes they come to the shores and try to steal women’s husbands — or at least that is what the husbands say. Sometimes they succeed. The man never returns. Whatever exists beneath the waves, wherever the Siren civilization is, it is a one-way door. Whether the taken cannot return, do not want to return, or are no longer alive is unknown. The mystery is the point.</p>
+</div>
+<div class="entry">
+<h4>The Sky-Sirens</h4>
+<p>Bird body with a woman’s head. Commonly mistaken for harpies. Will claw your eyes out for it. The distinction is not academic to them: harpies in myth are filthy, punishing, monstrous. The Sky-Sirens are proud, fully sapient, and aware that surface cultures have been telling degrading stories about them for centuries. Making the mistake to their face produces immediate and violent correction.</p>
+<p>These are the ones who come inland. They are not polite about it. If a Sky-Siren took your husband, she descended from the sky with talons and wings and snatched him and carried him to a cave. That is not seduction. That is abduction.</p>
+</div>
+<div class="entry">
+<h4>Relations with Thalassan Civilization</h4>
+<p>The relationship varies by continent. Amphitra — old world, maritime, built into the water — has the oldest and most practical working relationship with the Sirens, built on generations of coexistence. Salacica — new world, cosmopolitan, built on top of the water — is more distant and formal. The Isles suffer the worst of it: the Sirens are their bane. Sea-Sirens claim reefs and redirect fish schools. Sky-Sirens take livestock, take catches from drying racks, and nest on every available cliff. The islanders live with it the way coastal villages live with hurricanes — it is the price of being there.</p>
+</div>
+</div></details>
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Social Creatures<small>Companions, neighbors, mischief-makers</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>Katos — The Not-Cats</h4>
+</div>
+<div class="entry">
+<h4>Katos (KAH-tohs; Greek gatos, “cat”)</h4>
+<p>Small, blue-glowing, hyper-intelligent creatures that maintain their own parallel society within Thalassor. They are not pets. They are not domesticated. They come and go like friends, on their own terms, for their own reasons.</p>
+<p>A Katos typically arrives in a person’s life around age eleven. It watches for a while — weeks, sometimes longer — and decides the person is interesting, or good, or worth its time. It starts showing up: windowsill in the morning, following at a distance, and then one day it is inside, asleep on the bed, glowing faintly in the dark. The person’s mother says “oh, you’ve got one now” like it is a rite of passage, because it is. Some stay for life. Some visit multiple households daily. Some disappear for a year and return without explanation. When one dies, the grief is real and widely understood. There are Thalassan poems about it.</p>
+<p>Some Katos set up shops — small, tucked into market corners, in spaces too small for humanoid vendors. They trade in trinkets, charms, curiosities, and things that fell off the back of a cart. Half of them are fences. The operation is conducted with such charm and brazenness that even the authorities find it difficult to be angry. A Sinclair tax collector confronting a glowing blue creature sitting on a pile of clearly stolen jewelry, being stared at with absolute innocence and faint condescension — that is a Tuesday.</p>
+<p>Their mischief genuinely bothers a certain type of person. But while it is as common to dislike them as to love them, you are considered kind of an asshole if you hate them. If a tax collector tries to confront one and the cuteness does not work, it runs off and comes back with ten friends. They sometimes steal things for their chosen people, but never upon request. It is hard to get a Katos to do anything upon request.</p>
+<p>The old Katos — the ones alive for generations — are different. Quieter. They sit in gardens of old estates watching the harbor. They remember things nobody else remembers. Occasionally a historian sits with one and the creature does something — touches a specific object, leads them to a specific place — that reveals information lost for centuries. They are not oracles. They do not perform. But they know things, and sometimes, if they like you, they share.</p>
+</div>
+</div></details>
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Predators<small>Threat ecology and hunting pressure</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>The Lantern</h4>
+<p>A deep-water predator whose bioluminescence precisely mimics the glow of Krenides springs — the sacred healing waters of Thalassor. Prey is lured toward what appears to be a healing source. It is not. The Lantern exploits the single thing every creature in Thalassor’s ocean instinctively moves toward.</p>
+</div>
+</div></details>
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Neutral Creatures<small>Ambient fauna and phenomena</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>The Court</h4>
+<p>A phenomenon observed in the deep ocean: hundreds of luminous creatures arranging themselves in precise geometric patterns on the ocean floor, visible from the surface on clear nights. Whether this is communication, worship, governance, or something with no humanoid analogue is unknown. The resemblance to the Synedrion — the Thalassan ruling council — has not gone unnoticed by observers. Some marine scholars argue that the Court predates the Synedrion and may have been the model for it.</p>
+</div>
+<div class="entry">
+<h4>General Marine Life</h4>
+<p>Bioluminescent, blue-glowing, coordinated beyond instinct. Schools of luminous fish rearrange themselves into shapes that may be meaningful. Fishermen have generations of superstitions about the patterns. Some of those superstitions are not superstitions.</p>
+</div>
+</div></details>
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Mythic Creatures<small>Gonlans, legends, and impossible things</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>Archon — The Great Sea Serpent</h4>
+</div>
+<div class="entry">
+<h4>Archon (AR-kon; Greek archon, “ruler”)</h4>
+<p>Ancient beyond reckoning. Vast. Glowing blue-white in the deep. The extreme upper end of Thalassan marine intelligence — something that has been drinking Krenides-saturated water since before the Sinclairs held the gates.</p>
+<p>Sailors who encounter Archon do not describe a monster. They describe a presence: something vast moving beneath the hull and the overwhelming feeling of being regarded, assessed, and judged by a mind that operates on a timescale incompatible with human cognition. Most encounters end with nothing happening. Archon looked. Archon decided. The ship passed. But sailors who have been assessed say it changes you — not magically, but the way any encounter with something that vast and knowing changes a person. You come back quieter. You look at the water differently.</p>
+<p>Children on the coast sometimes see the glow far out, moving slowly. They wave. Their parents tell them not to. They wave anyway. Sometimes — and this might be a story, but the children believe it — the glow pauses. Just for a moment.</p>
+</div>
+<div class="entry">
+<h4>Hydralithe — The Gonlan of Thalassor</h4>
+<p>A Hydra the size of a moon. Alciel gained its form during his imprisonment in Hel. The form he almost used to drown Ferridane.</p>
+</div>
+</div></details>
+</div>
+</article></div><div class="wrap"><article id="pyrthera" class="realm reveal" style="--accent:var(--pyrthera);--accent-pale:var(--pyrthera-pale)">
+<div class="crown"></div>
+<div class="realm-head">
+<p class="kicker"><span class="dot"></span>V · Realm Wildlife</p>
+<h2>Pyrthera</h2>
+<div class="realm-meta">
+<span>Linguistic roots <b>Latin, Egyptian, Greek.</b></span>
+<span>Taxonomic threads <b>5</b></span>
+</div>
+<p class="realm-essence">Solar gigantism, sacred hunting, and megafauna that move like mountains under seven suns.</p>
+</div>
+<div class="realm-body">
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Between Animal And Human<small>Near-human and liminal species</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>The Androsphinx</h4>
+<p>The original dominant species of Pyrthera. A colossal, leonine being: head of a lion, everything from the neck down built like a bodybuilder four meters tall. Fully sapient — capable of language, relationship, memory, and the bearing of civilizational responsibility. The Androsphinx were there before humanoid civilization arrived on Pyrthera. The two species chose coexistence, and the Androsphinx participated in Pyrtheran society not as subjects or symbols but as elders.</p>
+<p>The species is now functionally extinct. Whether they dwindled through slow reproductive failure, through the vast timescale of their individual lives outpacing generational replacement, or through some other cause is not recorded. One remains.</p>
+</div>
+<div class="entry">
+<h4>Tein-Enhotep — The Trialkeeper</h4>
+<p>Supposedly the last Androsphinx. One of Aracice’s oldest friends. Alciel’s uncle — not biologically (Alciel’s parents are Aracice and Nyx), but in every way that matters. The word a child uses for his father’s closest companion, the one who was there before the child existed, who knew the father before he was a parent.</p>
+<p>Physical description: four meters tall, leonine head, body covered in golden brands that record not just his personal history but the history of Pyrtheran civilization. Every brand is a name — every person he watched live and then watched die or ascend. He carries a sunstone blade the size of most doors. His mane is smoldering black fire. His eyes are burning coals. His voice is rolling thunder. His footsteps quake the ground. He could hold a grown man in the palm of his hand.</p>
+<p>He is humorless. Completely. Alciel plays off it sometimes.</p>
+<p>He was once Exvisar of Pyrthera, long ago. Sol’Kheret has something like a deferential relationship with him — he was the standard for Pyrtheran civilization long before her grandparents’ grandparents were powerful enough to hold power. He thinks she is a bit rambunctious. Chalks it up to youth.</p>
+<p>He has watched his entire species die. A friend is another brand. Grief passes more easily now. He would rather carry honor for the fallen than be seen to grieve.</p>
+<p>He helped raise and train Alciel in the discipline of the martial. The way Alciel fights — the preference for fists, the honesty of the punch, the philosophy that a bullet does not carry the message that the beating is personal — some of that comes from Tein-Enhotep. He participates in the Battle of Point Zero, where his oldest friend dies. He goes ahead of Alciel to Zephyros and prepares the audience with the Oracles. He stands beside Alciel, always. Like a godfather. Like a bodyguard. Like a first knight. Like an uncle. He is not there because Alciel requires protection. He is there because he promised a dead friend he would look after the boy.</p>
+</div>
+</div></details>
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Predators<small>Threat ecology and hunting pressure</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>The Apex Predators</h4>
+<p>Solar-adapted reptilian creatures of enormous scale — organisms tuned to an extreme solar environment over millennia, operating as apex predators in a furnace ecosystem. Fast enough and strong enough to bring down the megafauna herbivores, which means fast enough and strong enough to kill anything that exists. Heat-resistant hides, solar-absorptive biology, metabolic speeds that non-Pyrtherans cannot track.</p>
+<p>They are beautiful. Terrifyingly, heartbreakingly beautiful. A Pyrtheran apex predator cresting a dune at sunrise with seven suns behind it, its solar-absorptive hide blazing with refracted light, is not a threat assessment. It is a religious experience. Pyrtherans hunt these things and also revere them.</p>
+<p>The Khetian hunt is simultaneously sacred, sporting, commercial, and sometimes fatal. Some hunters go out with reverence and return with food for the settlement. Some go out because they want the glory — to be the one who took down the big one, the one whose kill becomes the armor they wear. There are always guys who do it for the glory. There are always guys who get eaten. Someone at the feast says he always did think he was faster than he was, and everyone drinks to him, and life goes on. Pyrthera does not moralize about the ones who die. The trial gave its answer.</p>
+</div>
+</div></details>
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Social Creatures<small>Companions, neighbors, mischief-makers</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>The Hunting Companions</h4>
+<p>Solar-adapted reptilian predators, roughly horse-sized. Bonded to families across generations, passed down the way a sword is passed down elsewhere. The companion sleeps against the side of the house, and its body temperature keeps the walls warm through cold desert nights. The children grow up climbing on it. It lets them. When a family’s companion dies, the loss is generational — the animal that kept the house warm, that the grandparents rode, that the children climbed. The next one, if there is one, is not a replacement. It is a new relationship.</p>
+</div>
+</div></details>
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Neutral And Food Animals<small>Herds, livestock, and mutualism</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>The Megafauna Herbivores</h4>
+<p>Sauropod-scale, solar-fed, migratory. They follow routes older than any settlement, moving with the slow grandeur of something that has never in its evolutionary history needed to hurry. Solar-absorptive hides blaze with refracted light at sunrise. Some are known individually by nearby settlements — named the way you name a mountain, watched for every season. Children climb ridges to see the great ones pass. If one year a known individual did not come through her canyon, the settlement would mourn.</p>
+<p>Pyrtherans use every part of the animal. Not as efficiency — as honor. The solar-charged bone becomes structural material or weaponry. The heat-resistant hide becomes armor or shelter. The organs have alchemical and medicinal applications. A Pyrtheran warrior wearing armor from a particular kill can tell you about that kill — not as a boast, but as a relationship. This was a great animal. It fought well. I carry it with me now. The object is a memorial, not a trophy.</p>
+</div>
+<div class="entry">
+<h4>The Pastoral Creatures of Rhylos</h4>
+<p>Volcanic-adapted megafauna that move with the magma flows of the Ignition Rift the way terrestrial animals follow water. Heat-loving, not docile. They tolerate Rhylian herders because the herders are useful — the humans read the magma flows, find safe corridors, and guide the herd through. This is mutualism, not domestication. If the herder gets it wrong, the magma does not care and the animals do not wait.</p>
+<p>The Rhylian pastoral life is not gentle countryside herding. It is walking alongside megafauna through corridors between active volcanic flows that move, and sometimes move fast. There is a reason the Rhylians learned magma dancing — the percussive, grounded movement that influences the flow of magma and shapes stone. They learned it because the alternative was dying. The theology came after, to describe what the necessity had already taught them.</p>
+</div>
+</div></details>
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Mythic Creatures<small>Gonlans, legends, and impossible things</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>Pyralithe — Gonlan of the Upper Sky</h4>
+<p>The greater of Pyrthera’s two solar Gonlans. The transcendent flame above.</p>
+</div>
+<div class="entry">
+<h4>Agnivar — Gonlan of the Volcanic Heart</h4>
+<p>Lava bones and dragon glass. The volcanic heart of Pyrthera made manifest.</p>
+</div>
+</div></details>
+</div>
+</article></div><div class="wrap"><article id="tenebralis" class="realm reveal" style="--accent:var(--tenebralis);--accent-pale:var(--tenebralis-pale)">
+<div class="crown"></div>
+<div class="realm-head">
+<p class="kicker"><span class="dot"></span>VI · Realm Wildlife</p>
+<h2>Tenebralis</h2>
+<div class="realm-meta">
+<span>Linguistic roots <b>Akkadian.</b></span>
+<span>Taxonomic threads <b>3</b></span>
+</div>
+<p class="realm-essence">An ecology of cognition and concealment: what knows you can eat you. Be unknowable.</p>
+</div>
+<div class="realm-body">
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Between Animal And Human<small>Near-human and liminal species</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>Etemmu — The Thing in the Deep</h4>
+</div>
+<div class="entry">
+<h4>Etemmu (eh-TEM-oo; Akkadian etemmu, “spirit/ghost”)</h4>
+<p>A single entity of the same species as the apex things on the surface — a cognitive predator of incomprehensible scale — but this one is inside Tempora. It sits at the summit of the Aesthete hierarchy. To the five hundred thousand Mavarrans of Tempora, the Etemmu is their sovereign — the reason the perimeter holds, the reason the other apex entities on the surface do not enter the cavity. Territorial in the way a predator defends its hunting ground: it does not care about the deer. The deer are its deer.</p>
+<p>The Aesthetes serve the Etemmu because service is the only survivable proximity to it. Its method of predation is cognitive: it unmakes minds, then souls, then bodies, in that order. Every other Mavarran gives the Aesthetes whatever they want because the alternative is the Aesthetes directing that attention downward. No laws are needed. No constitution. No enforcement apparatus. Just the universal understanding that attention flows downward from something that eats minds, and your entire life is organized around not being the thing it notices.</p>
+<p>The foundational lie of Mavarran civilization: the Etemmu is managed by Vex Mavarra. She is the one mind in Tenebralis that never resolves into a fixed image. The Etemmu cannot dominate what it cannot perceive, and Vex is the one thing it has never perceived clearly. The mechanism of forgetting applied at cosmic scale. Their god is real. Their god is powerful. Their god is the reason they survive. And their god does not run anything. Vex runs everything. The god is the mask Vex wears at the scale of an entire civilization. Nobody knows.</p>
+</div>
+</div></details>
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Predators<small>Threat ecology and hunting pressure</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>Pansirru — The Mirror-Raptor</h4>
+<p class="taxon">Pansirru (pan-SEER-oo; Akkadian pānu “face” + šerru “to rend,” “face-ripper”)</p>
+<p>A large, falcon-like predator whose feathers are mirrored on their surface — each one a slightly curved reflective panel. In flight, visually disruptive, scattering and fragmenting light in every direction. When it shrieks, the cry has a documented psychic component: it broadcasts the secret truths of its nearest target into the local air, where they propagate through the Vith’Pani’s rumor networks like atmospheric transmission.</p>
+<p>The Pansirru hunts liars. This is not metaphor. The creature has developed a predatory specialism on a world where deception is the primary social behavior, and the physiology of active deception — elevated stress hormones, micro-tension in the vasculature — registers as prey-signal. Its existence is a genuine structural problem for a civilization built on the Shim’zillai. The Curators monitor its migration patterns. Symposiums relocate when a Pansirru is sighted nearby.</p>
+</div>
+<div class="entry">
+<h4>Sarrith — The Glass-Winged Insects</h4>
+</div>
+<div class="entry">
+<h4>Sarrith (SAR-reeth; Akkadian sartu, “lie”)</h4>
+<p>Glass-winged insects approximately the size of a large moth. Wings are transparent and slightly reflective. They congregate on mirrored surfaces and feed on the emotional residue — specifically insecurity and denied self-knowledge — reflected in the glass. In small numbers, dismissed as a nuisance comparable to mosquitoes. A swarm gathering on a particular mirror is read as an omen: the person reflected is coming apart underneath. Unmasking is approaching. Vulnerability is visible to something. Mavarrans cover mirrors not in use to prevent Sarrith infestation. The practical gesture has acquired its own cultural weight: covered mirrors mean something is being hidden that is not yet ready to be known.</p>
+</div>
+<div class="entry">
+<h4>La’Sumu — The Nameless Things</h4>
+<p class="taxon">La’Sumu (lah-SOO-moo; Akkadian lā “not” + šumu “name,” “the nameless”)</p>
+<p>Slithering shapes under the fog line. Faster than eye-tracking allows. Smarter than their apparent morphology suggests. Not catalogued. Referenced in whisper. They are the intermediary fauna between Tempora’s manageable transition zone dangers and the incomprehensible things on the surface and in the deep. They come up from below and down from above, testing the perimeter, probing the boundary of the habitable zone. The Luxenfallen perimeter watch — composed entirely of slaves — exists to keep the La’Sumu out.</p>
+</div>
+</div></details>
+<details class="thread" open>
+<summary><span class="ico">+</span><span class="lbl">Mythic Creatures<small>Gonlans, legends, and impossible things</small></span></summary>
+<div class="thread-body">
+<div class="entry">
+<h4>Mushussu — The Shoggoths</h4>
+<p class="taxon">Mushussu (moo-SHOO-soo; Akkadian, originally a mythical serpent-dragon hybrid)</p>
+<p>A common population on the surface of Tenebralis. Amorphous masses of dark protoplasm that reform continuously, possessing no fixed shape or size, absorbing and digesting organic matter on contact. Common as deer, if deer were shapeless and all-consuming. The Mushussu are not even close to the most dangerous thing on the surface. They are the baseline wildlife of a world where the baseline is horror.</p>
+</div>
+<div class="entry">
+<h4>The Apex Entities</h4>
+<p>The actual dominant species of Tenebralis. Beings so vast, so cognitively alien, so fundamentally incompatible with mortal perception that seeing one is itself an injury. Not because they attack on sight — because the mortal mind is not built to process what they are. The madness is not a weapon. It is a side effect of proximity, the way radiation is not an attack but simply what happens when you stand too close to something operating at an energy level your biology was never designed to survive.</p>
+<p>These entities will almost certainly never appear on screen. They do their narrative work by existing, not by appearing. A single line in the right moment — someone glancing upward toward the chasm rim and choosing not to explain why — does more work than pages of description. The horror is in the silence around them.</p>
+</div>
+<div class="entry">
+<h4>Noctivex — The Gonlan of Tenebralis</h4>
+<p>The Primal Gonlan of Tenebralis. Eyeless, many-winged, coiled in shadows. Vantablack scales. Drinks minds, eclipses all light. Alciel’s maternal inheritance made flesh — the form drawn from his mother Nyx’s domain.</p>
+</div>
+<div class="entry">
+<h4>The Threat Model</h4>
+<p>From the Sarrith feeding on insecurity to the Pansirru broadcasting secrets to the La’Sumu probing the perimeter to the Mushussu on the surface to the apex entities walking among them to the Etemmu in the deep: the entire ecology of Tenebralis operates on a single gradient. Minds, then souls, then bodies are unmade by whatever perceives them clearly. The Mavarran culture — masks, fluid identity, the Pansilion, the Shim’zillai — is the behavioral adaptation of a prey species that learned to hide from predators that hunt by cognition. Vex Mavarra did not invent deception as a cultural practice. She refined what was already a biological survival strategy against things that would devour any mind they could comprehend.</p>
+</div>
+</div></details>
+</div>
+</article></div><section id="plague" class="wrap reveal">
+<p class="sec-eyebrow">VII · The Infernal Plague</p>
+<h2>The Infernal Plague and the Animals<span class="uline"></span></h2>
+<div class="pull"><q>The animals and wildlife and even the Gonlan seem to be in mourning — but for what?</q><cite>The State of the Realms</cite></div>
+<div class="section-card plague-card"><div class="card-crown"></div><div class="card-inner">
+<p class="lead">At the start of Book One, the forces of Hel have been encroaching on the living Realms for several years. Not as a political threat. As a sickness. The animals know. They knew before the people did.</p>
+<p>The Gonlans are in mourning. Every single one — children of Aracice, orphaned by his murder at Point Zero, feeling the sickness spread through worlds their father built and guarded. The divine cascade on Zephyros falters as Aeralithe’s patterns shift. The megafauna of Pyrthera grow restless, migration routes deviating from patterns held for millennia. The deep-water creatures of Thalassor surface more frequently, as if checking on something. The Felicis and Lykons of Ferridane are agitated in ways the Outlands patrols have never recorded.</p>
+<p>And on Zephyros — a world where nothing is supposed to be violent — the corruption comes for the innocent. A Flambelin that used to curl up at the foot of a child’s bed now has something wrong with it. Something in its eyes. Something in the way it moves. Something that makes the child’s mother pull her child away and close the door for the first time ever against a creature that was family.</p>
+<p>The peaceful creatures of a peaceful world can feel the sickness coming, and they have no framework for it. No evolutionary defense against predation, because predation does not exist on Zephyros. When the Plague reaches this world, it does not meet resistance. It meets innocence. And innocence is not armor.</p>
+</div></div>
+<div class="diadiv"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div>
+<p class="living-doc">This codex is a living document. Pyrtheran fauna await individual species names. The Siren civilization beneath Thalassor’s waves awaits elaboration. The near-human species will receive expanded entries as their narrative roles develop across the nine books.</p>
+</section>
+</main>
+
+<footer class="reveal">
+  <div class="bar"></div>
+  <p class="candle">The creatures knew before the people did.</p>
+  <p class="ma">Moirai Codex · Nature &amp; Wildlife of the Realms
+    <small>The light is one. The colors are many. The animals are listening.</small>
+  </p>
+</footer>
+
+<script>
+  (function(){
+    var els=document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(e){io.observe(e);});
+  })();
+  (function(){
+    var links=[].slice.call(document.querySelectorAll('nav.codex-nav a')),map={};
+    links.forEach(function(a){var id=a.getAttribute('href').slice(1),t=document.getElementById(id);if(t)map[id]={a:a,t:t};});
+    function s(){var pos=window.scrollY+140,cur=null;for(var id in map){if(map[id].t.offsetTop<=pos)cur=id;}
+      links.forEach(function(a){a.style.color='';a.style.borderBottomColor='transparent';});
+      if(cur&&map[cur]){map[cur].a.style.color='var(--gold)';map[cur].a.style.borderBottomColor='currentColor';}}
+    window.addEventListener('scroll',s,{passive:true});s();
+  })();
+</script>
+</body>
+</html>

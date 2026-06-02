@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tenebralis — The Realm of Masks · Moirai Codex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Marcellus&display=swap" rel="stylesheet">
+<style>
+  /* ===== HOUSE-STYLE TOKENS ===== */
+  :root{
+    --paper:#FBF7EE; --paper-2:#F6F0E2; --card:#ffffff;
+    --ink:#2B2317; --ink-soft:#5A4E3A; --rule:#E4D8BE;
+    --gold:#9A7B1F; --gold-bright:#C9A227; --gold-pale:#E9DCB0; --gold-glow:rgba(201,162,39,.18);
+    --zephyros:#8AA63A; --zephyros-pale:#D8E3B0;
+    --pyrthera:#C7572B; --pyrthera-pale:#F0C39A;
+    --thalassor:#2E6FA3; --thalassor-pale:#A9CBE4;
+    --ferridane:#A66A2E; --ferridane-pale:#E0C394;
+    --tenebralis:#6A3D9A; --tenebralis-pale:#C8B0E2;
+    --luxenfall:#C9A227; --luxenfall-pale:#EBDCA6;
+    --glacia:#5C97B8; --glacia-pale:#BDDCE8;
+    --accent:var(--tenebralis); --accent-pale:var(--tenebralis-pale);
+    --prism:linear-gradient(90deg,var(--tenebralis) 0%,var(--thalassor) 17%,var(--glacia) 30%,var(--zephyros) 45%,var(--luxenfall) 60%,var(--ferridane) 74%,var(--pyrthera) 100%);
+    --maxw:760px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Spectral",Georgia,serif;font-weight:400;font-size:19px;line-height:1.72;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(120% 80% at 8% -5%,rgba(106,61,154,.06),transparent 45%),radial-gradient(120% 80% at 105% 110%,rgba(106,61,154,.05),transparent 45%),radial-gradient(140% 90% at 100% 0%,rgba(46,111,163,.03),transparent 40%),radial-gradient(100% 100% at 50% 40%,transparent 60%,rgba(43,35,23,.05));}
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");}
+  .ribbon{position:fixed;top:0;left:0;right:0;height:5px;z-index:60;background:var(--prism);background-size:200% 100%;animation:drift 22s linear infinite;}
+  @keyframes drift{0%{background-position:0 0;}100%{background-position:200% 0;}}
+  nav.codex-nav{position:sticky;top:5px;z-index:55;background:rgba(251,247,238,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);}
+  nav.codex-nav ul{list-style:none;margin:0 auto;padding:.55rem .9rem;display:flex;flex-wrap:wrap;gap:.2rem .9rem;justify-content:center;max-width:1040px;}
+  nav.codex-nav a{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;padding:.15rem 0;border-bottom:1.5px solid transparent;transition:.25s;white-space:nowrap;}
+  nav.codex-nav a:hover{color:var(--tenebralis);border-bottom-color:currentColor;}
+
+  main{position:relative;z-index:1;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.4rem;}
+
+  header.mast{text-align:center;padding:5.5rem 1.4rem 3rem;position:relative;}
+  .eyebrow{font-family:"Marcellus",serif;font-size:.82rem;letter-spacing:.42em;text-transform:uppercase;color:var(--tenebralis);margin:0 0 1.6rem;text-indent:.42em;}
+  h1.title{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(2.6rem,8vw,5rem);line-height:.98;margin:0;letter-spacing:-.01em;color:var(--ink);font-variation-settings:"opsz" 144;}
+  h1.title .gilt{background:linear-gradient(95deg,var(--tenebralis) 0%,#9B6DD0 45%,#C8A6E8 60%,var(--tenebralis) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;}
+  .subtitle{font-family:"Spectral",serif;font-weight:300;font-style:italic;font-size:clamp(1.05rem,2.6vw,1.35rem);color:var(--ink-soft);margin:1.5rem auto 0;max-width:40ch;line-height:1.5;}
+  .mast-mark{margin:2.4rem auto 0;width:min(420px,80%);}
+  .mast-mark .bar{height:3px;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  .mast-epi{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.15rem,3vw,1.55rem);color:var(--tenebralis);margin:2.6rem auto 0;max-width:32ch;line-height:1.4;}
+  .mast-epi span{display:block;color:var(--ink-soft);font-size:.7em;font-style:normal;font-family:"Spectral";letter-spacing:.05em;margin-top:.5rem;}
+
+  .diadiv{display:flex;align-items:center;justify-content:center;gap:1rem;margin:3.4rem 0;}
+  .diadiv .line{height:1px;flex:1;max-width:120px;background:linear-gradient(90deg,transparent,var(--gold-pale),var(--gold));}
+  .diadiv .line.r{background:linear-gradient(90deg,var(--gold),var(--gold-pale),transparent);}
+  .diadiv .gem{font-size:.9rem;color:var(--accent);letter-spacing:.4em;text-indent:.4em;}
+
+  section{padding:1.5rem 0;position:relative;}
+  .sec-eyebrow{font-family:"Marcellus",serif;font-size:.78rem;letter-spacing:.32em;text-transform:uppercase;color:var(--accent);margin:0 0 .5rem;}
+  h2{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(1.9rem,5vw,2.9rem);line-height:1.05;margin:.2rem 0 1.2rem;color:var(--ink);letter-spacing:-.01em;font-variation-settings:"opsz" 80;}
+  h2 .uline{display:block;height:3px;width:108px;margin-top:.7rem;border-radius:2px;background:var(--prism);background-size:200% 100%;animation:drift 16s linear infinite;}
+  h3{font-family:"Fraunces",serif;font-weight:500;font-style:italic;font-size:clamp(1.25rem,3.4vw,1.6rem);margin:2.2rem 0 .6rem;color:var(--ink);font-variation-settings:"opsz" 40;}
+  h4{font-family:"Marcellus",serif;font-weight:400;font-size:1.02rem;letter-spacing:.04em;margin:1.6rem 0 .35rem;color:var(--accent);}
+  p{margin:0 0 1.15rem;}
+  strong{font-weight:600;color:var(--ink);}
+  .lead{font-size:1.12rem;}
+  .lead::first-letter{font-family:"Fraunces",serif;font-weight:400;float:left;font-size:4.4rem;line-height:.72;padding:.32rem .55rem 0 0;color:var(--accent);font-variation-settings:"opsz" 144;}
+
+  .realm{margin:3rem auto;border:1px solid var(--rule);border-radius:16px;background:linear-gradient(180deg,var(--card),var(--paper));box-shadow:0 20px 50px -40px rgba(20,12,28,.6);overflow:hidden;position:relative;}
+  .realm > .crown{height:7px;background:linear-gradient(90deg,var(--accent),var(--accent-pale),var(--accent));}
+  .realm-head{padding:1.8rem 1.6rem 1.3rem;border-bottom:1px solid var(--rule);background:radial-gradient(120% 140% at 100% -20%,color-mix(in srgb,var(--accent) 11%,transparent),transparent 60%);}
+  .realm-head .kicker{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin:0 0 .4rem;display:flex;align-items:center;gap:.6rem;}
+  .realm-head .kicker .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);}
+  .realm-head h2{margin:.1rem 0 .55rem;font-size:clamp(2rem,6vw,3rem);}
+  .realm-head h2 .uline{display:none;}
+  .realm-meta{font-family:"Marcellus",serif;font-size:.8rem;letter-spacing:.05em;color:var(--ink-soft);display:flex;flex-wrap:wrap;gap:.4rem 1.3rem;margin-top:.5rem;}
+  .realm-meta b{color:var(--accent);font-weight:400;}
+  .realm-essence{font-style:italic;color:var(--ink-soft);font-weight:300;margin:.9rem 0 0;font-size:1.04rem;}
+  .realm-body{padding:.4rem 1.6rem 1.7rem;}
+
+  details.thread{border-bottom:1px solid var(--rule);}
+  details.thread:last-of-type{border-bottom:none;}
+  details.thread > summary{list-style:none;cursor:pointer;padding:1.15rem .2rem 1rem;display:flex;align-items:center;gap:.85rem;font-family:"Fraunces",serif;font-size:1.15rem;font-weight:500;color:var(--ink);}
+  details.thread > summary::-webkit-details-marker{display:none;}
+  details.thread > summary .ico{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--accent);color:var(--accent);display:grid;place-items:center;font-family:"Spectral";font-size:1rem;transition:.3s;background:color-mix(in srgb,var(--accent) 7%,transparent);}
+  details.thread[open] > summary .ico{transform:rotate(45deg);}
+  details.thread > summary .lbl small{display:block;font-family:"Marcellus";font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:400;margin-top:.15rem;}
+  .thread-body{padding:.1rem .3rem 1.5rem 0;}
+  @media(min-width:540px){.thread-body{padding-left:3.5rem;}}
+
+  .vignette{margin:1.5rem 0;padding:1.1rem 1.3rem;border-left:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 6%,var(--paper-2));border-radius:0 10px 10px 0;}
+  .vignette .tag{font-family:"Marcellus";font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin:0 0 .4rem;}
+  .vignette p{font-style:italic;font-weight:300;margin:0;color:var(--ink);font-size:1.02rem;line-height:1.6;}
+
+  .pull{margin:2.4rem auto;text-align:center;max-width:34ch;}
+  .pull q{font-family:"Fraunces",serif;font-style:italic;font-weight:300;quotes:none;font-size:clamp(1.3rem,3.6vw,1.8rem);line-height:1.34;color:var(--accent);display:block;}
+  .pull cite{display:block;font-style:normal;font-family:"Marcellus";font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin-top:1rem;}
+
+  .feature{margin:2.2rem 0;padding:1.4rem 1.5rem;border:1px solid var(--rule);border-radius:14px;background:linear-gradient(180deg,var(--card),var(--paper));box-shadow:0 14px 40px -36px rgba(20,12,28,.5);}
+  .feature h3{margin-top:.2rem;}
+
+  /* ===== DUALITY COMPONENTS ===== */
+  /* The facet — two faces of one thing, side by side */
+  .facet{display:grid;gap:0;border:1px solid var(--rule);border-radius:14px;overflow:hidden;margin:1.8rem 0;box-shadow:0 16px 44px -38px rgba(20,12,28,.6);}
+  @media(min-width:640px){.facet{grid-template-columns:1fr 1fr;}}
+  .facet .axiom{grid-column:1/-1;font-family:"Fraunces",serif;font-style:italic;font-weight:400;font-size:1.18rem;color:var(--gold);text-align:center;padding:1rem 1.2rem .2rem;background:#221833;}
+  .facet .axiom.light{background:var(--paper-2);color:var(--gold);}
+  .facet .face{padding:1.15rem 1.3rem 1.3rem;}
+  .facet .face.seen{background:linear-gradient(180deg,#fff,var(--paper-2));}
+  .facet .face.truth{background:radial-gradient(140% 130% at 50% -30%,#241733,#140d20);color:#ECE2C6;}
+  .facet .face .flab{font-family:"Marcellus";font-size:.64rem;letter-spacing:.24em;text-transform:uppercase;margin:0 0 .5rem;display:flex;align-items:center;gap:.5rem;}
+  .facet .face.seen .flab{color:var(--gold);}
+  .facet .face.truth .flab{color:#B98BE0;}
+  .facet .face .flab::before{content:"";width:9px;height:9px;border-radius:50%;background:currentColor;}
+  .facet .face p{margin:0;font-size:1rem;line-height:1.62;}
+  .facet .face.truth p{color:#D9CDEA;}
+  .facet .face.seen p{color:var(--ink);}
+
+  /* The threshold — crossing the line into the Deep */
+  .threshold{position:relative;margin:2rem 0 0;padding:4.5rem 1.4rem 4rem;text-align:center;color:#D9CDEA;
+    background:linear-gradient(180deg,var(--paper) 0%,#2a1c3d 38%,#160e23 100%);}
+  .threshold .ey{font-family:"Marcellus";font-size:.74rem;letter-spacing:.34em;text-transform:uppercase;color:#B98BE0;margin:0 0 1rem;}
+  .threshold .big{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.5rem,4.5vw,2.4rem);line-height:1.3;color:#EFE6CC;margin:0 auto;max-width:24ch;}
+  .threshold .sub{font-weight:300;font-style:italic;color:#B8A9CC;margin:1.4rem auto 0;max-width:40ch;font-size:1.02rem;}
+  .threshold .descend{margin-top:2rem;font-family:"Marcellus";letter-spacing:.5em;color:#8E6FB6;font-size:1.1rem;text-indent:.5em;animation:bob 3.5s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);opacity:.7;}50%{transform:translateY(7px);opacity:1;}}
+
+  /* THE DEEP — the inversion. Redefine tokens; every component follows. */
+  .deep{
+    --paper:#160E23; --paper-2:#1E1430; --card:#1E1530;
+    --ink:#ECE2C6; --ink-soft:#B8A9CC; --rule:#382A4E;
+    --gold:#E3C463; --gold-bright:#F1D480; --gold-pale:#6E5C2F;
+    --accent:#9B6DD0; --accent-pale:#5E3D86;
+    position:relative;color:var(--ink);
+    background:
+      radial-gradient(130% 90% at 50% -10%, #271838, transparent 60%),
+      radial-gradient(100% 120% at 100% 100%, #1c1330, transparent 55%),
+      #160E23;
+  }
+  .deep::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)' opacity='0.05'/%3E%3C/svg%3E");}
+  .deep .wrap{position:relative;z-index:1;}
+  .deep h2,.deep h3{color:var(--ink);}
+  .deep strong{color:#F1D480;}
+  .deep .vignette{background:color-mix(in srgb,var(--accent) 14%,#140d20);}
+  .deep .vignette p{color:#E6DCF2;}
+
+  /* a small "known / unknown" ledger built from the facet */
+  .knownledger .face.seen{background:linear-gradient(180deg,#fff,var(--paper-2));}
+  footer{text-align:center;padding:4rem 1.4rem 5rem;margin-top:0;position:relative;z-index:1;
+    background:linear-gradient(180deg,#160E23 0%, #120b1c 100%);color:#C9BBDD;}
+  footer .bar{height:3px;width:min(420px,80%);margin:0 auto 2.4rem;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  footer .candle{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.3rem,4vw,2rem);color:#E3C463;line-height:1.35;margin:0 auto;max-width:28ch;}
+  footer .ma{font-family:"Marcellus";font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:#9E8FB6;margin-top:2.4rem;}
+  footer .ma small{display:block;letter-spacing:.05em;text-transform:none;font-family:"Spectral";font-style:italic;font-weight:300;margin-top:.5rem;color:#9E8FB6;}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;}.ribbon,h2 .uline,.mast-mark .bar,footer .bar,.realm>.crown,.threshold .descend{animation:none;}}
+  @media(max-width:540px){body{font-size:18px;}nav.codex-nav ul{gap:.15rem .7rem;}.realm-body,.realm-head{padding-left:1.1rem;padding-right:1.1rem;}}
+</style>
+</head>
+<body>
+<div class="ribbon" aria-hidden="true"></div>
+
+<nav class="codex-nav" aria-label="Sections">
+  <ul>
+    <li><a href="#two">The Two Realms</a></li>
+    <li><a href="#surface">The Surface</a></li>
+    <li><a href="#deep">The Deep</a></li>
+    <li><a href="#sovereign">The Sovereign</a></li>
+    <li><a href="#gap">The Gap</a></li>
+  </ul>
+</nav>
+
+<main>
+<header class="mast">
+  <p class="eyebrow">Moirai Codex · Realm of Shadow</p>
+  <h1 class="title">Tene<span class="gilt">bralis</span></h1>
+  <p class="subtitle">The realm as it wishes to be seen, and the realm as it is — and the distance between them, which is the realm itself.</p>
+  <div class="mast-mark"><div class="bar"></div></div>
+  <p class="mast-epi">Only liars know the truth.<span>Small, but infinite.</span></p>
+</header>
+
+<!-- ============ THE TWO REALMS ============ -->
+<section id="two" class="wrap reveal">
+  <p class="sec-eyebrow">Orientation</p>
+  <h2>The Two Realms<span class="uline"></span></h2>
+  <p class="lead">Tenebralis from the outside is not Tenebralis from the inside, and that is not a flaw in anyone's information. It is the design. No other realm keeps so total a separation between what it shows and what it is, because no other realm's safety depends on the separation holding. The cosmos knows the surface — the masked travelers, the bottled joy, the luminous crystata, the beautiful and available stranger who learns everything about you in one night and leaves you feeling you had a wonderful evening. The inside — the structure of the society, the thing in the deep, the rite every child undergoes at sixteen, the meaning of the word <em>recovery</em> — is known to almost no one who was not born there. The realm is insular for exactly this reason, and the insularity is not shyness. It is a wall around a fact.</p>
+
+  <p>The wall holds because it cannot be breached. An army that enters Tempora does not fight a battle; it becomes a vector that walks back out wearing familiar faces, or it does not come back at all. Every scout Sol'Kheret ever sent into the dark returned with their eyes missing, smiling, eating their own tongues. So the realm is left alone, and what crosses the line crosses on the realm's terms: <strong>Mavarrans</strong>, insular and hard to scandalize and never seen in daylight; the <strong>Rewritten</strong>, who pass for recovering Luxenfallen; the output of the <strong>Lightwells</strong>, understood across the cosmos as Light-element crystata, mined from the conquered Realm of Light and charged with extraordinary myst; and the <strong>distillates</strong> — shik'piris, the rendered emotional content made into something you can drink, and memory coins, an experience made re-experiential, lived again from the inside.</p>
+
+  <p>What the cosmos knows of Tenebralis is true and short, and all of it is surface. What is known is that the magic is powerful. What is not known — what the surface exists to keep no one asking — is what the magic does, and to whom, and that it rewrites not only the body it wears but the mind beneath the body and the soul beneath the mind. This codex is written from both sides of the wall. It begins where the cosmos begins: in the light.</p>
+
+  <div class="pull"><q>The audience must fall in love with it before they understand what it costs.</q><cite>Narrative function of the realm</cite></div>
+</section>
+
+<!-- ============ THE SURFACE ============ -->
+<section id="surface" class="wrap reveal">
+  <p class="sec-eyebrow">As They Wish to Be Seen</p>
+  <h2>The Surface<span class="uline"></span></h2>
+  <p>Everything you are about to admire is genuinely beautiful. That is not a trick played on the careless; it is the realm working exactly as designed. The danger of Tenebralis was never that it looks like a hellscape. The danger is that it looks like liberation, and that the justification it offers is the most seductive in the cosmos: permission to do the thing you already wished to do.</p>
+
+  <article class="realm">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>The Realm of Masks</p>
+      <h2>Tempora, the Lit City</h2>
+      <div class="realm-meta"><span>Element <b>Shadow</b></span><span>Patron <b>Erebus</b> (nominal)</span><span>Sovereign <b>Vex Mavarra</b></span><span>Signature <b>Bruised Violet</b></span></div>
+      <p class="realm-essence">A jewel set into a lightless abyss — New Orleans at Carnival, Las Vegas, a masquerade that never ends — carved into onyx and lit by stolen fire.</p>
+    </div>
+    <div class="realm-body">
+
+      <details class="thread" open>
+        <summary><span class="ico">+</span><span class="lbl">The City You Are Shown<small>Upper terraces</small></span></summary>
+        <div class="thread-body">
+          <p>The visitor sees the upper terraces, because the upper terraces are what Tenebralis exports as its image — the brightest light, the densest warm-gold Luxanian crystata set into carved niches, the symposiums and the Veiled Houses and the performance-front commerce. Buildings are not built but subtracted, carved from black onyx and polished to a gloss, gold veining catching the light so every surface shimmers and every surface is, faintly, a mirror. Bioluminescent water falls through the city in a constant cool light and a constant white noise. Deep violet belladonna glows along every ledge. It is one of the loveliest places in the cosmos to stand, and the fog past ten feet only makes it more so. A guest leaves enchanted, a little hazy on the details, certain they have seen something rare. They have. They have seen the part meant for seeing.</p>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">The Doctrine as Liberation<small>The Shim'zillai, surface</small></span></summary>
+        <div class="thread-body">
+          <p>The Shim'zillai — the Shadow Decree — presents itself as scripture of freedom: a guide to sovereignty over the self, release from guilt and shame and the tyranny of external judgment, in a cosmos where divine surveillance is real and constant. Its axioms are written as gentle meditations, not commandments; they do not tell you what to do, only what is permitted. Read aloud at symposiums, inscribed in private rooms, the Ten Permissions sound like mercy:</p>
+          <p style="font-style:italic;color:var(--ink-soft);border-left:2px solid var(--accent-pale);padding-left:1rem;margin:1rem 0;">You may unburden remembrance, setting memory adrift like petals on the current. You may pass unmarked, as the shadow moves where the lantern cannot follow. You may unmake the self entirely, for vanishing is the final art.</p>
+          <p>To a person carrying guilt they did not choose, in a cosmos that condemns by hereditary sentence, this is the kindest thing anyone has ever said to them. Its most celebrated translator, the scholar Val Ravemar, guides the reader toward peace in the register of scholarly compassion. The doctrine is beautiful. Everyone who has ever needed it has needed it sincerely. That is the whole of its power, and the reason it travels — the cosmos calls the exported version the Tongue of the Eighth Hell, and most people who speak it have no idea they are quoting anyone.</p>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">The Beautiful Export<small>Mavarrans abroad</small></span></summary>
+        <div class="thread-body">
+          <p>The Mavarran abroad is charming, gorgeous, and fun. A woman presenting female in another realm is running the most effective intelligence posture in the catalog — the aesthetic of the lovely, available stranger — and she learns everything in a single night, while the mark experiences the evening as a triumph. They are known as insular, as slutty, as carriers of clinking pornographic memory coins they hand out like business cards. They are known, above all, for never being seen in daylight, and the cosmos files this under eccentricity rather than asking why. The reason is the sunrise: away from the eternal night of Tempora, the first light of every morning strips the chosen face away and restores the birth form, involuntarily, like being publicly undressed — so a Mavarran abroad builds their whole life around windowless rooms and unwitnessed dawns. The cosmos sees a vain and secretive people. It does not see what the secret is for.</p>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">The Gentle Industry<small>What the markets receive</small></span></summary>
+        <div class="thread-body">
+          <p>The mass market that sustains the whole economy is not suffering. It is joy. A vendor sells the Spirit of Courage and the Elixir of Bliss and a hundred lesser tinctures, and they work — the courage feels like courage, the bliss like bliss, with nothing in the experience to signal a source. Memory coins let you live someone else's best night from the inside. The Lightwells, named for the obvious reason, are understood as the natural thing: of course the realm that conquered the Realm of Light would mine its light, refining Luxanian crystata charged with more myst than any other source can hold. And the occupied Luxenfallen themselves are spoken of, where they are spoken of, as a recovering people, undergoing <em>Convalescence</em> — a word that means exactly what it sounds like it means, to anyone who hears it from the outside.</p>
+          <p>Even if the truth were laid out plainly, something close to half the cosmos would not change a thing, because the distance between the product and the process is too wide to hold in one hand. The bottle feels good. The crystal is beautiful. The word is gentle. Only one Exvisar runs an inquisition into any of it, and she is the person at the dinner party who will not stop asking where the chocolate comes from, and everyone wishes she would stop, and she will not, because she holds a weapon that can end a planet and does not need their approval.</p>
+          <div class="vignette">
+            <p class="tag">What is received</p>
+            <p>A grieving man buys a vial that smells of nothing and tastes of warmth, and for one evening the weight lifts, and he sleeps. He does not ask whose courage he drank, or whether, somewhere, there is now a person who can no longer find their own. The vendor did not lie to him. The vendor simply did not volunteer the one thing that would have stopped the sale.</p>
+          </div>
+        </div>
+      </details>
+
+    </div>
+  </article>
+</section>
+
+<!-- ============ THE THRESHOLD ============ -->
+<div class="threshold reveal">
+  <p class="ey">Cross the line</p>
+  <p class="big">Everything above is true. None of it is the truth.</p>
+  <p class="sub">What follows is known to almost no one outside the abyss. The light is for selling. Below the light is the thing the light was built to keep you from asking about.</p>
+  <div class="descend" aria-hidden="true">▾ ▾ ▾</div>
+</div>
+
+<!-- ============ THE DEEP ============ -->
+<div class="deep">
+<section id="deep" class="wrap reveal">
+  <p class="sec-eyebrow">As They Are</p>
+  <h2>The Deep<span class="uline"></span></h2>
+  <p class="lead">Strip the performance and Tenebralis is not a society of terraces and schools and aristocratic houses. It is a single fact with a city built over it: there are predators, and there is prey, and the gap between them is the only line that means anything. The terraces are not rank — they are fog and visibility, brighter above and blind below, and a soul in the gilded upper city is exactly as much prey as a soul in the violet dark. Status here is one question only, and it is not asked in words: has the thing in the deep turned its attention to you yet.</p>
+
+  <h3>The only two classes</h3>
+  <p>In a civilization of half a million individuals, there is exactly one organized body sustained enough to mean anything, and it is the <strong>Aesthetes</strong> — one Mavarran in twenty, some twenty-five thousand, the only institution in a realm that has no others. They hold the Temple of Ishtar and they hold the deep, and they have spent millennia with their hands inside the structure of the soul, learning with real scholarly precision what separates a mind from a soul, how a soul can be removed while the body keeps working, how it can be rendered into its component parts. Everyone else — the Curators who run the symposiums, the Oneironauts who walk the dreams, the Veiled Houses, the masked thousands of the upper city — is the herd. The famous three schools are not three classes. They are three stations of one process: the Curators <strong>ranch</strong>, cultivating interesting souls and assessing which are richest; the Oneironauts <strong>audit</strong>, entering the inner life to catalogue what is there; and the Aesthetes <strong>render</strong>, in the chambers in the deep. The machine has run for centuries. It is not presented as a machine. It is presented as a civilization.</p>
+
+  <div class="vignette">
+    <p class="tag">In the dark</p>
+    <p>Attention flows downward from something that eats minds, then souls, then bodies, in that order — and so every life in Tempora is arranged around a single discipline: do not become the thing it notices. There is no law enforcing this. There does not need to be. The masks, the changed faces, the whole art of being no one in particular, are what a prey animal does when it has already been into the predator's mouth once and knows what waits if it is ever seen clearly again.</p>
+  </div>
+
+  <h3>The one descent</h3>
+  <p>Every Mavarran goes down into the deep exactly once that they remember, at sixteen, for the Second Birth — and you pray the one time is the only time, and you pray you come back up at all. Before the rite, every child is fixed in their birth form: translucent, clawed, unblinking, kept indoors and out of sight, because a Mavarran child is the single most honest thing in the city and honesty is the one thing the city cannot have on display. At the ceremony the child is walked through the whole uncurated archive of their own childhood and made to choose what to keep and what to surrender — and what is surrendered is not deleted. It is extracted: the fear and the humiliation distilled into poisons and narcotics, the joy refined into luxury goods, every generation of children quietly feeding its own childhood into the supply chain. The child walks out wearing a chosen face, remembering none of it, with no framework left to understand it even if told. That first masked night is documented as formative and frequently catastrophic.</p>
+  <p>And the rite is binary. The mask manifests, or it does not. The children whose magic never comes do not leave. The Aesthetes take custody, and they are rendered before they ever reach adulthood — the supply of innocent souls, processed without even the social theatre of a trial. The population does not discuss this. It is simply known. There is a colloquial word used, beforehand and predictively, for a child everyone senses will not ascend, and the word is not acknowledged, and the word is used.</p>
+
+  <h3>The doctrine, turned over</h3>
+  <p>The same axioms that read as mercy in the lit city have an operative function underneath, and the operative function is the real text. The doctrine serves predator and prey at once: the predator needs it to feel righteous, the prey needs it to feel survivable, and both sleep at night on the same page. Turn three of them over.</p>
+
+  <div class="facet">
+    <div class="axiom">"What forgets, is free."</div>
+    <div class="face seen"><p class="flab">What it says</p><p>Move forward from your pain. The past does not have to define who you are. You are allowed to set it down.</p></div>
+    <div class="face truth"><p class="flab">What it does</p><p>Willful amnesia is a sacrament. Forgetting is not healing — it is the erasure of the very conditions that might one day generate accountability. The Lightwells and the Second Birth are its institutional form.</p></div>
+  </div>
+
+  <div class="facet">
+    <div class="axiom">"A face is a choice."</div>
+    <div class="face seen"><p class="flab">What it says</p><p>Self-creation is sacred. You have the right to define who you are, and to remake yourself as often as you need.</p></div>
+    <div class="face truth"><p class="flab">What it does</p><p>There is no authentic self to betray. Identity is a disposable tactical tool and sincerity is a strategic error. The person who insists on a fixed self is simply someone who cannot adapt to what the situation requires of them.</p></div>
+  </div>
+
+  <div class="facet">
+    <div class="axiom">"That which yields, was meant to."</div>
+    <div class="face seen"><p class="flab">What it says</p><p>Release your resistance. What is natural will unfold naturally, in its own time.</p></div>
+    <div class="face truth"><p class="flab">What it does</p><p>Consent is retroactive. Submission at any point is read as agreement to everything that came before it. The one who applied the force is absolved; the one who yielded is assigned the responsibility for having yielded.</p></div>
+  </div>
+
+  <h3>The word "recovery"</h3>
+  <p>The gentle word the cosmos receives is <strong>Convalescence</strong>, and it is a euphemism — the Mavarran cover-word for the extraction of the self from a living person. The act has three plain names, and they are never spoken from the same mouth: <em>Unselfing</em>, the word of those of the craft; <em>Shucking</em>, the coarse name for it; and <em>Degloving</em>, the clinical, anatomical truth of it. Convalescence is only the intake step. It leaves behind an Etemesh — a body still walking, eyes present and vacant, the will removed — and its yield is the shik'piris and the memory coins the markets love. What remains after is carried down for the Pashar'etem, the rendering proper, and the rendered material is delivered to Vex to be reassembled into the Damq'eth, her beautiful composite children, each one stitched from the best parts drawn out of as many as a thousand prior souls. A Poppet is the cruder product: a person hollowed by Convalescence, worn into a chosen face, and sold.</p>
+  <p>So the bottle of courage in the lit city was someone's courage. The luminous Luxanian crystata is the cover laid over the truth that the Lightwells do not mine light at all — they harvest the emotional content of living people. And <em>recovery</em> is the name written over a degloving, gently, so that the person hearing it from outside will nod and move on. The horror is industrial: known inputs, known outputs, a supply chain. It is held below the surface not by conspiracy but by the surface's own adequacy. Nobody asks the question the word was built to prevent.</p>
+
+  <h3>The Rewritten</h3>
+  <p>This is what becomes of the conquered. The Luxenfallen who leave Tenebralis are, mostly and unfortunately, named among the <strong>Rewritten</strong> — and <em>abroad</em>, for them, does not usually mean living somewhere. It means distributed. Where the Glassen at home lost their memory, the Rewritten had a new one written over them and were sent out: bodies edited, minds reprogrammed for servility, the soul itself overwritten and made to wear a borrowed self. The cosmos receives them as recovering Luxenfallen, as servants of unusual compliance, as product that breathes. What is known is that the magic that made them is powerful. What is not known is that the rewriting goes all the way down — not the face only, not the body only, but the mind and the soul — and the food chain in the deep is the proof that the soul is a thing that can be edited at all.</p>
+
+  <h3>The ecology of prey</h3>
+  <p>Even the wildlife tells the truth the culture hides. The whole ecology of Tenebralis runs on one rule — what knows you can eat you, so be unknowable — and the Mavarran himself is the most refined expression of it. The Sarrith gather on a mirror to feed on the insecurity reflected in it, so a swarm on the glass is read as an omen that the person is coming apart underneath, and unused mirrors are kept covered. The Pansirru, the mirror-feathered raptor, hunts liars by the stress of active deception and shrieks their secrets into the air, which makes it a genuine problem for a civilization built on lying. And below it all sits the Etemmu in the abyss, a cognitive predator of incomprehensible scale, the sovereign the whole population actually serves — the reason the perimeter holds, the reason the other vast things on the surface do not come in. The perimeter watch that stands between the city and what comes up from the deep is composed entirely of Luxenfallen slaves. The lowest people in Tenebralis stand, every night, between the realm and the thing that would eat it.</p>
+</section>
+</div>
+
+<!-- ============ THE SOVEREIGN ============ -->
+<div class="deep">
+<section id="sovereign" class="wrap reveal">
+  <p class="sec-eyebrow">The Author of Both</p>
+  <h2>The Sovereign of Within<span class="uline"></span></h2>
+  <p class="lead">There was no first Exvisar before her and no succession to her; no Mavarran recalls a time she was not there. Vex Mavarra is less a monarch than a condition given form — the moment a person chooses to do the thing they know to be wrong and does not stop, repeated at the scale of a civilization across centuries. She does not rule Tenebralis. She manages it, the way a showrunner manages a stage. The Isin'sartu, the Court of Masks, the Second Birth — these are mechanisms that keep the production interesting, and she grants the population one night of genuine, unmediated feeling each year only because a flatline is boring and she needs the machine calibrated.</p>
+
+  <p>Her mode is not action. It is permission. She finds what a person already wants to do and removes the restraint, and so she can author the doctrine and also pose as its celebrated translator — <em>Val Ravemar</em> is an anagram of her name, guiding the reader toward her own cosmic nihilism under the cover of scholarly compassion. She cannot be targeted, purified, or removed by any means the nine realms understand; she exists distributed across every shadow, physical and psychological and spiritual; and a void surrounds her in memory and attention, so that even those who meet her struggle afterward to say clearly who the Exvisar of Tenebralis is. She has surpassed survival, conquest, and legacy. What is left to her is entertainment, and the most interesting furniture in the very large room of the cosmos is a righteous person — which she does not wish to destroy so much as to watch rot from the inside, slowly, choosing each stage of its own decomposition.</p>
+
+  <div class="pull"><q>Dress up and make believe — authored by a gardener of poisonous flowers.</q><cite>The realm in one line</cite></div>
+
+  <p>And beneath the gospel of boredom there is one project she takes seriously. The Lightwells were not built for energy, nor for cruelty as an end in itself. They were built across centuries as preparation — the avatar of Atropos, the Measurer of endings, has historically grown from the crystaturge bloodline of Luxania, and by destroying Luxania and rendering its survivors through the Lightwells, Vex has been hollowing out the very soil from which that avatar must rise, so that when the seed of cosmic Finality arrives it arrives in ground she has already saturated. Everything else — the masks, the markets, the doctrine, the bottled joy — is the show. This is the work. Her people are Mavarran by soul and not Tenebrali by law; they named themselves after her without ever being told whom they were named for; and the god they revere in daily worship is a mask she wears at the scale of a civilization, while the true thing in the deep, the Etemmu, is the one mind she has never let perceive her clearly. Their god is real. Their god is powerful. Their god runs nothing. Nobody knows.</p>
+</section>
+</div>
+
+<!-- ============ THE GAP ============ -->
+<div class="deep">
+<section id="gap" class="wrap reveal">
+  <p class="sec-eyebrow">The Realm Itself</p>
+  <h2>The Gap<span class="uline"></span></h2>
+  <p class="lead">Set the two realms side by side and the space between them is the whole danger. The cosmos receives a lovely, secretive, sophisticated people who sell good feelings and recover the conquered; the truth is a prey civilization organized around one predator, harvesting the soul as an industry and exporting the proceeds as joy. Neither account is a lie in the ordinary sense. The surface is true. It is simply not the truth, and the realm's entire genius is the maintenance of the difference — a wall so adequate that no one on the far side of it asks the one question that would bring it down.</p>
+
+  <p>This is why Tenebralis is the antagonist the Advent cannot meet on a battlefield. Its weapon is not its army; an army would only become a vector. Its weapon is the most plausible permission in the cosmos, dressed as liberation, sold as recovery, spoken in the gentle register of a translator who loves you — the substitution of sophistication for truth, complexity offered in the exact place where a plain word belonged. The plain words exist. <em>Degloving</em> is one. The realm's achievement is that you will almost always hear <em>Convalescence</em> instead, and nod, and feel sophisticated for understanding.</p>
+
+  <div class="pull"><q>Only liars know the truth.</q><cite>The first axiom, read both ways</cite></div>
+</section>
+</div>
+
+</main>
+
+<footer class="reveal">
+  <div class="bar"></div>
+  <p class="candle">The light is for selling.<br>The truth is in the deep.</p>
+  <p class="ma">The Laws of Ma'at apply · The Test of Iles applies
+    <small>Is this true? Not interesting, not sophisticated, not dramatic. True. — Moirai Codex · Tenebralis</small>
+  </p>
+</footer>
+
+<script>
+  (function(){
+    var els=document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.06,rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(e){io.observe(e);});
+  })();
+  (function(){
+    var links=[].slice.call(document.querySelectorAll('nav.codex-nav a')),map={};
+    links.forEach(function(a){var id=a.getAttribute('href').slice(1),t=document.getElementById(id);if(t)map[id]={a:a,t:t};});
+    function s(){var pos=window.scrollY+140,cur=null;for(var id in map){if(map[id].t.offsetTop<=pos)cur=id;}
+      links.forEach(function(a){a.style.color='';a.style.borderBottomColor='transparent';});
+      if(cur&&map[cur]){map[cur].a.style.color='var(--tenebralis)';map[cur].a.style.borderBottomColor='currentColor';}}
+    window.addEventListener('scroll',s,{passive:true});s();
+  })();
+</script>
+</body>
+</html>

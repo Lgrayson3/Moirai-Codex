@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advent — Street-Level Culture, Class, and Hierarchy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Marcellus&family=Spectral+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     THE TOKENS — change these, and the whole document changes.
+     This is the entire house style. Everything below references it.
+     ============================================================ */
+  :root{
+    /* Ground & ink — never pure white, never pure black */
+    --paper:#FBF7EE;
+    --paper-2:#F6F0E2;
+    --ink:#2B2317;
+    --ink-soft:#5A4E3A;
+    --rule:#E4D8BE;
+
+    /* Gold — the primary accent and the color of headings */
+    --gold:#9A7B1F;          /* text-weight gold */
+    --gold-bright:#C9A227;   /* accent / gradient gold */
+    --gold-pale:#E9DCB0;
+    --gold-glow:rgba(201,162,39,.18);
+
+    /* The prism — one light, seven readings. Thin accents ONLY. */
+    --zephyros:#8AA63A;   --zephyros-pale:#D8E3B0;
+    --pyrthera:#C7572B;   --pyrthera-pale:#F0C39A;
+    --thalassor:#2E6FA3;  --thalassor-pale:#A9CBE4;
+    --ferridane:#A66A2E;  --ferridane-pale:#E0C394;
+    --tenebralis:#6A3D9A; --tenebralis-pale:#C8B0E2;
+    --luxenfall:#C9A227;  --luxenfall-pale:#EBDCA6;
+    --glacia:#5C97B8;     --glacia-pale:#BDDCE8;
+
+    --prism:linear-gradient(90deg,
+      var(--tenebralis) 0%, var(--thalassor) 17%, var(--glacia) 30%,
+      var(--zephyros) 45%, var(--luxenfall) 60%, var(--ferridane) 74%,
+      var(--pyrthera) 100%);
+
+    --maxw:760px;
+  }
+
+  /* ============================================================
+     THE SYSTEM — copy this block verbatim into any new piece.
+     ============================================================ */
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Spectral",Georgia,serif;font-weight:400;
+    font-size:19px;line-height:1.72;-webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;overflow-x:hidden;
+  }
+  body::before{ /* warm vignette + corner prismatic light-leaks */
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(120% 80% at 8% -5%, rgba(106,61,154,.05), transparent 45%),
+      radial-gradient(120% 80% at 105% 110%, rgba(199,87,43,.05), transparent 45%),
+      radial-gradient(140% 90% at 100% 0%, rgba(46,111,163,.04), transparent 40%),
+      radial-gradient(100% 100% at 50% 40%, transparent 60%, rgba(43,35,23,.05));
+  }
+  body::after{ /* fine paper grain */
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  }
+  .ribbon{position:fixed;top:0;left:0;right:0;height:5px;z-index:60;
+    background:var(--prism);background-size:200% 100%;animation:drift 22s linear infinite;}
+  @keyframes drift{0%{background-position:0 0;}100%{background-position:200% 0;}}
+
+  nav.codex-nav{position:sticky;top:5px;z-index:55;background:rgba(251,247,238,.86);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);}
+  nav.codex-nav ul{list-style:none;margin:0 auto;padding:.55rem .9rem;display:flex;
+    flex-wrap:wrap;gap:.2rem .9rem;justify-content:center;max-width:1040px;}
+  nav.codex-nav a{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-soft);text-decoration:none;padding:.15rem 0;
+    border-bottom:1.5px solid transparent;transition:.25s;white-space:nowrap;}
+  nav.codex-nav a:hover{color:var(--gold);border-bottom-color:currentColor;}
+
+  main{position:relative;z-index:1;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.4rem;}
+
+  header.mast{text-align:center;padding:5.5rem 1.4rem 3rem;position:relative;}
+  .eyebrow{font-family:"Marcellus",serif;font-size:.82rem;letter-spacing:.42em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 1.6rem;text-indent:.42em;}
+  h1.title{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(2.7rem,8vw,5.1rem);
+    line-height:.98;margin:0;letter-spacing:-.01em;color:var(--ink);font-variation-settings:"opsz" 144;}
+  h1.title .gilt{background:linear-gradient(95deg,var(--gold) 0%,var(--gold-bright) 45%,#EFD27A 60%,var(--gold) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;}
+  .subtitle{font-family:"Spectral",serif;font-weight:300;font-style:italic;
+    font-size:clamp(1.05rem,2.6vw,1.35rem);color:var(--ink-soft);margin:1.5rem auto 0;max-width:38ch;line-height:1.5;}
+  .mast-mark{margin:2.4rem auto 0;width:min(420px,80%);}
+  .mast-mark .bar{height:3px;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  .mast-epi{font-family:"Fraunces",serif;font-style:italic;font-weight:300;
+    font-size:clamp(1.15rem,3vw,1.6rem);color:var(--gold);margin:2.6rem auto 0;max-width:32ch;line-height:1.4;}
+  .mast-epi span{display:block;color:var(--ink-soft);font-size:.7em;font-style:normal;
+    font-family:"Spectral";letter-spacing:.05em;margin-top:.5rem;}
+
+  .diadiv{display:flex;align-items:center;justify-content:center;gap:1rem;margin:3.4rem 0;}
+  .diadiv .line{height:1px;flex:1;max-width:120px;background:linear-gradient(90deg,transparent,var(--gold-pale),var(--gold));}
+  .diadiv .line.r{background:linear-gradient(90deg,var(--gold),var(--gold-pale),transparent);}
+  .diadiv .gem{font-size:.9rem;color:var(--gold);letter-spacing:.4em;text-indent:.4em;}
+
+  section{padding:1.5rem 0;position:relative;}
+  .sec-eyebrow{font-family:"Marcellus",serif;font-size:.78rem;letter-spacing:.32em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 .5rem;}
+  h2{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(1.9rem,5vw,2.9rem);
+    line-height:1.05;margin:.2rem 0 1.2rem;color:var(--ink);letter-spacing:-.01em;font-variation-settings:"opsz" 80;}
+  h2 .uline{display:block;height:3px;width:108px;margin-top:.7rem;border-radius:2px;
+    background:var(--prism);background-size:200% 100%;animation:drift 16s linear infinite;}
+  h3{font-family:"Fraunces",serif;font-weight:500;font-style:italic;font-size:clamp(1.25rem,3.4vw,1.6rem);
+    margin:2.2rem 0 .6rem;color:var(--ink);font-variation-settings:"opsz" 40;}
+  h4{font-family:"Marcellus",serif;font-weight:400;font-size:1.02rem;letter-spacing:.04em;margin:1.6rem 0 .35rem;color:var(--gold);}
+  p{margin:0 0 1.15rem;}
+  p a{color:var(--gold);}
+  strong{font-weight:600;color:var(--ink);}
+  .lead{font-size:1.12rem;}
+  .lead::first-letter{font-family:"Fraunces",serif;font-weight:400;float:left;font-size:4.4rem;
+    line-height:.72;padding:.32rem .55rem 0 0;color:var(--gold);font-variation-settings:"opsz" 144;}
+
+  .spectrum{margin:2rem auto;border:1px solid var(--rule);border-radius:14px;overflow:hidden;
+    background:var(--paper-2);box-shadow:0 1px 0 #fff inset, 0 14px 36px -28px rgba(43,35,23,.45);}
+  .spectrum .top{height:8px;background:var(--prism);background-size:180% 100%;animation:drift 20s linear infinite;}
+  .spectrum .rows{padding:.4rem .2rem;}
+  .spec-row{display:grid;grid-template-columns:14px 1fr;gap:.9rem;align-items:start;
+    padding:.7rem 1.1rem;border-bottom:1px solid var(--rule);}
+  .spec-row:last-child{border-bottom:none;}
+  .spec-row .swatch{width:14px;height:14px;border-radius:50%;margin-top:.45rem;
+    box-shadow:0 0 0 3px var(--paper-2),0 0 0 4px currentColor;}
+  .spec-row .nm{font-family:"Marcellus",serif;letter-spacing:.06em;font-size:1.05rem;}
+  .spec-row .nm small{display:block;font-family:"Spectral";font-style:italic;letter-spacing:0;
+    color:var(--ink-soft);font-size:.86rem;margin-top:.15rem;font-weight:300;}
+
+  .realm{--accent:var(--gold);--accent-pale:var(--gold-pale);margin:3rem auto;border:1px solid var(--rule);
+    border-radius:16px;background:linear-gradient(180deg,#fff,var(--paper));
+    box-shadow:0 20px 50px -40px rgba(43,35,23,.6);overflow:hidden;position:relative;}
+  .realm > .crown{height:7px;background:linear-gradient(90deg,var(--accent),var(--accent-pale),var(--accent));}
+  .realm-head{padding:1.8rem 1.6rem 1.3rem;border-bottom:1px solid var(--rule);
+    background:radial-gradient(120% 140% at 100% -20%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%);}
+  .realm-head .kicker{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 .4rem;display:flex;align-items:center;gap:.6rem;}
+  .realm-head .kicker .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);}
+  .realm-head h2{margin:.1rem 0 .55rem;font-size:clamp(2rem,6vw,3rem);}
+  .realm-head h2 .uline{display:none;}
+  .realm-meta{font-family:"Marcellus",serif;font-size:.8rem;letter-spacing:.05em;color:var(--ink-soft);
+    display:flex;flex-wrap:wrap;gap:.4rem 1.3rem;margin-top:.5rem;}
+  .realm-meta b{color:var(--accent);font-weight:400;}
+  .realm-essence{font-style:italic;color:var(--ink-soft);font-weight:300;margin:.9rem 0 0;font-size:1.04rem;}
+  .realm-body{padding:.4rem 1.6rem 1.7rem;}
+
+  details.thread{border-bottom:1px solid var(--rule);}
+  details.thread:last-of-type{border-bottom:none;}
+  details.thread > summary{list-style:none;cursor:pointer;padding:1.15rem .2rem 1rem;display:flex;
+    align-items:center;gap:.85rem;font-family:"Fraunces",serif;font-size:1.15rem;font-weight:500;color:var(--ink);}
+  details.thread > summary::-webkit-details-marker{display:none;}
+  details.thread > summary .ico{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--accent);
+    color:var(--accent);display:grid;place-items:center;font-family:"Spectral";font-size:1rem;transition:.3s;
+    background:color-mix(in srgb,var(--accent) 6%,transparent);}
+  details.thread[open] > summary .ico{transform:rotate(45deg);}
+  details.thread > summary .lbl small{display:block;font-family:"Marcellus";font-size:.66rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);font-weight:400;margin-top:.15rem;}
+  .thread-body{padding:.1rem .3rem 1.5rem 0;}
+  @media(min-width:540px){.thread-body{padding-left:3.5rem;}}
+
+  .vignette{margin:1.5rem 0;padding:1.1rem 1.3rem;border-left:3px solid var(--accent);
+    background:color-mix(in srgb,var(--accent) 5%,var(--paper-2));border-radius:0 10px 10px 0;}
+  .vignette .tag{font-family:"Marcellus";font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin:0 0 .4rem;}
+  .vignette p{font-style:italic;font-weight:300;margin:0;color:var(--ink);font-size:1.02rem;line-height:1.6;}
+
+  .pull{margin:2.4rem auto;text-align:center;max-width:32ch;}
+  .pull q{font-family:"Fraunces",serif;font-style:italic;font-weight:300;quotes:none;
+    font-size:clamp(1.3rem,3.6vw,1.8rem);line-height:1.34;color:var(--gold);display:block;}
+  .pull cite{display:block;font-style:normal;font-family:"Marcellus";font-size:.74rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ink-soft);margin-top:1rem;}
+
+  .feature{margin:2.2rem 0;padding:1.4rem 1.5rem;border:1px solid var(--rule);border-radius:14px;
+    background:linear-gradient(180deg,#fff,var(--paper));box-shadow:0 14px 40px -36px rgba(43,35,23,.5);}
+  .feature h3{margin-top:.2rem;}
+
+  footer{text-align:center;padding:4rem 1.4rem 5rem;margin-top:2rem;position:relative;z-index:1;}
+  footer .bar{height:3px;width:min(420px,80%);margin:0 auto 2.4rem;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  footer .candle{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.3rem,4vw,2rem);
+    color:var(--gold);line-height:1.35;margin:0 auto;max-width:26ch;}
+  footer .ma{font-family:"Marcellus";font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-top:2.4rem;}
+  footer .ma small{display:block;letter-spacing:.05em;text-transform:none;font-family:"Spectral";font-style:italic;font-weight:300;margin-top:.5rem;color:var(--ink-soft);}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;}
+    .ribbon,.spectrum .top,.realm>.crown,h2 .uline,.mast-mark .bar,footer .bar{animation:none;}
+  }
+  @media(max-width:540px){body{font-size:18px;}nav.codex-nav ul{gap:.15rem .7rem;}
+    .realm-body,.realm-head{padding-left:1.1rem;padding-right:1.1rem;}}
+
+  /* ============================================================
+     SPEC-ONLY HELPERS (not part of the reusable system —
+     used here to document and demonstrate it)
+     ============================================================ */
+  .codeblock{margin:1.4rem 0;border:1px solid var(--rule);border-radius:12px;overflow:hidden;
+    background:#2B2317;box-shadow:0 16px 40px -34px rgba(43,35,23,.7);}
+  .codeblock .cb-head{display:flex;align-items:center;gap:.6rem;padding:.6rem 1rem;background:#221B11;
+    border-bottom:1px solid #3a3020;font-family:"Marcellus";font-size:.68rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--gold-bright);}
+  .codeblock .cb-head .gem{color:var(--gold);}
+  .codeblock pre{margin:0;padding:1.1rem 1.2rem;overflow-x:auto;}
+  .codeblock code{font-family:"SFMono-Regular",ui-monospace,"Cascadia Code","Menlo",monospace;
+    font-size:.8rem;line-height:1.65;color:#EBDCA6;white-space:pre;}
+  .codeblock code .c{color:#9c8a63;font-style:italic;}     /* comment */
+  .codeblock code .v{color:#8AB6D6;}                        /* value/var */
+  .codeblock code .k{color:#D9A441;}                        /* key */
+
+  .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:.7rem;margin:1.4rem 0;}
+  .sw{border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:#fff;}
+  .sw .chip{height:54px;}
+  .sw .lab{padding:.45rem .6rem;font-family:"Marcellus";font-size:.66rem;letter-spacing:.05em;color:var(--ink);}
+  .sw .lab small{display:block;font-family:"SFMono-Regular",monospace;letter-spacing:0;color:var(--ink-soft);font-size:.66rem;margin-top:.1rem;}
+
+  .note{margin:1.5rem 0;padding:1rem 1.2rem;border-radius:10px;border:1px dashed var(--gold);
+    background:color-mix(in srgb,var(--gold) 6%,var(--paper-2));}
+  .note .t{font-family:"Marcellus";font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:0 0 .35rem;}
+  .note p{margin:0;font-size:.98rem;}
+
+  .twocol{display:grid;gap:1rem;margin:1.6rem 0;}
+  @media(min-width:620px){.twocol{grid-template-columns:1fr 1fr;}}
+  .card-rule{border:1px solid var(--rule);border-radius:12px;padding:1.1rem 1.2rem;background:linear-gradient(180deg,#fff,var(--paper));}
+  .card-rule.do{border-color:color-mix(in srgb,var(--zephyros) 50%,var(--rule));}
+  .card-rule.dont{border-color:color-mix(in srgb,var(--pyrthera) 45%,var(--rule));}
+  .card-rule h4{margin-top:0;}
+  .card-rule.do h4{color:var(--zephyros);}
+  .card-rule.dont h4{color:var(--pyrthera);}
+  .card-rule ul{margin:.3rem 0 0;padding-left:1.1rem;}
+  .card-rule li{margin:.4rem 0;font-size:.97rem;}
+
+  .demo{border:1px dashed var(--rule);border-radius:12px;padding:1.2rem;margin:1.3rem 0;background:var(--paper);}
+  .demo > .demo-tag{font-family:"Marcellus";font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 .9rem;}
+
+  .typescale > div{margin:.6rem 0;border-bottom:1px dotted var(--rule);padding-bottom:.6rem;}
+  .typescale .rolelab{font-family:"SFMono-Regular",monospace;font-size:.7rem;color:var(--ink-soft);display:block;margin-bottom:.15rem;}
+</style>
+</head>
+
+<body>
+<div class="ribbon" aria-hidden="true"></div>
+
+<nav class="codex-nav" aria-label="Sections">
+  <ul>
+    <li><a href="#orientation">Orientation</a></li>
+    <li><a href="#pattern">The Pattern</a></li>
+    <li><a href="#zephyros">Zephyros</a></li>
+    <li><a href="#pyrthera">Pyrthera</a></li>
+    <li><a href="#thalassor">Thalassor</a></li>
+    <li><a href="#ferridane">Ferridane</a></li>
+    <li><a href="#tenebralis">Tenebralis</a></li>
+    <li><a href="#luxenfall">Luxenfall</a></li>
+    <li><a href="#glacia">Glacia</a></li>
+    <li><a href="#weave">The Weave</a></li>
+    <li><a href="#uriel">Uriel's Question</a></li>
+  </ul>
+</nav>
+
+<main>
+<header class="mast">
+  <p class="eyebrow">Advent Codex · Street-Level Research Pass</p>
+  <h1 class="title">Class, Culture, and <span class="gilt">the Street</span></h1>
+  <p class="subtitle">A source-text sweep of the Realms as lived civilizations: hierarchy, labor, intimacy, ordinary life, and the divine shadow each blessing casts below.</p>
+  <div class="mast-mark"><div class="bar"></div></div>
+  <p class="mast-epi">Fate, Heaven, and the street.<span>The gods bless. The cultures metabolize. The people pay.</span></p>
+</header>
+
+<section id="orientation" class="wrap reveal">
+  <p class="sec-eyebrow">Orientation</p>
+  <h2>What This Pass Is<span class="uline"></span></h2>
+  <p class="lead">This document gathers the street-level culture sweep of the Realms: how class, hierarchy, labor, intimacy, and ordinary life emerge from each Realm's divine premise. It treats the project codices as source texts and reads them for what they reveal about people below the thrones.</p>
+  <p>The clearest finding is this: <strong>class in Advent is not a generic economic ladder. Class is the street-level consequence of theology.</strong> In every Realm, hierarchy is not merely who has money or who has blood. It is the local god's blessing translated into body, architecture, clothing, marriage, labor, violence, privacy, shame, and civic imagination.</p>
+  <p>That is why the Realms feel different at the ground level. A poor person in Thalassor is not poor in the same way as a poor person in Ferridane. A powerless person in Zephyros is not powerless in the same way as a powerless person in Tenebralis. A low-status person in Pyrthera is not low-status in the same way as a low-status person in Luxenfall. The categories of advantage and injury are spiritually local.</p>
+  <div class="pull"><q>Advent's class politics work because every Realm's inequality is the local shadow of its blessing.</q><cite>The central finding</cite></div>
+</section>
+
+<div class="diadiv reveal"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div>
+
+<section id="pattern" class="wrap reveal">
+  <p class="sec-eyebrow">The Pattern</p>
+  <h2>The Broad Social Logic<span class="uline"></span></h2>
+  <p>The Realms are not organized around one shared model of class. They are organized around different answers to the question: <strong>what counts as value here?</strong></p>
+  <div class="spectrum">
+    <div class="top"></div>
+    <div class="rows">
+      <div class="spec-row" style="color:var(--zephyros)"><span class="swatch"></span><span class="nm">Zephyros<small>Value is connection to truth, Aether, shared knowledge, and the Compendium.</small></span></div>
+      <div class="spec-row" style="color:var(--pyrthera)"><span class="swatch"></span><span class="nm">Pyrthera<small>Value is visible wholeness under intensity, public truth, and embodied capacity.</small></span></div>
+      <div class="spec-row" style="color:var(--thalassor)"><span class="swatch"></span><span class="nm">Thalassor<small>Value is flow: patronage, liquidity, beauty, access, and social fluency.</small></span></div>
+      <div class="spec-row" style="color:var(--ferridane)"><span class="swatch"></span><span class="nm">Ferridane<small>Value is endurance across generations, embodied transformation, lineage, and craft.</small></span></div>
+      <div class="spec-row" style="color:var(--tenebralis)"><span class="swatch"></span><span class="nm">Tenebralis<small>Value is secrecy, unreadability, useful intimacy, and proximity to predatory knowledge.</small></span></div>
+      <div class="spec-row" style="color:var(--luxenfall)"><span class="swatch"></span><span class="nm">Luxenfall<small>Value has been inverted by occupation: memory, trauma, and trust have been weaponized.</small></span></div>
+      <div class="spec-row" style="color:var(--glacia)"><span class="swatch"></span><span class="nm">Glacia<small>Value was perfection of order and stillness; after the Fall, status survives without home.</small></span></div>
+    </div>
+  </div>
+  <p>Class in Advent is therefore not just social location. It is <strong>metaphysical location</strong>. Who can breathe the truth-network? Who glows from holy water? Who has Galvaneum in their body? Who can stand in the sun? Who is close to the abyss? Who has been renamed? Who has been forgotten? Who is carried in the Compendium, the Krenides, the Myst-Grid, the Lightwells, the Aether, or the Source?</p>
+  <p>The street-level question is always: <strong>what does the divine order do to the body standing at the bottom?</strong></p>
+</section>
+
+<article id="zephyros" class="realm reveal" style="--accent:var(--zephyros);--accent-pale:var(--zephyros-pale)">
+  <div class="crown"></div>
+  <div class="realm-head">
+    <p class="kicker"><span class="dot"></span>Realm of Iles</p>
+    <h2>Zephyros</h2>
+    <div class="realm-meta"><span>Hierarchy <b>Soft exclusion</b></span><span>Street wound <b>Silence</b></span><span>Class mark <b>Aetheric access</b></span></div>
+    <p class="realm-essence">The softest hierarchy in the cosmos is still a hierarchy, because the deepest punishment is not shame but absence from shared truth.</p>
+  </div>
+  <div class="realm-body">
+    <details class="thread" open><summary><span class="ico">+</span><span class="lbl">The Mystic–Nihila Divide<small>Sixteen, ascension, and absence</small></span></summary><div class="thread-body">
+      <p>Zephyros is the gentlest class system in the corpus, and that gentleness is exactly what makes it interesting. The culture keeps “the softest hierarchy in the cosmos,” but the sorting is still profound. The Mystic–Nihila divide occurs at sixteen, in the Halls of Ascension. A child either opens to the Aether or goes home into a world where the air is only air.</p>
+      <p>There is no public shaming because shame would be false and the air would catch it. But the Compendium is a country the Nihila cannot enter. That is the whole class structure. The wound is absence.</p>
+      <p>Zephyros does not need brutality because its deepest punishment is silence. Severance from the Compendium is worse than prison because it removes a person from the shared psychic, scholarly, emotional, and civic life of the Realm.</p>
+    </div></details>
+    <details class="thread"><summary><span class="ico">+</span><span class="lbl">The Poor Without Squalor<small>Respect, fabric, and visible subtraction</small></span></summary><div class="thread-body">
+      <p>The street-level poor are not necessarily starving or dirty. A Nihila farmer may wear well-made practical cloth and be respected, but the absence of prismatic light in the fabric communicates position at a glance. They are not outside society in an economic sense; they are outside the Realm's fuller mode of being.</p>
+      <p>That is a very specific kind of inequality. It does not look like oppression from the outside. It looks like peace. But to live there and not hear what everyone else hears would be a lifelong subtraction.</p>
+    </div></details>
+    <details class="thread"><summary><span class="ico">+</span><span class="lbl">Truth as Rank<small>Epistemic authority and civic gravity</small></span></summary><div class="thread-body">
+      <p>The hierarchy is also epistemic. Authority is earned through demonstrated understanding: Wind Abbots, Oracles, Stellarchs, scholars, Templars. Aeon governs not by command but by attentional gravity. When he speaks, the civilization reorients. When he is silent, that silence is itself political.</p>
+      <p>At the street level, Zephyros feels like a place of fruit merchants asking about your mother, gardens storing knowledge, children learning harmony, and lovers unable to hide desire. It is warm. It is beautiful. It is safe. It is also a society where there is no escape from being known unless you leave the Realm.</p>
+    </div></details>
+    <div class="vignette"><p class="tag">Street-level wound</p><p>Zephyrosian inequality is not violent but subtractive: a life lived near truth, loved by truth-tellers, and still unable to enter the shared country of the air.</p></div>
+  </div>
+</article>
+
+<article id="pyrthera" class="realm reveal" style="--accent:var(--pyrthera);--accent-pale:var(--pyrthera-pale)">
+  <div class="crown"></div>
+  <div class="realm-head">
+    <p class="kicker"><span class="dot"></span>Realm of Hestia</p>
+    <h2>Pyrthera</h2>
+    <div class="realm-meta"><span>Hierarchy <b>Embodied capacity</b></span><span>Street wound <b>No hiding</b></span><span>Class mark <b>Visible wholeness</b></span></div>
+    <p class="realm-essence">No permanent underclass, but no private incompletion either: the body tells the truth, and the culture answers in public.</p>
+  </div>
+  <div class="realm-body">
+    <details class="thread" open><summary><span class="ico">+</span><span class="lbl">No Permanent Underclass<small>Movement instead of fixed social death</small></span></summary><div class="thread-body">
+      <p>Pyrthera is the most deliberately anti-feudal Realm in the culture document. It has hierarchy, but the hierarchy is not inherited in the usual way. Rank is displayed and re-displayed. The body tells the truth through kafer, brands, heat, capacity, and presence.</p>
+      <p>The key line is that there is no permanent underclass because nothing is allowed to settle. That does not mean Pyrthera is egalitarian in a modern liberal sense. It means the society rejects fixed social deadness. A person's standing is not supposed to be locked into birth. It is expressed through whether they are whole, whether they can experience intensity, whether they can hold pain and pleasure, combat and intimacy, discipline and abandon.</p>
+    </div></details>
+    <details class="thread"><summary><span class="ico">+</span><span class="lbl">The Feast as Street<small>Public correction, public life</small></span></summary><div class="thread-body">
+      <p>The street here is not the tenement or the factory. It is the feast, the bonfire, the hunt, the dance, the sparring circle, the communal wedding, the public correction. The culture document says, “There is no marble district here. There is a feast, and you are at it.” That line captures the entire class logic.</p>
+      <p>Pyrthera's friction is not primarily rich versus poor. It is lens versus lens. Khet reads fire as judgment. Rhylos reads it as relationship and flow. The Ashen Vale reads it as information. Each thinks the others have misread the same truth. That produces social difference, but not exactly class stratification.</p>
+    </div></details>
+    <details class="thread"><summary><span class="ico">+</span><span class="lbl">Hospitality as Proof<small>The Glacian refugees and sacred generosity</small></span></summary><div class="thread-body">
+      <p>Pyrthera's treatment of the Glacian refugees is one of the clearest moral markers in the corpus. The Rhylian magma-dancers build them obsidian citadels, cold inside, using sacred material and sacred art, and ask nothing in return. This is not charity in the condescending sense. It is hospitality as proof of theological seriousness. Hospitality offered for advantage is not hospitality.</p>
+      <p>At the street level, Pyrthera feels generous, loud, and physically public. The body is not hidden. Poverty means less ornamentation, but not less exposure, because brands are free and light is free. The poorest Pyrtheran still stands in the sun. Their body still tells the truth.</p>
+    </div></details>
+    <div class="vignette"><p class="tag">Street-level wound</p><p>If the body tells the truth, then everyone can read failure. A culture without a fixed underclass may still give very little privacy to weakness.</p></div>
+  </div>
+</article>
+
+<article id="thalassor" class="realm reveal" style="--accent:var(--thalassor);--accent-pale:var(--thalassor-pale)">
+  <div class="crown"></div>
+  <div class="realm-head">
+    <p class="kicker"><span class="dot"></span>Realm of Salacia</p>
+    <h2>Thalassor</h2>
+    <div class="realm-meta"><span>Hierarchy <b>Conditional abundance</b></span><span>Street wound <b>Purchased silence</b></span><span>Class mark <b>Krenides saturation</b></span></div>
+    <p class="realm-essence">The poor do not rebel because the floor is beautiful, the water heals, and the current offers just enough upward motion to make silence feel like gratitude.</p>
+  </div>
+  <div class="realm-body">
+    <details class="thread" open><summary><span class="ico">+</span><span class="lbl">The Beautiful Ladder<small>Glow, marble, and vertical city</small></span></summary><div class="thread-body">
+      <p>Thalassor is the strongest class document in the corpus. Its class system is not only economic. It is visible in the skin, visible in the city, visible in the clothing, and audible in the etiquette.</p>
+      <p>The class line is Krenides saturation. The Crystata aristocracy glows with the accumulated effects of divine water and wealth. The Nihila age normally and look ordinary. In Salacica, the city descends from the translucent Spire through luminous Heights, terraced marble districts, and down to the stone waterfront. The architecture itself is a social gradient: translucent at the top, warm in the middle, functional at the base.</p>
+    </div></details>
+    <details class="thread"><summary><span class="ico">+</span><span class="lbl">Conditional Abundance<small>Patronage as grace and purchase</small></span></summary><div class="thread-body">
+      <p>The brilliant choice is that Thalassor's poor are not written as living in obvious squalor. The marble tenements are beautiful. The floor is high. The water heals. Patronage provides visible paths upward. That makes revolt feel irrational and ungrateful.</p>
+      <p>This is how the hierarchy sustains itself: not through crushing deprivation, but through conditional abundance. A talented child can be sponsored. A nephew can receive an apprenticeship. A patron can notice you. But that generosity has a price: silence. The sponsored artist cannot criticize the patron. The person who receives the current must not question the current's source.</p>
+    </div></details>
+    <details class="thread"><summary><span class="ico">+</span><span class="lbl">Wine, Marriage, and Violence<small>Who gets ritual and who gets policing</small></span></summary><div class="thread-body">
+      <p>Marriage makes this worse and more human. Highborn marriages are mergers. Dowries are common. Poor daughters can be sold upward to Syndicate merchants because beauty, manners, and pedigree-adjacent polish are assets. Poor men's sons may never marry because they are priced out. Yet the Wine of Shared Fates binds rich and poor alike, and a fisherman's son and the woman who does not care can drink it at a kitchen table and be just as bound as the Sinclairs in silk.</p>
+      <p>Violence in Thalassor is classed. Crystata-tier duels are formal, officiated, sworn on wine. Marble-tier clients hire champions. Stone-tier violence is raw and policed by Squalls. The upper classes get ritualized violence; the lower classes get policing. The weapon you can see is never the one that kills you because the actual weapons are wine, gates, access, memory, patronage, and tempo.</p>
+    </div></details>
+    <div class="vignette"><p class="tag">Street-level wound</p><p>Thalassor is the Realm of beautiful complicity: warm, liquid, charming, and livable, while generosity becomes purchase so smoothly that even the purchased may call it grace.</p></div>
+  </div>
+</article>
+
+<article id="ferridane" class="realm reveal" style="--accent:var(--ferridane);--accent-pale:var(--ferridane-pale)">
+  <div class="crown"></div>
+  <div class="realm-head">
+    <p class="kicker"><span class="dot"></span>Realm of Edgerinne</p>
+    <h2>Ferridane</h2>
+    <div class="realm-meta"><span>Hierarchy <b>Geological mobility</b></span><span>Street wound <b>Expendability</b></span><span>Class mark <b>Augmentation</b></span></div>
+    <p class="realm-essence">Ferridane does not promise equality. It promises that gravel can become diamond, given pressure, time, and generations willing to pay.</p>
+  </div>
+  <div class="realm-body">
+    <details class="thread" open><summary><span class="ico">+</span><span class="lbl">Geological Mobility<small>Pressure, time, and descendants</small></span></summary><div class="thread-body">
+      <p>Ferridane handles class through time. Equality is considered absurd because some are stronger, some are blessed, and some can afford better augments. The mountain does not apologize to the gravel. But the gravel can become diamond, given pressure and time.</p>
+      <p>That makes Ferridane neither static aristocracy nor modern meritocracy. Mobility exists, but it is generational. A laborer is not working for himself. He is working for descendants he will never meet. At the street level, that produces a population that can endure immense exploitation because the exploitation is narrated as investment.</p>
+    </div></details>
+    <details class="thread"><summary><span class="ico">+</span><span class="lbl">The Body as Ledger<small>Galvaneum, lineage, and class made flesh</small></span></summary><div class="thread-body">
+      <p>Ferridane's class is physically legible through augmentation. At the top, Aurelius is seamless flesh and golden Galvaneum. Among elites, compressed technology means a person may carry powered armor, wings, vehicles, and weapons in jewelry. Among clans, body forms mark Felidae, Axipitre, Old Lykaion, New Lykaion. In the Outlands, every body is a personal statement. At the bottom, poverty looks like unaugmented flesh.</p>
+      <p>That is brutal. In Thalassor, the poor lack glow. In Ferridane, the poor lack transformation. The distance between a Nihila miner and a Felidae aristocrat is not merely economic. It is ontological.</p>
+    </div></details>
+    <details class="thread"><summary><span class="ico">+</span><span class="lbl">Clans and Outlands<small>Regulated covenant, unregulated Ferridane</small></span></summary><div class="thread-body">
+      <p>The clans give class a political shape. Felidae consume and govern what others produce. Axipitre build the wonders and the heresies. Old Lykaion preserve the old names and brutal strength. New Lykaion turn Edgerinne's covenant into biological entitlement. The Outlands are not where Ferridane breaks down; they are where Ferridane runs unregulated.</p>
+      <p>The Outlands are Ferridane without guild brakes, theological restraint, or polite central governance. Sovereignty means your business is your own. Do not start what you cannot finish. It is the realm of exiles, illegal augments, black-market artistry, and craftspeople tired of being told what they cannot build.</p>
+    </div></details>
+    <details class="thread"><summary><span class="ico">+</span><span class="lbl">Best and Worst Share a Shape<small>Progress, shortcut, and Tiamat's shadow</small></span></summary><div class="thread-body">
+      <p>Ferridane at its worst looks exactly like Ferridane at its best. Soul-batteries are procurement. Unsafe mines are economical. Nihila auxiliaries as expendable screens are tactical. The Godmind Project and Tiamat emerge naturally from this gap between values and incentives. Ferridane worships earned mastery and rewards shortcuts. It honors process and builds systems that benefit from bypassing process.</p>
+      <p>Street-level Ferridane is forges, bars after campaign, deployment returns, lineage ledgers, heavy boots on clean floors, Hero's Journey pilgrims, and miners whose lungs are the cost of progress. It is the Realm where Uriel's politics and Crex's philosophy both become inevitable.</p>
+    </div></details>
+    <div class="vignette"><p class="tag">Street-level wound</p><p>The Nihila woman working the crystal seams, coming home to raise children, and pouring everything into descendants she will never meet is Brokkae's truest inheritor and Ferridane's forgotten foundation.</p></div>
+  </div>
+</article>
+
+<article id="tenebralis" class="realm reveal" style="--accent:var(--tenebralis);--accent-pale:var(--tenebralis-pale)">
+  <div class="crown"></div>
+  <div class="realm-head">
+    <p class="kicker"><span class="dot"></span>Realm of Erebus and Vex</p>
+    <h2>Tenebralis</h2>
+    <div class="realm-meta"><span>Hierarchy <b>Altitude</b></span><span>Street wound <b>Being consumed</b></span><span>Class mark <b>Control of the real</b></span></div>
+    <p class="realm-essence">The higher you live, the more of yourself you author. The lower you live, the more likely your self becomes material.</p>
+  </div>
+  <div class="realm-body">
+    <details class="thread" open><summary><span class="ico">+</span><span class="lbl">Order by Altitude<small>Tempora and the abyss</small></span></summary><div class="thread-body">
+      <p>Tenebralis is perhaps the most visually clean class system: order by altitude. Tempora is a city carved into the wall of an abyss. Upper Terraces are the social city: Veiled Houses, symposiums, light, exported image. Middle Terraces are residential, quieter, where children are kept and Oneironauts maintain cloisters. Lower Terraces are less discussed, more violet, closer to the dark. Below that are the Depths, where the Aesthetes render souls and where Luxenfallen slaves hold the perimeter against what comes up from the abyss.</p>
+      <p>That is class as geography. The farther down you live, the closer you stand to being eaten. There is almost no need for explicit law because the threat is ecological and theological. Attention flows downward from things that eat minds, then souls, then bodies.</p>
+    </div></details>
+    <details class="thread"><summary><span class="ico">+</span><span class="lbl">Trades of Predation<small>Poppets, dreams, Azanni, Aesthetes</small></span></summary><div class="thread-body">
+      <p>The trades make the street level work. Poppets sell worn bodies and chosen faces. Dreamwalkers sell relief from memory. Azanni or Pantomimes go abroad as infiltrators. Aesthetes render the soul. The Damq'eth are made from the best of a thousand unmakings. The Rewritten hold the abyss. Every profession is a social use of metaphysical predation.</p>
+    </div></details>
+    <details class="thread"><summary><span class="ico">+</span><span class="lbl">Intimacy as Capital<small>Secrets, love, and Shum'katim</small></span></summary><div class="thread-body">
+      <p>The culture's intimacy economy is the heart of it. Courtship is not flowers and wine; it is useful information. The “bouquet” is a secret that strengthens the beloved's position. Real love is not romance as other Realms understand it. It is the active refusal to use the weapon someone has placed in your hand. Shum'katim is a relationship built around knowing the thing that can unmake the other and choosing not to do it.</p>
+      <p>That is class too. In Tenebralis, the most precious resource is not money but access to the real. Real face, real name, real memory, real vulnerability, real unmediated feeling. The lower you are, the more likely your inner life becomes product.</p>
+    </div></details>
+    <div class="vignette"><p class="tag">Street-level wound</p><p>The Lightwells do not merely sell suffering. They sell harvested joy, courage, bliss, and private feeling. The product feels good, so the person behind it disappears.</p></div>
+  </div>
+</article>
+
+<article id="luxenfall" class="realm reveal" style="--accent:var(--luxenfall);--accent-pale:var(--luxenfall-pale)">
+  <div class="crown"></div>
+  <div class="realm-head">
+    <p class="kicker"><span class="dot"></span>The Fallen Realm of Light</p>
+    <h2>Luxenfall</h2>
+    <div class="realm-meta"><span>Hierarchy <b>Occupation</b></span><span>Street wound <b>Enforced division</b></span><span>Class mark <b>Survival deformation</b></span></div>
+    <p class="realm-essence">There is no hierarchy of Luxania anymore. There is an occupation, and beneath it the same people split into incompatible shapes of survival.</p>
+  </div>
+  <div class="realm-body">
+    <details class="thread" open><summary><span class="ico">+</span><span class="lbl">Three Configurations<small>Not peoples, but wounds</small></span></summary><div class="thread-body">
+      <p>Luxenfall is no longer a normal hierarchy. The document explicitly says there is no hierarchy of Luxania anymore. There is an occupation, and beneath it the population stands in three configurations. That is crucial. The social structure is not organic. It is imposed and maintained.</p>
+      <p>The Glassen have forgotten what their gift was and mine the Ancestral Archive for “glass.” Their forgetting is an achieved outcome of induced amnesia. The Screaming Chorus are survivors whose empathic network has been turned against them, so the Wellspring carries recursive trauma. The Grounded are not foolish isolationists; their doctrine follows from accurate diagnosis. Reaching outward cost Luxania everything. Trust admitted the infiltration. The gods were silent. So they refuse.</p>
+    </div></details>
+    <details class="thread"><summary><span class="ico">+</span><span class="lbl">Occupation as Class System<small>Maintaining the split</small></span></summary><div class="thread-body">
+      <p>They are not three peoples. They are the same people, split. That is the street-level truth of Luxenfall. Class is not upper/lower. It is which survival deformation you have been forced into.</p>
+      <p>The occupation's primary discipline is maintaining the split. That means Luxenfall's class system is political technology. The conqueror keeps the population from becoming one people again. The diaspora is present in other Realms but invisible to those Realms' self-descriptions.</p>
+    </div></details>
+    <details class="thread"><summary><span class="ico">+</span><span class="lbl">Present Tense Atrocity<small>The Lightwells still operate</small></span></summary><div class="thread-body">
+      <p>The Lightwells are still operating. The violence is present tense. Institutional ledgers prefer past tense because past-tense framing lets everyone arrange around an absence. The correction is that Luxenfall is not an absence. It is the center of the cosmos's moral reality.</p>
+      <p>That makes Luxenfall the natural destination for Uriel's attention. It is exactly the kind of place prophecies and councils forget because it is not glamorous to stay. The restoration is not reassembling Luxania as it was. It is the population deciding what the Realm becomes next with the people who commit to staying.</p>
+    </div></details>
+    <div class="vignette"><p class="tag">Street-level wound</p><p>Luxenfall is the moral test of whether the “next world” includes the people most damaged by the old one.</p></div>
+  </div>
+</article>
+
+<article id="glacia" class="realm reveal" style="--accent:var(--glacia);--accent-pale:var(--glacia-pale)">
+  <div class="crown"></div>
+  <div class="realm-head">
+    <p class="kicker"><span class="dot"></span>The Fallen Golden Age</p>
+    <h2>Glacia</h2>
+    <div class="realm-meta"><span>Hierarchy <b>Perfection and order</b></span><span>Street wound <b>Homelessness</b></span><span>Class mark <b>Status without world</b></span></div>
+    <p class="realm-essence">Glacia had solved scarcity and injustice before the Fall; afterward, its survivors possess reverence, power, and no Center.</p>
+  </div>
+  <div class="realm-body">
+    <details class="thread" open><summary><span class="ico">+</span><span class="lbl">Before the Fall<small>Class at the level of sublime order</small></span></summary><div class="thread-body">
+      <p>Glacia is different because it no longer functions as a living street society. But its pre-Fall structure and diaspora position matter. Before the Fall, Glacia had already solved war, scarcity, and injustice. Its hierarchy was not economic in the ordinary sense. It was ordered around spiritual and artistic attainment: Oracles, Wardens, Star-Eaters, and Harmonic Conductors.</p>
+      <p>The great struggle was not survival but the meaning of perfection. Should a masterpiece be preserved unchanged or continued forever? That is class at the level of sublime order. The problem is not hunger. The problem is spiritual hygiene, perfection, and the dangerous arrogance of people who truly did live in a Golden Age.</p>
+    </div></details>
+    <details class="thread"><summary><span class="ico">+</span><span class="lbl">The Gift and Its Consequences<small>Charged crystata and the Mystic/Nihila divide</small></span></summary><div class="thread-body">
+      <p>The gift of charging crystata is important because Glacia gave other Realms a simplified version of a mundane byproduct of its own spiritual practice. The other Realms turned it into war and commerce, widening the Mystic/Nihila divide. This makes Glacia indirectly responsible for much of the inter-Realm economy's class machinery, though not in the crude sense of intent. They gave a child a chemistry set and watched what happened.</p>
+    </div></details>
+    <details class="thread"><summary><span class="ico">+</span><span class="lbl">After the Fall<small>High-status exile</small></span></summary><div class="thread-body">
+      <p>After the Fall, Glacians are not pitiable refugees. They are demigod royalty. They are powerful, respected, expensive, difficult to deceive, and almost impossible to kill. But the horror is that they are homeless. They have reverence, wealth, purpose, and status, but not their Center.</p>
+      <p>That is an important class complication. They are high-status exiles. They are not at the bottom materially, but they embody loss of world. The Obsidian Court in Pyrthera is a rare example of inter-Realm hospitality done correctly: sacred space built for them, cold inside, with nothing asked in return.</p>
+    </div></details>
+    <div class="vignette"><p class="tag">Street-level question</p><p>What does class mean when you have everything except home?</p></div>
+  </div>
+</article>
+
+<section id="weave" class="wrap reveal">
+  <p class="sec-eyebrow">Between Realms</p>
+  <h2>The Weave: Where Class Crosses Borders<span class="uline"></span></h2>
+  <p class="lead">The Culture document's final sections show that the Realms do not become a melting pot. They remain divine answers standing next to other divine answers. This is where class moves across borders.</p>
+  <div class="feature">
+    <h3>Inter-Realm intimacy without inter-Realm fusion</h3>
+    <p>Inter-Realm sex is common. Inter-Realm marriage is strange. Inter-Realm children almost never happen. That means contact can be intimate without disrupting lineage. Bodies meet, but civilizations remain reproductively firewalled. This choice lets the Realms mingle erotically, commercially, and politically while preserving structural separateness.</p>
+  </div>
+  <div class="feature">
+    <h3>The economy of intimacy</h3>
+    <p>The economy of intimacy becomes one of the most invasive cross-Realm class systems. A Zephyrosian wife goes abroad, experiences the only secret she has ever held, and a gentle Oneironaut removes it like a splinter. She is grateful. That memory becomes a valuable coin in Tempora because it is authentically unperformed in a way Mavarran memories cannot be. This is perfect class horror: the most sheltered honesty becomes luxury product.</p>
+  </div>
+  <div class="feature">
+    <h3>The Symposium as theater of war</h3>
+    <p>The Symposium is the real theater of war because the unassailable powers cannot conquer each other directly. Conflict happens through leverage, trade, intelligence, debt, infiltration, and complicity. The people below pay the price in a currency they never agreed to spend.</p>
+  </div>
+  <div class="feature">
+    <h3>The Temple of Ishtar</h3>
+    <p>The Temple of Ishtar is the one jurisdiction that cuts across all of this. Each Realm's Ishtar temple reveals what that Realm cannot otherwise allow: in Ferridane, love apart from bloodline; in Zephyros, love not yet ready for truth; in Thalassor, love that cannot be priced; in Pyrthera, love beyond curriculum. In Tenebralis, the temple is the wound because Vex took it and turned the floor of love into a site of soul-murder.</p>
+    <p>Love is not sentimental in the corpus. It is the one force that class systems cannot fully metabolize. It is also the one force Mavarra cannot truly bottle.</p>
+  </div>
+</section>
+
+<section id="handling" class="wrap reveal">
+  <p class="sec-eyebrow">Assessment</p>
+  <h2>How Class Is Being Handled<span class="uline"></span></h2>
+  <p>The strongest thing the material does is make class <strong>embodied</strong>. Class is not an abstract spreadsheet. It is skin glow, fabric weight, brands, augmentations, masks, altitude, silence, access to networks, marriage eligibility, memory, body temperature, lineage records, and whether the air itself includes you.</p>
+  <p>The second strongest thing is that every Realm has a moral floor. Zephyros has peace and withheld truth. Pyrthera has communal wholeness and social exposure. Thalassor has beauty and purchased silence. Ferridane has mobility and industrial expendability. Tenebralis has freedom and predation. Luxenfall has survival and enforced division. Glacia has perfection and homelessness.</p>
+  <p>The third strongest thing is that the common person is not interchangeable. The documents include street details that make each class system livable as fiction: the Zephyrosian fig seller, the Pyrtheran mother hitting harder than her son, the Thalassori kitchen-table vow, the Ferridanian wife holding her husband in the doorway, the Mavarrans breathing unmasked in the dark, the Luxenfallen factions refusing easy restoration.</p>
+  <h3>Where the material is strongest</h3>
+  <p>Thalassor and Ferridane are currently the strongest class systems on the page. Thalassor is strongest in social economy, patronage, etiquette, marriage, and invisible purchase. Ferridane is strongest in labor, body hierarchy, military-industrial exploitation, lineage, and generational aspiration.</p>
+  <p>Tenebralis is the strongest in metaphysical class horror. Its verticality is clean, memorable, and brutal. Its economy of intimacy gives it a street-level engine that feels unique.</p>
+  <p>Luxenfall is morally strongest. It is the place where the class question becomes unavoidable because the victims are not merely poor or excluded; they are actively maintained as a divided, extractive population.</p>
+  <p>Zephyros is conceptually strong because its inequality is not violent but subtractive. The distinction between no shame and real absence is subtle and effective.</p>
+  <p>Pyrthera is emotionally strong because it gives the reader relief from cynicism. It shows a society where hierarchy can exist without becoming a permanent underclass. Its risk is not class cruelty but overconfidence in visible wholeness.</p>
+  <p>Glacia is mythically strong, but because it is fallen, it is less developed at the ordinary street level.</p>
+</section>
+
+<section id="further" class="wrap reveal">
+  <p class="sec-eyebrow">Development Notes</p>
+  <h2>Where the Street Could Be Pushed Further<span class="uline"></span></h2>
+  <p>Zephyros and Pyrthera would benefit most from a few more banal class frictions. Zephyros has the Mystic/Nihila divide, severance, and truth pressure, but it would benefit from seeing more ordinary Nihila life. What does a Nihila teenager feel two years after Ascension? What jobs are subtly unavailable? Does a Nihila farmer marry into Mystic families? Do Mystics overcompensate with kindness? Does kindness become humiliating?</p>
+  <p>Pyrthera has no permanent underclass, which is compelling, but the absence of class stratification could become too clean unless the story shows what happens to the chronically weak, disabled, sexually uninterested, conflict-avoidant, or spiritually imbalanced. The culture says imbalance is sickness rather than low birth. Who treats that sickness? Who fails treatment? Who leaves?</p>
+  <p>Tenebralis could use more ordinary maintenance life outside the glamorous horror. Who fixes the cataract channels? Who grows food? Who raises children before the rite? What does a mediocre Curator do for rent? The horror is strong, but banal detail would make the city even more real.</p>
+  <p>Luxenfall needs, when the plot reaches it, day-in-the-life density: a Glassen miner, a Chorus elder, a Grounded patrol, a diaspora laborer in Salacica whose host Realm does not count them. This is where Uriel's politics will need faces.</p>
+  <p>Glacia's pre-Fall daily life could also become more textured if needed. Right now, it reads sublimely, which is correct for a lost mythic realm, but the street-level Glacian before annihilation is still mostly implied.</p>
+</section>
+
+<section id="uriel" class="wrap reveal">
+  <p class="sec-eyebrow">The Human Doorway</p>
+  <h2>What This Means for Uriel's Ground-Level Advent<span class="uline"></span></h2>
+  <p class="lead">Uriel is going to see things the divine and aristocratic plotlines cannot easily see. He is the one who asks the rude material question. Who made the wine? Who paid for the gate? Who died in the mine? Who got silenced by peace? Who got called unwhole? Who got rewritten? Who got sold as bliss in a bottle?</p>
+  <div class="feature"><h3>In Zephyros</h3><p>He will see that gentleness can still exclude.</p></div>
+  <div class="feature"><h3>In Pyrthera</h3><p>He will respect honesty but ask what happens to those who cannot keep up with the feast.</p></div>
+  <div class="feature"><h3>In Thalassor</h3><p>He will see the fruit-crusher behind the vintage.</p></div>
+  <div class="feature"><h3>In Ferridane</h3><p>He will see the miner beneath the Galvaneum tower and the soldier behind the lineage hymn.</p></div>
+  <div class="feature"><h3>In Tenebralis</h3><p>He will see that the product has a person behind it.</p></div>
+  <div class="feature"><h3>In Luxenfall</h3><p>He will see the people everyone else turned into tense: past-tense victims, present-tense inconvenience.</p></div>
+  <div class="feature"><h3>In Glacia</h3><p>He may see the opposite of the usual class question: people with immense reverence and power who still lost the one thing class cannot replace.</p></div>
+  <p>That is the street's question to Heaven.</p>
+  <div class="pull"><q>The gods provide blessings; the societies turn those blessings into hierarchies; the hierarchies create the people at the bottom; and Uriel is the one who comes back from the lowest possible bottom asking why the people at the top still think their hands are clean.</q><cite>Final read</cite></div>
+</section>
+
+</main>
+
+<footer class="reveal">
+  <div class="bar"></div>
+  <p class="candle">Fate, Heaven,<br>and the street.</p>
+  <p class="ma">Advent Codex · Street-Level Culture Sweep
+    <small>The light is one. The colors are many. The people pay in different currencies.</small>
+  </p>
+</footer>
+
+<script>
+  (function(){
+    var els=document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(e){io.observe(e);});
+  })();
+  (function(){
+    var links=[].slice.call(document.querySelectorAll('nav.codex-nav a')),map={};
+    links.forEach(function(a){var id=a.getAttribute('href').slice(1),t=document.getElementById(id);if(t)map[id]={a:a,t:t};});
+    function s(){var pos=window.scrollY+140,cur=null;for(var id in map){if(map[id].t.offsetTop<=pos)cur=id;}
+      links.forEach(function(a){a.style.color='';a.style.borderBottomColor='transparent';});
+      if(cur&&map[cur]){map[cur].a.style.color='var(--gold)';map[cur].a.style.borderBottomColor='currentColor';}}
+    window.addEventListener('scroll',s,{passive:true});s();
+  })();
+</script>
+</body>
+</html>

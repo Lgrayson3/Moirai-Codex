@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Myth — Crex's Bounty · Advent of Ultima</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0a0a0c;
+  --bg-card: #121014;
+  --ferridane-core: #c9a84c;
+  --ferridane-bronze: #a07535;
+  --ferridane-border: #2e2510;
+  --ferridane-text: #e0cc8a;
+  --galvaneum: #b8b4a0;
+  --searing: #fbf6e6;
+  --ember-accent: #d8542f;
+  --ifris-accent: #9b4dca;
+  --ifris-light: #c98fe0;
+  --text-primary: #ddd4c4;
+  --text-secondary: #9a9183;
+  --text-dim: #645d52;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --measure: 38rem;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg-deep); color: var(--text-primary);
+  font-family: var(--font-body); font-size: 21px; font-weight: 400; line-height: 1.82;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+::selection { background: var(--ferridane-border); color: var(--ferridane-core); }
+body::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse at 22% 8%, rgba(201,168,76,0.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 82% 88%, rgba(155,77,202,0.05) 0%, transparent 48%),
+    radial-gradient(ellipse at 50% 50%, rgba(216,84,47,0.025) 0%, transparent 62%);
+}
+body::after {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.35;
+  background-image: repeating-linear-gradient(115deg, rgba(201,168,76,0.014) 0px, rgba(201,168,76,0.014) 1px, transparent 1px, transparent 6px);
+}
+.page { position: relative; z-index: 1; max-width: var(--measure); margin: 0 auto; padding: 0 1.6rem; }
+
+header.mast { text-align: center; padding: 6rem 0 2rem; }
+.mast .tag {
+  font-family: var(--font-display); font-size: 0.6rem; letter-spacing: 0.42em;
+  text-transform: uppercase; color: var(--ferridane-bronze); display: block; margin-bottom: 2rem;
+}
+.mast h1 {
+  font-family: var(--font-display); font-size: clamp(2.6rem, 9vw, 4.4rem);
+  font-weight: 700; letter-spacing: 0.07em; line-height: 1.06; margin-bottom: 0.9rem;
+  background: linear-gradient(180deg, var(--searing) 0%, var(--ferridane-core) 55%, var(--ferridane-bronze) 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-shadow: 0 0 80px rgba(201,168,76,0.18);
+}
+.mast .sub {
+  font-family: var(--font-display); font-size: 0.72rem; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--text-dim);
+}
+.rule {
+  display: flex; align-items: center; justify-content: center; gap: 0.9rem;
+  margin: 2.8rem auto; opacity: 0.55; max-width: 16rem;
+}
+.rule::before, .rule::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--ferridane-bronze), transparent);
+}
+.rule span {
+  width: 7px; height: 7px; background: var(--ferridane-core);
+  transform: rotate(45deg); flex-shrink: 0; box-shadow: 0 0 9px rgba(201,168,76,0.5);
+}
+.tale { padding-bottom: 2rem; }
+.tale p { margin: 0 0 1.5rem; }
+.tale p.cont { text-indent: 1.6em; }
+.tale p.first::first-letter {
+  font-family: var(--font-display); font-weight: 700; float: left;
+  font-size: 4.4rem; line-height: 0.72; padding: 0.36rem 0.5rem 0 0; color: var(--ferridane-core);
+}
+.tale em { color: var(--text-secondary); font-style: italic; }
+.tale strong { color: var(--ferridane-text); font-weight: 600; }
+.tale .said { color: var(--galvaneum); font-style: italic; }
+.tale .fire { color: var(--ifris-light); font-style: italic; }
+.canto {
+  font-family: var(--font-display); font-size: 0.62rem; letter-spacing: 0.32em;
+  text-transform: uppercase; color: var(--ferridane-bronze);
+  text-align: center; margin: 0.5rem 0 2.2rem;
+}
+.stand {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: clamp(1.35rem, 4vw, 2.1rem); letter-spacing: 0.06em; line-height: 1.25;
+  text-align: center; margin: 2.4rem 0; color: var(--ferridane-text);
+}
+.stand.fire {
+  background: linear-gradient(180deg, var(--ifris-light), var(--ifris-accent));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-shadow: 0 0 50px rgba(155,77,202,0.35); letter-spacing: 0.12em;
+}
+.stand.searing { color: var(--searing); }
+.coda {
+  text-align: center; font-style: italic; color: var(--text-secondary);
+  font-size: 1.15rem; line-height: 1.5; margin: 2.6rem auto; max-width: 30ch;
+}
+.footer {
+  text-align: center; padding: 3.5rem 0 4rem;
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim);
+}
+.footer span { color: var(--ferridane-bronze); }
+.fi { opacity: 0; transform: translateY(12px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.fi.vis { opacity: 1; transform: none; }
+@media (max-width: 640px) {
+  body { font-size: 19px; }
+  .mast { padding: 4rem 0 1.5rem; }
+  .tale p.first::first-letter { font-size: 3.6rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="mast">
+    <span class="tag">Advent of Ultima · A Myth of Ferridane</span>
+    <h1>Crex's Bounty</h1>
+    <div class="sub">The Red Wolf, the Free Bird, and the Eyes in the Dragon</div>
+  </header>
+
+  <div class="rule"><span></span></div>
+
+  <div class="tale">
+
+    <p class="canto">The Knock</p>
+
+    <p class="first">There was a man the whole cosmos knew the name of, and a man the whole cosmos could not find, and the story is what happened the day the first went looking for the second.</p>
+
+    <p class="cont">The first was the Red Wolf. Everyone knew him. Nobody did not. He was the one who had burned the Prime Court of Dystan, and for as long as it took the Gods to raise it again, no prayer in all the Realms had a court to be heard in or a road to be carried up. A grief laid on the whole of creation by a single hand. That was the name Uriel carried now, and he carried it the way he carried everything — without apology.</p>
+
+    <p class="cont">The second was Crex. Three hundred and fifty years he had spent in Hel, and he had come back a ghost in a shell of living steel, and in the half-century since he had built a life out of being found by no one. He did not hide out of fear. He hid because he had earned the right to want nothing from anyone, and he wanted it the way other men want air. The Advent reached him only because the one called Fiacre could read the thread of a life, and the thread does not lie. They came chasing a prophecy and a war against a God, and they had reasoned that a man who had fought a God and walked away would be worth more to them than any army.</p>
+
+    <p class="cont">When they found him he was not hiding at all. That was the first thing. He was somewhere he had chosen, somewhere comfortable, somewhere defended in ways they could not yet see, and he was doing precisely what he wanted, which that day was nothing. He had a cold drink waiting and a warm afternoon ahead of it, and he had paid three and a half centuries for the privilege of both. And he had let himself be found — for he knew exactly who was coming, and a man like Crex does not flee the most infamous being in the cosmos. He sits, and lets him arrive, and keeps a relic of a dead world on his hip where it can be seen.</p>
+
+    <p class="cont">So the Red Wolf laid eyes on him, and the first thing he saw was the pistol — a thing out of a world that no longer existed, worn for no reason but that its owner wished to wear it.</p>
+
+    <p class="cont"><span class="said">"Is that a fucking Glock?"</span></p>
+
+    <p class="cont">Crex did not reach for it. He had no need. The pistol was only the weapon they could see.</p>
+
+    <p class="cont">Then the Goddess of Peace made the Call, as she had come to do — the prophecy, the war, the worth of a man who had stood against a God and lived. She laid the whole shape of it before him in her own register, which was the register of one who believes that responsibility is a thing you are handed and do not set down. Crex heard her out. And then he gave his answer, and it was the answer of a man who has already survived one ending of the world and has decided not to attend the next.</p>
+
+    <p class="cont"><span class="said">"Why the hell would I do that?"</span></p>
+
+    <p class="cont">It was not a refusal of conscience. Crex was no one's idea of a righteous man, and he passed no judgment on the burning of the Court. It was arithmetic. He had run the young one's road to its end and found nothing waiting there. Black out every prayer in the universe a second time? Have his word with the Gods, and then what — back to the abyss, or barred from every tavern in every town until the end of days? There was no <em>after</em> in the Red Wolf's plan. There was only the burning, and past it the dark, or a life with no afternoons in it. And to a man who had bought his afternoons at the price Crex had paid, those two were one and the same.</p>
+
+    <div class="rule"><span></span></div>
+
+    <p class="canto">Sit Down, Kid</p>
+
+    <p class="first">The Red Wolf was furious, in the particular way of a man who has thrown his whole life at a God and meets another who fought one and only shrugs. He pressed. He pressed because to him a creature with the power to act, declining to spend it on the thing that was coming, was the seated life in its most unforgivable form. So Crex gave him the thing that was meant to end it. He gave him the story. Three hundred and fifty years, laid down like the closing of a case — for surely a man hearing what Hel truly was, told by one who had spent three and a half centuries inside it, would understand at last why Crex had earned the right never to go near any of it again.</p>
+
+    <p class="cont">And the Red Wolf looked at him, and said:</p>
+
+    <p class="stand">"...and?"</p>
+
+    <p class="cont">Two letters, against three and a half centuries. For Uriel had been to Hel and back as well, and carried his own behind his eyes, and was not moved. And here was the thing Crex could not answer, the thing that turned the whole day: he had <em>no idea</em> what the young one had endured. He could not. Not without his eyes. He sat across from a man who had said <em>and?</em> to three hundred and fifty years of torment, and he could not tell whether it was the bravado of a fool or whether this furious stranger truly carried something to match his own — for the instrument that would have let him see had been torn from his skull long ago and set into the eyes of a dragon.</p>
+
+    <p class="cont">The wise thing, the thing Crex himself would have respected, was for the young one to sit the hell down and have a drink. That was the offer beneath the refusal, and it was the most generous thing the Free Bird had to give. Not <em>join me.</em> Not <em>let me teach you.</em> Only this: <strong>Sit. Have a drink. You have already done damage enough to be a legend. You do not have to die proving it.</strong> It was everything three and a half centuries had taught him — that the power to act does not oblige a man to spend it, that to survive the abyss is to win the right to want a cold drink and a quiet afternoon, that to be free is to be free to not go fight the God today.</p>
+
+    <p class="cont">But the kid would not sit. Crex could see that much without any eyes at all. Here was a man so far gone in the fire that the drink would never take in him — a man with a death wish wearing the clothes of a mission. And you cannot talk a man out of a death wish. You can only give him something worth dying about.</p>
+
+    <p class="cont">So Crex made his wager, and it was no test of mettle and no recruitment. It was a shrug. <strong>Bring me my eyes,</strong> he said, <strong>and we will talk. They are set in the skull of the Diamond Gonlan, deep in the Atrium of Steelheart</strong> — behind the whole war-machine of the oldest Realm in the cosmos. He did not believe it could be done. He was counting on the opposite. And either way he won: should the Wolf die in the Atrium, Crex would never see him again and keep his afternoon; should by some madness he live, Crex would have back the eyes he had given up on a lifetime ago. It was almost a kind of affection, dressed as contempt. <em>You want to burn something this badly? There is a building. Go on. Go die about it.</em></p>
+
+    <p class="cont">And so the wager meant to end the conversation became the thing that would end Crex's solitude forever. For the Red Wolf did not hear <em>impossible.</em></p>
+
+    <p class="cont">He heard <strong>target.</strong></p>
+
+    <p class="cont">He named the Gonlan for what his people already knew it to be — Vorn's secret, fed by the slaving trade of Tenebralis, a thing already written on his list for after Luxenfall. The wager, he said, had only given him cause to move the day up. <em>Consider it done.</em> And at the threshold he paused, and said over his shoulder that when he brought the eyes, Crex would see at last what they were truly up against, and would understand why his little revenge was a sideshow. Then he was gone.</p>
+
+    <div class="rule"><span></span></div>
+
+    <p class="canto">Arson as Argument</p>
+
+    <p class="first">It was no campaign, and no theft. He did not creep, did not plan, did not gather a company nor seek a secret way. He flew — alone, on his own wings — to the most fortified place in the most powerful civilization in the nine Realms, the Atrium of Steelheart, the beating heart of the Felidae empire, ringed by nine hundred million souls and the finest war-machine ever forged. And he knocked on the front door.</p>
+
+    <p class="cont">He burned the shot out of the air as it was fired, and the walls beside it. He set the floor alight and watched the soldiers dance from it. He burned the weapons in their hands. Then he rose into the sky above the ruin, wreathed in <span class="fire">violet flame</span> and smoke, and gave them the only word he had for them.</p>
+
+    <p class="stand fire">BRING ME THE EYES.</p>
+
+    <p class="cont">And then, for good measure, he snapped his fingers, and every flame went out at once. The soldiers found their feet, and turned, and looked up, and saw the Red Wolf above them — grinning, or baring his teeth.</p>
+
+    <p class="stand">"Now."</p>
+
+    <p class="cont">He snapped again, and the world was fire. They tore the eyes from the dragon's skull with burning hands and carried them up to him through the smoke, and by the time the eyes reached him the Atrium was past saving — trillions of pounds of crystata gone to ash, the arsenals charred, more of the great hall catching by the breath. He took the eyes. He snapped once more. He flew away.</p>
+
+    <p class="cont">And the thing that broke the cosmos was not the ruin, nor the crystata, nor the dragon. It was that the whole might of Ferridane — the legions, the constructs, the Grid, the compressed arsenals, all of it — could not stop one man who had knocked on the front door. For the faith of that Realm rested on a single belief: that to behold their power was to know yourself already beaten. The Red Wolf beheld it. And he came anyway. Alone. And he won.</p>
+
+    <div class="rule"><span></span></div>
+
+    <p class="canto">The Curtain, Torn</p>
+
+    <p class="first">He had not burned a building. He had torn the curtain off the stage. For the Atrium had been a secret, and the dragon a deeper one, and deepest of all the thing they had hidden within it — the Godmind, the heresy, the attempt to forge a God out of stolen souls and borrowed Mavarran craft. The Steelborn himself had not known. The faithful had not known. And now it lay open, a smoking ruin shown across the whole Realm, and the questions began at once and could not be stopped. What had been kept in there. Why guarded so. Where the hoarded crystata had come from, while the border legions went hungry for it.</p>
+
+    <p class="cont">So the crack in the Realm became a chasm overnight. The faithful stood in shock, their civilization humbled by one man and the wreckage confessing a heresy at the very top of it. The Stonereaders, Brokkae's forgotten remnant, were the only ones unsurprised — they had said for centuries the Realm had lost its way, and here was the proof, burning. The southern wolves of Lykaion were vindicated in their every old resentment, for their soldiers had bled undersupplied while Steelheart fed a diamond dragon. The Axipitre of the high north fell into crisis, for the Godmind had been their own clan's sin — the building of the sacred in place of submission to it — carried to its blasphemous end, Crex's first crime echoed back at the scale of the cosmos. And out in the ungoverned lands the Free Birds raised their cups and toasted the Red Wolf's name in every tavern, for the system had been humbled by a single man who had not even been trying to break it. He had been running an errand. For Crex. And so in the eyes of the Outlands it was Crex who had sent the Wolf to burn Steelheart's deepest secret to the ground, and his legend turned immortal whether he wished it or not.</p>
+
+    <div class="rule"><span></span></div>
+
+    <p class="canto">The Eyes in the Dragon</p>
+
+    <p class="first">The Red Wolf dropped the eyes at Crex's feet — torn from the skull of a dragon in a burning hall by a man who had done it on a dare. Crex had wagered it could not be done. Crex had been wrong. And Crex was never wrong.</p>
+
+    <p class="cont">He took up the eyes. He set them in. And then he looked at the young one, truly looked, and the seeing-gift woke in him, and he did not merely glimpse the Red Wolf's memory. He <em>lived</em> it.</p>
+
+    <p class="cont">The dying without end in the Sea of Wrath. The ash of the Prime Court on the tongue. The face of Raiwata, not as a word but as an enemy known and intimate. The armies massing in the Hel that is now, the staging-ground for the end of all things. The Battle of the Second Sun. Luxenfall. And the whole terrible measure of an apocalypse that is not coming but is already here — already at the door.</p>
+
+    <p class="cont">And Crex understood that his three hundred and fifty years had been a <strong>sentence passed upon one man.</strong> The Red Wolf's Hel had been a <strong>preview of the damnation that waits for everyone,</strong> should Raiwata win. The two letters the young one had answered him with — <em>and?</em> — had been the truest words ever spoken to him.</p>
+
+    <p class="cont">So for the first time in a life built on needing no one, Crex saw a thing larger than himself. Not larger in goodness. Not larger in wisdom. Larger in the cold accounting he had always trusted above all else — a problem that even he, with all his copies and all his weapons and all his stolen genius, could not solve alone. And his whole self had been built on solving everything alone.</p>
+
+    <p class="coda fi">What he wanted now, with eyes at last to see by, was to live. And to live would cost him the one thing he had spent his every year avoiding.</p>
+
+    <p class="stand searing">There is no alone to be left to.</p>
+
+    <p class="cont">He did not take up the Advent's cause. He took up its forge. He became their armorer not because he was moved, and not because he was asked, but because he had finally seen the enemy, and the enemy was too large to turn his back on. The cold drink would keep. The war was already at the door — and the only man in all the Realms who could arm the resistance against it was the one who had wanted, more than anything, to be left alone.</p>
+
+  </div>
+
+  <div class="footer">
+    Advent of Ultima &nbsp;·&nbsp; <span>A Myth of Ferridane</span> &nbsp;·&nbsp; The Red Wolf &amp; The Free Bird
+  </div>
+
+</div>
+
+<script>
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Oubliette — Uriel · Advent of Ultima, Book Two</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0a0807;
+  --bg-card: #131010;
+  --bg-card-hi: #1a1614;
+  --bg-ash: #15100d;
+
+  --ember-dark: #4f1c14;
+  --ember-core: #b23a2a;
+  --ember-accent: #d8542f;
+  --ember-glow: #f0a878;
+
+  --ifris-core: #7e2da0;
+  --ifris-accent: #9b4dca;
+  --ifris-light: #c98fe0;
+
+  --ash: #6f6a66;
+  --ash-pale: #9a948d;
+  --gold-vein: #c4a052;
+
+  --text-primary: #d6cabd;
+  --text-secondary: #968878;
+  --text-dim: #645750;
+  --border-subtle: #241b15;
+  --border-mid: #382a1f;
+
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --max-width: 860px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 19px;
+  line-height: 1.82;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: #3a221a; color: var(--ember-glow); }
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 50% 40% at 50% 0%, rgba(178,58,42,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 50% 100%, rgba(216,84,47,0.07) 0%, transparent 55%);
+  pointer-events: none; z-index: 0;
+}
+
+.wrap { position: relative; z-index: 1; max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem; }
+
+/* descent rail — a thin line down the page that fades ember→ash→ember */
+.rail {
+  position: fixed; left: 50%; top: 0; bottom: 0; width: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(to bottom,
+    var(--ember-accent) 0%, var(--ember-dark) 14%,
+    var(--ash) 42%, #2a2622 64%, var(--ash) 80%,
+    var(--ember-core) 92%, var(--ember-accent) 100%);
+  opacity: 0.16; z-index: 0; pointer-events: none;
+}
+
+.divider {
+  display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+  margin: 3.6rem 0; opacity: 0.55;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--border-mid), transparent);
+}
+.divider span {
+  width: 6px; height: 6px; background: var(--ember-accent);
+  transform: rotate(45deg); flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(216,84,47,0.5);
+}
+.divider.ash span { background: var(--ash); box-shadow: none; }
+
+/* ---- HEADER ---- */
+.header { text-align: center; padding: 5.5rem 0 1rem; }
+.header .tag {
+  font-family: var(--font-display); font-size: 0.58rem;
+  letter-spacing: 0.38em; text-transform: uppercase;
+  color: var(--text-dim); display: block; margin-bottom: 1.8rem;
+}
+.header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 9vw, 4.4rem);
+  font-weight: 700; letter-spacing: 0.1em; line-height: 1.05;
+  color: var(--ember-glow);
+  text-shadow: 0 0 70px rgba(216,84,47,0.3);
+  margin-bottom: 0.6rem;
+}
+.header .sub {
+  font-family: var(--font-display); font-size: 0.66rem;
+  letter-spacing: 0.24em; text-transform: uppercase; color: var(--text-secondary);
+}
+
+/* ---- TWO SPEAKERS frame ---- */
+.frame {
+  display: grid; grid-template-columns: 1fr auto 1fr; gap: 0;
+  align-items: stretch; margin-top: 2.6rem;
+}
+.speaker {
+  padding: 1.8rem 1.6rem; background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+}
+.speaker.uriel { border-top: 2px solid var(--ember-accent); text-align: right; }
+.speaker.wolf { border-top: 2px solid var(--ash); text-align: left; }
+.speaker .who {
+  font-family: var(--font-display); font-size: 0.56rem;
+  letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 0.7rem;
+}
+.speaker.uriel .who { color: var(--ember-accent); }
+.speaker.wolf .who { color: var(--ash-pale); }
+.speaker .line {
+  font-family: var(--font-display); font-size: 1.05rem; font-weight: 500;
+  line-height: 1.4; margin-bottom: 0.6rem;
+}
+.speaker.uriel .line { color: var(--ember-glow); }
+.speaker.wolf .line { color: var(--text-primary); }
+.speaker .gloss { font-style: italic; font-size: 0.86rem; color: var(--text-dim); line-height: 1.6; }
+.frame-mid {
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 1rem; background: var(--bg-deep);
+}
+.frame-mid span {
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim);
+  writing-mode: vertical-rl; text-orientation: mixed;
+}
+
+.lede {
+  margin-top: 2.2rem; font-size: 1.04rem; line-height: 1.8;
+  color: var(--text-secondary);
+}
+.lede p { margin-bottom: 1.1rem; }
+.lede p:last-child { margin-bottom: 0; }
+.lede strong { color: var(--ember-glow); font-weight: 600; }
+.lede em { color: var(--text-primary); font-style: italic; }
+
+/* ---- SECTION TITLES ---- */
+.sec-num {
+  font-family: var(--font-display); font-size: 0.54rem;
+  letter-spacing: 0.34em; text-transform: uppercase;
+  color: var(--ember-accent); display: block; margin-bottom: 0.4rem;
+}
+.sec-title {
+  font-family: var(--font-display); font-size: clamp(1.15rem, 3vw, 1.5rem);
+  font-weight: 600; color: var(--ember-glow); letter-spacing: 0.05em;
+  padding-bottom: 0.7rem; border-bottom: 1px solid var(--border-mid);
+  margin-bottom: 1.3rem;
+}
+.prose p { margin-bottom: 1.15rem; font-size: 1rem; }
+.prose p:last-child { margin-bottom: 0; }
+.prose strong { color: var(--ember-glow); font-weight: 600; }
+.prose em { color: var(--text-primary); font-style: italic; }
+.prose .ash-word { color: var(--ash-pale); font-style: italic; }
+
+/* ---- COUNT NOTE ---- */
+.countnote {
+  background: var(--bg-ash); border: 1px solid var(--border-mid);
+  border-left: 3px solid var(--ash); border-radius: 2px;
+  padding: 1.5rem 1.8rem; margin: 1.4rem 0;
+}
+.countnote p { font-size: 0.95rem; line-height: 1.74; color: var(--text-secondary); }
+.countnote p strong { color: var(--ash-pale); }
+
+/* ---- WINDOWS (the thirteen) ---- */
+.windows { margin-top: 0.5rem; }
+.window {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--wc, var(--ember-dark));
+  border-radius: 2px;
+  padding: 1.5rem 1.7rem;
+  margin-bottom: 0.55rem;
+}
+.window.gap-before { margin-top: 2.4rem; }
+.win-head { display: flex; align-items: baseline; gap: 0.9rem; flex-wrap: wrap; margin-bottom: 0.2rem; }
+.win-idx {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 1.5rem; line-height: 1; color: var(--wc, var(--ember-accent));
+  flex-shrink: 0;
+}
+.win-title {
+  font-family: var(--font-display); font-size: 0.98rem; font-weight: 600;
+  color: var(--text-primary); letter-spacing: 0.02em;
+}
+.win-circle {
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--text-dim); border: 1px solid var(--border-mid);
+  padding: 0.2rem 0.5rem; border-radius: 2px; white-space: nowrap;
+}
+.win-body { font-size: 0.97rem; line-height: 1.74; color: var(--text-secondary); margin-top: 0.7rem; }
+.win-body p { margin-bottom: 0.7rem; }
+.win-body p:last-child { margin-bottom: 0; }
+.win-body strong { color: var(--text-primary); font-weight: 600; }
+.win-body em { color: var(--text-primary); font-style: italic; }
+
+/* ledger row */
+.ledger {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  margin-top: 0.9rem; border: 1px solid var(--border-mid); border-radius: 2px;
+  overflow: hidden;
+}
+.ledger div { padding: 0.7rem 0.95rem; }
+.ledger .lost { background: rgba(20,15,12,0.6); border-right: 1px solid var(--border-mid); }
+.ledger .gained { background: rgba(18,14,12,0.4); }
+.ledger .lbl {
+  font-family: var(--font-display); font-size: 0.46rem;
+  letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 0.25rem;
+}
+.ledger .lost .lbl { color: var(--ember-accent); }
+.ledger .gained .lbl { color: var(--ash-pale); }
+.ledger .val { font-size: 0.88rem; line-height: 1.55; color: var(--text-secondary); font-style: italic; }
+
+/* circle colour tiers — ember at top, ashen through the middle, ember-cold at the burn */
+.w-sea     { --wc: #b23a2a; }
+.w-wilds   { --wc: #9a4536; }
+.w-halls   { --wc: #7d5a3e; }
+.w-wastes  { --wc: #5a5550; }
+.w-wastes2 { --wc: #6f6a66; }
+.w-mire    { --wc: #4a4e52; }
+.w-burn    { --wc: #d8542f; }
+
+/* the burn window — set apart */
+.window.burn {
+  background: linear-gradient(160deg, #1a1210 0%, #130f0d 70%);
+  border: 1px solid var(--ember-dark);
+  border-left: 3px solid var(--ember-accent);
+}
+.window.burn .win-body strong { color: var(--ember-glow); }
+
+/* ---- EMERGENCE ---- */
+.emergence {
+  background: var(--bg-ash); border: 1px solid var(--border-mid);
+  border-radius: 2px; padding: 2rem 2rem;
+}
+.emergence .prose p strong { color: var(--ember-glow); }
+
+/* the charge — the line, rendered loud */
+.charge {
+  text-align: center; margin: 2.6rem 0 1rem;
+}
+.charge .pre {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.24em; text-transform: uppercase; color: var(--text-dim);
+  margin-bottom: 1rem;
+}
+.charge .cry {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 6vw, 3rem); font-weight: 700;
+  letter-spacing: 0.04em; line-height: 1.15;
+  color: var(--ember-glow);
+  text-shadow: 0 0 50px rgba(216,84,47,0.5), 0 0 14px rgba(216,84,47,0.4);
+}
+.charge .post {
+  margin-top: 1.1rem; font-style: italic; font-size: 0.95rem;
+  color: var(--text-secondary); max-width: 560px; margin-left: auto; margin-right: auto;
+}
+
+/* ---- WHILE HE SUFFERS (the other threads) ---- */
+.meanwhile {
+  border: 1px solid var(--border-subtle); border-radius: 2px;
+  background: var(--bg-card); padding: 1.8rem;
+}
+.meanwhile .mw-intro {
+  font-style: italic; font-size: 0.97rem; color: var(--text-secondary);
+  margin-bottom: 1.2rem; line-height: 1.7;
+}
+.mw-row {
+  display: flex; gap: 1rem; padding: 0.85rem 0;
+  border-top: 1px solid var(--border-subtle);
+}
+.mw-row:first-of-type { border-top: none; }
+.mw-who {
+  font-family: var(--font-display); font-size: 0.62rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ifris-light);
+  width: 7.5rem; flex-shrink: 0; padding-top: 0.15rem;
+}
+.mw-what { font-size: 0.93rem; line-height: 1.66; color: var(--text-secondary); }
+.mw-what em { color: var(--text-primary); font-style: italic; }
+
+/* ---- CONTINUITY ---- */
+.cont { padding: 1rem 0; border-bottom: 1px solid var(--border-subtle); }
+.cont:last-child { border-bottom: none; }
+.cont-n {
+  font-family: var(--font-display); font-size: 0.52rem;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-vein);
+  margin-bottom: 0.3rem;
+}
+.cont p { font-size: 0.95rem; line-height: 1.7; color: var(--text-secondary); }
+.cont p strong { color: var(--ember-glow); font-weight: 600; }
+
+.callout {
+  background: #1a1210; border: 1px solid var(--ember-dark);
+  border-left: 3px solid var(--ember-accent);
+  padding: 1.7rem 2rem; margin-top: 1.3rem;
+}
+.callout p { font-size: 1rem; line-height: 1.78; }
+.callout p strong { color: var(--ember-glow); }
+.callout p em { color: var(--text-primary); font-style: italic; }
+
+.footer {
+  text-align: center; padding: 3rem 0 2.6rem;
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim);
+}
+.footer span { color: var(--ember-accent); }
+
+.fade { opacity: 0; transform: translateY(13px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade.vis { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 660px) {
+  body { font-size: 17px; }
+  .rail { display: none; }
+  .frame { grid-template-columns: 1fr; }
+  .frame-mid { padding: 0.6rem 0; }
+  .frame-mid span { writing-mode: horizontal-tb; }
+  .speaker.uriel, .speaker.wolf { text-align: left; }
+  .ledger { grid-template-columns: 1fr; }
+  .ledger .lost { border-right: none; border-bottom: 1px solid var(--border-mid); }
+  .mw-row { flex-direction: column; gap: 0.2rem; }
+  .mw-who { width: auto; }
+  .header { padding: 3.4rem 0 1rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="rail"></div>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header class="header fade">
+    <span class="tag">Advent of Ultima · Book Two · The Uriel Thread</span>
+    <h1>The Oubliette</h1>
+    <div class="sub">Thirteen Windows Across an Uncountable Descent</div>
+  </header>
+
+  <!-- TWO SPEAKERS -->
+  <section class="fade">
+    <div class="frame">
+      <div class="speaker uriel">
+        <div class="who">Spoken by Uriel</div>
+        <div class="line">"They were right. I fucked it up. I always do."</div>
+        <div class="gloss">Point Zero. Nineteen years old. Dying. He still believes there was a right thing and he missed it — which means he still believes the right thing was real.</div>
+      </div>
+      <div class="frame-mid"><span>The Ledger</span></div>
+      <div class="speaker wolf">
+        <div class="who">Spoken by the Red Wolf</div>
+        <div class="line">"I died for nothing."</div>
+        <div class="gloss">The ashes of Terrae. After thousands of deaths. Not grief — a charge, flung at the sky with the whole fury of the fire that tore the hole. The worth has been burned out of the sentence. A different mouth says it.</div>
+      </div>
+    </div>
+
+    <div class="lede">
+      <p>This is the document of the distance between those two sentences. It is not a distance traveled. It is a distance <em>excavated</em> — a boy standing still while the abyss digs out everything beneath him, transaction by transaction, until there is no ground left and the thing that remains gives itself a new name.</p>
+      <p><strong>Uriel does not become the Red Wolf.</strong> Uriel is the price. The Red Wolf is the thing the price purchased. Hel is the counterparty. Every circle takes a faculty that made him human and hands back, in exchange, a power that makes him terrible — and he agrees to each trade, every time, because the thing being taken is the thing currently being used to destroy him. That is the Faustian structure: not one signing, but thousands, each one survivable, each one his.</p>
+      <p>The thirteen windows below are not the attempts. The attempts number in the <strong>thousands upon thousands</strong> — tens of thousands of deaths, each one returning him not to where he fell but to the Sea of Wrath, because the Sea is where the cosmos ruled he belongs. The thirteen are only the windows the camera stops at: the deaths that <em>cost</em> something. Everything between them is real, and unwritten, and the reader is meant to feel its uncountable weight in the silence the page leaves around each stop.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- THE OUBLIETTE -->
+  <section class="fade">
+    <span class="sec-num">The Setting</span>
+    <h2 class="sec-title">An Oubliette, Not a Trial</h2>
+    <div class="prose">
+      <p>Hel is not an ordeal with a structure. It was not built to be passed. It is an <em>oubliette</em> — a pit a soul is dropped into and forgotten, with no door, no sentence read aloud, no mechanism of release, because release was never part of the design. The Sea of Wrath is not the first circle of a climb. It is the bottom of the hole, and it is the whole intended experience: fight, die, wake in the Sea, fight, die, wake in the Sea, eternally, by divine verdict, world without end.</p>
+      <p>So the climb is not progress <em>through</em> Hel. There is no through. The climb is a soul doing the one thing the architecture has no provision for — and the walls of an oubliette are smooth and infinite, and the only handhold is a being's own humanity, and so he climbs by burning that humanity for fuel. Every failed attempt ends in the Sea because death in Hel does not return you to where you fell. It returns you to your <em>sentence</em>. Thousands of times, the cosmos drags him back to the floor and says, with full divine authority: <em>here. this is what you are. this is what you earned. stay.</em></p>
+      <p>And thousands of times he does not stay. The thread that follows is the cost of that refusal.</p>
+    </div>
+    <div class="countnote">
+      <p><strong>On the uncountable.</strong> Between any two windows below, he died hundreds more times — uncounted, unwritten, real. The page shows thirteen so the reader can bear to look; the reader is meant to multiply, and the multiplication is the horror. Five names once stood in for a number that does not end. Thirteen windows do the same here. The thirteen are not the descent. They are the descent made just bearable enough to witness.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- THE BOY WHO DIED -->
+  <section class="fade">
+    <span class="sec-num">The Window Opens</span>
+    <h2 class="sec-title">The Boy Who Woke in the Sea</h2>
+    <div class="prose">
+      <p>He was nineteen. He punched a god to save a world, and he died doing it, and the last thought he carried down was that he had failed. Then he woke — and no one wakes. He woke anyway, face down in a war with no shore, and the first thing the Sea of Wrath taught him it taught for free: there had been no judgment. No scale. No weighing of his deeds. He had simply been thrown into the hole. <strong>The gods did this. No one warned him.</strong> That was the whole of the lesson, and it became the root of everything after.</p>
+      <p>He went into the abyss carrying the soft verdict — <em>I fucked it up</em> — which is, underneath, a kind of faith: the belief that a right outcome was possible and he personally missed it. The thread below is the machine that grinds that faith down. Watch the sentence change owners.</p>
+    </div>
+  </section>
+
+  <!-- THE THIRTEEN WINDOWS -->
+  <section class="windows fade">
+
+    <!-- I-IV: THE SEA -->
+    <div class="window w-sea">
+      <div class="win-head">
+        <span class="win-idx">I</span>
+        <span class="win-title">The First Death</span>
+        <span class="win-circle">Sea of Wrath</span>
+      </div>
+      <div class="win-body">
+        <p>The first time he is killed in the Sea, he dies the way a person dies — appalled, resisting, a boy who has never been nothing. He wakes again in the same water. He learns, in this window, the rule that governs everything: there is no out, there is only the Sea, and the Sea does not end. Not a loss yet. The window where he understands the shape of forever.</p>
+      </div>
+    </div>
+
+    <div class="window w-sea">
+      <div class="win-head">
+        <span class="win-idx">II</span>
+        <span class="win-title">The Pause He Could Not Afford</span>
+        <span class="win-circle">Sea of Wrath</span>
+      </div>
+      <div class="win-body">
+        <p>In the Sea, the small human stutter before a strike — the flinch that knows the thing in front of you is alive — is a door, and the Sea comes through it. He decides to stop pausing. He decides it. And the decision works: he survives longer, kills cleaner.</p>
+        <div class="ledger">
+          <div class="lost"><div class="lbl">He loses</div><div class="val">The flinch. The body's recognition that the other is a person.</div></div>
+          <div class="gained"><div class="lbl">He gains</div><div class="val">The strike that does not hesitate.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="window w-sea">
+      <div class="win-head">
+        <span class="win-idx">III</span>
+        <span class="win-title">The Thing Monsters Avoid</span>
+        <span class="win-circle">Sea of Wrath · across thousands</span>
+      </div>
+      <div class="win-body">
+        <p>This window is not one death. It is the long uncountable middle of the Sea collapsed into a single sight: thousands of deaths, tens of thousands of kills, until the things in the Sea — things that had never feared anything — begin to give him room. He has become the kind of thing that frightens monsters. He felt the fear in their eyes the first time, and some part of him welcomed it, and that welcome is the tell.</p>
+        <div class="ledger">
+          <div class="lost"><div class="lbl">He loses</div><div class="val">The memory of who he was before the water. The boy thins to an outline.</div></div>
+          <div class="gained"><div class="lbl">He gains</div><div class="val">Dread. A presence the abyss itself flinches from.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- V: THE WILDS -->
+    <div class="window w-wilds gap-before">
+      <div class="win-head">
+        <span class="win-idx">IV</span>
+        <span class="win-title">The Mask of Tenderness</span>
+        <span class="win-circle">Bleeding Wilds of Lust</span>
+      </div>
+      <div class="win-body">
+        <p>He climbs out of the Sea at last and the Wilds take him. The Wilds use tenderness for bait — every soft thing there ends in the mouth of something. So he kills the softness in himself, because a man who cannot be reached gently cannot be caught by it. And then, because the abyss never lets a thing be set down without handing over its weapon, he finds he can <em>use</em> it: read the rhythm of false gentleness, turn it outward, bait his own hooks. He dies in the Wilds. He wakes in the Sea.</p>
+        <div class="ledger">
+          <div class="lost"><div class="lbl">He loses</div><div class="val">The capacity to be touched. Intimacy as something he can receive.</div></div>
+          <div class="gained"><div class="lbl">He gains</div><div class="val">Intimacy as a knife — closeness he can weaponize against another.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VI: THE HALLS -->
+    <div class="window w-halls gap-before">
+      <div class="win-head">
+        <span class="win-idx">V</span>
+        <span class="win-title">The Crown He Refused</span>
+        <span class="win-circle">Broken Halls of Pride</span>
+      </div>
+      <div class="win-body">
+        <p>The Halls of Pride offer him a crown. <em>You have suffered enough. Be a king. Be remembered well.</em> And he refuses — and this matters, this is the one trial he passes clean, the proof that something in him still will not be bought. But the Halls charge him for the passing. To want to live more than he wants the crown, he must stop wanting to be remembered <em>at all</em> — and that is not a small coin. That is the boy from Bed-Stuy who wanted it to <em>mean something</em> that he was good.</p>
+        <div class="ledger">
+          <div class="lost"><div class="lbl">He loses</div><div class="val">The wish to be remembered well. The reason he ever wanted to be a hero.</div></div>
+          <div class="gained"><div class="lbl">He gains</div><div class="val">Immunity to glory. Nothing can be dangled in front of him again.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VII: WASTES, FIRST -->
+    <div class="window w-wastes gap-before">
+      <div class="win-head">
+        <span class="win-idx">VI</span>
+        <span class="win-title">Her Face, the First Time</span>
+        <span class="win-circle">Ashen Wastes of Betrayal</span>
+      </div>
+      <div class="win-body">
+        <p>He reaches the Wastes, and the Wastes wear the faces of everyone a soul has loved. He has only one face left to lose. Hers. And he cannot raise his hand against it. He does not fall so much as <em>stop</em> — the way a man stops at the edge of a thing he will not do — and the Wastes take him apart while he stands there, and he wakes in the Sea.</p>
+        <p>This window costs him nothing yet. It does something worse: it shows him there is still a price he will not pay, and names it. <strong>Her.</strong> Everything below could be traded. She could not. Not yet.</p>
+      </div>
+    </div>
+
+    <!-- VIII-X: WASTES, THE LONG ONE -->
+    <div class="window w-wastes2 gap-before">
+      <div class="win-head">
+        <span class="win-idx">VII</span>
+        <span class="win-title">The Long Climb</span>
+        <span class="win-circle">Sea · Wilds · Halls · across thousands</span>
+      </div>
+      <div class="win-body">
+        <p>The window onto the attempt that takes the rest of him. He comes up through the Sea and the Wilds and the Halls — faster now, harder, a thing the lower circles can no longer teach anything. The uncountable deaths are behind this single frame. He is climbing toward the Wastes a second time, and he knows what waits at the top, and he climbs anyway. That knowing-and-climbing-anyway is the decision the whole tragedy turns on, and it is made here, in the white space, where it cannot be pointed at.</p>
+      </div>
+    </div>
+
+    <div class="window w-wastes2">
+      <div class="win-head">
+        <span class="win-idx">VIII</span>
+        <span class="win-title">What He Did to Her Face</span>
+        <span class="win-circle">Ashen Wastes of Betrayal</span>
+      </div>
+      <div class="win-body">
+        <p>The second time in the Wastes, he does not stop. The only way up runs through the thing wearing Aya — her face, her voice, the fragment of her soul that has been fused to his since the night he died — and he raises his hands against it, and he does not stop, hour after hour, an attempt-long. He cuts his way through her. He kills the last of her that the abyss could not take from him, because killing her was the only door, and he had decided — somewhere he will never afterward be able to find — that the door was worth it.</p>
+        <p class="prose" style="margin-top:0.4rem;"><em>The page does not grieve here. He cannot, so it does not. It is the quietest window in the document. The reader carries the grief he no longer can.</em></p>
+        <div class="ledger">
+          <div class="lost"><div class="lbl">He loses</div><div class="val">Aya. The last person he had. The only aperture love still had into him.</div></div>
+          <div class="gained"><div class="lbl">He gains</div><div class="val">Nothing yet. This is the pure debit. The credit comes one window on.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="window w-wastes2">
+      <div class="win-head">
+        <span class="win-idx">IX</span>
+        <span class="win-title">The Names</span>
+        <span class="win-circle">Ashen Wastes of Betrayal</span>
+      </div>
+      <div class="win-body">
+        <p>At the top of the Wastes he reaches for her name, to carry it the last distance — and the word is not there. He reaches for his own, and the only voices that have said <em>Uriel</em> in all those years were the things that wanted him dead, and a name said only by torturers stops being a name and becomes a wound, and then it stops being anything at all. He comes up out of the Wastes carrying nothing he walked in with. Not the girl. Not the boy who loved her. Not the name the boy was called.</p>
+        <p>And a thing with no name still has to be something. In the ash at the top of the Wastes he reaches for one — not given by anyone who loved him, they are gone; not a name the abyss can ever turn against him, because it is born <em>here</em>, on the far side of the worst of it. He takes <strong>the Red Wolf.</strong> He does not receive it. He makes it, in the dark, out of what is left.</p>
+        <div class="ledger">
+          <div class="lost"><div class="lbl">He loses</div><div class="val">Her name. His own name. <span class="ash-word">Uriel</span> goes cold here — for the cosmos, and for the page.</div></div>
+          <div class="gained"><div class="lbl">He gains</div><div class="val">The Red Wolf. A name nothing can take, because he forged it himself.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- XI: THE MIRE -->
+    <div class="window w-mire gap-before">
+      <div class="win-head">
+        <span class="win-idx">X</span>
+        <span class="win-title">The Drowning, Underfoot</span>
+        <span class="win-circle">Mire of Cowardice</span>
+      </div>
+      <div class="win-body">
+        <p>He reaches the Mire — the swamp of cowards, of the drowning, of the begging. The Mire works on the part of a man that can still look at a coward and see a frightened person. He no longer has that part; he spent it climbing. So the Mire does not break him. The Mire is simply the first place his finishedness becomes <em>visible</em> — and what it shows is a thing walking across the drowning without looking down, because the drowning are not people to it. They are footing. He crosses the Mire like flagstones.</p>
+        <div class="ledger">
+          <div class="lost"><div class="lbl">He loses</div><div class="val">The sight of others as real. The boy who could not walk past suffering.</div></div>
+          <div class="gained"><div class="lbl">He gains</div><div class="val">The use of anyone as a stepping-stone toward where he is going.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- XII: THE VERDICT, ONE LAST TIME -->
+    <div class="window w-mire gap-before">
+      <div class="win-head">
+        <span class="win-idx">XI</span>
+        <span class="win-title">Insufficient</span>
+        <span class="win-circle">Mire of Cowardice → Sea of Wrath</span>
+      </div>
+      <div class="win-body">
+        <p>He reaches the top of the Mire. The surface is right there. He has paid <em>everything</em> — the flinch, the softness, the wish to be good, the sight of others as real, Aya, both names, the whole of the boy who fell into the water. And the Mire throws him down. Back to the Sea. <em>Here. This is what you are. Stay.</em></p>
+        <p>The same verdict, delivered one more time, to a thing that has just rendered the full and total price — and the cosmos looks at the complete payment and answers: <strong>insufficient.</strong> This is the window the rampage is born in. Not rage at the Mire. The specific, annihilating fury of a being taught, by the universe itself, that no price will ever be enough — because the sentence was never about deeds. It was only ever about keeping him in the hole.</p>
+      </div>
+    </div>
+
+    <!-- XIII: THE BURN -->
+    <div class="window burn gap-before">
+      <div class="win-head">
+        <span class="win-idx">XII</span>
+        <span class="win-title">The One That Did Not End in the Sea</span>
+        <span class="win-circle">All Nine Circles · the threshold</span>
+      </div>
+      <div class="win-body">
+        <p>It is not the thirteenth attempt. It is the attempt — after thousands upon thousands — that does not send him back. He wakes on the floor of the oubliette with nothing left for any circle to charge, because the bargains are over: there is no Uriel left to extract a price from. So he reaches down into the only thing the abyss has not yet taken — the infernal fire itself — and it answers, because it recognizes the thing holding out its hand. <strong>It is not a bargain offered from outside. It is the abyss recognizing its own.</strong></p>
+        <p>And he does not climb. He <em>burns</em> — up through the Mire, the Wastes, the Halls, the Wilds, the Sea, every circle that unmade him, and not one can hold him now. Hel is built to the scale of souls and devils, and it holds devils by the thousand. It is not built to the scale of a being that has crossed into a different order of magnitude — the same threshold Raiwata crossed at Point Zero, climbed to instead of granted. He burns a hole straight up through the floor of Hel and through the crust of the Earth.</p>
+        <div class="win-body" style="margin-top:0.5rem;">
+          <strong>The thirteenth window is the only one that is almost easy.</strong> The reader has witnessed twelve agonizing failures; this one is smooth — and the smoothness is the verdict. He does not overcome Hel. He passes through it freely, because there is no longer enough of Uriel left in him for Hel to hold.
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="divider ash"><span></span></div>
+
+  <!-- WHILE HE SUFFERS -->
+  <section class="fade">
+    <span class="sec-num">Intercut · Book Two</span>
+    <h2 class="sec-title">While He Suffers, They Build Lives</h2>
+    <div class="meanwhile">
+      <p class="mw-intro">Three years pass in the living Realms while eighteen pass in the abyss. Book Two cuts away from the oubliette into a world knitting itself back together — and every other thread is a person settling, building, finding their footing. They are not relief. They are the dramatic-irony engine: the world heals while Uriel is unmade beneath it, and the reader holds both. The dilation lives in the white space between his windows — weeks in their threads, years in his.</p>
+      <div class="mw-row">
+        <div class="mw-who">Alciel</div>
+        <div class="mw-what">In Zephyros — the Venturae Ultima revealed. The witness becomes what twenty years of formation prepared him to be. Later, a tenuous pact: he joins forces with Anberlyn and Rukii against Raiwata.</div>
+      </div>
+      <div class="mw-row">
+        <div class="mw-who">Fiacre</div>
+        <div class="mw-what">In Luxenfall — the Lex Aeterna restored. Decency comes back online, principle by principle, in the corpse of a realm. The work she will not call vindication.</div>
+      </div>
+      <div class="mw-row">
+        <div class="mw-who">Aya</div>
+        <div class="mw-what">In Salacica — the quiet life of a dressmaker and seamstress. Her hands busy with cloth. <em>She does not know a fragment of her soul is in the abyss, carrying her face through the Ashen Wastes.</em> She lives. He will not learn it.</div>
+      </div>
+      <div class="mw-row">
+        <div class="mw-who">Cloud</div>
+        <div class="mw-what">Interludes — dressed down by his father, and given an ultimatum. The golden prince forced toward a reckoning, at home, with a future still in front of him.</div>
+      </div>
+      <div class="mw-row">
+        <div class="mw-who">Anberlyn &amp; Rukii</div>
+        <div class="mw-what">A journey of life after the Bloodtide and Point Zero — the road that leads them to the pact with Alciel against Raiwata.</div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:1.3rem;">
+      <p>The cruelty of the intercut is total. Aya sews a quiet life in Salacica — and the reader knows what is carrying her face through the Wastes, and knows she cannot know, and knows Uriel is about to climb out believing she is among the dead. <strong>He saved them. Every thread in this book is a life that exists because a nineteen-year-old went first and used the forbidden thing. And when he returns, he does not know it.</strong> He will believe he died for nothing. The reader will hold the proof that he did not, and will never be able to hand it to him.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- EMERGENCE -->
+  <section class="fade">
+    <span class="sec-num">The Window Closes</span>
+    <h2 class="sec-title">The Ashes of Terrae</h2>
+    <div class="emergence">
+      <div class="prose">
+        <p>He breaks through into half-light and stone — and the old joke of the prison world, the one the people of Terrae always told, lands and is not a joke at all: Hell below, the sky above. <em>They were right.</em> He came up through the floor of the world.</p>
+        <p>And the world is ash. Terrae — the world he died to save — burned. Raiwata invoked Antaka at Point Zero; Aracice broke its <em>completion</em> and paid with his life, but the sun still came, dragged close, and Terrae combusted slow and total while everyone who could flee fled. Eight billion of the pre-damned — who were never going to survive a world hauled toward its star — burned. Their souls, confirmed damned by birth, have already fallen and been counted into the ledger of the god he once punched. He stands in the crematorium of everything he was from, and the half-light on the stone is the light of a sun that came too close.</p>
+        <p>He does not know that Aracice broke the completion. He does not know the Mystics escaped. He does not know that Aya lives, sewing in Salacica. He does not know his punch bought the seconds that mattered. <strong>He has never had the rest of the picture — that is the engine — and the rest of the picture is the only thing that could save him.</strong> What he has is a dead world, and the belief, ground into him across thousands of deaths, that he is the one who ruins things. The burned planet does not make him grieve. It <em>confirms</em> him. It is the verdict made planetary, eight billion bodies of evidence for a case the abyss already closed.</p>
+        <p>The soft verdict — <em>I failed to save them, I should have done more</em> — died in the Wastes. That sentence still believed the world was worth saving and the trying was real. What climbs out of the hole has had the worth burned off. It does not say <em>I failed.</em> It says the other thing.</p>
+      </div>
+    </div>
+
+    <div class="charge">
+      <div class="pre">And the Red Wolf, standing in the ash, does not say it softly</div>
+      <div class="cry">"I died for nothing."</div>
+      <div class="post">Not a confession. Not grief. A charge — flung up at the gods who built the hole and the court and the ledger, with the whole fury of the fire that just tore through Hel and the Earth both. The loudest thing he has ever said. It does not land flat. It lands like the fire did.</div>
+    </div>
+
+    <div class="prose" style="margin-top:2rem;">
+      <p>Then the Archangels come down to seize the thing that crawled out of Hel. Nothing has ever escaped Hel by force; they have no protocol for it, and they move to take it the way they have taken ten thousand lesser things. He kills several before the rest learn to be afraid. <strong>The Do Not Engage doctrine is born here</strong> — not later, not at the branding of Vesper, but on this barren field, the first time Ex-Deorum meets a thing out of the abyss and counts its own dead.</p>
+      <p>And then the Red Wolf lets the frightened survivors take him — toward Dystan, toward the Prime Court, toward the one room where a verdict was always meant to be read over a boy named Uriel. They believe they are escorting a prisoner. They are carrying their own catastrophe through their own front door. He demanded the trial he was never given. They will give him the trial. And in the hall of divine justice he will deliver his own verdict, and burn the court to ash, and leave a single survivor alive to carry the story — and he will not say what the story <em>is</em>, will leave the predicate empty, <em>tell them the Red Wolf did this</em> — because to name a reason would mean believing the deed had a meaning worth naming, and he has just told the sky he died for nothing.</p>
+      <p style="color:var(--text-dim); font-style:italic;">Fade to black. The reader is left in the dark holding both documents — the true account of Point Zero, and the verdict the abyss manufactured — knowing the truest thing about him is the one thing he will never again be able to hear, and that the cosmos has gone dark on him before anyone could say it.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- CONTINUITY -->
+  <section class="fade">
+    <span class="sec-num">Reintegration</span>
+    <h2 class="sec-title">What This Thread Hands Forward</h2>
+    <div class="prose" style="margin-bottom:1.2rem;">
+      <p>This thread is the step between two men the earlier codex already names — and it must be folded back into that codex, because without it the codex has a hole where its hinge should be. It is the bridge between the boy who failed to save his own world and the figure who, in Book Three, single-handedly holds the front line at the Battle of the Second Sun in Luxenfall.</p>
+    </div>
+    <div class="cont">
+      <div class="cont-n">For the Uriel Codex — the hinge</div>
+      <p>The codex is titled <strong>Uriel</strong>, but that name stops referring to a living person at Window IX. The document should not resolve this. It should let the name go cold at the hinge — Uriel through the first half, Hel as the transaction, the Red Wolf for everything after — so the reader feels the name turn to an estate in their hands at the exact place it turned cold for the cosmos.</p>
+    </div>
+    <div class="cont">
+      <div class="cont-n">For Book Three — the front line at Luxenfall</div>
+      <p>He could not have held the Second Sun line as the boy from Point Zero. He holds it because the oubliette made a thing that does not flinch, cannot be reached, cannot be tempted off its purpose, fears nothing the cosmos can show it, and burns with a fire reforged from the abyss itself. The thread above is the price of that line being held. Every faculty Luxenfall needs from him in Book Three is a faculty Hel charged him for in Book Two. <strong>The heroism of the Second Sun is paid for, in advance, here.</strong></p>
+    </div>
+    <div class="cont">
+      <div class="cont-n">For the series — the Raiwata symmetry</div>
+      <p>Two beings cross the same threshold out of Hel in Book Two, by opposite routes. Raiwata leaves through a bridge the Aesthetes <em>built</em> — exit as engineered corruption. The Red Wolf leaves through a hole he <em>burns</em> — exit as brute violation, no route at all. They are the same order of entity. The cosmos naming the Red Wolf <em>hellspawn</em> is not hysteria; it is taxonomically correct. The only difference between the god of Chaos and the thing on the heroes' side of the war is <strong>what each destroyed to cross</strong>: Raiwata paid with a world, the Red Wolf paid with himself. Whether that difference is everything or nothing is the question the nine books are asking.</p>
+    </div>
+    <div class="callout">
+      <p>One man punches the devil. Another burns the angels. One boy says <em>I fucked it up.</em> Another says <em>I died for nothing.</em> It is the same gesture and the same sentence — the same person the whole way down — with everything that made being that person survivable taken away, one window at a time, across a descent no one can count. <strong>That is the tragedy: not a thing that became a monster, but a person who never stopped being himself while the abyss spent him to the last coin.</strong></p>
+    </div>
+  </section>
+
+  <div class="divider ash"><span></span></div>
+
+  <footer class="footer">
+    Advent of Ultima <span>·</span> Book Two <span>·</span> The Oubliette <span>·</span> The Uriel Thread <span>·</span> The Moirai Codex
+  </footer>
+
+</div>
+
+<script>
+const obs = new IntersectionObserver(es => {
+  es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); } });
+}, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.fade').forEach((el, i) => {
+  el.style.transitionDelay = Math.min(i * 30, 180) + 'ms';
+  obs.observe(el);
+});
+</script>
+
+</body>
+</html>

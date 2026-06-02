@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glacia — The Star-Eater&rsquo;s Cradle · Advent of Ultima</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #f3f7fb;
+  --bg-page: #fbfdfe;
+  --bg-card: #ffffff;
+  --bg-hover: #eef4fa;
+  --bg-highlight: #f0f6fc;
+  --navy-deep: #1b2f4e;
+  --navy-core: #284a76;
+  --navy-accent: #356094;
+  --ice-core: #6fa3d6;
+  --ice-light: #a9cdec;
+  --ice-pale: #d6e8f6;
+  --ice-ghost: #eaf3fb;
+  --frost-line: #cfe1f1;
+  --text-primary: #1f2c3d;
+  --text-secondary: #3f566f;
+  --text-dim: #7c91a7;
+  --border-subtle: #dde9f3;
+  --border-accent: #c2d8ec;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --max-width: 880px;
+  --section-gap: 4.5rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--ice-core); color: #ffffff; }
+
+#frost-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.8;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 18% 10%, rgba(111,163,214,0.10) 0%, transparent 52%),
+    radial-gradient(ellipse at 84% 32%, rgba(40,74,118,0.06) 0%, transparent 46%),
+    radial-gradient(ellipse at 50% 98%, rgba(169,205,236,0.16) 0%, transparent 44%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page { position: relative; z-index: 1; max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem; }
+
+.divider {
+  display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+  margin: var(--section-gap) 0; opacity: 0.7;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--ice-core), transparent);
+}
+.divider span {
+  width: 7px; height: 7px; background: var(--navy-accent);
+  transform: rotate(45deg); flex-shrink: 0;
+  box-shadow: 0 0 10px rgba(111,163,214,0.6);
+}
+
+/* ---------- Header ---------- */
+.header { text-align: center; padding: 5.5rem 0 1.5rem; }
+.header .tag {
+  font-family: var(--font-display); font-size: 0.6rem;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--navy-accent); display: block; margin-bottom: 2rem;
+}
+.header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.9rem, 9vw, 4.8rem);
+  font-weight: 900;
+  background: linear-gradient(160deg, var(--navy-deep) 0%, var(--navy-core) 40%, var(--ice-core) 90%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.1em; line-height: 1.05; margin-bottom: 0.7rem;
+  filter: drop-shadow(0 4px 30px rgba(111,163,214,0.3));
+}
+.header .sub {
+  font-family: var(--font-display); font-size: 0.78rem;
+  letter-spacing: 0.24em; text-transform: uppercase; color: var(--text-dim);
+  line-height: 1.9;
+}
+.header .epigraph {
+  font-style: italic; font-size: 1.12rem; color: var(--text-secondary);
+  max-width: 33rem; margin: 1.9rem auto 0; line-height: 1.72;
+}
+
+/* ---------- Sections ---------- */
+.sec-num {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--ice-core); display: block; margin-bottom: 0.4rem;
+}
+.sec-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 3vw, 1.65rem);
+  font-weight: 700; color: var(--navy-core);
+  letter-spacing: 0.05em; margin-bottom: 1.5rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--border-accent);
+}
+.sub-head {
+  font-family: var(--font-display); font-size: 0.95rem;
+  font-weight: 600; color: var(--navy-core);
+  letter-spacing: 0.03em; margin-top: 1.9rem; margin-bottom: 0.6rem;
+}
+.sub-head .ds { color: var(--ice-core); font-weight: 400; margin-right: 0.5rem; }
+
+.prose p { margin-bottom: 1.2rem; }
+.prose p:last-child { margin-bottom: 0; }
+.prose strong { color: var(--navy-core); font-weight: 600; }
+.prose em { color: var(--text-secondary); }
+.lead-cap::first-letter {
+  font-family: var(--font-display); float: left;
+  font-size: 3.6rem; line-height: 0.82; font-weight: 700;
+  color: var(--ice-core); margin: 0.12rem 0.6rem 0 0;
+}
+
+/* ---------- Highlight ---------- */
+.highlight-box {
+  background: var(--bg-highlight); border: 1px solid var(--border-accent);
+  border-left: 3px solid var(--navy-accent);
+  padding: 1.8rem 2.2rem; margin: 1.5rem 0; position: relative;
+  box-shadow: 0 2px 22px rgba(40,74,118,0.05);
+}
+.highlight-box::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(111,163,214,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.highlight-box p { position: relative; font-size: 1.02rem; line-height: 1.84; }
+.highlight-box p + p { margin-top: 1rem; }
+.highlight-box strong { color: var(--navy-core); }
+
+/* ---------- Scripture ---------- */
+.scripture {
+  text-align: center; font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2.5vw, 1.3rem); font-weight: 600;
+  color: var(--navy-core); letter-spacing: 0.05em; line-height: 1.55;
+  margin: 2.2rem auto; max-width: 36rem;
+  text-shadow: 0 2px 30px rgba(111,163,214,0.25);
+}
+.scripture .src {
+  display: block; font-family: var(--font-body); font-style: italic;
+  font-size: 0.82rem; font-weight: 400; letter-spacing: 0.04em;
+  color: var(--text-dim); margin-top: 1rem;
+}
+
+/* ---------- Identity panel ---------- */
+.id-card {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: 2px; padding: 2.2rem; position: relative; overflow: hidden;
+  box-shadow: 0 4px 30px rgba(40,74,118,0.07);
+}
+.id-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, var(--navy-core), var(--ice-core), var(--navy-core));
+}
+.id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem 2rem; }
+.id-item .lbl {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--ice-core); margin-bottom: 0.25rem;
+}
+.id-item .val { font-size: 0.97rem; color: var(--text-primary); line-height: 1.6; }
+.id-item.wide { grid-column: 1 / -1; }
+
+/* ---------- Accordions ---------- */
+.acc-item {
+  border: 1px solid var(--border-subtle); margin-bottom: -1px;
+  background: var(--bg-card); overflow: hidden;
+}
+.acc-item:first-child { border-radius: 2px 2px 0 0; }
+.acc-item:last-child { border-radius: 0 0 2px 2px; }
+.acc-btn {
+  width: 100%; background: none; border: none;
+  padding: 1.15rem 1.4rem; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--font-display); font-size: 0.92rem;
+  font-weight: 600; color: var(--navy-core);
+  letter-spacing: 0.04em; text-align: left;
+  transition: background 0.2s;
+}
+.acc-btn:hover { background: var(--bg-hover); }
+.acc-btn .lead { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.2rem 0.8rem; }
+.acc-btn .hint {
+  font-family: var(--font-body); font-size: 0.85rem;
+  font-weight: 400; color: var(--text-dim); font-style: italic;
+}
+.acc-btn .arr {
+  width: 7px; height: 7px;
+  border-right: 1.5px solid var(--ice-core);
+  border-bottom: 1.5px solid var(--ice-core);
+  transform: rotate(45deg); transition: transform 0.3s;
+  flex-shrink: 0; margin-left: 1rem;
+}
+.acc-item.open .acc-btn .arr { transform: rotate(-135deg); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.6s ease; }
+.acc-inner { padding: 0 1.4rem 1.5rem; }
+.acc-inner .atm {
+  font-style: italic; font-size: 0.95rem; color: var(--navy-accent);
+  margin-bottom: 0.9rem; padding-left: 0.85rem;
+  border-left: 2px solid var(--ice-light);
+}
+.acc-inner p { font-size: 0.95rem; line-height: 1.78; color: var(--text-secondary); margin-bottom: 0.8rem; }
+.acc-inner p:last-child { margin-bottom: 0; }
+.acc-inner p strong { color: var(--navy-core); }
+
+/* ---------- Wonders / list rows ---------- */
+.row { padding: 1.05rem 0; border-bottom: 1px solid var(--border-subtle); }
+.row:last-child { border-bottom: none; }
+.row-name {
+  font-family: var(--font-display); font-size: 0.9rem; font-weight: 600;
+  color: var(--navy-core); letter-spacing: 0.04em; margin-bottom: 0.15rem;
+}
+.row-name .gloss {
+  font-family: var(--font-body); font-style: italic; font-weight: 400;
+  font-size: 0.82rem; color: var(--text-dim); margin-left: 0.45rem;
+}
+.row p { font-size: 0.93rem; line-height: 1.72; color: var(--text-secondary); }
+
+/* ---------- Footer ---------- */
+.footer {
+  text-align: center; padding: 3.5rem 0 2.8rem;
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim);
+}
+.footer span { color: var(--ice-core); }
+
+.fi { opacity: 0; transform: translateY(14px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.fi.vis { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 640px) {
+  body { font-size: 17px; }
+  .id-grid { grid-template-columns: 1fr; }
+  .id-card { padding: 1.4rem; }
+  .header { padding: 3.5rem 0 1rem; }
+  :root { --section-gap: 3rem; }
+  .highlight-box { padding: 1.3rem 1.2rem; }
+  .lead-cap::first-letter { font-size: 3rem; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="frost-canvas"></canvas>
+
+<div class="page">
+
+  <header class="header fi">
+    <span class="tag">Advent of Ultima · Realm Codex</span>
+    <h1>Glacia</h1>
+    <div class="sub">The Star-Eater&rsquo;s Cradle · The Cradle of Peace · Realm of Order</div>
+    <p class="epigraph">&ldquo;Clarity Through Stillness. Beautiful in thought, word, and deed.&rdquo;</p>
+  </header>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ I. THE RECORD ============ -->
+  <section class="fi">
+    <span class="sec-num">I</span>
+    <h2 class="sec-title">The Realm</h2>
+
+    <div class="id-card">
+      <div class="id-grid">
+        <div class="id-item"><div class="lbl">What It Was</div><div class="val">A planet-sized crystata, forged from a neutralized star</div></div>
+        <div class="id-item"><div class="lbl">Element</div><div class="val">Ice &mdash; the visible byproduct of Order made physical</div></div>
+        <div class="id-item"><div class="lbl">God-King</div><div class="val">Aracice Aquilon Karai, the Dragon &mdash; Star-Eater, God of Order</div></div>
+        <div class="id-item"><div class="lbl">People</div><div class="val">The Gonlansūnu &mdash; the draconic demigods, children of the Dragon</div></div>
+        <div class="id-item"><div class="lbl">The Art</div><div class="val">Sūnkýrr, the Endothermic Art &mdash; the building of the Shansál, the Still Soul</div></div>
+        <div class="id-item"><div class="lbl">Status</div><div class="val">Unmade. The first Realm Raiwata came against</div></div>
+        <div class="id-item wide"><div class="lbl">The Plain Statement</div><div class="val">Glacia was the most beautiful and most magically advanced civilization the cosmos has produced &mdash; a thousand-year Golden Age in which war was a thing that did not happen. It is gone. What remains of it walks the living Realms in the bodies of its survivors, each one a piece of a perfect world that no longer exists.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ II. THE MAKING ============ -->
+  <section class="fi">
+    <span class="sec-num">II</span>
+    <h2 class="sec-title">The Making &mdash; The Song of Creation</h2>
+
+    <div class="prose">
+      <p class="lead-cap">In the dawn of time the Dragon performed the supreme feat of the Endothermic Art: the <strong>Tārāśa</strong>, the Star-Feast. He did not fight a chaotic young sun. He faced it and grew so still that he became a living sink for its fury, drawing the whole of its exothermic rage into his own being until its discord resolved into a single perfect note. From the cooled and solidified core of that swallowed star, a planet-sized crystata was born &mdash; Glacia, a world of perfect structured order, a monument to Clarity Through Stillness.</p>
+      <p>He populated it with his draconic children, the <strong>Gonlansūnu</strong>, and taught them the two truths their civilization was built upon: that inner peace is the wellspring of outer harmony, and that love is the most powerful and most harmonious force in the universe. The making of Glacia was the first <strong>Pritisongr</strong> &mdash; the first Song of Delight &mdash; an act of creation born not from will imposed, but from a peace so profound it could turn chaos into beauty.</p>
+    </div>
+
+    <div class="highlight-box">
+      <p>Their ethos was <strong>Clarity Through Stillness</strong>. Their moral imperative was to be beautiful in thought, word, and deed &mdash; for the Gonlansūnu, an ugly act, a deceit, a chaos was a dishonor to one&rsquo;s own divine and perfect nature. Their famed indifference to the lesser Realms was a matter of spiritual hygiene, the natural perspective of a people whose gaze was fixed on the music of creation itself.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ III. THE ENDOTHERMIC ART ============ -->
+  <section class="fi">
+    <span class="sec-num">III</span>
+    <h2 class="sec-title">Sūnkýrr &mdash; The Endothermic Art</h2>
+
+    <div class="prose">
+      <p>A Gonlansūnu does not impose their will upon reality. They receive it. Where every other civilization measures power by the magnitude of the change one can force upon the world, Glacia measured it by the perfection of one&rsquo;s stillness &mdash; the capacity to draw in the chaotic <strong>Shaktyrr</strong>, the &ldquo;Unrestful Energy&rdquo; of existence, and resolve it within into ordered calm. Their whole spiritual life was the lifelong craft of building the <strong>Shansál</strong>, the Still Soul.</p>
+      <p>The cold they emit and the ice they raise are not weapons. They are the byproduct &mdash; the entropy drawn out of a system and left more ordered than it was found. A Gonlansūnu is not a wall against the ocean; they are the deep beneath it, absorbing the chaos of the surface storm without ever being stirred from their foundational calm. They feel rage and grief and joy as deeply as anyone alive. They are simply not moved by them. This is the Clarity in Clarity Through Stillness.</p>
+    </div>
+
+    <h3 class="sub-head" style="margin-bottom:1rem"><span class="ds">&diams;</span>The Three Orders</h3>
+    <div class="acc">
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Order of Revelation <span class="hint">the Oracles</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">&ldquo;Truth is filtered from the noise of the cosmos.&rdquo;</p>
+          <p>The seers, judges, and mystics of the Realm. Meditating in warmed geothermal springs, they absorb the chaotic thermal energy, and in the resulting perfect stillness they filter the signal of truth from the noise of existence &mdash; receiving revelations and perceiving the most probable shapes of what is to come. The frozen spring, where the water cooled solid around them, was the proof of their success.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Order of Stillness <span class="hint">the Wardens</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The guardians and architects. They neutralize kinetic and mystical energy, drawing it out of a defined space so that the moisture freezes into a barrier as a byproduct &mdash; and they alone could impose perfect order on raw, energy-rich crystata to forge the super-dense <strong>Hrímkristall</strong>, the frost-crystal from which walls, shields, and city-forms were grown. A single Warden could, in theory, absorb a starfall for one perfect moment.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Order of Containment <span class="hint">the Star-Eaters</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The rarest and most legendary, those with the density of soul to walk the Dragon&rsquo;s own path. They practiced absorbing and containing energy on a cosmic scale, and their highest spiritual goal was the Tārāśa itself. It is said that each of the surviving Star-Eaters holds the energy of a star within their soul, kept in perfect harmony like a bottled storm.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Harmonic Conductors <span class="hint">the Pritisongr</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>An elite class drawn from all three Orders, masters of a higher, synthetic art. Where the Orders absorb, the Conductors release &mdash; not as force, but as a symphony of perfect harmony so resonant it &ldquo;delights the very fabric of reality.&rdquo; When they played in the Samvada Halls, the world answered: cities of obsidian and ice did not obey a command, they <em>danced into formation</em>. The Pritisongr was Love made operative, and the making of Glacia was its greatest performance.</p>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ IV. THE GREAT WORKS ============ -->
+  <section class="fi">
+    <span class="sec-num">IV</span>
+    <h2 class="sec-title">The Great Works</h2>
+
+    <div class="prose">
+      <p>In a perfect world ruled by a living God, with war and scarcity and injustice long since solved, the only struggle left to the Gonlansūnu was with the meaning of their own perfection &mdash; a passionate debate among artists and theologians over whether the masterpiece should be preserved unchanging or continued forever. They turned their immense power toward three Great Pursuits: the lifelong forging of the individual Shansál; the curation of their world as a single shared artwork; and the <strong>Silent Vigil</strong>, in which the greatest Star-Eaters and Oracles spent millennia charting the birth and death of stars and listening for the rhythmic pulse of the cosmos itself. From these came the Ten Great Wonders &mdash; creations so profound they astonished and frightened the Gods.</p>
+    </div>
+
+    <div class="rows" style="margin-top:1.3rem">
+      <div class="row"><div class="row-name">The Pritisongr <span class="gloss">Symphony of Genesis</span></div><p>The highest art itself, counted a Wonder: the song that coaxed reality to dance into a state of flawless existence.</p></div>
+      <div class="row"><div class="row-name">The Tarahring <span class="gloss">Celestial Veil</span></div><p>A vast orbital ring of Hrímkristall encircling the world &mdash; filter and shield, absorbing chaotic cosmic radiation so the Star-Eaters could study the pure music of the cosmos undisturbed.</p></div>
+      <div class="row"><div class="row-name">The Kyrantra <span class="gloss">Stillness Engines</span></div><p>Continent-sized subterranean networks of crystalline conduits that absorbed excess energy from the planet&rsquo;s core &mdash; the silent, beating heart of the Realm&rsquo;s unwavering peace.</p></div>
+      <div class="row"><div class="row-name">The Minniveda <span class="gloss">Glacial Archives</span></div><p>Not a library of books but a cavern of colossal flawless crystals, into which the Oracles filtered perfect, incorruptible, unbiased memory &mdash; the true history of the civilization.</p></div>
+      <div class="row"><div class="row-name">The Jivagard <span class="gloss">Sanctuaries of Life</span></div><p>Domed ecosystems of warmth and life on the frozen world, oases of lush growth around the geothermal springs the Oracles used for their art.</p></div>
+      <div class="row"><div class="row-name">The Nirsýn <span class="gloss">The Unblinking Eye</span></div><p>A cosmic observatory of unimaginable scale, used by the Star-Eaters to gaze upon Dystan itself. Perceiving the Gods without their leave is believed to be what first kindled the Pantheon&rsquo;s fear.</p></div>
+      <div class="row"><div class="row-name">The Samvada Halls <span class="gloss">Forge of Souls&rsquo; Light</span></div><p>The grandest concert halls in the cosmos, acoustically perfect, where orchestras of Hrímkristall instruments played the symphonies that built the world.</p></div>
+      <div class="row"><div class="row-name">The Bodibrunnr <span class="gloss">Well of Coalescence</span></div><p>A vast circular chasm to the planet&rsquo;s core, the most sacred site for meditation, where the harmonious energy of the neutralized star ran most potent.</p></div>
+      <div class="row"><div class="row-name">The Sunkamunnr <span class="gloss">Wyrm&rsquo;s Maw</span></div><p>A colossal polar intake built to draw in and safely contain vast streams of cosmic energy &mdash; planetary-scale practice for the Tārāśa.</p></div>
+      <div class="row"><div class="row-name">The Kyrrsæti <span class="gloss">Throne of Stillness</span></div><p>The nexus of the Realm&rsquo;s harmony, from which Aracice ruled, his perfect peace radiating outward to hold the balance of his whole creation.</p></div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ V. THE GIFT FORGOTTEN ============ -->
+  <section class="fi">
+    <span class="sec-num">V</span>
+    <h2 class="sec-title">The Gift the Realms Forgot</h2>
+
+    <div class="prose">
+      <p>The technology of charging crystata &mdash; the foundation of the entire inter-realm economy that came after &mdash; was a Glacian invention, a mundane byproduct of their spiritual pursuits, as common to them as a hammer. In a gesture they considered patronizing kindness, they gave a simplified version of it to the lesser Realms, hoping it might ease the chaotic struggles of the &ldquo;Unsteady People&rdquo; with scarcity. It was, in their own words, like handing a chemistry set to a child.</p>
+      <p>The Calamann did what the Gonlansūnu expected. They turned it to war and to commerce: weapons, atomic crystata, a booming trade in bottled divinity that widened the divide between Mystic and Nihila. The Glacians watched this unfold with a quiet, earned indifference, and a gift whose origin the other Realms have since entirely forgotten became the seed of everything that followed.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ VI. THE FALL ============ -->
+  <section class="fi">
+    <span class="sec-num">VI</span>
+    <h2 class="sec-title">The Fall &mdash; The Mahāgaldr</h2>
+
+    <div class="prose">
+      <p class="lead-cap">The tragedy came in two acts. First, the Pantheon, fearing a prophecy that whispered the Dragon&rsquo;s son would unmake their order, tricked and bound Aracice and exiled him to the magic-poor world of Terrae &mdash; removing the one being who had mastered the Tārāśa from the heart of his own power. Then Raiwata, the Apex Predator newly risen from Hel, found a crack in reality and looked through it at the silent crystalline majesty of Glacia. He did not see a civilization. He saw a bauble.</p>
+      <p>He invoked <strong>Antaka</strong>, the Sun-Calling. He reached into the sky, took hold of the star of that system, and commanded it to fall. This was not a spell against the Realm but an astronomical event visited upon it &mdash; Glacia was not destroyed in any conventional sense; it was unmade on the celestial-mechanical level, a world and its star fused together in a single act of unimaginable violence. The Star-Eaters who remained tried, in a final heroic vigil, to absorb the falling sun. But the one who could have held it was in exile, a world away. It was the second of the three suns to fall &mdash; Luxania&rsquo;s, taken by Tenebralis, had already gone dark before it, and Terrae&rsquo;s would follow. The monument to peace went out.</p>
+      <p>Raiwata did not learn the Realm&rsquo;s name. He took a single trophy from the wreckage &mdash; a Glacian queen &mdash; and carried her out of her dead world, and made her bear him a child. That child became <strong>Anberlyn</strong>. Then he moved on, having learned his first lesson: that worlds, like everything else, can be broken.</p>
+
+      <p>The second sun fell on the very day the Dragon&rsquo;s son was born. It did not stay fallen. <strong>Alciel</strong> &mdash; son of Glacia, the Second Sun &mdash; rose to meet it.</p>
+    </div>
+
+    <div class="highlight-box">
+      <p>The awe the cosmos once held for the Gonlansūnu has curdled into a terrified reverence for the power that erased them. They are remembered now not as arrogant but as sublime, their perfection making their annihilation all the more absolute. The story of the Star-Eater and the Sun-Caller is woven into the fabric of reality as a foundational, tragic myth &mdash; the warning unheeded that became the catalyst of a cosmic war.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ VII. THE DIASPORA ============ -->
+  <section class="fi">
+    <span class="sec-num">VII</span>
+    <h2 class="sec-title">The Diaspora &mdash; Royalty in Exile</h2>
+
+    <div class="prose">
+      <p>The riches of Glacia were never in its ground. They were in its people, its art, and its knowledge &mdash; and the Fall was so swift that only what could be carried through the Clairgates was saved. So every survivor is a walking, breathing piece of a lost world, and every salvaged artifact is priceless and irreplaceable.</p>
+
+      <h3 class="sub-head"><span class="ds">&diams;</span>The Survivors</h3>
+      <p>A Glacian in the modern Realms is not a pitiable refugee. They are demigod royalty &mdash; their draconic wings and multifaceted eyes badges of a legendary lineage, met everywhere with awe, fear, and the utmost respect. Their Endothermic Art makes them the ultimate survivors: they need no food, drawing vitality from ambient energy; they need no shelter, raising walls of ice from the moisture in the air; they are immune to the elements and incorruptible and impossible to deceive. When they choose to work, their price is astronomical &mdash; the perfect bodyguards, the peerless intelligence assets, the arbiters no lie can sway. A single Warden could hold a mountain pass against an army.</p>
+
+      <h3 class="sub-head"><span class="ds">&diams;</span>The Treasures</h3>
+      <p>The salvaged <strong>Hollow Crystata</strong> are not raw material but finished artifacts &mdash; an Oracle&rsquo;s vision-focus, a Warden&rsquo;s shield-core &mdash; inert until a true practitioner of the Endothermic Art channels power through them, and so both incalculably powerful and useless to nearly everyone. A Glacian blade does not merely cut; it absorbs the kinetic energy of each blow, growing colder and sharper with every impact. And the firsthand account of a single Oracle is worth more than a battle-fleet, for they are the only primary sources left &mdash; working with the archivists of Zephyros to cross-reference their perfect memories against the ambient truths of the Aether, painstakingly reconstructing a history, not for profit, but for preservation.</p>
+
+      <h3 class="sub-head"><span class="ds">&diams;</span>The New Home &mdash; The Obsidian Court</h3>
+      <p>The greater part of the diaspora found a home in Pyrthera, the Realm of seven suns. The magma-dancers, as a gesture of supreme respect, wove them <strong>Obsidian Citadels</strong> &mdash; fortresses of black volcanic glass, cold within, sacred, asked for in return for nothing. There the philosophies met: the Pyrtheran path of Becoming Through Sensation and the Glacian path of Becoming Through Integration, two roads to the same summit, fire and stillness as hammer and anvil. And under the constant immense output of seven suns, the absorptive art of a people who are living heat-sinks becomes <strong>astronomical</strong> &mdash; supercharged toward the godlike. There the surviving Gonlansūnu wait, and there a son of the Dragon will one day return to find his people congregated as if for a fated arrival.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ VIII. THE CORE TRAGEDY ============ -->
+  <section class="fi">
+    <span class="sec-num">VIII</span>
+    <h2 class="sec-title">The Core Tragedy</h2>
+
+    <div class="prose">
+      <p>The horror of Glacia&rsquo;s fall is not that its people were made destitute. They have everything a being could want &mdash; power, reverence, wealth, purpose. The horror is that they were made <strong>homeless</strong>. They lack the one thing their entire philosophy and society was built around: their Center. Their Unmoving Point. Their world.</p>
+      <p>They are the living memory of a perfect, silent Order, enduring now as stabilizers and sages in a cosmos that is, to them, a chaotic and noisy place. They carry the stillness of their lost home within them, a perfect silent memory of a place that no longer exists &mdash; shattered into a thousand priceless pieces, scattered among the stars, each piece a reminder of the whole. They are the Stillness that gives the universe&rsquo;s Song its meaning.</p>
+    </div>
+
+    <div class="scripture">
+      The real treasure was the civilization itself.
+      <span class="src">&mdash; what the Realms have only now begun to understand</span>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <footer class="footer">
+    <span>&diams;</span>&nbsp;&nbsp;Advent of Ultima &nbsp;·&nbsp; Glacia, The Star-Eater&rsquo;s Cradle &nbsp;&nbsp;<span>&diams;</span>
+  </footer>
+
+</div>
+
+<script>
+// ---------- Accordions ----------
+document.querySelectorAll('.acc-btn').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var item = btn.parentElement;
+    var body = item.querySelector('.acc-body');
+    if (item.classList.contains('open')) {
+      body.style.maxHeight = null;
+      item.classList.remove('open');
+    } else {
+      item.classList.add('open');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+  });
+});
+window.addEventListener('resize', function () {
+  document.querySelectorAll('.acc-item.open .acc-body').forEach(function (body) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+  });
+});
+
+// ---------- Fade-in on scroll ----------
+var obs = new IntersectionObserver(function (entries) {
+  entries.forEach(function (e) {
+    if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fi').forEach(function (el) { obs.observe(el); });
+
+// ---------- Drifting frost particles ----------
+(function () {
+  var canvas = document.getElementById('frost-canvas');
+  var ctx = canvas.getContext('2d');
+  var flakes = [];
+  var W, H;
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  var COUNT = Math.min(60, Math.floor(window.innerWidth / 22));
+  for (var i = 0; i < COUNT; i++) { flakes.push(newFlake(Math.random() * H)); }
+  function newFlake(y) {
+    var cool = Math.random();
+    // pale blue to blue-white spectrum
+    var r = 175 + Math.floor(cool * 70);
+    var g = 205 + Math.floor(cool * 45);
+    var b = 235 + Math.floor(cool * 20);
+    return {
+      x: Math.random() * W,
+      y: y,
+      r: 0.7 + Math.random() * 1.9,
+      sp: 0.12 + Math.random() * 0.45,
+      drift: (Math.random() - 0.5) * 0.35,
+      a: 0.35 + Math.random() * 0.5,
+      tw: Math.random() * Math.PI * 2,
+      col: [r, g, Math.min(b, 255)]
+    };
+  }
+  function tick() {
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < flakes.length; i++) {
+      var f = flakes[i];
+      f.y += f.sp;
+      f.x += f.drift + Math.sin(f.tw) * 0.2;
+      f.tw += 0.015;
+      if (f.y > H + 10) { flakes[i] = newFlake(-10); continue; }
+      var shimmer = f.a * (0.7 + 0.3 * Math.sin(f.tw * 1.5));
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + f.col[0] + ',' + f.col[1] + ',' + f.col[2] + ',' + shimmer + ')';
+      ctx.shadowBlur = 7;
+      ctx.shadowColor = 'rgba(170,205,236,' + (shimmer * 0.9) + ')';
+      ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+</script>
+
+</body>
+</html>

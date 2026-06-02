@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crex Falcon Axipitre · Moirai Codex</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #0B0A08;
+  --bg-secondary: #12110E;
+  --bg-card: #171513;
+  --bg-card-hover: #1C1A16;
+  --border-card: #262218;
+  --border-subtle: rgba(180, 140, 50, 0.08);
+
+  --accent-primary: #C4943A;
+  --accent-secondary: #A07830;
+  --accent-tertiary: #D4A84A;
+  --accent-dim: #5C4D28;
+  --accent-glow: rgba(196, 148, 58, 0.1);
+
+  --highlight: #EDE5D4;
+  --highlight-dim: #A89E88;
+
+  --galvaneum: #E8C860;
+  --myst-color: #D4A030;
+  --edgerinne-white: #F2EBD8;
+
+  --text-primary: #CFC8B8;
+  --text-secondary: #908878;
+  --text-tertiary: #605848;
+
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+
+  --section-gap: 3.5rem;
+  --content-max: 760px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.75;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem;
+}
+
+/* ═══ DIAMOND DIVIDER ═══ */
+.dd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  margin: var(--section-gap) 0;
+  user-select: none;
+}
+.dd::before, .dd::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
+}
+.dd span {
+  color: var(--accent-dim);
+  font-size: 8px;
+  letter-spacing: 0.5em;
+}
+
+/* ═══ HEADER ═══ */
+.hdr { text-align: center; padding: 2.5rem 0 1.5rem; }
+.hdr-tag {
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--accent-dim);
+  margin-bottom: 2.25rem;
+  display: block;
+}
+.hdr h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 700;
+  color: var(--accent-primary);
+  letter-spacing: 0.06em;
+  line-height: 1.15;
+  margin-bottom: 0.6rem;
+}
+.hdr-epi {
+  font-family: var(--font-body);
+  font-size: 1.3rem;
+  font-style: italic;
+  color: var(--highlight-dim);
+  margin-bottom: 0.6rem;
+}
+.hdr-realm {
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* ═══ SECTION LABEL ═══ */
+.sl {
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--accent-secondary);
+  margin-bottom: 1.25rem;
+}
+
+/* ═══ IDENTITY CARD ═══ */
+.idc {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  padding: 2rem 2rem 1.75rem;
+  position: relative;
+}
+.idc::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+}
+.idc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.idc-row:last-of-type { border-bottom: none; }
+.idc-k {
+  font-family: var(--font-display);
+  font-size: 0.55rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  min-width: 110px;
+}
+.idc-v {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-primary);
+  text-align: right;
+}
+.idc-ol {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-card);
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--highlight-dim);
+  text-align: center;
+  line-height: 1.65;
+}
+
+/* ═══ PROSE ═══ */
+.prose { font-family: var(--font-body); font-size: 1.05rem; color: var(--text-primary); line-height: 1.8; }
+.prose p + p { margin-top: 0.9rem; }
+.prose strong { color: var(--accent-tertiary); font-weight: 600; }
+
+/* ═══ VISUAL PHASES ═══ */
+.vp-list { list-style: none; }
+.vp-item { border-left: 2px solid var(--accent-dim); transition: border-color 0.3s; }
+.vp-item.on { border-color: var(--accent-primary); }
+.vp-head {
+  display: flex; align-items: center; gap: 0.9rem;
+  padding: 0.85rem 1.1rem;
+  cursor: pointer; user-select: none;
+  transition: background 0.2s;
+}
+.vp-head:hover { background: var(--accent-glow); }
+.vp-dot {
+  width: 7px; height: 7px;
+  border: 1px solid var(--accent-primary);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+.vp-item.on .vp-dot { background: var(--accent-primary); }
+.vp-name {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.vp-item.on .vp-name { color: var(--accent-primary); }
+.vp-per {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+  margin-left: auto;
+  font-style: italic;
+}
+.vp-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.45s ease, padding 0.35s;
+  padding: 0 1.1rem 0 2.2rem;
+}
+.vp-item.on .vp-body {
+  max-height: 800px;
+  padding: 0 1.1rem 1.2rem 2.2rem;
+}
+.vp-desc {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  line-height: 1.7;
+  margin-bottom: 0.4rem;
+}
+.vp-note {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* ═══ ABILITY BLOCK ═══ */
+.ab { margin-bottom: 1.25rem; }
+.ab-name {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  margin-bottom: 0.3rem;
+}
+.ab-desc {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-primary);
+  line-height: 1.75;
+}
+
+/* ═══ SWATCHES ═══ */
+.sw-row { display: flex; flex-wrap: wrap; gap: 1.1rem; justify-content: center; }
+.sw { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+.sw-color {
+  width: 48px; height: 48px;
+  border-radius: 2px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.sw-label {
+  font-family: var(--font-display);
+  font-size: 0.45rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+.sw-hex {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+/* ═══ RELATIONSHIPS ═══ */
+.rl { list-style: none; }
+.rl-item {
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex; gap: 0.9rem; align-items: baseline;
+}
+.rl-item:last-child { border-bottom: none; }
+.rl-name {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  color: var(--accent-primary);
+  min-width: 90px;
+  letter-spacing: 0.04em;
+}
+.rl-type {
+  font-family: var(--font-display);
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  min-width: 75px;
+}
+.rl-desc {
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+}
+
+/* ═══ FOOTER ═══ */
+.ftr {
+  text-align: center;
+  padding-top: 1.5rem;
+  font-family: var(--font-display);
+  font-size: 0.5rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 600px) {
+  body { padding: 1.25rem 1rem 3rem; font-size: 16px; }
+  .idc-row { flex-direction: column; gap: 0.1rem; }
+  .idc-v { text-align: left; }
+  .rl-item { flex-direction: column; gap: 0.2rem; }
+  .idc { padding: 1.5rem; }
+  .vp-head { padding: 0.7rem 0.85rem; }
+  .vp-item.on .vp-body { padding: 0 0.85rem 1rem 1.6rem; }
+  .sw-row { gap: 0.75rem; }
+  .sw-color { width: 40px; height: 40px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 1. HEADER -->
+<header class="hdr">
+  <span class="hdr-tag">Advent of Ultima</span>
+  <h1>Crex Falcon Axipitre</h1>
+  <div class="hdr-epi">God-Eyes · The Ghost of the Outlands · The Free Bird</div>
+  <div class="hdr-realm">Ferridane · House Axipitre · The Northern Highlands</div>
+</header>
+
+<div class="dd"><span>◆</span></div>
+
+<!-- 2. IDENTITY CARD -->
+<section>
+  <div class="sl">Identity</div>
+  <div class="idc">
+    <div class="idc-row"><span class="idc-k">Full Name</span><span class="idc-v">Crex Falcon Axipitre</span></div>
+    <div class="idc-row"><span class="idc-k">Epithets</span><span class="idc-v">God-Eyes · The Ghost · The Gunslinger · The Free Bird · The Armorer of the Advent</span></div>
+    <div class="idc-row"><span class="idc-k">Realm</span><span class="idc-v">Ferridane</span></div>
+    <div class="idc-row"><span class="idc-k">House</span><span class="idc-v">Axipitre — Northern Highlands (name erased, lineage disgraced)</span></div>
+    <div class="idc-row"><span class="idc-k">Tier</span><span class="idc-v">Five</span></div>
+    <div class="idc-row"><span class="idc-k">Role</span><span class="idc-v">Herald · Quartermaster and Armorer of the Advent</span></div>
+    <div class="idc-row"><span class="idc-k">Affiliation</span><span class="idc-v">The Free Birds (Founder/Operator) · The Advent (reluctantly)</span></div>
+    <div class="idc-row"><span class="idc-k">Age</span><span class="idc-v">350+ years chronological · ~2,700 years experienced (Hel time dilation)</span></div>
+    <div class="idc-ol">The most talented Namer in the Realms, using his gift as a kill counter while selling stolen weapons in the Outlands. The greatest waste of potential in the cosmos — until he finally saw something bigger than himself.</div>
+  </div>
+</section>
+
+<div class="dd"><span>◆</span></div>
+
+<!-- 3. BACKSTORY -->
+<section>
+  <div class="sl">Backstory</div>
+  <div class="prose">
+    <p>Crex Falcon Axipitre was born the firstborn son of the oldest Architectonic bloodline in Ferridane. House Axipitre occupies the Northern Highlands of the Pangaea and practices Transfusion — the art of channeling the Vital Current to enchant objects and awaken constructs. From birth, Crex received every advantage his civilization could provide: wings (a heraldic augmentation granted at birth to Axipitre nobility), the God-Eyes (the Deusaex-Wizaer, a birth gift permitting total knowledge absorption through eye contact), the Multiplicity Protocol (a synthetic deusa installed by his clan at sixteen, enabling two thousand simultaneous autonomous clones), and a natural aptitude for the Art of the True Name that marked him as one of the most gifted Namers his realm had ever produced. He was intended to carry the Axipitre tradition forward — a bridge between the endurance of Brokkae and the refinement of Edgerinne.</p>
+    <p>He got bored. He left Ferridane and traveled widely — through Zephyros, where he met a woman named Ardenne, and to Terrae, where he spent significant time in Japan, America, and Germany. On Terrae, he watched a civilization without magic solve through engineering and stubbornness every problem the Realms solve through mystical means. He absorbed their blueprints through the God-Eyes and returned to Ferridane carrying technologies and ideas nobody in the nine realms had encountered. Where his people saw sacred rites and hard-won tradition, Crex saw problems with more efficient solutions.</p>
+    <p>He challenged the goddess Edgerinne — patron deity of Ferridane, Goddess of the Blade — to a sacred duel. This was a theological event, not a tactical engagement. Crex brought a weapon translated from Terrae through the Art of the True Name. Nobody in the Realms had a word for what he pointed at her. He shot her. He did not defeat her. The Archangels killed him in secret, ripped the God-Eyes from his skull, erased his name from the Axipitre records, and cast his soul into the Mire of Cowardice in Hel. His sentence was eternity.</p>
+    <p>He spent twenty-seven hundred years of experienced time dissolving. Not fighting, not enduring, not being forged — dissolving. The Mire of Cowardice is where the souls of the faithless and paralyzed rot. Crex could not fight through it. He could not ascend. He found the River Lethe, drowned himself in the waters of oblivion, and erased his soul, his guilt, his name, and his memories. He clawed back to the mortal realms remembering nothing but the drowning dark. He learned his own history from other people.</p>
+    <p>In the fifty years since his return, he has rebuilt in the Outlands — the ungoverned territories of Ferridane, the one corner of his home realm that already operates the way he does. He founded the Free Birds, the largest arms-dealing operation in the nine realms. He runs it from a barstool through two thousand copies of himself. He has sent proxies back to Terrae to continue downloading engineering blueprints. He has built weapons nobody in the Realms can categorize. He considers every moment of ease he now experiences to be time stolen from an eternal sentence, and he is entirely at peace with that.</p>
+  </div>
+</section>
+
+<div class="dd"><span>◆</span></div>
+
+<!-- 4. PSYCHOLOGY -->
+<section>
+  <div class="sl">Psychology</div>
+  <div class="prose">
+    <p>Crex operates on a single governing question: "Why the hell would I do that?" The question predates every defining event of his life. It was not produced by Hel, by loss, or by disillusionment. It is foundational to how he processes every decision. He does everything the easiest possible way, delegates everything he can, and sees no reason to exert himself when a tool, a clone, or a better method exists. Whether this constitutes efficiency or laziness depends on the observer's values.</p>
+    <p>He is arrogant. Spectacularly, flamboyantly, deafeningly arrogant. He is also usually correct. He is smarter, faster, and more resourceful than most things placed in front of him, and the rules, in his assessment, exist for people who are not. He does not perform respect for traditions he does not feel bound by, does not observe forms, and treats the divine order of the cosmos as environment — terrain to be navigated. He does not deny that the gods are real. He can see that they are real. He does not consider this relevant to how he should operate. The gods are powerful. So is a mountain. You find the pass.</p>
+    <p>The twenty-seven hundred years in the Mire stripped his limits. Whatever part of a person says "that is too far" dissolved sometime around century eight and was never replaced. This does not manifest as cruelty, rage, or recklessness. It manifests as a total absence of hesitation. Nothing in the mortal world moves fast enough to register against what he endured. Fifty years in the Outlands is a breath. He has barely sat down. The Heralds arrive with urgency and he is operating on a clock that makes their emergency look like a weather report.</p>
+    <p>He is having the time of his life, always. The bar is his favorite place. A fight is his second favorite. He is well traveled because he has wings and no respect for borders. He quotes people nobody in the Realms has heard of and never says where he got it. Sophistication is local. Simplicity is universal. He is not a philosopher, not a revolutionary, not a man with a thesis. He is a man with a question, and the question has never changed.</p>
+    <p>He knows he earned his sentence. He shot a goddess. They sent him to Hel. That is the correct response. There is no grievance.</p>
+  </div>
+</section>
+
+<div class="dd"><span>◆</span></div>
+
+<!-- 5. DESTINY -->
+<section>
+  <div class="sl">Destiny</div>
+  <div class="prose">
+    <p>Crex's thread was fated to end. His escape from Hel, his return, his fifty-year afternoon, his reluctant involvement with the Advent — if none of it was meant to be, it would not be. The greatest cheat in the history of the cosmos may not have been a cheat at all. The cosmos looked at its own system and said: I am going to need someone who does not believe in me. And then it made one.</p>
+    <p>He is not the leader of the Advent. He is not the visionary. He is not the moral center. He is the man who is already comfortable in the world everyone else is still adjusting to. The age of gods is ending. Every other Herald will have a moment of reckoning when they realize the world they are building looks nothing like the world they grew up in. Crex has been living in the post-divine world for centuries. He is already there, holding the door open.</p>
+    <p>His trajectory is not toward redemption. It is toward consequence. He is the man who was ahead of the curve by three and a half centuries, and it took everyone else a remarkably long time to catch up. The situation changed. He did not. That turns out to be exactly what was needed.</p>
+  </div>
+</section>
+
+<div class="dd"><span>◆</span></div>
+
+<!-- 6. VISUAL PHASES -->
+<section>
+  <div class="sl">Visual Phases</div>
+  <ul class="vp-list" id="phases">
+    <li class="vp-item on" data-i="0">
+      <div class="vp-head" onclick="tp(0)">
+        <div class="vp-dot"></div>
+        <span class="vp-name">The Young Prince</span>
+        <span class="vp-per">Pre-Duel</span>
+      </div>
+      <div class="vp-body">
+        <p class="vp-desc">Firstborn of House Axipitre in full inheritance. Wings from birth. The God-Eyes active and glowing burnished bronze-gold — the Ferridane myst signature at its most concentrated. The Multiplicity Protocol installed at sixteen. He carries himself as Northern Highlands aristocracy at its apex: every gift his civilization can offer, worn as though he has not thought about any of it once. He is the promise the Axipitre made to themselves.</p>
+        <p class="vp-note">Defining mark: the God-Eyes. The bronze-gold fire in his gaze is the visual anchor of this phase — total knowledge absorption rendered as light.</p>
+      </div>
+    </li>
+    <li class="vp-item" data-i="1">
+      <div class="vp-head" onclick="tp(1)">
+        <div class="vp-dot"></div>
+        <span class="vp-name">The Traveler</span>
+        <span class="vp-per">Zephyros · Terrae</span>
+      </div>
+      <div class="vp-body">
+        <p class="vp-desc">Post-travel Crex returns simplified. Extended time in Japan, America, and Germany has stripped the Axipitre formalism out of his presentation. He has absorbed engineering traditions, cultural registers, and languages nobody in the Realms has heard. The result reads as a Ferridanian cowboy who quotes classical Terrae authors — Axipitre craftsmanship expressed through a register his civilization does not recognize. Sophistication distilled into simplicity.</p>
+        <p class="vp-note">What changed: everything decorative was removed. What remained is function, comfort, and an arrogance that no longer needs the trappings of House identity to announce itself.</p>
+      </div>
+    </li>
+    <li class="vp-item" data-i="2">
+      <div class="vp-head" onclick="tp(2)">
+        <div class="vp-dot"></div>
+        <span class="vp-name">The Ghost</span>
+        <span class="vp-per">Post-Hel · The Outlands</span>
+      </div>
+      <div class="vp-body">
+        <p class="vp-desc">Crex returns from Lethe with no memories, no God-Eyes, and no name in the family ledger. His eyes are ordinary — intelligent, watchful, amused, but without the Deusaex-Wizaer they carry no myst signature. He is diminished in the one way that matters. The wings remain. The Multiplicity Protocol remains. The grin remains. He rebuilds in the Outlands and settles into the visual register he will hold for fifty years: a man on stolen time who dresses for comfort, carries what works, and has the look of someone having the best afternoon of his life in a room that does not concern him.</p>
+        <p class="vp-note">Defining absence: the God-Eyes. The bronze-gold fire is gone. The eyes are sharp but dark. Every attempt to locate the real Crex among his clones has failed.</p>
+      </div>
+    </li>
+    <li class="vp-item" data-i="3">
+      <div class="vp-head" onclick="tp(3)">
+        <div class="vp-dot"></div>
+        <span class="vp-name">God-Eyes Restored</span>
+        <span class="vp-per">Post-Dare</span>
+      </div>
+      <div class="vp-body">
+        <p class="vp-desc">Uriel retrieves the God-Eyes from the skull of the Diamond Gonlan Bahamut in the Atrium of Steelheart. Crex reinstalls them. The bronze-gold myst returns to his gaze. The first person he looks at is Uriel. He absorbs everything Uriel has seen: Raiwata, Hel, Luxenfall, the demon armies, the coming apocalypse. He also gains Edgerinne's vast knowledge through the eyes that once met her gaze — divine hierarchies, cosmic law, the mechanics of death, the structure of the Tapestry itself. Post-restoration, every one of his two thousand clones carries the God-Eyes' ability. Each clone becomes a node in a surveillance network approaching omniscience.</p>
+        <p class="vp-note">Defining return: the fire. The myst-lit eyes distributed across two thousand simultaneous bodies. He is no longer merely seeing through many eyes. He is knowing through countless encounters across all Realms simultaneously.</p>
+      </div>
+    </li>
+    <li class="vp-item" data-i="4">
+      <div class="vp-head" onclick="tp(4)">
+        <div class="vp-dot"></div>
+        <span class="vp-name">The Armorer of the Advent</span>
+        <span class="vp-per">The Return</span>
+      </div>
+      <div class="vp-body">
+        <p class="vp-desc">Demons in the Outlands. A storm at his beach house. He arrives to the Heralds a little drunk, a little irritated, fully armed, and operating at a level of tactical awareness none of them can match. The visual register does not change — he still dresses for comfort, still carries his bandolier, still looks like a man at the bar. The difference is in the eyes. The God-Eyes are active. The grin has a different quality. He has seen the scale of what is coming and his equations now include the survival of other people as integral to his own.</p>
+        <p class="vp-note">What shifted: the math. Not the man. The same casual presentation now contains a commitment that was not there before.</p>
+      </div>
+    </li>
+  </ul>
+</section>
+
+<div class="dd"><span>◆</span></div>
+
+<!-- 7. THE SILHOUETTE -->
+<section>
+  <div class="sl">The Silhouette</div>
+  <div class="prose">
+    <p>At a distance, the identifier is altitude. In a world that fights on the ground, Crex is the shape in the sky — wings spread, unhurried, with something in his hand that catches light wrong. The silhouette reads as airborne, relaxed, and armed with objects the observer cannot categorize. There is no visible connection between the man and the results occurring below him.</p>
+    <p>In a crowd, the original is at the bar. The figure you noticed across the room is one of two thousand clones. The real Crex reads as a man having the best afternoon of his life in a space that does not concern him — loose posture, amused expression, drink in hand. The distinction between the original and a clone is undetectable to external observation.</p>
+    <p>In shadow, the wings are the shape. Before any detail resolves, the spread of the wings against open sky is the identifying mark. The single image that locates him: a man-shape with wings, half a mile up, pulling something small off his chest with the casual rhythm of someone choosing which card to play next.</p>
+  </div>
+</section>
+
+<div class="dd"><span>◆</span></div>
+
+<!-- 8. ABILITIES -->
+<section>
+  <div class="sl">Abilities</div>
+
+  <div class="ab">
+    <div class="ab-name">The God-Eyes (Deusaex-Wizaer)</div>
+    <div class="ab-desc">Birth gift. Deusaex-class. Upon making eye contact with any being, Crex instantly absorbs the totality of their knowledge — every technique, memory, secret, and weakness. This is the collection mechanism that makes every other edge he possesses more effective. The God-Eyes were ripped from his skull by the Archangels upon his death and installed in the skull of the Diamond Gonlan Bahamut. After restoration, every one of his two thousand clones carries the ability. Each clone functions as a node in a distributed intelligence network approaching omniscience.</div>
+  </div>
+
+  <div class="ab">
+    <div class="ab-name">True Name: Gun</div>
+    <div class="ab-desc">Conceptual deusa. The power to project harm from here to there, severing cause from effect. In its soul-less form (the Air Ripper), he uses external Crystata to accelerate ambient particles into kinetic strikes. After his soul is restored, it becomes the Ghost Punch: pure kinetic force projected directly onto a target through his own myst. No travel time. No visible mechanism. A decision and a consequence with nothing in between.</div>
+  </div>
+
+  <div class="ab">
+    <div class="ab-name">The Art of the True Name (Transmutation)</div>
+    <div class="ab-desc">Crex is a natural Namer. He can speak a True Name over a thing and that thing becomes the Name. This is the skill that allows him to translate Terrae engineering concepts into functional magical weapons. It is also the source of True Name: Gold — his every-sixth-round counting mechanism that transmutes enemies into gold statues. Un De Octogina. Atomic number 79. Most Namers peak at transmuting a coin. Crex does it to a person as a rhythm device.</div>
+  </div>
+
+  <div class="ab">
+    <div class="ab-name">The Multiplicity Protocol</div>
+    <div class="ab-desc">Synthetic deusa installed by House Axipitre at age sixteen. Two thousand active clones operating simultaneously. Each clone is capable, autonomous, and shares information with the original in real time. The Protocol functions simultaneously as an intelligence network, workforce, distribution system, defense mechanism, and personal statement. Every attempt to locate the original among his clones has failed.</div>
+  </div>
+
+  <div class="ab">
+    <div class="ab-name">Wings</div>
+    <div class="ab-desc">Axipitre heraldic augmentation from birth. Full flight capability. In a world connected by Clairgates, the ability to fly grants total freedom of movement within any realm he visits. In combat, it grants an altitude advantage the Realms have no doctrine to counter. The Realms have no established defense against an airborne gunner with unlimited copies of himself deploying weapons from a technological tradition they have never encountered.</div>
+  </div>
+</section>
+
+<div class="dd"><span>◆</span></div>
+
+<!-- 9. VISUAL AND PERSONAL EFFECTS -->
+<section>
+  <div class="sl">Visual &amp; Personal Effects</div>
+  <div class="prose">
+    <p>Crex dresses for function and comfort. Nothing ornamental. His clothing communicates Outlands sovereignty — practical, unaffiliated, indifferent to the fashion systems of any established power. He wears what works and carries what kills, and the craftsmanship is evident despite his indifference to it, because an Axipitre engineer cannot make something poorly even when he is not trying.</p>
+    <p>The <strong>bandolier</strong> is the signature item. Bullets arranged in sequence across his chest, each one a key to a different weapon system. One hundred and fifty complete weapon platforms can be invoked from a single round in under a second. The bandolier functions simultaneously as wardrobe, armory, status marker, and threat.</p>
+    <p><strong>Ardenne</strong> — his first self-forged Astra. A soul-bonded sniper rifle. The round finds its target through the fabric of fate itself. The only defense is not being important enough for Crex to bother. He names it after Ardenne Chevalier, Fiacre's elder sister — a woman he knew in his youth whose full significance he can no longer access because his soul was dissolved in Lethe. He does not acquire Ardenne until after Book Six, when a failed Astra hunt leads him to learn to forge them himself.</p>
+    <p><strong>Lil' Peter</strong> — a swarm cannon. An exotic heavy grenade launcher that fires miniature robotic insectoid grenades. On impact, a swarm of robotic spiders deploys, tracks targets, and detonates on proximity. The payload is venom and toxins derived from Tenebrali fear elixirs. The weapon fuses Terrae robotics, Ferridanian craft, and Tenebrali biochemistry into a single platform that no civilization in any realm has conceived of independently.</p>
+    <p><strong>The Ifris Cannon</strong> — a palm-mounted hand cannon powered by an engine Crex designed for limitless output. He raises his hand and something happens to the target. No draw, no aim in the traditional sense. The weapon is his body. The power source does not deplete. Built in collaboration with Uriel as part of a direct exchange: Crex builds Uriel a new arm with an Ifris-powered flamethrower. In return, Crex receives his palm cannon. An eye for an arm.</p>
+  </div>
+</section>
+
+<div class="dd"><span>◆</span></div>
+
+<!-- 10. COMBAT STYLE -->
+<section>
+  <div class="sl">Combat Style</div>
+  <div class="prose">
+    <p>Crex is a one-man army with guns who can fly. That is the starting point. Do not complicate it.</p>
+    <p>He is airborne, armed with one hundred and fifty complete weapon systems, backed by two thousand autonomous clones each feeding real-time intelligence to the original, carrying round types that range from turning armor to glass to compressing a kneecap to a pinpoint to transmuting a person into a gold statue. Combat in the Realms assumes proximity, mystical engagement, and visible exchanges of power. Crex breaks every one of those assumptions. There is no myst signature. There is no True Name spoken aloud. There is no visible connection between the man and the result. A sound nobody has heard before, or no sound at all, and someone falls down.</p>
+    <p>Preferred range: half a mile. Preferred tempo: casual. He pulls bullets off his bandolier with the same unhurried rhythm he uses to pour a drink. The selection process is the entertainment — Glass Cannon on the large target, Hole Puncher on the fast one, Lil' Peter to watch them run. Every sixth round, someone turns to gold. The rhythm of combat for Crex is one, two, three, four, five, gold. He is making money while fighting. The fight is fun and profitable and he is flying and nobody can touch him.</p>
+    <p>The twenty-seven hundred years in the Mire stripped whatever part of a person says "that is too far." When he fights, there is no anger in it. No heat. No fury. Just a man solving problems from a distance he considers comfortable with the calm of someone who has been past the worst thing imaginable and found everything since then to be moderate by comparison.</p>
+    <p>He avoids fights because he has better things to do. When the fight finds him, second-favorite-thing takes over. Second place for Crex is still the most terrifying thing the other side has ever seen.</p>
+  </div>
+</section>
+
+<div class="dd"><span>◆</span></div>
+
+<!-- 11. CHROMATIC IDENTITY -->
+<section>
+  <div class="sl">Chromatic Identity</div>
+  <div class="sw-row">
+    <div class="sw">
+      <div class="sw-color" style="background:#D4A030;"></div>
+      <div class="sw-label">Myst Color</div>
+      <div class="sw-hex">#D4A030</div>
+    </div>
+    <div class="sw">
+      <div class="sw-color" style="background:#C4943A;"></div>
+      <div class="sw-label">Burnished Bronze</div>
+      <div class="sw-hex">#C4943A</div>
+    </div>
+    <div class="sw">
+      <div class="sw-color" style="background:#E8C860;"></div>
+      <div class="sw-label">Galvaneum Gold</div>
+      <div class="sw-hex">#E8C860</div>
+    </div>
+    <div class="sw">
+      <div class="sw-color" style="background:#8B7355;"></div>
+      <div class="sw-label">Wardrobe Earth</div>
+      <div class="sw-hex">#8B7355</div>
+    </div>
+    <div class="sw">
+      <div class="sw-color" style="background:#3A3028;"></div>
+      <div class="sw-label">Leather Dark</div>
+      <div class="sw-hex">#3A3028</div>
+    </div>
+    <div class="sw">
+      <div class="sw-color" style="background:#F2EBD8;"></div>
+      <div class="sw-label">Edgerinne White</div>
+      <div class="sw-hex">#F2EBD8</div>
+    </div>
+    <div class="sw">
+      <div class="sw-color" style="background:#161310;"></div>
+      <div class="sw-label">Wing Shadow</div>
+      <div class="sw-hex">#161310</div>
+    </div>
+  </div>
+</section>
+
+<div class="dd"><span>◆</span></div>
+
+<!-- 12. RELATIONSHIPS -->
+<section>
+  <div class="sl">Relationships</div>
+  <ul class="rl">
+    <li class="rl-item">
+      <span class="rl-name">Uriel</span>
+      <span class="rl-type">Herald</span>
+      <span class="rl-desc">Retrieved the God-Eyes on what was intended as an impossible errand. Crex built him a new arm in exchange. They share the same absence of restraint, arrived at from opposite directions — Uriel through belief, Crex through endurance. Together, the most dangerous combination the Realms have ever seen.</span>
+    </li>
+    <li class="rl-item">
+      <span class="rl-name">Ardenne</span>
+      <span class="rl-type">The Past</span>
+      <span class="rl-desc">Fiacre Chevalier's elder sister. Crex knew her in Zephyros when they were young. She was killed by Leviathan. The full weight of what she meant to him is no longer accessible — dissolved in Lethe. He named his first Astra after her.</span>
+    </li>
+    <li class="rl-item">
+      <span class="rl-name">Fiacre</span>
+      <span class="rl-type">Herald</span>
+      <span class="rl-desc">Ardenne's younger sister. A thread connecting Crex to something his soul cannot fully remember. Her empathy has been identified as the only external lens through which he might recover what Ardenne once meant to him. The shape of this connection exists but its full form is unconfirmed.</span>
+    </li>
+    <li class="rl-item">
+      <span class="rl-name">Algol</span>
+      <span class="rl-type">Herald</span>
+      <span class="rl-desc">He calls her "Auntie Algol." She corrects him every time. He offers her a drink. She declines. He is one of the few people in the cosmos who treats her as a person. She is not a person, which is precisely why it registers.</span>
+    </li>
+    <li class="rl-item">
+      <span class="rl-name">Edgerinne</span>
+      <span class="rl-type">Goddess</span>
+      <span class="rl-desc">Patron deity of Ferridane. Goddess of the Blade. The goddess he shot. The Archangels killed him for it. He considers this the correct response and holds no grievance.</span>
+    </li>
+    <li class="rl-item">
+      <span class="rl-name">The Free Birds</span>
+      <span class="rl-type">Organization</span>
+      <span class="rl-desc">The largest arms-dealing operation in nine realms. Founded by Crex post-Hel. Run from a barstool through two thousand clones. Also serves as fixer network and the closest thing the Outlands have to an institution.</span>
+    </li>
+    <li class="rl-item">
+      <span class="rl-name">The Advent</span>
+      <span class="rl-type">Found Family</span>
+      <span class="rl-desc">His reluctant people. They facilitated the return of his eyes and, later, his soul. They are no longer merely assets in his calculations. His equations now include their survival as integral to his own.</span>
+    </li>
+  </ul>
+</section>
+
+<div class="dd"><span>◆</span></div>
+
+<!-- 13. FOOTER -->
+<footer class="ftr">
+  Advent of Ultima · Moirai Codex · April 2026
+</footer>
+
+<script>
+function tp(n) {
+  var items = document.querySelectorAll('.vp-item');
+  for (var i = 0; i < items.length; i++) {
+    if (i === n) items[i].classList.toggle('on');
+    else items[i].classList.remove('on');
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zephyros — Realm of Wind | Advent of Ultima</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deepest: #0a110a;
+  --bg-deep: #0f1a0f;
+  --bg-card: #131f13;
+  --bg-card-hover: #1a2b1a;
+  --bg-highlight: #0d1a12;
+  --green-dark: #2D5F2D;
+  --green-mid: #3A7D3A;
+  --green-light: #4A9E4A;
+  --green-bright: #6BBF6B;
+  --green-glow: #8FD98F;
+  --green-pale: #c8eac8;
+  --gold: #B8960B;
+  --gold-light: #D4B44A;
+  --gold-pale: #E8D68A;
+  --silver: #A8B8C0;
+  --silver-light: #C8D4DA;
+  --text-primary: #D4DED4;
+  --text-secondary: #9AAE9A;
+  --text-muted: #6A826A;
+  --text-bright: #E8F0E8;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --max-width: 900px;
+  --radius: 2px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg-deepest);color:var(--text-primary);font-family:var(--font-body);font-size:18px;font-weight:400;line-height:1.75;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 10%,rgba(74,158,74,0.04) 0%,transparent 70%),radial-gradient(ellipse 60% 80% at 80% 90%,rgba(184,150,11,0.03) 0%,transparent 70%);pointer-events:none;z-index:0;}
+.aether-particles{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;}
+.aether-particle{position:absolute;width:2px;height:2px;background:var(--green-glow);border-radius:50%;opacity:0;animation:adrift linear infinite;}
+@keyframes adrift{0%{transform:translateY(0) translateX(0);opacity:0;}10%{opacity:0.35;}90%{opacity:0.1;}100%{transform:translateY(100vh) translateX(25px);opacity:0;}}
+.wrap{max-width:var(--max-width);margin:0 auto;padding:0 2rem;position:relative;z-index:2;}
+section{padding:4rem 0;}
+.dd{display:flex;align-items:center;justify-content:center;gap:1rem;padding:2.5rem 0;opacity:0.45;}
+.dd::before,.dd::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,var(--green-dark),transparent);}
+.dd i{width:7px;height:7px;background:var(--green-mid);transform:rotate(45deg);flex-shrink:0;}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:400;letter-spacing:0.05em;color:var(--text-bright);}
+.stitle{font-size:clamp(1.3rem,3vw,1.7rem);color:var(--green-bright);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1.8rem;position:relative;padding-bottom:0.8rem;}
+.stitle::after{content:'';position:absolute;bottom:0;left:0;width:50px;height:2px;background:linear-gradient(to right,var(--green-mid),transparent);}
+.p{font-size:1.05rem;line-height:1.85;color:var(--text-primary);margin-bottom:1.2rem;}
+.p em{color:var(--green-pale);font-style:italic;}
+.p strong{color:var(--text-bright);font-weight:500;}
+.p:last-child{margin-bottom:0;}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:4rem 2rem;position:relative;}
+.hero-tag{font-family:var(--font-display);font-size:0.7rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--text-muted);margin-bottom:2rem;animation:fi 1.4s ease-out 0.2s both;}
+.hero-name{font-family:var(--font-display);font-size:clamp(3rem,10vw,7rem);font-weight:400;letter-spacing:0.08em;color:var(--green-bright);line-height:1;margin-bottom:0.8rem;text-shadow:0 0 80px rgba(107,191,107,0.3),0 0 160px rgba(107,191,107,0.1);animation:fi 1.4s ease-out 0.5s both;}
+.hero-sub{font-family:var(--font-body);font-size:clamp(1rem,2.5vw,1.25rem);font-weight:300;font-style:italic;color:var(--text-secondary);letter-spacing:0.08em;animation:fi 1.4s ease-out 0.8s both;}
+.hero-scroll{position:absolute;bottom:2.5rem;animation:fi 1.4s ease-out 1.4s both;color:var(--text-muted);font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;font-family:var(--font-display);text-align:center;}
+.hero-scroll span{display:block;margin-top:6px;font-size:1.1rem;animation:bob 3s ease-in-out infinite;}
+@keyframes fi{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+@keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(5px);}}
+.id-card{background:var(--bg-card);border:1px solid var(--green-dark);border-radius:var(--radius);padding:2.5rem;position:relative;overflow:hidden;}
+.id-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--green-dark),var(--green-bright),var(--gold),var(--green-bright),var(--green-dark));}
+.id-card h2{font-size:0.65rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--text-muted);margin-bottom:1.8rem;}
+.id-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem 2.5rem;}
+.id-item{padding:0.5rem 0;border-bottom:1px solid rgba(45,95,45,0.2);}
+.id-item.fw{grid-column:1/-1;}
+.id-label{font-family:var(--font-display);font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:3px;}
+.id-val{font-family:var(--font-body);font-size:1rem;color:var(--text-primary);}
+.id-val em{color:var(--green-pale);}
+.acc-item{border:1px solid rgba(45,95,45,0.25);border-radius:var(--radius);overflow:hidden;margin-bottom:2px;transition:border-color 0.3s;}
+.acc-item.active{border-color:var(--green-mid);}
+.acc-hd{display:flex;justify-content:space-between;align-items:center;padding:0.9rem 1.5rem;background:var(--bg-card);cursor:pointer;transition:background 0.3s;user-select:none;}
+.acc-hd:hover{background:var(--bg-card-hover);}
+.acc-hd h3{font-size:0.95rem;letter-spacing:0.1em;color:var(--green-bright);flex:1;}
+.acc-hd .tag{font-family:var(--font-body);font-size:0.82rem;font-style:italic;color:var(--text-muted);margin-right:1rem;}
+.acc-hd .tog{width:18px;height:18px;display:flex;align-items:center;justify-content:center;color:var(--green-mid);font-size:1.1rem;transition:transform 0.3s;flex-shrink:0;}
+.acc-item.active .tog{transform:rotate(45deg);}
+.acc-bd{max-height:0;overflow:hidden;transition:max-height 0.5s ease;background:var(--bg-deep);}
+.acc-inner{padding:1.5rem;}
+.acc-inner .p{font-size:0.95rem;margin-bottom:0.9rem;}
+.acc-detail{margin-top:0.9rem;}
+.acc-dl{font-family:var(--font-display);font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--green-mid);margin-bottom:3px;}
+.pal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.9rem;}
+.sw{background:var(--bg-card);border:1px solid rgba(45,95,45,0.2);border-radius:var(--radius);overflow:hidden;transition:transform 0.2s,border-color 0.2s;}
+.sw:hover{transform:translateY(-2px);border-color:var(--green-mid);}
+.sw-color{height:70px;}
+.sw-info{padding:0.8rem;}
+.sw-name{font-family:var(--font-display);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-bright);}
+.sw-hex{font-size:0.78rem;color:var(--text-muted);display:block;margin:2px 0 5px;}
+.sw-desc{font-size:0.8rem;color:var(--text-secondary);line-height:1.5;}
+.gonlan-box{background:var(--bg-highlight);border:1px solid var(--gold);border-radius:var(--radius);padding:2.5rem;position:relative;overflow:hidden;}
+.gonlan-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--gold),var(--green-bright),var(--gold),transparent);}
+.gonlan-box .stitle{color:var(--gold-light);}
+.gonlan-box .stitle::after{background:linear-gradient(to right,var(--gold),transparent);}
+.rv{opacity:0;transform:translateY(25px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.rv.vis{opacity:1;transform:translateY(0);}
+.foot{text-align:center;padding:4rem 0 2.5rem;color:var(--text-muted);font-size:0.78rem;letter-spacing:0.08em;}
+.foot span{font-family:var(--font-display);letter-spacing:0.2em;font-size:0.6rem;text-transform:uppercase;}
+@media(max-width:700px){body{font-size:16px;}.id-grid{grid-template-columns:1fr;}.pal-grid{grid-template-columns:repeat(2,1fr);}.acc-hd{flex-wrap:wrap;gap:3px;}.acc-hd .tag{order:3;width:100%;margin:0;font-size:0.78rem;}section{padding:2.5rem 0;}.wrap{padding:0 1rem;}.id-card,.gonlan-box{padding:1.5rem;}}
+@keyframes pshift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+</style>
+</head>
+<body>
+<div class="aether-particles" id="ap"></div>
+
+<header class="hero">
+  <div class="hero-tag">Advent of Ultima — Realm Codex</div>
+  <h1 class="hero-name">Zephyros</h1>
+  <div class="hero-sub">Realm of Air · Cognition · Social Gravity</div>
+  <div class="hero-scroll">Descend<span>⌄</span></div>
+</header>
+
+<main class="wrap">
+
+<section class="rv">
+  <div class="id-card">
+    <h2>Realm Identity</h2>
+    <div class="id-grid">
+      <div class="id-item"><span class="id-label">Element</span><span class="id-val">Air and Wind — breath, language, comprehension, resonance</span></div>
+      <div class="id-item"><span class="id-label">Population</span><span class="id-val">Moderate; planetary-scale civilization across multiple continents</span></div>
+      <div class="id-item"><span class="id-label">Chromatic Signature</span><span class="id-val">Verdant green, Fulguror gold, moonstone silver, prismatic refractions, yellow-green Aetheric myst</span></div>
+      <div class="id-item"><span class="id-label">Material Hierarchy</span><span class="id-val">Living Flowers > Ancient Trees > Moonstone > Crystal > Woven Textiles > Stone</span></div>
+      <div class="id-item fw"><span class="id-label">Cultural Analogs</span><span class="id-val">The intellectual density of the Athenian agora; the cathedral architecture of medieval Christendom; the communal intimacy of a village where everyone knows your name; the quiet authority of a civilization that has never needed to raise its voice</span></div>
+      <div class="id-item fw"><span class="id-label">Role in the Story</span><span class="id-val">The paradise that makes the audience understand what is at stake. The home of the prophecy that set the Advent in motion. The first destination of the Dragonson. The Realm whose Oracles have held their silence for twenty years.</span></div>
+    </div>
+  </div>
+</section>
+<div class="dd"><i></i></div>
+
+<section class="rv">
+  <h2 class="stitle">The Divine Covenant</h2>
+  <p class="p"><strong>Iles, the Breath of All That Lives</strong> is the patron Goddess of Zephyros. Her domain is Air, Language, and Comprehension. She is all-seeing. She rewards clarity over brilliance.</p>
+  <p class="p">Iles is not a deity who watches over her world from a remove. She <em>is</em> the atmosphere. Her breath suffuses the air of the entire planet, making it a divine medium called the <strong>Aether</strong>. The Aether operates on a radio-frequency model: innumerable channels of information exist simultaneously in the atmosphere, carrying different signals. The mind is the receiver. Attunement — the ability to tune into specific frequencies — is learned socially, from parents, teachers, and community. What you know how to attune to is a marker of identity, education, and social standing.</p>
+  <p class="p">Every inhale on Zephyrosian soil restores the soul, replenishing myst the way sunlight feeds a plant. Every exhale carries away anxiety, stress, and accumulated psychic weight. This restorative property applies to every living being on the planet: native or visitor, Mystic or Nihila. The <strong>Compendium</strong> — the socially maintained informational layer built atop the Aether — connects every Mystic to a shared field of ambient knowledge. The Aether is the blessing. The Compendium is the institution. The distinction matters: the Compendium can be corrupted in ways the Aether itself cannot.</p>
+  <p class="p">The covenant is simple. Iles provides paradise. In return: do not lie, do not cheat, do not steal. Lies produce audible psychic dissonance. Sustained dishonesty results in severance from the Compendium. For violence — murder, assault, any physical harm — <strong>Fulguror</strong> descends: golden lightning that strikes down violent intent before it manifests. There are no trials. Violence is not punished. It is prevented.</p>
+  <p class="p"><strong>Anima</strong>, Goddess of Life, also receives worship on Zephyros. <strong>Ishtar</strong>, Goddess of Love, maintains a Temple here — the one sacred space where the air does not judge, where love can be confused and contradictory and not yet ready to be spoken aloud.</p>
+</section>
+<div class="dd"><i></i></div>
+
+<section class="rv">
+  <h2 class="stitle">The Exvisar</h2>
+  <p class="p"><strong>Exvisar Aeon, Warden of the Wind.</strong> Aeon presides over Zephyros as the face and custodian of the Realm. He floats rather than walks. He speaks rarely. When he does, the Aether shifts — conversations across the planet pause, priorities realign, the collective attentional field of the civilization reorients around his words. When he is silent, it is considered the end of one's voice.</p>
+  <p class="p">Aeon sits on the <strong>Exvisarelim</strong>, the interplanetary governing body, alongside Leif Sinclair of Thalassor, Sol'Kheret of Pyrthera, Aurelius Vorn of Ferridane, and Vex Mavarra of Tenebralis. He is the quietest member and the most carefully observed. The Oracles of Zephyros hold more information about the past, present, and future of the cosmos than any other mortal institution, and Aeon decides what the Oracles share.</p>
+  <p class="p">His silence is strategic. For twenty years, the Oracles under his custodianship have refused to disclose why the Gods exiled Aracice, the Star-Eater, to Terrae. Kings, intelligence operatives, and diplomats from every Realm have sought this information. Aeon has maintained the quiet. Iles herself is complicit — positioned as "Controlled Neutral" in the divine alignment, filtering what Dozu, God of Magic, can perceive. The Goddess whose clergy holds the blueprint for the Gods' undoing. Iles is not neutral. She is a vault. Aeon is the lock.</p>
+</section>
+<div class="dd"><i></i></div>
+
+<section class="rv">
+  <h2 class="stitle">The Land</h2>
+  <p class="p">Zephyros is a planet-scale civilization covering multiple continents and island chains. The predominant geography is lush, heavily forested terrain with vast agricultural plains, temperate coastlines, mountain ranges of significant altitude, and open seas dotted with floating crystalline islands. There is no hostile biome in the habitable regions. The climate is mild. The soil is fertile. The air itself is the primary natural resource.</p>
+  <p class="p">The Verdant Plains of Auraeas form the continental heartland — rolling farmland dotted with villages and cities. The architecture uses moonstone and crystalline materials that refract light omnidirectionally, casting prismatic spectrums across every surface. This technique originates from Luxanian architectural traditions imported centuries ago. The visual effect is a world illuminated from within.</p>
+  <p class="p">The Mountain Range of Uronoia rises in the north. Jagged peaks perpetually crowned with stormclouds. The transition from the Plains is dramatic: the wind sharpens, the temperature drops, the sky becomes a ceiling of black and gold. Lightning flickers constantly, some of it golden Fulguror. This is the only region where the environment is physically dangerous.</p>
+  <p class="p">The Crystal Isles are a floating archipelago drifting across the seas — crystalline, semi-transparent, built for acoustic resonance. West of Auraeas, across a great sea, the continent of Maias holds the city of Meliadas and the Grand Garden — the oldest knowledge repository on the planet.</p>
+  <p class="p">There is no hunting. The population is vegetarian. All fauna evolved for non-aggression: dragons for beauty and vocal resonance, elemental kitsune for domestic companionship, small seed-collecting mammals for pollination. The ecology is the product of natural selection under enforced non-violence over deep time.</p>
+</section>
+<div class="dd"><i></i></div>
+
+<section class="rv">
+  <h2 class="stitle">Nations & Regions</h2>
+  <div id="acc">
+    <div class="acc-item"><div class="acc-hd" onclick="tog(this)"><h3>Gran Ornea & Auraeas</h3><span class="tag">Silent Breath — Psychic</span><span class="tog">+</span></div><div class="acc-bd"><div class="acc-inner">
+      <p class="p">The continental heartland. Gran Ornea is the largest city in Auraeas, functioning as the de facto capital of narrative-relevant Zephyros. The Verdant Plains surround it — farming communities, trade routes, and cultural centers connected by the Aether Compendium.</p>
+      <div class="acc-detail"><div class="acc-dl">School of Magic</div><p class="p"><strong>Silent Breath (Psychic).</strong> Breath occlusion restricts airflow to sharpen perception. Silent communion produces direct contact with Iles. Thread-listening perceives inevitabilities in the Aether — the skill that, mastered over a lifetime, produces an Oracle.</p></div>
+      <div class="acc-detail"><div class="acc-dl">Architecture</div><p class="p">Plains: moonstone streets, prismatic buildings, colorful markets. Above: the Cloisters — bright cathedrals of moonstone and glass on floating formations, connected by luminous wind-paths. The brightest, stillest, most sacred spaces on the planet.</p></div>
+      <div class="acc-detail"><div class="acc-dl">Atmosphere</div><p class="p"><em>A world where the fruit merchant asks about your mother, and above the clouds, the most powerful people in the Realm listen to the Goddess in silence.</em></p></div>
+    </div></div></div>
+
+    <div class="acc-item"><div class="acc-hd" onclick="tog(this)"><h3>The Crystal Isles</h3><span class="tag">Resonant Song — Elegant</span><span class="tog">+</span></div><div class="acc-bd"><div class="acc-inner">
+      <p class="p">Floating crystal islands drifting across the seas. The artistic and spiritual heart of the Realm. Semi-transparent architecture built for acoustics — every plaza doubles as a stage. Bridges of glass. Windchime spires ringing perpetually.</p>
+      <div class="acc-detail"><div class="acc-dl">School of Magic</div><p class="p"><strong>Harmonics of Resonance — Resonant Song (Elegant).</strong> Voice-sculpting shapes sound into structures of light or protection. Warding Harmonies create barriers that absorb violence and resound as healing chords. Choral Invocation layers chants into "cathedrals of sound" that alter space.</p></div>
+      <div class="acc-detail"><div class="acc-dl">Governance</div><p class="p">Choral Councils — representatives sing arguments; votes cast as layered chords. The most harmonious resolution becomes law. Families arranged into choirs. Children learn harmony before arithmetic.</p></div>
+      <div class="acc-detail"><div class="acc-dl">Vulnerability</div><p class="p">Most vulnerable to Mavarran infiltration. Consensus culture means a lie wrapped in beauty passes unnoticed. A perfect chorus proves unity of sound, not truth. Active infiltration ongoing.</p></div>
+      <div class="acc-detail"><div class="acc-dl">Atmosphere</div><p class="p"><em>Floating crystal and perpetual song, where beauty is prayer and the most dangerous thing is a harmony so perfect it conceals a lie.</em></p></div>
+    </div></div></div>
+
+    <div class="acc-item"><div class="acc-hd" onclick="tog(this)"><h3>Uronoia & the Temples of Tempest</h3><span class="tag">Wind & Storm — Martial</span><span class="tog">+</span></div><div class="acc-bd"><div class="acc-inner">
+      <p class="p">The mountain nation. Jagged peaks crowned with perpetual stormclouds. The only region where the environment is physically dangerous. The Realm's shield.</p>
+      <div class="acc-detail"><div class="acc-dl">School of Magic</div><p class="p"><strong>Wind & Storm (Martial).</strong> Storm-Breath summons pressure systems; adepts exhale lightning. Sigilstorm Duels inscribe wind-runes as combat. Storm-Forging binds wind into crystata. Led by Wind Abbots who rise through mastery of Ventus. Training begins before dawn. Monks do not welcome tourists.</p></div>
+      <div class="acc-detail"><div class="acc-dl">The Gonlans</div><p class="p"><strong>Xal-Uron</strong> — black, streaked with gold, serpentine — inhabits the storm layer. <strong>Aeralithe</strong> — child of Aracice and Iles — lives above the stratosphere. Together they form the divine cascade: Aeralithe sheds Aetheric energy, Xal-Uron channels it into golden lightning, Stormcallers mimic a fraction of what both do naturally.</p></div>
+      <div class="acc-detail"><div class="acc-dl">Atmosphere</div><p class="p"><em>Storm-gray robes in the gale, dragons below, two Gonlans above, and monks who train in wind that could kill them because someone must be ready.</em></p></div>
+    </div></div></div>
+
+    <div class="acc-item"><div class="acc-hd" onclick="tog(this)"><h3>Maias & Meliadas</h3><span class="tag">The Keepers</span><span class="tog">+</span></div><div class="acc-bd"><div class="acc-inner">
+      <p class="p">Separate continent west of Auraeas across a great sea. Distinct governance, shared framework under Iles. Home to the Grand Garden of Meliadas — the oldest, deepest knowledge repository on the planet. A site of pilgrimage and inter-Realm tourism. Non-Zephyrosian Mystics can hear the flowers here.</p>
+      <div class="acc-detail"><div class="acc-dl">The Templar</div><p class="p">Near Meliadas. A school of genuine academic quality — agriculture, rhetoric, history, philosophy, the science of tending knowledge gardens. The campus where the Dragonson arrives. The site where the question of Aracice's exile has been debated for twenty years.</p></div>
+      <div class="acc-detail"><div class="acc-dl">Atmosphere</div><p class="p"><em>Where the cosmos comes to learn, in gardens breathing for centuries, on a continent that measures its worth by what it has kept alive.</em></p></div>
+    </div></div></div>
+  </div>
+</section>
+<div class="dd"><i></i></div>
+
+<section class="rv">
+  <h2 class="stitle">The People</h2>
+  <p class="p">Zephyrosians value honesty, intellectual rigor, aesthetic beauty, and communal warmth. They settle disputes through debate rather than force. Sigilstorm duels — rhetoric combined with wind-rune combat — formalize this practice. Street Orators survive on reputation alone. Romantic courtships frequently begin as rhetorical rivalries.</p>
+  <p class="p">The character of the population is shaped by the Aether. Zephyrosians cannot lie on their own soil without consequence, and most never learn to lie off it. This produces a directness that other civilizations find naive, disorienting, or deeply attractive depending on context. Courtship is either immediate — two people who connect realize it instantly because neither can hide it — or indefinitely deferred, because the fear of permanent honesty keeps people circling for years.</p>
+  <p class="p">Myst manifests physically as a faint yellow-green luminescence in the eyes and along the veins of attuned Mystics — the color of Aeralithe's shed scales. It intensifies during communion, debate, or emotional peaks. In ordinary moments the effect is subtle: a warmth behind the eyes, a shimmer that catches light at certain angles. Standing in a room of people from other Realms, a Zephyrosian reads as <em>still</em> — not passive, but composed. A quality of focused attention so precise it feels like being listened to by the room itself.</p>
+  <p class="p"><strong>Ascension</strong> occurs at sixteen in the Halls of Ascension. Every child grows up indistinguishable from peers. At sixteen they either emerge a Mystic — with the Aether alive in their perception — or Nihila, and the air is just air. The determination correlates with bloodline but is never guaranteed. A Mystic family can produce a Nihila child. The community feels the silence.</p>
+  <p class="p">A Mystic's chosen partner is called their <strong>Second Heart</strong> — a term transcending marriage as an institution. Ishtar's divine gift grants that true love doubles one's personal magical capacity. Losing a Second Heart halves you. The term is universal across all Realms.</p>
+</section>
+<div class="dd"><i></i></div>
+
+<section class="rv">
+  <h2 class="stitle">Schools of Magic</h2>
+  <p class="p">Three schools correspond to the three nations and form a triadic harmony — melody, rhythm, pause. The underlying mechanism for all three is the Aether's radio-frequency model.</p>
+  <p class="p"><strong>Harmonics of Resonance — Resonant Song (Crystal Isles).</strong> Voice-sculpting shapes sound into structures of light or protection. Warding Harmonies create barriers that absorb violence and resound as healing. Choral Invocation layers chants into temporary spatial alterations. Exports: resonance engines, song-sigils, harmonically infused crystata. Cost: breath and sustained concentration; choral work is physically exhausting.</p>
+  <p class="p"><strong>Temples of Tempest — Wind and Storm (Uronoia).</strong> Storm-Breath summons pressure systems through patterned inhalation; advanced practitioners exhale lightning. Sigilstorm Duels combine inscribed wind-runes with rhetorical combat. Storm-Forging binds wind into crystata, producing the finest airship sails and resonance-forged steel. Cost: physical ordeal — training in actual storms, fasting, altitude. Injuries and deaths among novices occur.</p>
+  <p class="p"><strong>Cloisters of Silent Breath (Gran Ornea).</strong> Breath Occlusion restricts airflow to sharpen perception. Silent Communion produces direct contact with Iles. Thread-Listening perceives inevitabilities in the Aether. Cost: decades of study and attunement. No visible effect. Power is informational, not physical.</p>
+  <p class="p"><strong>Knowledge Gardens.</strong> Scholars breathe comprehension into the air; the Aether carries it into plants, which absorb it on specific frequencies. An orchid grown for two hundred years holds centuries of accumulated understanding. Accessing stored knowledge requires attunement to the correct frequency. Neglected gardens mean knowledge extinct. The gardens of Meliadas are the most secure archives in the cosmos — and the most fragile. Loud disruption corrupts stored knowledge. Flowers also function as self-destructing dead drops: knowledge lives as long as the flower does and dies when it dies.</p>
+</section>
+<div class="dd"><i></i></div>
+
+<section class="rv">
+  <h2 class="stitle">Fashion & Material Culture</h2>
+  <p class="p">Zephyros produces the finest textiles in all the Realms. Fashion is a major cultural force. Beauty is understood as honest expression — care for appearance signals care for truth.</p>
+  <p class="p">The governing principle of dress is <strong>earned lightness</strong>. Fabric flows. Layers are sheer and luminous. Nothing is armored or heavy. The silhouette reads as open — breath passing through cloth. Lace is the prestige textile: intricate, labor-intensive, structurally delicate.</p>
+  <p class="p"><strong>Status at a glance:</strong> Well-connected Mystics wear prismatic weaves that shimmer with the same spectral quality as moonstone architecture. Oracles wear white, unadorned, perfectly cut — authority beyond decoration. Stormcallers: storm-gray with wind-sigil embroidery. Crystal Isle choristers: glass-fiber weaves that hum when they move.</p>
+  <p class="p"><strong>Poverty at a glance:</strong> Nihila farmers wear practical cloth without prismatic quality. Well-made, respected, but the absence of light in the fabric communicates class position at a glance.</p>
+</section>
+<div class="dd"><i></i></div>
+
+<section class="rv">
+  <h2 class="stitle">Weapons & the Relationship to Force</h2>
+  <p class="p">Zephyros does not carry weapons. Carrying implies intent. Intent triggers Fulguror. The most dangerous thing in a room full of Zephyrosians is the room itself — the air, the Aether, the Goddess who is the medium everyone exists within. Violence is not punished. It is prevented.</p>
+  <p class="p">There is no standing military. The Stormcallers are monks, not soldiers. Their combat capability has never been deployed offensively in living memory. Zephyrosians who travel abroad carry <strong>Ventus escorts</strong> — practitioners of pure elemental wind manipulation. The protocol for violent threat: remove the breath from the lungs of the aggressor. No weapon drawn. No spectacle. No military doctrine in any Realm accounts for this capability.</p>
+  <p class="p">The true weapon is informational. The Aether works off-world. A Zephyrosian abroad is a live node in the most comprehensive real-time intelligence network in the cosmos — receiving through channels no foreign power can intercept, detect, or perceive. Flowers planted abroad function as living dead drops on private frequencies. The most dangerous Zephyrosian in the cosmos is a quiet woman who tends a balcony garden.</p>
+</section>
+<div class="dd"><i></i></div>
+
+<section class="rv">
+  <h2 class="stitle">Relationship to the Other Realms</h2>
+  <p class="p"><strong>Thalassor.</strong> Cordial, wary. Thalassorians are silenced constantly when visiting — casual social dishonesty rings audibly wrong. The knowledge gardens hold scholarship on the Luxanian origins of Thalassori wealth. Zephyrosians find Thalassorians fascinating and slightly tragic: brilliant people who have confused performance for truth.</p>
+  <p class="p"><strong>Ferridane.</strong> The most complex relationship. Zephyrosians find Ferridane heartbreaking: nine hundred million people forging themselves into weapons because their theology holds pressure sacred. Ferridanian veterans vacation extensively; the air heals wounds their civilization inflicted. The only Ferridanian export Zephyros purchases is augmented wings from the Axipitre. Iles has the second-most foreign converts of any Goddess, behind only Salacia. Many are retired Ferridanian veterans.</p>
+  <p class="p"><strong>Pyrthera.</strong> Awed respect and mutual incomprehension. Pyrtheran directness rings true in the Aether, earning immediate trust. The theology of trial-through-suffering is incomprehensible to a civilization where suffering is structurally unnecessary.</p>
+  <p class="p"><strong>Tenebralis.</strong> Theological fear. Everything Zephyros defines itself against. Mavarran infiltration of the Crystal Isles is active. Agents introduce nuance as a weapon, reframing faith as naivety. The Oracles are aware. The population is not.</p>
+  <p class="p"><strong>Terrae.</strong> Barely considered by most. Scholars find it horrifying and moving — to be honest without divine enforcement, to love without the guarantee your partner cannot lie, requires a form of courage Zephyrosians recognize they have never needed.</p>
+  <p class="p"><strong>Exports:</strong> Tourism, textiles, resonance engines, song-sigils, crystata, agricultural produce, truth. <strong>Imports:</strong> Augmented wings (Ferridane), luxury goods (Thalassor). Zephyros is a net exporter of expatriates — the dishonored leave; the faithful of other Realms arrive.</p>
+</section>
+<div class="dd"><i></i></div>
+
+<section class="rv">
+  <h2 class="stitle">Leadership & Governance</h2>
+  <p class="p">Zephyros is a theocracy in which the Goddess is the medium, not the ruler. No edicts, no religious police, no institutional enforcement. Governance is what happens when a divine being is the atmosphere.</p>
+  <p class="p">Authority flows from relationship to the Aether: <strong>Nihila</strong> (disconnected) → <strong>Mystics</strong> (connected citizenry) → <strong>Scholars and Templars</strong> (curators of consensus; Templars enforce epistemological integrity) → <strong>Stellarchs</strong> (arbiters of alignment) → <strong>Oracles</strong> (clergy of absolute authority, earned through decades of study, never inherited).</p>
+  <p class="p">The Exvisar presides over all and sets the tempo of public life. The Crystal Isles are governed by Choral Councils, Uronoia by Wind Abbots, Gran Ornea by informal Oracle authority supplemented by communal civic councils. Maias maintains separate governance. The three narrative nations act as three voices of a single breath: the Isles sing the melody, the Temples keep the rhythm, the Cloisters hold the silence.</p>
+</section>
+<div class="dd"><i></i></div>
+
+<section class="rv">
+  <h2 class="stitle">Material Palette</h2>
+  <div class="pal-grid">
+    <div class="sw"><div class="sw-color" style="background:linear-gradient(135deg,#2D5F2D,#3A7D3A);"></div><div class="sw-info"><span class="sw-name">Verdant Deep</span><span class="sw-hex">#2D5F2D → #3A7D3A</span><span class="sw-desc">The Plains. Forest canopy. Knowledge gardens. The base color of the civilization.</span></div></div>
+    <div class="sw"><div class="sw-color" style="background:linear-gradient(135deg,#B8960B,#D4B44A);"></div><div class="sw-info"><span class="sw-name">Fulguror Gold</span><span class="sw-hex">#B8960B → #D4B44A</span><span class="sw-desc">Golden lightning. Xal-Uron's streaks. Divine justice made visible.</span></div></div>
+    <div class="sw"><div class="sw-color" style="background:linear-gradient(135deg,#A8B8C0,#D4DEE4);"></div><div class="sw-info"><span class="sw-name">Moonstone Silver</span><span class="sw-hex">#A8B8C0 → #D4DEE4</span><span class="sw-desc">Moonstone streets. Filigree. The Cloisters. Luxanian legacy in stone.</span></div></div>
+    <div class="sw"><div class="sw-color" style="background:linear-gradient(135deg,#6BBF6B,#8FD98F);"></div><div class="sw-info"><span class="sw-name">Aether Myst</span><span class="sw-hex">#6BBF6B → #8FD98F</span><span class="sw-desc">Aeralithe's shed scales. Visible Aetheric particles. A Mystic's glow during communion.</span></div></div>
+    <div class="sw"><div class="sw-color" style="background:linear-gradient(135deg,#6BBFBF,#8FD9D9,#BF8FD9,#D9BF6B);background-size:400% 400%;animation:pshift 8s ease infinite;"></div><div class="sw-info"><span class="sw-name">Prismatic Refraction</span><span class="sw-hex">Spectral</span><span class="sw-desc">Rainbow light through crystalline architecture. All colors passing through perfect structure.</span></div></div>
+    <div class="sw"><div class="sw-color" style="background:linear-gradient(135deg,#1a1a1a,#2a3a2a);position:relative;overflow:hidden;"><div style="position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,rgba(107,191,107,0.15),transparent 60%);"></div></div><div class="sw-info"><span class="sw-name">Storm Obsidian</span><span class="sw-hex">#1A1A1A + green undertone</span><span class="sw-desc">Uronoia's stormclouds. Xal-Uron's hide. The shadow that makes the light sacred.</span></div></div>
+  </div>
+</section>
+<div class="dd"><i></i></div>
+
+<section class="rv">
+  <h2 class="stitle">Societal Dysfunction</h2>
+  <p class="p">The structural fault line is the <strong>Nihila question</strong>. A portion of every generation Ascends as Nihila — magically disconnected, excluded from the Compendium, unable to participate in the civilization's primary medium. The distinction is ontological: whether Nihila possess souls at all is an unresolved philosophical question. Nihila on Zephyros live in safe, comfortable conditions — but they are permanently excluded from the informational commons. Their breath is carried on the wind; Iles hears them. They never hear her back. All Nihila go to Hel regardless of how they lived.</p>
+  <p class="p">The system generates its own exploitation. Nihila can operate without Aetheric consequence — their lies produce no dissonance, their actions are not registered on the Compendium. Mystics who need dishonorable tasks performed hire Nihila. The shadow economy pays better than farming. The class-wide reputation for criminality compounds. The Mystics who hired them are never scrutinized.</p>
+  <p class="p">The second vulnerability is <strong>Mavarran infiltration</strong>. A civilization that has never developed skepticism has no immune system against elegant deception. The Crystal Isles are actively being corrupted. The Oracles are aware. The general population is not. The vector is always the same: introduce nuance as a weapon; reframe faith as naivety; make the settled feel unsophisticated for accepting the simplicity of the covenant.</p>
+</section>
+<div class="dd"><i></i></div>
+
+<section class="rv">
+  <div class="gonlan-box">
+    <h2 class="stitle">The Gonlans of Zephyros</h2>
+    <p class="p">A Gonlan is to a dragon what a human is to a primate — a being of an entirely different order. All Gonlans are children of <strong>Aracice, the Star-Eater</strong>, the Dragon-God who served as divine head of the Exvisarelim before his exile and subsequent death at the Battle of Point Zero. Zephyros is guarded by two.</p>
+    <p class="p"><strong>Xal-Uron, the Sky-Leviathan.</strong> Black, streaked with gold, serpentine. If visible, it is blotting out the sky. Inhabits the storm layer of Uronoia. Arranges the Aetheric energy shed from Aeralithe's scales into golden lightning — including Fulguror. The Stormcallers commune with it directly. The Realm's first line of defense.</p>
+    <p class="p"><strong>Aeralithe, the Wind Above the Wind.</strong> Child of Aracice and Iles. Half-sibling of Alciel Aquilon Karai and every other Gonlan in the cosmos. Lives above the stratosphere. Landed once — the floating crystal beneath Gran Ornea and the Crystal Isles exists because the planet restructured to accommodate a being of that scale. Indistinguishable from weather. Its movements cause eclipses, storms, and atmospheric events. Its shed scales are the source of visible Aetheric particles — the yellow-green myst on the highest peaks.</p>
+    <p class="p">Zephyrosian eschatology holds that in the end of days, Aeralithe will descend and carry the faithful to the next world. The floating crystal cities are understood as a rehearsal for this promise.</p>
+    <p class="p">Alciel Aquilon Karai — the Dragonson — must commune with Aeralithe through <strong>Dracoris Ultima</strong> and take on its form. This communion is both a family reunion between orphaned siblings and an acquisition of power so vast it reshapes what he is capable of. When Alciel takes the form of Aeralithe, he becomes the sky over Zephyros — carrying in his body the shape of a being around which an entire civilization built its eschatology.</p>
+  </div>
+</section>
+<div class="dd"><i></i></div>
+
+<footer class="foot">
+  <span>Advent of Ultima</span> · Moirai Codex · April 2026
+</footer>
+
+</main>
+
+<script>
+(function(){var c=document.getElementById('ap');for(var i=0;i<22;i++){var p=document.createElement('div');p.className='aether-particle';p.style.left=Math.random()*100+'%';p.style.animationDuration=(13+Math.random()*18)+'s';p.style.animationDelay=(Math.random()*14)+'s';var s=(1+Math.random()*2)+'px';p.style.width=s;p.style.height=s;c.appendChild(p);}})();
+function tog(h){var item=h.parentElement,bd=item.querySelector('.acc-bd'),active=item.classList.contains('active');document.querySelectorAll('.acc-item').forEach(function(n){n.classList.remove('active');n.querySelector('.acc-bd').style.maxHeight='0';});if(!active){item.classList.add('active');bd.style.maxHeight=bd.scrollHeight+'px';}}
+(function(){var els=document.querySelectorAll('.rv');function ck(){els.forEach(function(el){if(el.getBoundingClientRect().top<window.innerHeight-60)el.classList.add('vis');});}window.addEventListener('scroll',ck);window.addEventListener('resize',ck);setTimeout(ck,100);})();
+</script>
+</body>
+</html>

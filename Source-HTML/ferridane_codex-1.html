@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ferridane · The Anvil of Ages · Moirai Codex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Marcellus&family=Spectral+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     THE TOKENS — Gold-on-White house style, set to the Anvil.
+     The prism is retired here. In its place runs Galvaneum:
+     one light caught across burnished bronze and gold.
+     ============================================================ */
+  :root{
+    /* Ground & ink — never pure white, never pure black */
+    --paper:#FBF7EE;
+    --paper-2:#F6F0E2;
+    --ink:#2B2317;
+    --ink-soft:#5A4E3A;
+    --rule:#E4D8BE;
+
+    /* Gold — the voice */
+    --gold:#9A7B1F;
+    --gold-bright:#C9A227;
+    --gold-pale:#E9DCB0;
+    --gold-glow:rgba(201,162,39,.18);
+
+    /* The forge palette — bronze, gold, iron, stone, searing white.
+       One accent per element. No element takes a full background. */
+    --bronze:#A66A2E;        --bronze-pale:#E0C394;
+    --bronze-deep:#7A4E1E;
+    --steel-gold:#C9A227;    --steel-gold-pale:#EBDCA6;
+    --iron:#6E6A60;          --iron-pale:#C7C1B2;
+    --ash:#534C41;           --ash-pale:#B8AE9C;
+    --diamond:#BFA15A;       --diamond-pale:#F2E6BE;   /* Edgerinne: searing white through pale gold */
+
+    /* GALVANEUM — the burnished line that replaces the prism.
+       Light travels across bronze and gold and catches white. */
+    --galvaneum:linear-gradient(90deg,
+      #5E3F1A 0%, #7A4E1E 12%, #A66A2E 28%, #C9A227 46%,
+      #F4E8BE 55%, #C9A227 65%, #A66A2E 80%, #5E3F1A 100%);
+
+    /* Glass — frosted forge-light, used on raised panels */
+    --glass-bg:rgba(251,247,238,.58);
+    --glass-bd:rgba(255,255,255,.55);
+    --glass-shadow:0 22px 54px -38px rgba(43,35,23,.62);
+
+    --maxw:760px;
+  }
+
+  /* ============================================================
+     THE SYSTEM — copied from the house style, then dressed in metal.
+     ============================================================ */
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Spectral",Georgia,serif;font-weight:400;
+    font-size:19px;line-height:1.72;-webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;overflow-x:hidden;
+  }
+  body::before{ /* warm vignette + forge-light leaks in bronze, gold, iron */
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(120% 80% at 6% -5%, rgba(166,106,46,.07), transparent 46%),
+      radial-gradient(120% 80% at 106% 108%, rgba(201,162,39,.07), transparent 46%),
+      radial-gradient(140% 90% at 100% 0%, rgba(110,106,96,.05), transparent 40%),
+      radial-gradient(100% 100% at 50% 42%, transparent 60%, rgba(43,35,23,.06));
+  }
+  body::after{ /* fine paper grain */
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  }
+  .ribbon{position:fixed;top:0;left:0;right:0;height:5px;z-index:60;
+    background:var(--galvaneum);background-size:220% 100%;animation:drift 24s linear infinite;}
+  @keyframes drift{0%{background-position:0 0;}100%{background-position:220% 0;}}
+
+  nav.codex-nav{position:sticky;top:5px;z-index:55;
+    background:rgba(251,247,238,.72);
+    backdrop-filter:blur(11px) saturate(120%);-webkit-backdrop-filter:blur(11px) saturate(120%);
+    border-bottom:1px solid var(--rule);}
+  nav.codex-nav ul{list-style:none;margin:0 auto;padding:.55rem .9rem;display:flex;
+    flex-wrap:wrap;gap:.2rem .9rem;justify-content:center;max-width:1040px;}
+  nav.codex-nav a{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-soft);text-decoration:none;padding:.15rem 0;
+    border-bottom:1.5px solid transparent;transition:.25s;white-space:nowrap;}
+  nav.codex-nav a:hover{color:var(--bronze);border-bottom-color:currentColor;}
+
+  main{position:relative;z-index:1;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.4rem;}
+
+  header.mast{text-align:center;padding:5.5rem 1.4rem 3rem;position:relative;}
+  .eyebrow{font-family:"Marcellus",serif;font-size:.82rem;letter-spacing:.42em;
+    text-transform:uppercase;color:var(--bronze);margin:0 0 1.6rem;text-indent:.42em;}
+  h1.title{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(2.7rem,8vw,5.1rem);
+    line-height:.98;margin:0;letter-spacing:-.01em;color:var(--ink);font-variation-settings:"opsz" 144;}
+  h1.title .gilt{background:linear-gradient(95deg,var(--bronze-deep) 0%,var(--bronze) 30%,var(--gold-bright) 55%,#EFD27A 66%,var(--bronze) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;}
+  .subtitle{font-family:"Spectral",serif;font-weight:300;font-style:italic;
+    font-size:clamp(1.05rem,2.6vw,1.35rem);color:var(--ink-soft);margin:1.5rem auto 0;max-width:40ch;line-height:1.5;}
+  .mast-mark{margin:2.4rem auto 0;width:min(420px,80%);}
+  .mast-mark .bar{height:3px;border-radius:2px;background:var(--galvaneum);background-size:200% 100%;animation:drift 20s linear infinite;}
+  .mast-epi{font-family:"Fraunces",serif;font-style:italic;font-weight:300;
+    font-size:clamp(1.15rem,3vw,1.6rem);color:var(--bronze);margin:2.6rem auto 0;max-width:34ch;line-height:1.4;}
+  .mast-epi span{display:block;color:var(--ink-soft);font-size:.7em;font-style:normal;
+    font-family:"Spectral";letter-spacing:.05em;margin-top:.5rem;}
+
+  .diadiv{display:flex;align-items:center;justify-content:center;gap:1rem;margin:3.4rem 0;}
+  .diadiv .line{height:1px;flex:1;max-width:120px;background:linear-gradient(90deg,transparent,var(--bronze-pale),var(--bronze));}
+  .diadiv .line.r{background:linear-gradient(90deg,var(--bronze),var(--bronze-pale),transparent);}
+  .diadiv .gem{font-size:.9rem;color:var(--bronze);letter-spacing:.4em;text-indent:.4em;}
+
+  section{padding:1.5rem 0;position:relative;}
+  .sec-eyebrow{font-family:"Marcellus",serif;font-size:.78rem;letter-spacing:.32em;
+    text-transform:uppercase;color:var(--bronze);margin:0 0 .5rem;}
+  h2{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(1.9rem,5vw,2.9rem);
+    line-height:1.05;margin:.2rem 0 1.2rem;color:var(--ink);letter-spacing:-.01em;font-variation-settings:"opsz" 80;}
+  h2 .uline{display:block;height:3px;width:108px;margin-top:.7rem;border-radius:2px;
+    background:var(--galvaneum);background-size:200% 100%;animation:drift 18s linear infinite;}
+  h3{font-family:"Fraunces",serif;font-weight:500;font-style:italic;font-size:clamp(1.25rem,3.4vw,1.6rem);
+    margin:2.2rem 0 .6rem;color:var(--ink);font-variation-settings:"opsz" 40;}
+  h4{font-family:"Marcellus",serif;font-weight:400;font-size:1.02rem;letter-spacing:.04em;margin:1.6rem 0 .35rem;color:var(--bronze);}
+  p{margin:0 0 1.15rem;}
+  p a{color:var(--bronze);}
+  strong{font-weight:600;color:var(--ink);}
+  em{font-style:italic;}
+  .lead{font-size:1.12rem;}
+  .lead::first-letter{font-family:"Fraunces",serif;font-weight:400;float:left;font-size:4.4rem;
+    line-height:.72;padding:.32rem .55rem 0 0;color:var(--bronze);font-variation-settings:"opsz" 144;}
+
+  /* Spectrum legend, recolored to the forge palette */
+  .spectrum{margin:2rem auto;border:1px solid var(--rule);border-radius:14px;overflow:hidden;
+    background:var(--glass-bg);backdrop-filter:blur(10px) saturate(115%);-webkit-backdrop-filter:blur(10px) saturate(115%);
+    box-shadow:0 1px 0 rgba(255,255,255,.6) inset, var(--glass-shadow);}
+  .spectrum .top{height:8px;background:var(--galvaneum);background-size:200% 100%;animation:drift 22s linear infinite;}
+  .spectrum .rows{padding:.4rem .2rem;}
+  .spec-row{display:grid;grid-template-columns:14px 1fr;gap:.9rem;align-items:start;
+    padding:.7rem 1.1rem;border-bottom:1px solid var(--rule);}
+  .spec-row:last-child{border-bottom:none;}
+  .spec-row .swatch{width:14px;height:14px;border-radius:50%;margin-top:.45rem;
+    box-shadow:0 0 0 3px var(--paper-2),0 0 0 4px currentColor;}
+  .spec-row .nm{font-family:"Marcellus",serif;letter-spacing:.06em;font-size:1.05rem;}
+  .spec-row .nm small{display:block;font-family:"Spectral";font-style:italic;letter-spacing:0;
+    color:var(--ink-soft);font-size:.86rem;margin-top:.15rem;font-weight:300;}
+
+  /* Accent card — given a frosted-glass body */
+  .realm{--accent:var(--bronze);--accent-pale:var(--bronze-pale);margin:3rem auto;
+    border:1px solid var(--glass-bd);border-radius:16px;
+    background:var(--glass-bg);backdrop-filter:blur(13px) saturate(118%);-webkit-backdrop-filter:blur(13px) saturate(118%);
+    box-shadow:0 1px 0 rgba(255,255,255,.55) inset, var(--glass-shadow);overflow:hidden;position:relative;}
+  .realm > .crown{height:7px;background:linear-gradient(90deg,var(--accent),var(--accent-pale),#F4E8BE,var(--accent));}
+  .realm-head{padding:1.8rem 1.6rem 1.3rem;border-bottom:1px solid var(--rule);
+    background:radial-gradient(120% 140% at 100% -20%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 60%);}
+  .realm-head .kicker{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 .4rem;display:flex;align-items:center;gap:.6rem;}
+  .realm-head .kicker .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);}
+  .realm-head h2{margin:.1rem 0 .55rem;font-size:clamp(2rem,6vw,3rem);}
+  .realm-head h2 .uline{display:none;}
+  .realm-meta{font-family:"Marcellus",serif;font-size:.8rem;letter-spacing:.05em;color:var(--ink-soft);
+    display:flex;flex-wrap:wrap;gap:.4rem 1.3rem;margin-top:.5rem;}
+  .realm-meta b{color:var(--accent);font-weight:400;}
+  .realm-essence{font-style:italic;color:var(--ink-soft);font-weight:300;margin:.9rem 0 0;font-size:1.04rem;}
+  .realm-body{padding:.4rem 1.6rem 1.7rem;}
+
+  details.thread{border-bottom:1px solid var(--rule);}
+  details.thread:last-of-type{border-bottom:none;}
+  details.thread > summary{list-style:none;cursor:pointer;padding:1.15rem .2rem 1rem;display:flex;
+    align-items:center;gap:.85rem;font-family:"Fraunces",serif;font-size:1.15rem;font-weight:500;color:var(--ink);}
+  details.thread > summary::-webkit-details-marker{display:none;}
+  details.thread > summary .ico{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--accent);
+    color:var(--accent);display:grid;place-items:center;font-family:"Spectral";font-size:1rem;transition:.3s;
+    background:color-mix(in srgb,var(--accent) 7%,transparent);}
+  details.thread[open] > summary .ico{transform:rotate(45deg);}
+  details.thread > summary .lbl small{display:block;font-family:"Marcellus";font-size:.66rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);font-weight:400;margin-top:.15rem;}
+  .thread-body{padding:.1rem .3rem 1.5rem 0;}
+  @media(min-width:540px){.thread-body{padding-left:3.5rem;}}
+
+  .vignette{margin:1.5rem 0;padding:1.1rem 1.3rem;border-left:3px solid var(--accent);
+    background:color-mix(in srgb,var(--accent) 6%,var(--paper-2));border-radius:0 10px 10px 0;}
+  .vignette .tag{font-family:"Marcellus";font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin:0 0 .4rem;}
+  .vignette p{font-style:italic;font-weight:300;margin:0 0 .8rem;color:var(--ink);font-size:1.02rem;line-height:1.6;}
+  .vignette p:last-child{margin-bottom:0;}
+
+  .pull{margin:2.4rem auto;text-align:center;max-width:34ch;}
+  .pull q{font-family:"Fraunces",serif;font-style:italic;font-weight:300;quotes:none;
+    font-size:clamp(1.3rem,3.6vw,1.8rem);line-height:1.34;color:var(--bronze);display:block;}
+  .pull cite{display:block;font-style:normal;font-family:"Marcellus";font-size:.74rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ink-soft);margin-top:1rem;}
+
+  .feature{margin:2.2rem 0;padding:1.4rem 1.5rem;border:1px solid var(--glass-bd);border-radius:14px;
+    background:var(--glass-bg);backdrop-filter:blur(12px) saturate(116%);-webkit-backdrop-filter:blur(12px) saturate(116%);
+    box-shadow:0 1px 0 rgba(255,255,255,.55) inset, var(--glass-shadow);}
+  .feature h3{margin-top:.2rem;}
+  .feature h4:first-child{margin-top:.2rem;}
+
+  .note{margin:1.5rem 0;padding:1rem 1.2rem;border-radius:10px;border:1px dashed var(--bronze);
+    background:color-mix(in srgb,var(--bronze) 6%,var(--paper-2));}
+  .note .t{font-family:"Marcellus";font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--bronze);margin:0 0 .35rem;}
+  .note p{margin:0;font-size:.98rem;}
+
+  .twocol{display:grid;gap:1rem;margin:1.6rem 0;}
+  @media(min-width:620px){.twocol{grid-template-columns:1fr 1fr;}}
+  .card-rule{border:1px solid var(--glass-bd);border-radius:12px;padding:1.1rem 1.2rem;
+    background:var(--glass-bg);backdrop-filter:blur(10px) saturate(112%);-webkit-backdrop-filter:blur(10px) saturate(112%);
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset;}
+  .card-rule h4{margin-top:0;}
+  .card-rule ul{margin:.3rem 0 0;padding-left:1.1rem;}
+  .card-rule li{margin:.4rem 0;font-size:.97rem;}
+
+  /* Lexicon table — the precise speech of the forge */
+  .lexicon{margin:1.8rem 0;border:1px solid var(--glass-bd);border-radius:14px;overflow:hidden;
+    background:var(--glass-bg);backdrop-filter:blur(11px) saturate(115%);-webkit-backdrop-filter:blur(11px) saturate(115%);
+    box-shadow:var(--glass-shadow);}
+  .lexicon .lx-top{height:6px;background:var(--galvaneum);background-size:200% 100%;animation:drift 22s linear infinite;}
+  .lx-row{display:grid;grid-template-columns:9.5rem 1fr;gap:.4rem 1.1rem;padding:.85rem 1.2rem;border-bottom:1px solid var(--rule);}
+  .lx-row:last-child{border-bottom:none;}
+  .lx-row .term{font-family:"Marcellus";letter-spacing:.04em;color:var(--bronze);font-size:1rem;}
+  .lx-row .def{font-size:.97rem;color:var(--ink);}
+  .lx-row .def small{display:block;color:var(--ink-soft);font-style:italic;font-weight:300;font-size:.85rem;margin-top:.15rem;}
+  @media(max-width:520px){.lx-row{grid-template-columns:1fr;gap:.15rem;}}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;}
+    .ribbon,.spectrum .top,.realm>.crown,h2 .uline,.mast-mark .bar,footer .bar,.lexicon .lx-top{animation:none;}
+  }
+  @media(max-width:540px){body{font-size:18px;}nav.codex-nav ul{gap:.15rem .7rem;}
+    .realm-body,.realm-head{padding-left:1.1rem;padding-right:1.1rem;}}
+
+  footer{text-align:center;padding:4rem 1.4rem 5rem;margin-top:2rem;position:relative;z-index:1;}
+  footer .bar{height:3px;width:min(420px,80%);margin:0 auto 2.4rem;border-radius:2px;background:var(--galvaneum);background-size:200% 100%;animation:drift 20s linear infinite;}
+  footer .candle{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.3rem,4vw,2rem);
+    color:var(--bronze);line-height:1.35;margin:0 auto;max-width:28ch;}
+  footer .ma{font-family:"Marcellus";font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-top:2.4rem;}
+  footer .ma small{display:block;letter-spacing:.05em;text-transform:none;font-family:"Spectral";font-style:italic;font-weight:300;margin-top:.5rem;color:var(--ink-soft);}
+</style>
+</head>
+<body>
+<div class="ribbon"></div>
+
+<nav class="codex-nav">
+  <ul>
+    <li><a href="#realm">The Realm</a></li>
+    <li><a href="#history">History</a></li>
+    <li><a href="#goddess">The Goddess</a></li>
+    <li><a href="#leadership">Leadership</a></li>
+    <li><a href="#regions">The Regions</a></li>
+    <li><a href="#arts">The Sacred Arts</a></li>
+    <li><a href="#works">The Works</a></li>
+    <li><a href="#biology">Biology</a></li>
+    <li><a href="#life">Life &amp; Custom</a></li>
+    <li><a href="#realms">The Realms Beyond</a></li>
+    <li><a href="#institutions">Institutions</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<header class="mast">
+  <p class="eyebrow">Moirai Codex · The Living Cosmos</p>
+  <h1 class="title">Ferridane,<br><span class="gilt">the Anvil of Ages</span></h1>
+  <p class="subtitle">The Realm of Steel. Element of Earth and Metal. Where a world answers the question of power with the work of its own hands.</p>
+  <div class="mast-mark"><div class="bar"></div></div>
+  <p class="mast-epi">Ex Petra, Lamina. Ex Lamina, Deus.
+    <span>From Stone, the Blade. From the Blade, God.</span>
+  </p>
+</header>
+
+<!-- THE REALM -->
+<section id="realm" class="wrap reveal">
+  <p class="sec-eyebrow">Orientation</p>
+  <h2>The Realm<span class="uline"></span></h2>
+  <p class="lead">Ferridane is a single unbroken continent carrying nine hundred million souls, the most powerful conventional military civilization in the cosmos, and the only people who have set out to surpass the age of gods with engineering. It is the magitek empire at the end of its golden age: the military reach of Rome, the industrial scale of a Victorian furnace-city, the technological appetite of a modern republic, the theological depth of Byzantium, and the clan warfare of feudal houses that have never once stopped fighting one another.</p>
+
+  <p>The seduction of Ferridane is that it works. The weapons are magnificent. The augmentations are extraordinary. The engineering has no equal anywhere among the Realms. The glory is real and earned. The cost of producing that glory is also real, and it has been folded so cleanly into the machinery that a person has to be looking for it to find it. A Ferridanian who surveys this civilization sees the greatest that has ever existed, and proof that discipline and craft applied at scale across centuries produce wonders the gods themselves have not matched. They are not wrong about any of it.</p>
+
+  <div class="feature" style="--accent:var(--bronze)">
+    <h4>The Realm at a glance</h4>
+    <div class="realm-meta" style="margin-top:.2rem">
+      <span>Element <b>Earth &amp; Metal</b></span>
+      <span>Patrons <b>Brokkae &amp; Edgerinne</b></span>
+      <span>Exvisar <b>Aurelius Vorn, the Steelborn</b></span>
+      <span>Scale <b>~900 million · one Pangaea</b></span>
+      <span>Signature <b>Bronze &amp; Gold</b></span>
+      <span>Chromatic veins <b>gold, bronze, iron-gray, searing white</b></span>
+    </div>
+    <p style="margin:1rem 0 0">The chromatic spectrum runs the whole distance of the gift, from raw earth at one end to living diamond at the other. The myst of Ferridane shows in the eyes and veins as the metals show in ore: warm where the body is rich, white where it has been carried to completion.</p>
+  </div>
+
+  <p>The answer Ferridane gives to the question every Realm answers in its own grammar is plain. Power is the luminous thing the pressure reveals, and what power is for is to prove that you were forged rather than merely born. The teaching that holds the continent together is the Covenant of Pressure, and its first line is a promise and a demand in one breath: you are not yet what you will become.</p>
+
+  <div class="pull"><q>You are not given, not born, not inherited. You are forged. Made, through pressure sustained long enough.</q><cite>The Covenant of Pressure</cite></div>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div></div>
+
+<!-- HISTORY -->
+<section id="history" class="wrap reveal">
+  <p class="sec-eyebrow">From Stone to Steel to Drift</p>
+  <h2>History<span class="uline"></span></h2>
+
+  <p class="lead">The realm received its gift in two layers across ten thousand years, and its whole history is the story of the second layer emerging from the first. The name of the place changed once. Petranor, the country of stone, became Ferridane, the country of forged iron, and the age of stillness gave way to the age of refinement.</p>
+
+  <h3>The Age of Stone</h3>
+  <p>In the beginning there was Brokkae, and Brokkae was the earth. He did not move. He spoke only in the slow language of geology: the settling of continents, the cooling of magma, the patient compression of sediment into rock. His people learned his way. They built in stone, farmed in cycles, and measured time in harvests and generations rather than hours. A Petranori house stood for ten thousand years, and a Petranori promise stood longer. The virtue of this age was stillness, and the understanding beneath it was that the world is already complete and the highest calling is to be a faithful part of it. The mountain does not seek to become. It is, and therefore it endures. This age lasted longer than any record can hold, and it was good.</p>
+
+  <h3>The Emergence</h3>
+  <p>From within the stone, something stirred. It came from the deep, from Brokkae's own nature carried to its furthest conclusion. Pressure upon pressure upon pressure, over millennia, and in the deepest place in the earth carbon became crystal. This was his daughter, Edgerinne. She came before him and said: I am what your depths have made. He looked at her and understood that his age, however good, was finished, and that what came next required a different principle.</p>
+
+  <p>He tested her. For a thousand years he brought the full weight of his nature against her, in rigor rather than anger, the same pressure that had made her applied with the full force of a god who needed to know whether she was real. She accepted the weight, and let it compress her further, and further still, until she emerged as living diamond, structure that holds light. Brokkae saw what his own domain had produced, recognized that his era was complete, and receded into the deep earth. He became the bedrock, the foundation no one sees and everyone stands on. The teaching the realm draws from this is that the old world becomes the floor: completion is a kind of recession, and the role of the finished thing is to hold up what comes after.</p>
+
+  <h3>The Covenant Era</h3>
+  <p>For centuries after Edgerinne's emergence, Ferridane practiced its three sacred arts inside a living relationship to the divine. The continent was violent, proud, and fractious, nine hundred million people who disagreed about everything, but the wars stayed inside the covenant. The clans fought over interpretation rather than over whether the divine relationship was real. A warrior listened to the metal before shaping it. A channeler tended a current understood to have flowed before they arrived and to flow after they were gone. A forged body submitted to sacred discipline before it fought. The theology held, and the realm was coherent.</p>
+
+  <h3>The Shot</h3>
+  <p>Three hundred and fifty years ago, Crex Falcon Axipitre, firstborn of the oldest Axipitre bloodline and the prodigy meant to carry the tradition forward, challenged the Goddess of the Blade to a sacred duel. He had traveled far, including to the magic-poor world of Terrae, where he watched people solve every problem the Realms solve with magic through stubbornness and craft. He came back simple. He looked at a sacred rite the way an engineer looks at a problem, and he asked the question that governs his whole life: why submit to a thousand years of pressure when a tool renders it unnecessary.</p>
+
+  <p>He brought a gun. Nobody in the Realms had a word for what he pointed at her, and nobody has one now except Crex and the people he arms. He did not defeat Edgerinne. He shot her. The argument the weapon made could not be unheard: the process does not matter if the result is the same. The realm killed him, erased his name, and cast him into Hel as a disgraced cheat. The argument outlived the man, and his intellectual descendants have spent three and a half centuries building it into an institution.</p>
+
+  <div class="vignette" style="--accent:var(--bronze)">
+    <p class="tag">A category error made physical</p>
+    <p>A theological question asks what a person's relationship to the divine is. A philosophical question asks what is true and how to act on it. The second question is a good one. It is simply not the same question. Crex brought a philosophical position to a theological event, and the realm could never forgive him, because his answer made its central choice look optional rather than sacred. Ferridane's entire identity rests on the work of the forge being holy rather than merely effective.</p>
+  </div>
+
+  <h3>The Drift</h3>
+  <p>What followed the Shot was a slow generational erosion, the kind no one notices because it happens one word at a time. Each of the three arts carried an original name that held its theology and acquired a later name that held only its function. The Art of the True Name became Transfiguration, and the work of speaking to essence became the work of overwriting it. The Art of the Vital Current became Transfusion, and stewardship became logistics, with the soul-batteries waiting at the end of that road. The Art of the Forged Self became Transcension, and the act of submitting to the forge became the act of designing one's own augmentation. The Axipitre coined all three new names. No one announced a change. The rituals continued and the temples stayed open, and the covenant quietly emptied, replaced by competence without reverence and progress without surrender.</p>
+
+  <h3>The Three-Way Schism</h3>
+  <p>Today nine hundred million souls occupy three civilizations wearing one name, and each can claim theological legitimacy, which is why the argument never ends and the continent is always at war.</p>
+  <div class="spectrum">
+    <div class="top"></div>
+    <div class="rows">
+      <div class="spec-row" style="color:var(--iron)"><span class="swatch"></span><span class="nm">Brokkae's Children<small>The Stonereaders and the Old Lykaion. The world was better when it was still. Endurance is the virtue, permanence the goal. The mountain does not seek to become.</small></span></div>
+      <div class="spec-row" style="color:var(--steel-gold)"><span class="swatch"></span><span class="nm">Edgerinne's Children<small>The Faithful, and the majority. The stone contains diamond, but only pressure reveals it. The process is the point. The duel matters. The years matter.</small></span></div>
+      <div class="spec-row" style="color:var(--ash)"><span class="swatch"></span><span class="nm">The Secular<small>The Godmind faction and the Axipitre technocrats. Why does the method matter if the result is the same. A gun is a better blade. Bahamut is a better god.</small></span></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">◆</span><span class="line r"></span></div></div>
+
+<!-- THE GODDESS -->
+<section id="goddess" class="wrap reveal">
+  <p class="sec-eyebrow">Brokkae the Bedrock · Edgerinne of the Blade</p>
+  <h2>The Goddess<span class="uline"></span></h2>
+
+  <p class="lead">Edgerinne is the diamond the earth-god Brokkae became when stone had been stone long enough. She did not reject her father's domain. She fulfilled it so completely that she became something new, and he receded into the bedrock to become the foundation she stands on. The new emerged from within the old as fulfillment. Of all the gods, this is why Edgerinne is the one who can look at a thing carried to completion and name it for what it has become.</p>
+
+  <h3>Her Covenant</h3>
+  <p>The teaching is simple, beautiful, and extraordinarily demanding. Within a person, as within the stone, sleeps something luminous, and it will not emerge on its own. It requires pressure, and patience, and surrender. A person must allow themselves to be shaped, by the sacred process rather than by their own design. The sacred symbol of all of this is the lattice, the geometry that lets light pass through crystal cleanly. Structure carries light and light reveals structure. Brokkae's stillness was never a lesser thing than Edgerinne's blade. The mountain holds up the diamond, and the diamond is what the mountain produces when its nature is carried all the way.</p>
+
+  <h3>Her Manifestation</h3>
+  <p>Edgerinne's sacred color is searing white, the look of pure light passing through perfect crystal. Her shrines are faceted obelisks, uncut stone at the base and flawless diamond points at the peak, the founding myth rendered in a single object. When she takes form her skin is living diamond, her voice cuts through lies, and her steps leave lattice-cracks in the ground beneath her, which reshape the foundation she walks on rather than break it. She is real in this cosmos, present and active where her father has become the floor, and she is the patron who answers when Ferridane proves itself sufficient.</p>
+
+  <div class="feature" style="--accent:var(--diamond)">
+    <h4>The Goddess one may challenge</h4>
+    <p>Edgerinne can be met in single combat. This is the rarest fact about her, and the most revealing. Crex brought a gun to her three hundred and fifty years ago and shot her, and was exiled rather than vaporized. Near the end of the age, the second son of the Dragon held against her in a sacred duel, and she named him no longer the Son but the Dragon, the only god to acknowledge his inheritance and the act that split the Pantheon. The Goddess of the Blade can be challenged by anyone brave enough to try, powerful enough to stand, and wise enough to lose. No one defeats her. The wise survive the meeting, and the meeting changes them.</p>
+    <p style="margin-bottom:0">A civilization built on this fact would, by its own logic, study how she holds the Blade. So one wonders, walking the halls of the Templar academies, whether the duel itself is curriculum. Whether the forms Edgerinne uses are recorded and rehearsed, whether a master in the Southern halls can name the line of a cut the Goddess made against her own father in the thousand-year test, whether the highest examination a swordmaster sits is the question of how the living diamond meets a strike. A people who can lose to their god in the flesh would not waste the loss. They would take it home and turn it into a lesson.</p>
+  </div>
+
+  <div class="note"><p class="t">◆ The law of succession</p><p>A god need not die to be succeeded. The divine part of a god's soul, its aspect, can pass to a mortal grown powerful enough to bear it, and the gentlest path that aspect can take is inheritance, parent to child, whole. Edgerinne is the living proof of that path, the aspect of the earth carried to its completion in her. This is why she, of all the Pantheon, recognizes an inheritance when she sees one, and why her acknowledgment of the Dragon's heir carries the weight it does.</p></div>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div></div>
+
+<!-- LEADERSHIP -->
+<section id="leadership" class="wrap reveal">
+  <p class="sec-eyebrow">The Steelborn and the fractured throne</p>
+  <h2>Leadership<span class="uline"></span></h2>
+
+  <p class="lead">Aurelius Vorn, called the Steelborn and the Gold Lion, is the Exvisar of Ferridane and the paragon of House Felidae. His authority flows from Edgerinne directly. She tested him and found him sufficient, and he answers to her rather than to any council. He is her teaching made flesh, the diamond produced by sacred pressure, a perfect warrior-king whose body is a seamless fusion of living golden Galvaneum and original biology.</p>
+
+  <p>One question haunts his existence, and it is the question Ferridane itself cannot answer about anything it makes. Whether Aurelius was forged by genuine sacred emergence or built by the finest engineers on the continent, no one can say, because in this realm both produce the same visible result. He is the place where the realm's deepest ambiguity stands up and rules. He holds a fractured continent together through discipline and will alone, presiding over three great clans locked in perpetual internal war: the Felidae who consume what the others produce and turn it into governance, the Lykaion who resent that dependency and believe themselves owed the crown, and the Axipitre who redefine the world a little more with every word they coin.</p>
+
+  <h3>The Felidae Mode of Rule</h3>
+  <p>The Felidae govern by synthesis and sovereign will. They are the lawmakers, the generals, the aristocrats, and the face Ferridane turns toward the other Realms. Their authority is demonstrated rather than explained, which is the whole of their style. They are apex predators in the most literal ecological sense, and like an apex predator they depend on the ecosystem beneath them: Lykaion raw craft and Axipitre innovation, consumed and integrated into the apparatus of the realm. They will never admit this dependency, and their monopoly on representing the continent to the cosmos is itself a standing cause of war.</p>
+
+  <h3>The Test of the Throne</h3>
+  <p>Legitimacy in Ferridane is something a person walks toward. The realm's premier contest, the Hero's Journey, also called the Iron Oath, is a footrace and pilgrimage across the whole Pangaea, along a course set with constructs and beasts and the open hazards of the Outlands. At its midpoint stands Steelheart and the Midway Banquet, a night of feasting that tests discipline rather than strength, since strength gets a contender to Steelheart and discipline gets them past it. At its finish, the winner must spar with Aurelius Vorn in single combat and land one blow. Not defeat him. No one defeats Aurelius. The single blow proves only that the journey produced a transformation. The race does not care who was fastest. It cares who was forged.</p>
+
+  <div class="pull"><q>The mountain does not apologize to the gravel. But the gravel can become diamond, given pressure and time.</q><cite>The ethos of the realm</cite></div>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">◆</span><span class="line r"></span></div></div>
+
+<!-- THE REGIONS -->
+<section id="regions" class="wrap reveal">
+  <p class="sec-eyebrow">One continent, four countries</p>
+  <h2>The Regions<span class="uline"></span></h2>
+  <p>Each of the three great clans leads with one of the sacred arts, and so places one relationship to the divine first. From that ordering grows the schism the temples cannot settle. A fourth country, the Outlands, belongs to none of them. On a battlefield the four read as four silhouettes and four movement languages under one banner, and a trained eye sorts them in an instant.</p>
+
+  <article class="realm" style="--accent:var(--steel-gold);--accent-pale:var(--steel-gold-pale)">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>House Felidae · The Ruling Synthesis</p>
+      <h2>The Heartland Cantons</h2>
+      <div class="realm-meta"><span>Seat <b>Steelheart, the Central Plains</b></span><span>Heraldic Form <b>Golden lions</b></span><span>Leads with <b>The True Name</b></span></div>
+      <p class="realm-essence">The gleaming face Ferridane turns toward the nine Realms.</p>
+    </div>
+    <div class="realm-body">
+      <details class="thread" open>
+        <summary><span class="ico">+</span><span class="lbl">Steelheart<small>The capital of the realm</small></span></summary>
+        <div class="thread-body"><p style="margin-bottom:0">Steelheart is the showcase, a continent-spanning sprawl of geometric architecture and living-metal towers where stone obeys command and the city is a standing demonstration of the True Name. It makes the gilded capitals of other Realms look like resort towns. When anyone outside Ferridane imagines the realm, they imagine the Felidae, and that single fact, the monopoly on the imagination of strangers, is a cause of war all by itself.</p></div>
+      </details>
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">The golden lion<small>Heraldic Form and temperament</small></span></summary>
+        <div class="thread-body"><p style="margin-bottom:0">In Heraldic Form the Felidae are golden lions, polished as brass, regal and composed until the instant they are not. Aurelius in full form looks inevitable rather than armored, for the lion does not wear armor because the lion does not need to. Their governance frames everything through self-perfection and sovereign will, and a Felidae marriage runs as a single instrument across two domains, his martial authority and her social intelligence operating as one piece of power.</p></div>
+      </details>
+    </div>
+  </article>
+
+  <article class="realm" style="--accent:var(--bronze-deep);--accent-pale:var(--bronze-pale)">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>House Axipitre · The Engineers</p>
+      <h2>The Northern Reaches</h2>
+      <div class="realm-meta"><span>Terrain <b>Mountain, mine, cliff-city</b></span><span>Heraldic Form <b>Bronze raptors</b></span><span>Leads with <b>The Vital Current</b></span></div>
+      <p class="realm-essence">The quietest clan, and the most intense.</p>
+    </div>
+    <div class="realm-body">
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Cliff and crystata<small>Geography and craft</small></span></summary>
+        <div class="thread-body"><p style="margin-bottom:0">The Northern Reaches are cliff-face cities and soaring bridges over deep shafts, with crystata veins pulsing through the rock like the arteries of the planet. The Axipitre are the best builders in the realm and the most fluent practitioners of the True Name. They lead with intelligence over force, which is why an Axipitre woman in the engineering halls comes nearest to professional equality, since intelligence asks nothing of a frame.</p></div>
+      </details>
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">The constructed self<small>The clan that builds rather than grows</small></span></summary>
+        <div class="thread-body"><p style="margin-bottom:0">Their sacred form is engineered. Their wings are crafted and bonded rather than discovered, the most constructed of the Heraldic Forms, living hieroglyphs in bronze that just landed on the battlefield. They coined the contemporary names of all three arts, and every redefinition loosens the covenant a little more. They carry the disgrace of producing Crex, and three centuries later their elders quietly repeat his error at the scale of a god with the Godmind project. Their isolation is at once their genius and their exposure.</p></div>
+      </details>
+    </div>
+  </article>
+
+  <article class="realm" style="--accent:var(--iron);--accent-pale:var(--iron-pale)">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>House Lykaion · Two cultures, one clan</p>
+      <h2>The Fractured Marches</h2>
+      <div class="realm-meta"><span>Seat <b>The Southern Coast</b></span><span>Heraldic Form <b>Wolves and jackals</b></span><span>Leads with <b>The Forged Self</b></span></div>
+      <p class="realm-essence">The strongest hands in the world, and the deepest grudge.</p>
+    </div>
+    <div class="realm-body">
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">The Old Lykaion<small>The Stone Wolves, keepers of the old names</small></span></summary>
+        <div class="thread-body"><p>Brokkae's inheritors are massive and hulking, carved as if from cliff-face, stone worked directly into their skin through the oldest form of Lapidry. They take what they are strong enough to take, and they hold their strength to be its own justification. They are also the keepers of the old names. When a Lykaion smith stands over a forge heated by the strongest hands in the world, with no machine between the body and the metal, and speaks the True Name over iron, that is the art practiced with something close to its first reverence. Body to material, breath to fire, will to iron. Their forgework is held to be holy, and every other Realm's elite pays staggering sums for it, because they know the difference between a thing that was engineered and a thing that was known.</p>
+        <p style="margin-bottom:0">In Heraldic Form they are stone-gray temple guardians, broad of shoulder and heavy of jaw, built to take impact and crack a city gate. They look at Steelheart and see the Felidae taking credit for a civilization the Lykaion bled to build, and that resentment is old and never goes away.</p></div>
+      </details>
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">The New Lykaion<small>The Gilt Jackals, the most dangerous faction</small></span></summary>
+        <div class="thread-body"><p style="margin-bottom:0">The New Lykaion read Edgerinne's covenant as biological ascent, pressure as a filter rather than a covenant, survival as proof of fitness. They keep the strength and the True Name and add ambition that is blunt and biological, neither the Felidae aspiration to perfect the self nor the Axipitre wish to understand and build. They take the old wolf and upgrade it with Axipitre engineering and Felidae synthesis, the walking advertisement for the glory of Ferridane. In Heraldic Form they are gilt-bronze jackals, lean and built for pursuit, Galvaneum tracing the muscle like filigree, something funerary in them, as of a people performing sacred embalming on themselves while still alive. They want what the Felidae hold, they believe themselves owed it, and that belief makes them the most politically dangerous faction on the continent.</p></div>
+      </details>
+    </div>
+  </article>
+
+  <article class="realm" style="--accent:var(--ash);--accent-pale:var(--ash-pale)">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>Crex's Domain · The Ungoverned Country</p>
+      <h2>The Outlands</h2>
+      <div class="realm-meta"><span>Population <b>Tens of millions</b></span><span>Law <b>Finish what you start</b></span><span>Ethos <b>Sovereignty</b></span></div>
+      <p class="realm-essence">Where Ferridane runs unregulated rather than where it breaks down.</p>
+    </div>
+    <div class="realm-body">
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">The honest country<small>What the Outlands actually are</small></span></summary>
+        <div class="thread-body"><p>The Outlands are not a failure of the realm. They are the realm with the theology and the hierarchy stripped away, the same excellence and the same craft running without a covenant. The augmentation carried in an Outlands hall outperforms the legal market, built by Axipitre engineers who tired of being told what they could not build. The weapons are custom masterworks made by craftsmen who could have been guild-masters and decided the guild was too slow. The single law is that you do not start what you cannot finish, and in a bar full of people carrying unrestricted enchantments that law enforces itself.</p>
+        <p style="margin-bottom:0">Edgerinne's covenant is preached everywhere else. The Outlands are the country of the people that covenant exiled. Walk in and start preaching it, and the wrong man will turn your shoes to magma, not because he is a criminal but because you came into his place and preached the religion of the people who cast him out.</p></div>
+      </details>
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">The four silhouettes<small>The battlefield read</small></span></summary>
+        <div class="thread-body"><p style="margin-bottom:0">A massive stone-gray hulk is an Old Lykaion, and the correct response is to brace for impact. A sleek gilt-bronze blur is a New Lykaion, and the correct response is to watch your flanks. A poised golden stillness that is suddenly not where it was is a Felidae, and you are already too late. Something with wings has blotted out the sun, which is an Axipitre, and the instruction is to look up.</p></div>
+      </details>
+    </div>
+  </article>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div></div>
+
+<!-- THE SACRED ARTS -->
+<section id="arts" class="wrap reveal">
+  <p class="sec-eyebrow">Magic · the three gifts of the covenant</p>
+  <h2>The Sacred Arts<span class="uline"></span></h2>
+  <p class="lead">Three divine gifts emerged from Edgerinne's covenant, three ways of living inside the relationship between the mortal and the divine. All three clans practice all three. They differ only in which art they lead with, and so in which relationship to the divine they place first. Each art carries an original name that holds its theology and a later name that holds only its work, and the precise speech of the forge gives a single word to the thing each art produces.</p>
+
+  <div class="lexicon">
+    <div class="lx-top"></div>
+    <div class="lx-row"><span class="term">Named</span><span class="def">A thing changed by the Art of the True Name. The stone spoken over is iron now, in weight and structure and conductivity, completely and at once. <small>The Art of the True Name, drifted into Transfiguration.</small></span></div>
+    <div class="lx-row"><span class="term">Charged</span><span class="def">A thing into which energy has been moved through the Transfusion. A blade given fire, a crystal given a discharge to hold, a construct given the current that wakes it. <small>The Art of the Vital Current, drifted into Transfusion.</small></span></div>
+    <div class="lx-row"><span class="term">Lapidry</span><span class="def">The art of working stone, metal, and crystata into living flesh until the boundary dissolves and the material is the body. <small>The contemporary form of the Art of the Forged Self, drifted into Transcension. Older texts called it Soma-Weaving.</small></span></div>
+    <div class="lx-row"><span class="term">Shaped</span><span class="def">One who has undergone Lapidry. The fuller, sacred transformation, body and soul, makes one Transcended. <small>A miner with stone-worked hands and Aurelius Vorn stand at the two ends of the same word.</small></span></div>
+    <div class="lx-row"><span class="term">Vitalon</span><span class="def">The self-sustaining, continent-wide current of myst that runs through the living-metal towers. <small>Held by the Vitalon Guild. See The Works.</small></span></div>
+  </div>
+
+  <h3>The Art of the True Name</h3>
+  <p>Speak a True Name over a thing, with sufficient myst behind it, and the thing becomes the Name, instantly and completely. The stone's opinion about whether it wishes to be iron does not enter into it. This is reality edited at its foundation, and the realm understood it first as reverence and only second as shaping. Speak Iron over a stone and the stone is iron, in molecular structure and weight and conductivity, all of it. Speak the guarded Name that wakes living steel over an ingot and the steel comes alive, thinks, and reforms. Speak Static over that same living steel and the life drains out of it. Speak Hollow over a charged crystal and the energy empties, or over a Mystic and the connection to their soul goes dark, so that they become Nihila, completely and for a time.</p>
+  <p>Each invocation costs a great deal of myst, one or perhaps two major workings a day even for a powerful Mystic, so every one counts. This makes a Namer a strategic asset on a battlefield, a silent threat in a negotiation, and a person you do not provoke in an Outlands bar. The Names are the true currency. Some are common, and Iron is foundational to the realm's craft. Some are state secrets, and the Name that wakes Galvaneum is among the most heavily guarded things in Ferridane. The Name for gold is Un De Octogina, which is the count of atomic number seventy-nine. The magic transcends chemistry and still speaks chemistry's language, and most Namers peak at turning a palm of silver to gold across a whole career. To speak Gold over a living person is a feat of another order entirely.</p>
+
+  <h3>The Art of the Vital Current</h3>
+  <p>Move essence from one thing to another. Channel fire into a blade. Charge a crystal with a discharge it will hold until a hand spends it. Wake a construct by directing the current into the script that animates it. The art belongs to those who can feel power flowing through things and direct it where it needs to go, and in its first form it was understood as stewardship, the tending of a current that does not belong to you. It is the art that keeps the realm running, and the Vitalon is the great work it tends.</p>
+  <p>The same art, turned, produces the soul-batteries. A channeler who can move a flame's essence from one vessel to another can move a soul's essence into a power cell. The distance between tending a current and draining the living is the whole distance between the sacred art and the atrocity, and the realm has institutions that have crossed it.</p>
+
+  <h3>The Art of the Forged Self</h3>
+  <p>Put something into the body and make it part of you. Stone into skin. Galvaneum into bone. Crystata into nerve. Wings onto shoulders. This is not the electronic kind of augmentation. Nothing runs on circuits or programming. A Galvaneum arm has no servos. It has living metal fused to living muscle fused to living nerve, animated by the same vital energy that animates the rest of the body, alive because the person is alive and theirs because the process made it theirs. The oldest form, Lapidry of stone, makes an Old Lykaion whose skin is stone and whose body is heavier, harder, and more enduring, a person who looks carved from a cliff because in a real sense they were. The contemporary form is the layer-by-layer Lapidry of Galvaneum into biology at the level of the cell, the flesh and the metal introduced to each other until the nervous system extends into the steel and the steel answers thought.</p>
+  <p>The shape this forging takes is the Heraldic Path, the body worked toward the clan's sacred beast, wolf or cat or raptor. The beast is a revelation of what was always there, in the same way the diamond emerged from within the stone. The range of the art is enormous, from a Lykaion miner with stone-worked hands at one end to Aurelius Vorn at the other, a being so thoroughly Shaped that the question of where the man ends and the material begins cannot be answered.</p>
+
+  <h3>How the Arts Move Together</h3>
+  <p>A Lykaion smith at a forge uses all three at once. The True Name changes what the metal is. The Vital Current Charges the blade with its enchantment. The Forged Self is in the very hands that hold the hammer, stone-worked hands that are the heat source of the work. A Felidae ruler depends on all three as well, the Forged Self for personal perfection, the Vital Current to govern and to tend the Vitalon, the True Name to reshape resources. The Felidae synthesis is a dependent thing, an apex predator's relationship to the ecosystem beneath it, and they will not say so aloud.</p>
+
+  <div class="feature" style="--accent:var(--iron)">
+    <h4>The Shaped and the lightning that finds no road</h4>
+    <p>A body of stone does not carry a current. Worked stone is a poor conductor, and a warrior whose skin is stone through Lapidry is grounded against the things that travel as electricity. Lightning, the electrical deusas, the Charged weapons that strike with a discharge, all of these wash over a stone-Shaped Old Lykaion and find no road into the body. The realm's own crystal-spined wolves discharge concussive electrical bursts, and the stone monks who answer their howl through the bedrock are deaf to that particular wrath. The protection is not universal. Fire still burns and the Hole Puncher still crushes and the Name that wakes steel can be unsaid. But against the current, the mountain is simply the wrong target.</p>
+  </div>
+
+  <div class="vignette" style="--accent:var(--iron)">
+    <p class="tag">In the room · at the Southern Academy</p>
+    <p>You see him before you understand him: a Shaped man, stone in his skin, and on his hip a blade that has been Named to a metal that should not exist and Charged with something that hums under the leather. Read it backward and the whole life resolves. The Lapidry alone is a fortune in crystata and a year of ordeal survived. The blade is a Namer's invocation and a channeler's enchantment, two masters paid. He carries it openly in the halls of the Southern Coast, where the lesson and the test are the same thing and every cadet has stood at the forge while the metal listened.</p>
+    <p>So he is powerful, and he is wealthy, and he has studied the Blade extensively, because a man does not bear a weapon like that to a place like that without having sat at the forms, perhaps the recorded forms of the Goddess herself. And somewhere there is a house he is the bedrock of, a beautiful wife who runs it like a small nation through his deployments, and children, because in this realm a man of standing is a man with a line. He is not to be trifled with. He never lied to you about any of it. He simply walked in wearing the answer.</p>
+  </div>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">◆</span><span class="line r"></span></div></div>
+
+<!-- THE WORKS -->
+<section id="works" class="wrap reveal">
+  <p class="sec-eyebrow">The glory of Ferridane · unique works</p>
+  <h2>The Works<span class="uline"></span></h2>
+  <p class="lead">These are engineered things, and they earn the engineer's vocabulary. No other Realm can replicate them, because no other Realm holds the industrial base, the theological inheritance, and the sheer number of practitioners all working inside one ecosystem. Here the realm's genius is plainest, and so is the cost folded inside it.</p>
+
+  <h4>Galvaneum, the living steel</h4>
+  <p>Galvaneum is metal that has been Named alive. It thinks, regenerates, and reforms, and a body that has had it worked in through Lapidry extends its nervous system into the metal so the metal answers thought. It is the backbone of the realm's military, its infrastructure, and its augmentation, and the Name that wakes it is a state secret. A Galvaneum drum carries the music that hits the chest at a feast. The Archangel Brutus has had so much Galvaneum Transfused into his body that he can grow a hundred arms, and to a Ferridanian that is not grotesque. That is magnificent.</p>
+
+  <h4>Synthetic Deusas</h4>
+  <p>The cosmic lottery of magic, broken open and put on a shelf. The labs replicate the signature of a natural deusa into crystalline form, consumable and portable, so a soldier born with modest earth magic can spend a fire-charged crystal and command flame for as long as the charge lasts, then be himself again. Ferridane is the only manufacturer in the cosmos. The making of them is a theological crime, the sacred produced without the sacred, tolerated through the maker's mortal life and answered in Hel after it.</p>
+
+  <h4>Compressed Technology</h4>
+  <p>Everything folds. A full suit of powered armor, inlaid with crystata holding Synthetic Deusas, rides inside a ring. A vehicle waits inside what looks like its own ignition key. A set of combat wings hides in a cape clasp. An officer at a Symposium wearing three rings, a clasp, and a belt buckle is carrying an armor suit, a flight rig, a vehicle, and several weapons systems, all disguised as jewelry. When the armor deploys, the wearer is not merely encased. They are suddenly wielding whatever the crystata array was loaded with, fire or void or the bending of gravity. The armor is a weapons platform worn as fashion.</p>
+
+  <h4>The Vitalon</h4>
+  <p>A self-sustaining current of myst that runs the whole continent through living-metal towers, tended by channelers who keep the power flowing where it must. It feeds teleportation, augmentation, the construct forges, the Nexus, and the artificial suns that light the cities through storms, with nine hundred million people drawing on one current. It is held by the Vitalon Guild, whose membership descends largely from the Axipitre bloodline, and whose stewardship of the realm's living circulatory system is among the quietest and most absolute forms of power in Ferridane.</p>
+
+  <h4>Constructs and Sovereign Intelligences</h4>
+  <p>Living machines, woken with the Vital Current. Golems for labor, Sentinel-Wardens for war, and at the summit the Sovereign Intelligences, genuinely self-aware, who think and learn and argue their own legal status in Ferridanian courts. Nowhere else among the nine Realms has anyone made life out of raw material. The Steel Menagerie are autonomous constructs in the shapes of the heraldic beasts, and the Aethereum Armory is an extradimensional vault from which a warrior summons a weapon through the Current as easily as drawing breath.</p>
+
+  <h4>The Thought Nexus</h4>
+  <p>A second civilization laid over the first, a shared digital reality projected into the mind through crystata shards set beneath the skin. Instant speech across the Pangaea, simulated worlds, commerce, art, philosophy, entertainment, every citizen joined to every other. The Nexus does not register gender at all, which makes it one of the few places in Ferridane where the old biological advantage simply does not apply.</p>
+
+  <h4>Military-grade simulation</h4>
+  <p>Classified environments, developed by the Axipitre, that push mind and body to the breaking point under controlled conditions. This is how the realm produces the finest soldiers in the cosmos without burning through its own population in live combat, and it gives Ferridanian graduates an edge that almost no one else can match, since they have fought in simulation and in actual war both. It is also the technology Saint Cloud Sinclair extracted through his friendship with Dorado Casanova, handed to Thalassor's oinomancers, and saw distilled into the Wine of Shared Dreams. Ferridane built the engine. Thalassor bottled the experience. Ferridane has not forgotten.</p>
+
+  <div class="feature" style="--accent:var(--ash)">
+    <h4>The Free Bird's arsenal</h4>
+    <p>Crex Axipitre carries his armory as one hundred and fifty bullets across triple bandoliers, each a complete weapon system folded down by the True Name. He pulls a bullet, invokes it, fires the platform until it is spent, drops it, and pulls the next, because switching is faster than reloading and he built the whole thing to never do the hard thing in the middle of a fight. His rounds turn what they touch to glass, or crush a struck point down to impossibly compressed matter, or kill Galvaneum outright and leave a living-steel warrior suddenly ordinary. Every sixth round speaks Gold, so he counts his ammunition by turning enemies into money and walks out of a fight richer than he walked in. The rhythm of his combat is one, two, three, four, five, gold.</p>
+    <p style="margin-bottom:0">An Astra is a round crafted from divine relics, a god-killing weapon whose shot finds its target through the fabric of fate itself. Crex has stolen them, stockpiled them, and sold them, and after a trap cost the Advent an attempt to acquire one, he learned to forge them himself. The only defense against an Astra is to not be important enough for Crex to spend one on you. He has never watched one kill a god. No one has tested the theory.</p>
+  </div>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div></div>
+
+<!-- BIOLOGY -->
+<section id="biology" class="wrap reveal">
+  <p class="sec-eyebrow">The forged body and the living continent</p>
+  <h2>Biology<span class="uline"></span></h2>
+  <p class="lead">The average Ferridanian is bigger than almost anyone you will meet elsewhere, and that is before a single working of Lapidry. They carry themselves like people tested physically their whole lives, because they have been. Augmented bodies metabolize alcohol differently, so the baseline for a good night begins where most cultures place alcohol poisoning. In Thalassor this is a diplomatic hazard.</p>
+
+  <h3>The body as instrument</h3>
+  <p>The element transforms the population across generations the way the elements transform every Realm's people. Augmenting the body augments its capacity for myst, because the nervous system extends into the worked material and gives the soul a larger instrument to play through. Aurelius Vorn, more integrated material than original biology, is a vast instrument for that reason. Damage runs the other way: a body cleaved has its myst network severed, and a soul removed from a body disconnects the source from the mechanism entirely. Ferridanians replenish their myst through the Vital Current and the Vitalon, which means a Ferridanian abroad, cut off from the continent's current, is on rations. Home ground is a literal increase in power.</p>
+
+  <h3>The Heraldic Forms and the beasts they answer</h3>
+  <p>The clans did not invent their beasts. They were named after them. The realm's wild megafauna came first, and the people shaped themselves toward what those animals already are.</p>
+  <div class="spectrum">
+    <div class="top"></div>
+    <div class="rows">
+      <div class="spec-row" style="color:var(--steel-gold)"><span class="swatch"></span><span class="nm">The Felicis<small>Golden lion megafauna. A Felicis on a ridge at dusk, mane blazing, is the most beautiful and terrifying thing most Ferridanians ever see. The Felidae exist as an attempt to become what it already is.</small></span></div>
+      <div class="spec-row" style="color:var(--iron)"><span class="swatch"></span><span class="nm">The Lykon<small>Crystal-spined pack wolves who discharge concussive electrical bursts and howl through the crystal in the bedrock. The Old Lykaion monks feel the wolves singing through the stone and sing back. The wolves sang first. The people answered.</small></span></div>
+      <div class="spec-row" style="color:var(--bronze-deep)"><span class="swatch"></span><span class="nm">The Axipter<small>Crystal-laced feathered dragons up to vulture size. They perceive the Vital Current as some birds perceive magnetism, and detect a fault in the Vitalon before any instrument registers it.</small></span></div>
+    </div>
+  </div>
+  <p>Every native animal of Ferridane is crystal-integrated, Charged by the Vital Current, and Shaped by nature rather than by an academy. Their magic expresses only as electricity, flame, or wind, and none of them can Name. The crystal-horned bull-creatures never bluff: a lowered head is a clear statement of exactly what is about to happen, a courtesy of warning the animal is not obliged to extend, and the Ferridanian respect for honest combat may trace to this creature, which never once lied to you. Crystal-antlered deer molt fragments that catch forge-light into prismatic patterns across the ground, and children collect the shed pieces the way Terrae children collect interesting rocks, slipping one that still holds a faint charge under a pillow where it hums warm through the night.</p>
+
+  <div class="feature" style="--accent:var(--ash)">
+    <h4>The originals and their copies</h4>
+    <p>The Outlands hold creatures the governed realm cannot fully clear. The Vastas are bovine-and-humanoid hybrids with just enough intelligence to be cruel, who build crude camps and crude weapons and take women, an infestation that breeds in the spaces between patrols and migrates toward the Midway Banquet because they have learned the annual pattern of a long line of lone humans converging on food. The Sagittans are a sapient archer-people of independent and unpredictable wild Current, territorial and content to be left alone, whose weapons mark a border rather than a threat, and a civilization that treats war as a philosophy looked at them and chose to leave them be, an assessment paid for in early casualties.</p>
+    <p style="margin-bottom:0">Mystics have retired to Terrae throughout history and told stories there. A Ferridanian veteran describing the Vastas to the people of ancient Greece is the origin of the minotaur. The creatures are the originals. The legends are the copies.</p>
+  </div>
+
+  <p>At the apex of the Outlands ecology stands the Chimera, an organism in which several crystal types have fused into one, producing compound Current abilities that are unique to each individual. No two are alike. They hold territory along the route of the Hero's Journey as natural obstacles, and contestants pass through rather than exterminate. Above them all is Bahamut, the Diamond Gonlan of Ferridane, a being of immense power whose existence the Godmind project co-opted, installed in the Atrium of Steelheart with Crex's stolen God-Eyes set into her skull. Every Gonlan is a child of Aracice the Star-Eater, and when she refused the shape the realm gave her and named herself Tiamat, she joined the Dragon's heir instead.</p>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">◆</span><span class="line r"></span></div></div>
+
+<!-- LIFE AND CUSTOM -->
+<section id="life" class="wrap reveal">
+  <p class="sec-eyebrow">The texture of a Ferridanian life</p>
+  <h2>Life &amp; Custom<span class="uline"></span></h2>
+
+  <h3>Epochal thinking</h3>
+  <p>Ferridane thinks in lineages rather than lifetimes. Brokkae measured time in epochs and that did not go away. A laborer is not working for himself. He is working for his great-grandchildren. Social mobility is real and geological: a bloodline can rise from miner to Mystic across generations, so any single life may be brutal and thankless while the line is always moving. The idea of equality strikes the realm as absurd. Of course some are stronger, some born blessed, some able to afford the best workings. The mountain does not apologize to the gravel. But the gravel becomes diamond, given pressure and time, and Brokkae is stone, and Brokkae is sacred.</p>
+
+  <h3>The Nihila and the seam</h3>
+  <p>A Ferridanian Nihila works the crystal seams alongside augmented Mystics, comes home to raise children, and pours everything into the chance that her line might ascend. She is Brokkae's truest inheritor, the foundation no one sees and everyone stands on, and the path upward is real even though it moves at the realm's geological pace. The cost of that pace is also real and plain. In the crystata mines, Nihila die in unsafe conditions because the cost of safety exceeds the cost of replacement labor, which the realm does not call a crime. It calls it economical. In the field, Nihila auxiliaries are deployed as expendable screens, which the realm does not call illegal. It calls it tactical. Ferridane at its worst looks exactly like Ferridane at its best, the same architecture and the same extraordinary people, with the suffering folded so cleanly into the machinery that a person has to be looking for it to find it.</p>
+
+  <h3>The feast and the drink</h3>
+  <p>Ferridanians do everything at full intensity. The civilization that makes the most devastating weapons makes the most spectacular feasts, the most thrilling athletes, the most magnetic company, and the most legendary drinking culture in the cosmos. The tables are stone and Galvaneum, built to take punishment. The food is excessive in quantity and extraordinary in quality. The music hits the chest, drums of resonant Galvaneum and vocal traditions grown out of forge-chants. The arguments are loud and physical. A Ferridanian toast is not to your health. It is to your next victory.</p>
+
+  <h3>Weapons worn honestly</h3>
+  <p>Where Thalassor hides its real weapon and carries an ornamental blade so that the thing you see never kills you, Ferridane carries functional weapons openly and is honest about what they are. The realm's whole posture toward an opponent is the inverse of Thalassor's. Thalassor wants you never to see it coming. Ferridane wants you to see it immediately and to understand that you have already lost. Before any equipment at all, a Ferridanian Templar graduate is among the most dangerous beings alive: Shaped along skeleton and muscle and nerve, walked along the Heraldic Path, trained in simulation since adolescence and blooded in real wars, fluent in all three sacred arts, with the flinch reflex burned out. And then they put on the ring.</p>
+
+  <h3>The women of the realm</h3>
+  <p>Ferridane was founded by a male god whose virtue was immovability, and Edgerinne changed the theology without changing the physics. She proved the feminine could surpass the masculine through refinement, and every Ferridanian believes it, and one diamond emerged from the stone across a thousand years. Diamonds are precious because they are rare. Nothing is barred to women, by law or edict or prohibition, and the absence of a prohibition is its own kind of distance from access, because the economy runs on a cycle, crystata buys augmentation, augmentation buys strength, strength buys opportunity, opportunity buys crystata, and men enter that cycle with a biological advantage at each stage.</p>
+  <p>Magic is the great equalizer within it. A woman with a devastating deusa is exactly as dangerous as a man with the same one, the True Name asks nothing of upper-body strength, augmentation closes the gap for those who can afford it, and the Nexus does not see gender at all. Ferridanian men regard their women the way they regard a diamond, as something precious that the pressure produced, rare and irreplaceable, a woman who holds a house together through deployments and mining wars and generational strategy worth more than the territory the house sits on. A Lykaion wife runs a household that is a small enterprise and is tough in the plain physical sense, raised where the standard for toughness does not soften for being female. A Felidae political wife operates at a strategic complexity that rivals a battlefield. An Axipitre woman in the engineering halls comes nearest to equality, because intelligence does not require a frame. The other Realms see the spectacle and form opinions from the surface. They do not see the discipline underneath, the athletics and the degrees and the generations of investment that produced the woman in front of them.</p>
+
+  <div class="vignette" style="--accent:var(--steel-gold)">
+    <p class="tag">Desire and demonstration</p>
+    <p>You do not tell a Ferridanian woman what you are. You show her, at the Hero's Journey, at the forge, on the battlefield, and she is not weighing whether you are attractive, which is table stakes. She is weighing whether you were forged. Helen of Troy was not a metaphor. Wars are fought over what a woman represents in this realm, a future and a line and an alliance and a house that endures, and Ferridane never left the world where that is literally true.</p>
+  </div>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div></div>
+
+<!-- THE REALMS BEYOND -->
+<section id="realms" class="wrap reveal">
+  <p class="sec-eyebrow">Power that cannot leave the continent</p>
+  <h2>The Realms Beyond<span class="uline"></span></h2>
+  <p class="lead">Ferridane cannot be invaded. Nine hundred million people in perpetual war on their own ground have produced the most dangerous conventional military force in existence, and you would be fighting it at home. The realm's frustration is the exact inverse of its strength. None of that power can cross to another world without Sinclair permission, because the Clairgates are the only roads between the Realms and a single Thalassori family holds them. The factory resents the storefront and cannot reach it.</p>
+
+  <h3>The conflict with Thalassor</h3>
+  <p>Three grievances compound. The portal stranglehold neuters the realm's whole military and economic reach behind one family's toll. The Wine of Shared Dreams was distilled from Ferridane's own classified simulation technology, extracted by Cloud Sinclair and sold across the cosmos, including to Ferridane's rivals. And the crystata trade runs against the realm, which mines the raw material that Thalassor refines into value and distributes, while charging Ferridane a toll to export its own goods through gates it does not own. Ferridane's practical answer is to plant permanent physical presence in the realms it deals with, the Felidae buying land and entangling themselves past the point of expulsion, the Lykaion arriving on Thalassori soil to claim crystata deposits and daring the locals to move them, which neither Aurelius nor Saint Leif can fully control.</p>
+
+  <h3>The Grounded and the road out</h3>
+  <p>The strategic answer is to build a Clairgate network of its own. The first attempt was the Godmind project, a synthetic god meant to break the portal monopoly, encouraged through Axipitre channels by Mavarran contacts and fated to fire catastrophically, a trap in which Ferridane loses whether it fails or succeeds. The second attempt is the replication of the Lumen Cradle, the lost half of inter-realm transit, fed to Ferridane by the Grounded of Luxenfall. The Grounded's true price is not portal independence for Luxania. It is Ferridanian military force moving through self-built gates into every realm that profited from the trade in Luxanian souls. They want the distributors held to account at the point of a weapon, and they want Thalassor to burn. The conflict goes kinetic the moment the replication completes, timed to Thalassor's deepest vulnerability.</p>
+
+  <h3>The infiltration</h3>
+  <p>Every crack in the realm's order is an opening for Mavarra, who never arrive looking like invaders. They arrive looking like solutions, at the moment of greatest need, with exactly what is required and a price that is reasonable at first. The real cost becomes clear only after the dependency is set and the compromises have accumulated. The Godmind grew out of years of such contact with Axipitre engineers and Felidae politicians already inclined toward it, and the whisper was never betray your realm. It was we can help you achieve something magnificent. Ferridane's pride made it unable to imagine that a culture it judged inferior could be moving it like a piece. Through the same crack runs the Shik'piris trade, psychoactive elixirs refined from harvested souls and consumed in Steelheart nightclubs by people with no idea what they are taking. Pyrthera, which sees the trade clearly, enforces a total embargo on all of it.</p>
+
+  <h3>The turn at the end of the age</h3>
+  <p>When the war with the Realm of Steel goes kinetic, the full might of Steelheart comes down by the will of Edgerinne, and the Clairgates close. The realm wakes Bahamut to stop the Dragon's heir from drowning a continent, and Bahamut refuses the shape, names herself Tiamat, and joins him. Then the heir holds against Edgerinne in a sacred duel, and the Goddess of the Blade names him the Dragon. She is the first god to acknowledge him, and the acknowledgment splits the Pantheon and legitimizes the Advent. Ferridane relents from open hostility. The divine order begins to crack from the side that was meant to stand unified, and it cracks because the goddess whose own origin was inheritance recognized an inheritance when it stood in front of her.</p>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">◆</span><span class="line r"></span></div></div>
+
+<!-- INSTITUTIONS -->
+<section id="institutions" class="wrap reveal">
+  <p class="sec-eyebrow">The bodies that forge the elite</p>
+  <h2>Institutions &amp; Factions<span class="uline"></span></h2>
+  <p class="lead">Ferridane is held together by no single hand. It is constantly at war, hundreds of small wars at once, territorial and theological and dynastic, because nine hundred million people who disagree about the nature of reality cannot get away from one another. That constant war is the realm's greatest strength and its greatest constraint together. It forges the finest soldiers in the cosmos and keeps those soldiers from ever serving one cause, and the only thing stopping Ferridane from taking everything is that it cannot stop fighting itself, while the Sinclairs hold the only roads out.</p>
+
+  <h3>The three academies</h3>
+  <p>The realm's three Templar academies are the pipelines through which a war-forged civilization produces its elite. They run like the divide between separate services under one flag, the same war and entirely different cultures, with a rivalry deep enough to be its own institution.</p>
+  <div class="twocol">
+    <div class="card-rule">
+      <h4>Steelheart's Academy · Felidae</h4>
+      <ul>
+        <li>The flagship. Produces generals, diplomats, governors.</li>
+        <li>Teaches synthesis, all three arts in concert, under retired officers who commanded multi-front campaigns.</li>
+        <li>A culture of controlled intensity and surgical precision. The question is never how would you take this position. It is you have taken it, the people hate you, the supply lines are contested, and the Nexus is broadcasting your every move, so now what.</li>
+      </ul>
+    </div>
+    <div class="card-rule">
+      <h4>The Southern Academy · Lykaion</h4>
+      <ul>
+        <li>Produces frontline soldiers, forgemasters, fleet officers.</li>
+        <li>Teaches through ordeal, where the lesson and the test are the same thing. Loud, physical, confrontational.</li>
+        <li>Every cadet spends time at the forge, because the True Name is practiced there in its first form, and even the most boisterous Lykaion falls quiet when the metal is listening. The Old and New Lykaion split runs straight through the halls.</li>
+      </ul>
+    </div>
+    <div class="card-rule">
+      <h4>The Northern Academy · Axipitre</h4>
+      <ul>
+        <li>Produces engineers, construct designers, intelligence operatives.</li>
+        <li>Equal parts military school, engineering institute, and research lab. The quietest of the three and the most intense, where instructors present real scenarios with real casualty numbers and wait.</li>
+        <li>Where the military simulation technology was developed, where the line between sacred craft and secular engineering is thinnest, and where the Godmind faction recruits from the faculty.</li>
+      </ul>
+    </div>
+    <div class="card-rule">
+      <h4>The Free Birds · the Outlands' institution</h4>
+      <ul>
+        <li>The largest arms-dealing operation in the nine Realms, built from nothing by Crex Axipitre.</li>
+        <li>Fixers and enforcers, the closest thing the ungoverned country has to an institution, run through two thousand autonomous clones by the Multiplicity Protocol.</li>
+        <li>Every attempt to locate the real Crex has failed. He runs a criminal empire from a barstool and delegates even his own defiance.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>The guilds and the faction</h3>
+  <p>The Vitalon Guild tends the continent's living current and descends largely from the Axipitre bloodline, its stewardship of the realm's circulatory system one of the quietest and most absolute powers in Ferridane. The labs that make Synthetic Deusas hold the only license in the cosmos to break the divine lottery, and pay for it in Hel. The Godmind faction sits among the Axipitre technocrats and the Felidae politicians who cannot tell a theological question from an engineering one, and who are building a god the way Crex fought a duel, with total competence and no comprehension of what they are actually doing. In the ungoverned country, cartels run crystata deposits with military training and augmented bodies, some rivaling minor city-states, smugglers move weapons out and harvested-soul elixirs in, and slavers take Nihila from the edges of governed land and sell them off-world through Mavarran contacts. The Outlands craftsman who builds a masterwork on a Tuesday sells it to whoever shows up with crystata and does not ask what it is for, because asking is a Steelheart question, a covenant question, and the Outlands left that conversation behind.</p>
+
+  <div class="feature" style="--accent:var(--ash)">
+    <h4>The man the realm was always going to produce</h4>
+    <p>Crex Falcon Axipitre was given everything Ferridane has to give, the oldest bloodline and the talent and the access and the God-Eyes, and was meant to be the bridge between Brokkae's endurance and Edgerinne's refinement. Instead he embodied what the realm actually rewards in practice, the brilliance and the shortcut that works, and so he is its greatest shame and its most honest product at once. He is what happens when you hand the brightest mind in the oldest house every tool in the world and then tell him the tools are not the point. He heard that, looked at the tools, looked at the point, and chose the tools. They erased his name three hundred and fifty years ago rather than sit with what he proved. Three hundred and fifty years later, they are still building his argument.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="reveal">
+  <div class="bar"></div>
+  <p class="candle">From stone, the blade.<br>From the blade, the question of what a hand can make.</p>
+  <p class="ma">Moirai Codex · The Anvil of Ages
+    <small>Tested by the Laws of Ma'at · Measured against the Test of Iles</small>
+  </p>
+</footer>
+
+<script>
+  (function(){
+    var els=document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.06,rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(e){io.observe(e);});
+  })();
+  (function(){
+    var links=[].slice.call(document.querySelectorAll('nav.codex-nav a')),map={};
+    links.forEach(function(a){var id=a.getAttribute('href').slice(1),t=document.getElementById(id);if(t)map[id]={a:a,t:t};});
+    function s(){var pos=window.scrollY+140,cur=null;for(var id in map){if(map[id].t.offsetTop<=pos)cur=id;}
+      links.forEach(function(a){a.style.color='';a.style.borderBottomColor='transparent';});
+      if(cur&&map[cur]){map[cur].a.style.color='var(--bronze)';map[cur].a.style.borderBottomColor='currentColor';}}
+    window.addEventListener('scroll',s,{passive:true});s();
+  })();
+</script>
+</body>
+</html>

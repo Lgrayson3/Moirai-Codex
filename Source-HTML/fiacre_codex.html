@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiacre Athena Chevalier — Clotho, the Spinner · Advent of Ultima</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0a0d09;
+  --bg-card: #11140d;
+  --bg-hover: #171b10;
+  --bg-highlight: #1b2013;
+  --green-dark: #2c3a20;
+  --green-core: #56702f;
+  --aether: #aac24e;
+  --aether-soft: #8a9f3e;
+  --aether-light: #cdd98a;
+  --gold-core: #c8a24a;
+  --gold-light: #e4c878;
+  --gold-ghost: #f1e6c2;
+  --prism: #e8e6d6;
+  --text-primary: #ddd9c6;
+  --text-secondary: #a39e83;
+  --text-dim: #6b664f;
+  --border-subtle: #232a16;
+  --border-accent: #2f3d21;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --max-width: 880px;
+  --section-gap: 4.5rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.78;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--gold-core); color: var(--bg-deep); }
+
+/* === AETHER MOTES === */
+#mote-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.5;
+}
+
+/* === AMBIENT GRADIENTS === */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 18% 12%, rgba(200,162,74,0.07) 0%, transparent 52%),
+    radial-gradient(ellipse at 85% 35%, rgba(170,194,78,0.05) 0%, transparent 48%),
+    radial-gradient(ellipse at 50% 95%, rgba(44,58,32,0.14) 0%, transparent 38%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page { position: relative; z-index: 1; max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem; }
+
+/* === DIAMOND DIVIDERS === */
+.divider {
+  display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+  margin: var(--section-gap) 0; opacity: 0.5;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--green-dark), transparent);
+}
+.divider span {
+  width: 7px; height: 7px; background: var(--gold-core);
+  transform: rotate(45deg); flex-shrink: 0;
+}
+
+/* === HEADER === */
+.header { text-align: center; padding: 5.5rem 0 1.5rem; }
+.header .tag {
+  font-family: var(--font-display); font-size: 0.6rem;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--aether); display: block; margin-bottom: 2rem;
+}
+.header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.3rem, 7vw, 3.9rem);
+  font-weight: 700; color: var(--gold-light);
+  letter-spacing: 0.08em; line-height: 1.1; margin-bottom: 0.7rem;
+  text-shadow: 0 0 80px rgba(228,200,120,0.18);
+}
+.header .sub {
+  font-family: var(--font-display); font-size: 0.75rem;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-dim);
+}
+.header .epigraph {
+  font-style: italic; font-size: 1.05rem; color: var(--text-secondary);
+  margin-top: 2rem; line-height: 1.7;
+}
+.header .epigraph .attr {
+  display: block; font-style: normal; font-family: var(--font-display);
+  font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--aether-soft); margin-top: 0.8rem;
+}
+
+/* === SECTION FRAMEWORK === */
+.sec-num {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--aether); display: block; margin-bottom: 0.4rem;
+}
+.sec-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-weight: 600; color: var(--gold-light);
+  letter-spacing: 0.05em; margin-bottom: 1.4rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--border-accent);
+}
+.sub-head {
+  font-family: var(--font-display); font-size: 0.9rem;
+  font-weight: 600; color: var(--gold-light);
+  letter-spacing: 0.03em; margin-top: 1.6rem; margin-bottom: 0.5rem;
+}
+
+/* === PROSE === */
+.prose p { margin-bottom: 1.2rem; }
+.prose p:last-child { margin-bottom: 0; }
+.prose strong { color: var(--gold-light); font-weight: 600; }
+.prose em { color: var(--text-secondary); }
+
+/* === IDENTITY CARD === */
+.id-card {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: 2px; padding: 2.2rem; position: relative; overflow: hidden;
+}
+.id-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, var(--green-dark), var(--gold-core), var(--green-dark));
+}
+.id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem 2rem; }
+.id-item .lbl {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--aether); margin-bottom: 0.2rem;
+}
+.id-item .val { font-size: 0.95rem; color: var(--text-primary); line-height: 1.6; }
+.id-item.wide { grid-column: 1 / -1; }
+
+/* === ACCORDION === */
+.acc-item {
+  border: 1px solid var(--border-subtle); margin-bottom: -1px;
+  background: var(--bg-card); overflow: hidden;
+}
+.acc-item:first-child { border-radius: 2px 2px 0 0; }
+.acc-item:last-child { border-radius: 0 0 2px 2px; }
+.acc-btn {
+  width: 100%; background: none; border: none;
+  padding: 1.1rem 1.4rem; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--font-display); font-size: 0.9rem;
+  font-weight: 600; color: var(--gold-light);
+  letter-spacing: 0.04em; text-align: left;
+  transition: background 0.2s;
+}
+.acc-btn:hover { background: var(--bg-hover); }
+.acc-btn .lead { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.2rem 0.8rem; }
+.acc-btn .hint {
+  font-family: var(--font-body); font-size: 0.82rem;
+  font-weight: 400; color: var(--text-dim); font-style: italic;
+}
+.acc-btn .arr {
+  width: 7px; height: 7px;
+  border-right: 1.5px solid var(--aether);
+  border-bottom: 1.5px solid var(--aether);
+  transform: rotate(45deg); transition: transform 0.3s;
+  flex-shrink: 0; margin-left: 1rem;
+}
+.acc-item.open .acc-btn .arr { transform: rotate(-135deg); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.45s ease; }
+.acc-inner { padding: 0 1.4rem 1.4rem; }
+.acc-inner .atm {
+  font-style: italic; font-size: 0.92rem; color: var(--aether-light);
+  margin-bottom: 0.8rem; padding-left: 0.8rem;
+  border-left: 2px solid var(--green-dark);
+}
+.acc-inner .dlbl {
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--gold-core); margin-top: 0.9rem; margin-bottom: 0.2rem;
+}
+.acc-inner p { font-size: 0.92rem; line-height: 1.72; color: var(--text-secondary); margin-bottom: 0.6rem; }
+.acc-inner p:last-child { margin-bottom: 0; }
+.acc-inner strong { color: var(--gold-light); }
+
+/* === HIGHLIGHT BOX === */
+.highlight-box {
+  background: var(--bg-highlight); border: 1px solid var(--green-dark);
+  border-left: 3px solid var(--gold-core);
+  padding: 1.8rem 2.2rem; margin: 1.3rem 0; position: relative;
+}
+.highlight-box::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(200,162,74,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.highlight-box p { position: relative; font-size: 1.02rem; line-height: 1.82; }
+.highlight-box p + p { margin-top: 1rem; }
+.highlight-box strong { color: var(--gold-light); font-weight: 600; }
+
+/* === PULL QUOTE === */
+.pull {
+  text-align: center; font-style: italic;
+  font-size: clamp(1.15rem, 3vw, 1.5rem); line-height: 1.55;
+  color: var(--gold-light); margin: 2rem auto; max-width: 32ch;
+}
+
+/* === PRINCIPLE BLOCKS === */
+.princ { padding: 1rem 0; border-bottom: 1px solid var(--border-subtle); }
+.princ:last-child { border-bottom: none; }
+.princ-n {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.2em; color: var(--aether); text-transform: uppercase; margin-bottom: 0.3rem;
+}
+.princ p { font-size: 0.95rem; line-height: 1.7; }
+.princ p strong { color: var(--gold-light); }
+
+/* === SWATCHES === */
+.sw-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-top: 1.2rem; }
+.sw { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 2px; overflow: hidden; }
+.sw-color { height: 72px; }
+.sw-info { padding: 0.6rem 0.8rem; }
+.sw-name {
+  font-family: var(--font-display); font-size: 0.58rem;
+  letter-spacing: 0.13em; text-transform: uppercase; color: var(--text-primary); margin-bottom: 0.1rem;
+}
+.sw-hex { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0.25rem; }
+.sw-desc { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.45; }
+
+/* === REGARD GRID === */
+.regard { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; }
+.regard-item {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-top: 2px solid var(--green-dark); border-radius: 2px;
+  padding: 1.1rem 1.3rem;
+}
+.regard-item .who {
+  font-family: var(--font-display); font-size: 0.7rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-light);
+  margin-bottom: 0.4rem;
+}
+.regard-item p { font-size: 0.88rem; line-height: 1.62; color: var(--text-secondary); }
+
+/* === FOOTER === */
+.footer {
+  text-align: center; padding: 3.5rem 0 2.5rem;
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim);
+}
+.footer span { color: var(--gold-core); }
+
+/* === FADE === */
+.fi { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fi.vis { opacity: 1; transform: translateY(0); }
+
+/* === RESPONSIVE === */
+@media (max-width: 640px) {
+  body { font-size: 17px; }
+  .id-grid { grid-template-columns: 1fr; }
+  .sw-grid { grid-template-columns: repeat(2, 1fr); }
+  .regard { grid-template-columns: 1fr; }
+  .id-card { padding: 1.4rem; }
+  .header { padding: 3.5rem 0 1rem; }
+  :root { --section-gap: 3rem; }
+  .highlight-box { padding: 1.3rem 1.1rem; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="mote-canvas"></canvas>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="header fi">
+    <span class="tag">Advent of Ultima · Moirai Codex</span>
+    <h1>Fiacre Athena Chevalier</h1>
+    <div class="sub">Clotho, the Spinner · The Goddess of Peace</div>
+    <p class="epigraph">
+      &#x201C;Must she catch every leaf in the gale to know that she has lived?&#x201D;
+      <span class="attr">Of Gran Ornea, in the Realm of Iles</span>
+    </p>
+  </header>
+
+  <div class="divider"><span></span></div>
+
+  <!-- I. THE RECORD -->
+  <section class="fi">
+    <span class="sec-num">I</span>
+    <h2 class="sec-title">The Record</h2>
+    <div class="id-card">
+      <div class="id-grid">
+        <div class="id-item">
+          <div class="lbl">Name</div>
+          <div class="val">Fiacre Athena Chevalier &#x2014; in full, Fiacre Athena Chevalier-Du&#x2019;Moira. A daughter of the house of Chevalier.</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Origin</div>
+          <div class="val">Gran Ornea, in the Verdant Plains of Zephyros &#x2014; the Realm of Iles, Goddess of Breath and Comprehension.</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Epithets</div>
+          <div class="val">Seraph of Ex-Deorum &#183; the Angel of Mercy &#183; Fugitive Archangel &#183; the Goddess of Peace.</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Station</div>
+          <div class="val">Elevated directly to Seraph at fourteen &#x2014; one of seven in the cosmos &#x2014; bypassing the Angelic and Archangelic grades entirely.</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Domain &amp; Polarity</div>
+          <div class="val">Peace. She is the cosmic counterweight to Leviathan, God of War. The polarity is War, or Peace.</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Classification</div>
+          <div class="val">Avatar of Clotho, the Spinner &#x2014; first of the Fates. The first living Avatar of Clotho in the history of existence.</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Chromatic Signature</div>
+          <div class="val">Zephyrosian yellow-green Aether in the eyes and veins, carried outward as warm golden light &#x2014; light in the register of renewal and life. Her passage leaves a faint, benevolent afterglow.</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Regalia</div>
+          <div class="val">A resplendent suit of dragonscale armor, gift of a Ferridanian dragon. Two ceremonial swords, gifts of Aurelius Vorn and Saint Leif Sinclair, kept as decorations.</div>
+        </div>
+        <div class="id-item wide">
+          <div class="lbl">Role in the Series</div>
+          <div class="val">The first of the nine Heralds &#x2014; the first thread of the Prophecy of Ultima, and Thread A of Book One. She is the figure who defines what righteousness looks like when the Gods will not do the work.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- II. THE CENTRAL TRUTH -->
+  <section class="fi">
+    <span class="sec-num">II</span>
+    <h2 class="sec-title">The Central Truth</h2>
+    <div class="highlight-box">
+      <p>By the measure of what she can do, Fiacre is the highest power in the cosmos that walks in mortal shape. She is constitutionally invincible. She can author her own roads between Realms. She can call down a sun. She can weave new deusas into being &#x2014; the act reserved to the God of Magic himself. And the seat of a murdered god has begun, of its own accord, to settle on her.</p>
+      <p>The most important thing about her is not that power. It is what she does with it. She spends her life trying to remain peaceful, and trying to remain in alignment with an order higher than herself &#x2014; when nothing above her could compel it, and nothing below her could resist her if she chose otherwise.</p>
+    </div>
+    <div class="prose">
+      <p>This is the spine of the character, and everything else in this record is downstream of it. Fiacre does not impose. She aligns. Her role, as she understands it, is not to define what is true but to align with what is true and act accordingly. She does not seek the truth of the cosmos through deconstruction; she seeks it through alignment. When one aligns oneself with the Truth in the highest sense, one understands that the path is measured, and the duty is to stay the path: to be honest and just, moral and peaceful, to refrain from violence without cause, anger without reason, and reason without justice.</p>
+      <p>She holds this not as a leash but as a choice. She is Clotho. The Loom works through her whether she wills it or not. But the goodness is not the Loom. The goodness is Fiacre &#x2014; deciding, every single day, to use what she is in service of what she believes. Every village healed, every famine reversed, every body she shields is not a Fate executing a cosmic function. It is a person choosing to do good with power she could turn to literally anything.</p>
+      <p>She has the power of a god and she has elected, with full knowledge and at full cost, to carry it as a woman who is honest, accountable, and at peace. That election &#x2014; the highest power in the room choosing alignment over imposition &#x2014; is who she is.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- III. ORIGIN -->
+  <section class="fi">
+    <span class="sec-num">III</span>
+    <h2 class="sec-title">Origin &#x2014; Gran Ornea and the Ascension</h2>
+    <div class="prose">
+      <p>Fiacre was born and raised in Gran Ornea, in the Verdant Plains of Zephyros &#x2014; a place where promises are currency, where truth is ambient in the air, and where a lie does not merely break trust but breaks something in the person who tells it. Iles does not permit deceit in the realm she breathes through. This is not a cultural preference. It is physiological. It is the air.</p>
+      <p>Gran Ornea is a place of wonder and honesty: markets, gossip, philosophy taught alongside farming, children who grow up knowing their word is their bond because the air itself rejects the alternative. It is lively and warm and tightly woven &#x2014; the kind of place that becomes part of a person so deeply they carry it in their posture for the rest of their life. Fiacre loved it. The sweets. The plays. The fashionable black clothes. Birdwatching. She was of that place the way a person is of a place when they have never had reason to imagine leaving it.</p>
+      <p>Most children of Zephyros ascend at sixteen, surrounded by family and neighborhood and the collective held breath of everyone who loves them. Fiacre ascended at fourteen &#x2014; not gently, but overwhelmingly. She healed before she had finished standing up from a fall. Later, hungry and wanting something sweet, she conjured a honeyed roll from nothing &#x2014; not summoned, not borrowed, <em>created</em> &#x2014; and the Gods themselves came to collect her before dinner that night.</p>
+      <p>She skipped the ceremony. The family witness. The whole passage that marks a Zephyrosian life. She went from Gran Ornea to Dystan before she had finished becoming a person. She did not become an Angel, and she did not become an Archangel. She became a Seraph &#x2014; one of seven in the entire cosmos, the Ex-Deorum, beings who act with the power and, by necessity, the will of the Gods themselves. She was fourteen years old, and equal in station to figures she might otherwise have prayed to. It was the only station befitting her power, because of what she is. That she was entirely too young for it and that it was the only place she belonged were both true at once, and only time could close the gap. Time was exactly what she was not given.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- IV. THE THIRTEEN YEARS IN DYSTAN -->
+  <section class="fi">
+    <span class="sec-num">IV</span>
+    <h2 class="sec-title">The Thirteen Years in Dystan</h2>
+    <div class="prose"><p>From fourteen to twenty-seven, Fiacre lived in the First Realm of Dystan &#x2014; the innermost world, where the Gods reside. She was the only living person in paradise: surrounded by the worthy dead, who had lived and loved and failed and died and been found sufficient, while she alone was still being weighed. These thirteen years are not a prologue. They are the formation of the woman who walks into EMBERLIGHT.</p></div>
+    <div class="acc">
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Room She Walked Into<span class="hint">Age 14&#x2013;15</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">She was fourteen, homesick, overwhelmed, and having the most extraordinary experience of her life &#x2014; all of these at once.</div>
+          <p>Roughly a year before her birth, Algol had stood before the Pantheon and spoken the Prophecy of Ultima. The Gods who towered over Fiacre in the vast open architecture of the First Realm already knew what she did not: that she was the first thread. The public story was simply that an extraordinarily gifted girl had ascended early and been elevated. The full truth &#x2014; that a living Avatar of Clotho had been born for the first time in the history of existence &#x2014; was held very closely.</p>
+          <div class="dlbl">The Table of the Seraphim</div>
+          <p>She joined six others at the right hand of the Pantheon. <strong>Leviathan</strong>, a God, head of Ex-Deorum, who found her &#x201C;particularly precious&#x201D; &#x2014; fond, almost paternal &#x2014; and who suspected from the first that she would not lose. <strong>Algol</strong>, the Measurer, who exists outside the system. <strong>Erion</strong>, Avatar of Atropos. <strong>Brutus</strong> the Bludgeon, who saw a child who had earned none of it. <strong>Chikage</strong> the Manipulator of Realities, who related to her as a variable to be assessed and dueled her often, as practice. And <strong>Garson</strong> the Beastmaster, a fellow child of Zephyros who loved her like a little sister from home.</p>
+          <p>She did what a good child of Gran Ornea does. She rose to the occasion. She studied as a scholar studies, because knowledge is sacred where she is from, and she trained as a warrior because that was what was being asked and she respected the asking. And when she did not understand why divine compassion could not simply fix what she saw, she deferred &#x2014; genuinely &#x2014; because she came from a place where authority flows from earned wisdom, and she trusted the beings who had lived lifetimes before her world existed.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Becoming<span class="hint">Age 16&#x2013;18</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">Good enough to see the work, not yet wise enough to do it well &#x2014; and self-aware enough to know the difference.</div>
+          <p>Sixteen is the age every other Zephyrosian child ascends. The ceremony she had skipped belonged to someone else now. The Gods threw her a celebration; Gran Ornea held a parade in her honor; her family was proud and could see her from afar. It was not the same thing, and she knew it. The sadness was a small thing inside a large joy. It passed through her, and she continued.</p>
+          <p>Seeing her restlessness, the Gods did not clamp down. They sent her out. She tended the flowers at the Grand Garden of Meliadas as an ambassador of the divine. She collected sacrifices and alms for Iles. She was sent to issue warnings to those who had let darkness form in their hearts &#x2014; learning to carry divine correction before she would ever be asked to carry divine wrath. And in Ferridane she witnessed war for the first time: a daughter of a Realm where violence cannot even occur, watching people kill one another in earnest. The fear was real. She did not run. She discovered that bravery was something she could do when it was required.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Glory Years<span class="hint">Age 18&#x2013;22</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">A legend was born who healed with her own blood and tears, broke the violent with their own violence, and sang the praises of the Gods.</div>
+          <div class="dlbl">The Southern Coast of Ferridane</div>
+          <p>Sent with Erion to bring judgment on a Mystic who slaughtered villages and raised the dead as an army, Fiacre was told she must sharpen and harden if she wished to see victory. She chose to harden, but not to sharpen. She raised a shield so powerful that the act of striking it destroyed the attacker; the army of the dead collapsed against her and disintegrated into dust on the breath of Iles. When it was cleared, she pointed out the Mystic and gave him a thumbs down &#x2014; Erion&#x2019;s cue. In her very first real engagement she divided divine judgment into its parts: <em>I will protect, you will execute.</em> Both necessary. Both the will of the Gods. Neither needing to live in the same hand.</p>
+          <div class="dlbl">The Angel of Mercy</div>
+          <p>She became known as a wall upon which the violent shatter. She once detained a man with tangling vines, and each time he escaped she entangled him again, and each time he cursed her she laughed &#x2014; for days, until he nearly crystallized from the effort and submitted to judgment.</p>
+          <div class="dlbl">The Dragon Dispute and Sol&#x2019;Kheret&#x2019;s Court</div>
+          <p>She settled a dispute between two dragons by cutting a deal with one and defeating the other in single combat; the Ferridanian dragon gifted her the dragonscale armor that became her regalia, and Aurelius Vorn and Saint Leif Sinclair &#x2014; rival Realm leaders &#x2014; both granted her swords. Sent later to judge the hearts of Sol&#x2019;Kheret&#x2019;s court after the destruction of Glacia, she instead spent the day in the feast halls; the Sun Blossom taught her Antaka herself, and they used it in a drunken tug of war to see who could pull a sun further across the horizon. That was not hospitality. It was trust &#x2014; and it made Fiacre the seventh being in the universe who can call down the sun.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Darkening<span class="hint">Age 22&#x2013;27</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">She does not change. The world does.</div>
+          <p>The forces of Hel began to encroach on the living Realms like a sickness. People tortured beyond repair with demonic flesh grafted to their bodies. Flowers weeping blood where dew once was. Babies devouring their mothers from inside the womb; those children going on to cannibalize villages in their sleep. Fields going barren. The animals and the Gonlan in mourning. And Fiacre was sword and shield of the Gods.</p>
+          <p>There was no clean break between the glory years and what followed. The sword simply grew heavier &#x2014; year by year, mission by mission &#x2014; and she kept carrying it. She did not break. She did not waver. She did not question the order. The weight accumulated not as doubt but as experience: the quiet, faithful cataloguing of every face she could not save, every village already too far gone, every child whose body had been made into something unrecognizable. She carried it faithfully, even as it grew heavy. Until the one day she could not.</p>
+        </div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- V. TEMPERAMENT -->
+  <section class="fi">
+    <span class="sec-num">V</span>
+    <h2 class="sec-title">Temperament</h2>
+    <div class="prose">
+      <p>Faithful. Disciplined. Precise. Gracious. Proportional. Scholarly. Deliberate. Vigilant. Dignified. Warm. Mischievous. Certain. Honest. Direct. Patient. Decisive. Merciful. Formidable. Perceptive. Measured. Devoted. Principled. Courageous. Thorough. Restrained. Authoritative. Observant. Composed. Tender. Emotionally attuned. Self-possessed. Accountable. Good. And underneath all of it, still: <strong>hungry</strong>.</p>
+
+      <div class="sub-head">Stature</div>
+      <p>She has immense stature. She has broken bread with Gods, administered divine judgment across Realms, and thinks in ages because she lives in ages. This stature is not a defense mechanism and not compensation for a wound. It is who she is. She listens before she speaks &#x2014; fully, completely, the way a child of Iles does &#x2014; and she does not open her mouth until she knows the right thing to say. When she speaks, she says exactly what she means and nothing else. No filler. No approximation. No mask, because masks are beneath her and unnecessary. She is who she is in every room.</p>
+
+      <div class="sub-head">Grace and Patience</div>
+      <p>She has limited patience and remarkable grace, and the two are not in tension &#x2014; they are the same thing operating at different scales. Grace is not softness; it is load-bearing structure. At her scale, impatience without grace would be catastrophic. When patience runs out, it runs out cleanly: no residue, no drama, no warning beyond the warning she has already given.</p>
+
+      <div class="sub-head">Honesty</div>
+      <p>Zephyros enforces honesty physiologically. Fiacre cannot produce a lie the way a person from another Realm cannot breathe underwater &#x2014; the capacity is simply not there. Everything she says is not merely honest but <em>true</em>. The constraint is on the utterance, not the silence: she holds complete authority over what she speaks on. She can decline, redirect, and shape the whole contour of a conversation through what she decides she has standing to address. But within what she speaks on, truth is not optional.</p>
+
+      <div class="sub-head">Self-Possession and Accountability</div>
+      <p>She possesses herself fully. Her qualities are hers &#x2014; not products of her environment, not responses to her conditions. Zephyros, Dystan, and Ex-Deorum did not manufacture her; she brought herself to them and met them. When the ground moves, she does not. And she holds herself accountable not to a system, a code, or a God, but to herself &#x2014; to her own standard, which she set and maintains. When she acts, the action is hers. When she fails, the failure is hers. She does not distribute responsibility, does not blame circumstance, and does not narrativize her choices into justifications.</p>
+
+      <div class="sub-head">Emotional Health</div>
+      <p>She is emotionally attuned and healthy. She feels fully, cries often, laughs, rages, and is offended &#x2014; and her feelings are real and appropriately sized against the cosmos. She does not intellectualize what she feels and she does not self-justify. She processes by feeling, completely and honestly, and then she continues. This is a clear emotional channel in a person who has never needed to build walls between herself and her own heart.</p>
+
+      <div class="sub-head">What She Wants &#x2014; the Hunger</div>
+      <p>She wants things, all the time. She wants sweets. She wants to control her own fate. She wants the work to be finished. She wants to go home. She acts on her wants constantly at the daily scale: she takes a bite of the honeyed roll every time. The hunger is not a flaw and not a crack in her. It is appetite &#x2014; the same appetite that, at fourteen, simply decided that the sweet thing she wanted should exist, and made it so. What she cannot control is the trajectory. She does not control her fate; that is the injustice, and it is an injustice in her circumstances, not a damage in her psyche. She lives fully inside conditions she did not choose, and the fullness is not compensation for the conditions. It is just who she is.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- VI. THE MULTITUDE -->
+  <section class="fi">
+    <span class="sec-num">VI</span>
+    <h2 class="sec-title">The Multitude</h2>
+    <div class="prose">
+      <p>The solemn, tragic frame that gets projected onto Fiacre describes half of her at most. The other half is a woman who is genuinely, actively having a good time. She is funny &#x2014; not because she tries to be, and not because the gap between her gravity and the world&#x2019;s absurdity produces accidental comedy. She is funny because she is having fun. One is a byproduct. The other is a disposition.</p>
+      <p>She fist-fought a dragon once to settle a dispute. She got drunk with Sol&#x2019;Kheret and learned Antaka just to see who could pull the sun further across the horizon &#x2014; and she was winning, but let the Sun Blossom win, because she did not want her to hurt herself. She identified the Red Wolf of legend, assessed him in roughly four exchanges, and made him fall flat on his face without breaking her train of thought. She has ragdolled grown men without apparent effort and held them up afterward so they would not hit the floor too hard.</p>
+      <p>This is not relief from the weight, and it is not how she copes. It is not a mask, a defense, or evidence of compartmentalization. It is simply also true. She finds the cosmos genuinely entertaining. She has opinions about which disputes are best settled with fists. She has the twinkle of someone interested in what happens next, rather than someone who has seen too much to be surprised.</p>
+      <div class="highlight-box">
+        <p>The hardest multitude to hold is this one: she is a being of formidable power, carrying responsibility that would unmake most people &#x2014; and she is also the kind of person whose idea of fun is a cosmological event. Both things are completely serious. Both are completely true. Neither cancels the other. She is that large. She contains all of it, and she does it without effort, without performance, and without asking anyone to reconcile it on her behalf.</p>
+      </div>
+      <div class="sub-head">Goodness</div>
+      <p>She is good. Not complicated-good, not good-despite-a-darkness, not good-in-spite-of-a-wound. Simply, cleanly, completely good. And the goodness is not naivety &#x2014; it is the most radical possible position for a being of her power. She looked at everything, with full knowledge and at full cost, and chose it anyway. She is the adult in every room: not because she is the most powerful, though she is, but because she is honest and accountable and self-respecting in a cosmos full of people who are none of those things consistently.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- VII. PHILOSOPHY & ALIGNMENT -->
+  <section class="fi">
+    <span class="sec-num">VII</span>
+    <h2 class="sec-title">Philosophy &#x2014; Alignment, Not Imposition</h2>
+    <div class="prose">
+      <p>Fiacre does not question the cosmic order &#x2014; not because she is indoctrinated, but because she has seen it from the top down. She has eaten at the table of the Gods. She knows. From that vantage, she recognizes questioning for what she takes it to be: a lesser activity, the symptom of a mind without a foundation. She does not seek truth through deconstruction. She seeks it through alignment.</p>
+      <p>Her conviction is that all answers are true, and that her role in the cosmos is not to define what is true but to align with it and act accordingly. When a person aligns with the Truth in its highest sense, they understand that the path they walk is measured, and their duty is to stay the path: to be honest and just, moral and peaceful, and to refrain from violence without cause, anger without reason, and reason without justice.</p>
+      <p>This is why her goodness is a discipline rather than a reflex, and why it does not soften her. She would tell people to listen to their parents. She would ask the entry-level worker complaining about the business whether they have ever run one. She would ask the person arguing geopolitics whether they have ever stood in a war room. And when someone asks her to question the cosmic order, she would ask whether they have ever seen the cosmos from the top down. Her certainty is not faith. It is the settled knowledge of someone who has been to the place the question is about.</p>
+      <p>It is essential to her that this is a posture toward truth, not toward power. Her alignment is with what is right, not with whoever happens to give an order. EMBERLIGHT proved exactly this: when an order and her conscience diverged, the conscience held. Alignment, for Fiacre, is the opposite of obedience &#x2014; it is the refusal to let anything, including an institution she served for thirteen years, stand between her and the path as she measures it.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- VIII. POWERS & DEUSAS -->
+  <section class="fi">
+    <span class="sec-num">VIII</span>
+    <h2 class="sec-title">Powers &amp; Deusas</h2>
+    <div class="prose">
+      <p>The tier system that maps mortal and divine power in the Realms does not contain Fiacre. She is classified <strong>beyond the fifth tier</strong> &#x2014; she does not channel power through a body that strains at a capacity wall, the way ordinary Mystics do. She is infrastructure. What it feels like to be a soldier who swings a blade at her aegis and strikes something that <em>forgives</em> them for it is what the world below this order experiences when it meets the world above. Her domain is light, and where the lost Realm of Luxania expressed light as structure, resonance, or passage, Fiacre expresses a fourth thing: light as renewal and life.</p>
+    </div>
+    <div class="acc">
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Loom of Clotho<span class="hint">what she is</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">There has never been a living Avatar of Clotho. The very concept is a paradox. And yet, here is Fiacre.</div>
+          <p>Clotho is the Spinner, the first of the Fates &#x2014; the one who spins the thread of every life. Fiacre is her first living Avatar in the history of existence. The honeyed roll she conjured at fourteen was the first thread she ever spun; every miracle, every healing, every act of creation since has been the Loom working through her before she knew she had it.</p>
+          <p>She does not yet know this. When she learns it, it will explain her &#x2014; and it will not change her. Because what she does was never a function of what she is. It was always a function of who she chose to be. The Loom does not author her mercy. Fiacre authors her mercy. That is the distinction she holds the whole cosmos apart on.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Genesis<span class="hint">the weaving of new deusas</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">She can do the thing only the God of Magic is supposed to do.</div>
+          <p>Under the ordinary divine dispensation, every deusa is shaped by the Gods and assigned by Dozu, who reads each soul and knows the gift it was meant to carry. Fiacre weaves new deusas into existence herself. This is the capacity that conjured a sweet roll out of nothing before she had a name for what she was.</p>
+          <p>It is also a permanent danger to her. Dozu can see every miracle. Every deusa she creates is, to him, a flare going up &#x2014; a mortal performing the function that defines his domain. He is going mad watching the system he governs slip, and Fiacre, simply by being what she is, is one of the things slipping.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Wayfarer&#x2019;s Light<span class="hint">teleportation &amp; the Navigator legacy</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">She does not need the Sinclairs&#x2019; roads. She authors her own.</div>
+          <p>Fiacre crafted a personal deusa of light-based teleportation &#x2014; the capacity to step between Realms without a Clairgate, authoring her own pathways. Her passage is not a violent tear in reality but a graceful stepping-through, like passing through a curtain of light, leaving behind a faint and benevolent afterglow.</p>
+          <p>This places her, by lineage of expression, as the inheritor of the Astral Navigators of Luxania &#x2014; the idealistic pioneers who first carved the leylines between worlds before their legacy was stolen and erased. She does not use their corrupted, stolen ports. She reaches the same destinations on roads of her own making, which is why she carries their legacy back to the murdered Realm rather than merely repeating it.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Healing &#x2014; Blood and Tears<span class="hint">restoration as resonance</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">A legend was born who healed the sick and wounded with her own blood and tears.</div>
+          <p>Fiacre heals through her own blood and tears &#x2014; an expression in the resonant register of the lost Choral Dynasties, light worked as connection and renewal rather than structure. Her healing is not maintenance; it reverses famine, mends villages, and awakens in starved land the dormant memory of what it was. Where she walks, the light comes back.</p>
+          <p>The same substance that heals can be turned to defense. Her spilled blood is an instrument she retains command of: when Chikage believed he had killed her, she turned her own blood into spikes and impaled him.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Pax Aegis<span class="hint">the wall the violent shatter on</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">A soldier swings a sword, strikes her aegis, and the air forgives them for it.</div>
+          <p>The Pax Aegis is Fiacre&#x2019;s warding art: densely layered wind-barriers that resound with healing, harmonic in origin. It is not a passive shield. It is so powerful that the mere act of impacting it can destroy the attacker &#x2014; an army of the dead once collapsed against it and disintegrated into dust on the breath of Iles, while she stood unmoved at the center.</p>
+          <p>It is the physical statement of her whole philosophy of force: she chose to harden rather than sharpen. The Aegis ends violence by absorbing and returning it, never by carrying it forward. In its mature form it was forged in the very gauntlet that tried to destroy her &#x2014; the Hunt &#x2014; and by the late stages of her longest battle it was fully operational.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Antaka<span class="hint">the capacity to redirect a sun</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">Six people in the universe held this power. Sol&#x2019;Kheret made her the seventh.</div>
+          <p>Antaka &#x2014; the ability to collapse the distance between a planet and its sun &#x2014; is a learned technique rather than a birth deusa. It was held only by Sol&#x2019;Kheret and her five Torchbearers until the Sun Blossom taught it to Fiacre directly, in her own feast court, as an act of trust. Fiacre possesses the raw capacity to survive being its conduit, where almost any other Mystic attempting it would burn or crystallize.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Eidolon Marionette<span class="hint">the Strings of Fate</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">A deusa of profound control &#x2014; and the heaviest thing she ever made.</div>
+          <p>Eidolon Marionette is a deusa Fiacre invents: the Strings of Fate, a power of profound control over a body and its motion. Its first and defining use is the lobotomizing of Leviathan &#x2014; the God of War undone with his own hands.</p>
+          <p>And then she cries. Not because she is broken. Because she did something enormous to someone she loved, and she is not made of stone. The grief is the correct size for the act. It moves through her, and she continues. She will not call the victory a vindication.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Supreme Clarity &amp; Invincibility<span class="hint">what she cannot be</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">The question is never whether she can go on. The question is what she is for.</div>
+          <p><strong>Supreme Clarity</strong> is a permanent perceptual crossing. Cornered by Chikage in the corrupted Solareth Rainforest &#x2014; chosen by him for its psychic cacophony layered over his reality-warping art &#x2014; the discipline required to pierce his illusion pushed her across a threshold. The crossing did not reverse. She perceives differently now, for good.</p>
+          <p><strong>Invincibility</strong> is constitutional. Fiacre is not merely difficult to harm; she cannot be killed. She learned this not through despair but through betrayal: when her former peers among the Seraphim and Archangels &#x2014; the people she had trained, eaten, and served alongside for thirteen years &#x2014; were sent to kill her, and could not. The most extraordinary fact about her arrived soaked in the fire of being hunted by everyone she had loved. Beneath all of this runs the Hyper Complex baseline at immense scale: the strength to ragdoll grown men without apparent effort, and the control to relax every muscle in a body at once.</p>
+        </div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- IX. THE WAY SHE FIGHTS -->
+  <section class="fi">
+    <span class="sec-num">IX</span>
+    <h2 class="sec-title">The Way She Fights</h2>
+    <div class="prose">
+      <p>Told at the Southern Coast of Ferridane that she must sharpen and harden to see victory, Fiacre made the choice that has defined every engagement since: she would harden, but she would not sharpen. Her combat identity is the shield, not the sword. She is a wall upon which the violent shatter &#x2014; and she made that wall, the Pax Aegis, so absolute that striking it is its own punishment.</p>
+      <p>In her first real engagement she divided the labor of divine judgment into its component parts and refused to let them share a hand: <em>I will protect, you will execute.</em> Both are necessary. Both, in their place, are the will of the Gods. But protection and killing did not need to live in the same person. She held the line; another made the cut. She separated mercy from the kill.</p>
+      <p>And yet she does not separate mercy from <em>correction</em>. When a warlord sent his heavy to remove her, she forced every muscle in the heavy&#x2019;s body to relax at once; he crumpled, and she caught him on the way down and held him up by his collar like a lost child &#x2014; while giving the warlord the look a mother or an older sister gives a child doing something wrong and being given the chance to stop. She was tender with the man sent to hurt her in the same motion she corrected the man who sent him. The correction itself arrives clean, precise, and without cruelty &#x2014; administered with such economy of force that her remarkable politeness reads as warmth until the corrected party realizes what has happened. She will not correct you twice.</p>
+      <p>She is formidable in open combat &#x2014; she fought a Thalassan dragon alone and won; she detained a man for days with nothing but tangling vines and her own laughter &#x2014; but the tension in her battles never comes from whether she can win. It comes from what winning costs the people around her, and from what restraint she chooses, and how much of the world is left standing when she stops holding back. Her longest and hardest battle was against the God of War himself, and she fought it the way she fights everything: studying him as he struck her, until by the late stages she knew him better than he knew her. The cosmos measured him as older. It measured her as more fundamental.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- X. THE FALL -->
+  <section class="fi">
+    <span class="sec-num">X</span>
+    <h2 class="sec-title">The Fall</h2>
+    <div class="prose">
+      <p><strong>EMBERLIGHT.</strong> She was sent to a village. The order was clear and the order was not cruel: the village held beings that Baphomet had been seeding &#x2014; Raiwata&#x2019;s silent invasion in its nascent form &#x2014; and the Gods, who could see the full shape of what was coming, sent the instrument capable of containing it cleanly. The orders were Absolute Neutralization.</p>
+      <p>She saw children. She could not do it. She cried. She went home.</p>
+      <p>What broke at EMBERLIGHT was not her faith in the Gods. The framework was right about the cost; she simply could not pay it. She did not lose faith in the order &#x2014; she lost faith in herself. She holds herself accountable for a divine order she failed to execute, and she holds, at the same time and without resolving it, that perhaps the sword was never hers to carry. She failed, and she was the wrong instrument. Both are true. She does not reconcile them. She carries them.</p>
+      <p>Then she went to Leviathan and asked one reasonable question &#x2014; not in defiance, but as a tired Seraph who had served faithfully for thirteen years: <em>&#x201C;Can I not simply retire?&#x201D;</em></p>
+      <p>He came to Gran Ornea. To her family&#x2019;s home, in the Realm where violence is supposed to be impossible. He did not come angry. He came fond, almost paternal. He told her that desire would be the poison in her honey, and he said, with something that sounded like love: <em>&#x201C;May you die as you have lived, with grace.&#x201D;</em></p>
+      <p>Ardenne &#x2014; her older sister, the person she had left behind at fourteen &#x2014; walked into the room because she heard voices. Leviathan killed her. He kept coming. Fiacre blocked his weapon and learned, in that single motion, that she was more than she had been told she was. She did not have time to think. She ran &#x2014; not because she had calculated that she could not win, but because she was twenty-seven and her sister was on the floor and the being in front of her had done that without hesitation and was still coming. She ran knowing exactly what she was running from and exactly what she was running into.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- XI. LUXENFALL -->
+  <section class="fi">
+    <span class="sec-num">XI</span>
+    <h2 class="sec-title">Luxenfall &#x2014; The Work</h2>
+    <div class="prose">
+      <p>She came to Luxenfall to be out of the sight of the Gods. She landed on a rock in the worst place in the cosmos and found out why the Gods were not watching. There was no revelation and no political statement. She saw people suffering, she is a person with the power to help, and there was no longer a chain of command between her and the work. The math was simple. She did the thing.</p>
+      <p>She works without stopping, because Luxenfall has no in-between &#x2014; the need is constant, the suffering is everywhere, and she is one person. She knows Dozu can see every miracle, that every famine she reverses is a flare going up, that the Archangels are coming. Those are not details that matter to her while the people in front of her cannot wait. She came to call it destiny &#x2014; not as hope, but as understanding. It became abundantly clear to her that this is what she was made for.</p>
+      <p>In the ruins she found the thing the murdered Realm had truly lost. The fall of Luxania was not, at root, a conquest &#x2014; it was the destruction of the infrastructure of conscience. Buried in the rubble were building-sized crystata that had once encoded basic principles of decency into the empathic network &#x2014; decency so ambient it had felt like weather. She reconstructed the pattern, failing and trying again, until she held the blueprint. Five principles:</p>
+      <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:2px;padding:0.4rem 1.5rem;margin:1.2rem 0;">
+        <div class="princ"><div class="princ-n">The First</div><p><strong>Do not cause suffering you can prevent.</strong></p></div>
+        <div class="princ"><div class="princ-n">The Second</div><p><strong>Do not take what is not offered.</strong></p></div>
+        <div class="princ"><div class="princ-n">The Third</div><p><strong>Do not deceive those who trust you.</strong></p></div>
+        <div class="princ"><div class="princ-n">The Fourth</div><p><strong>Do not turn away from someone in pain.</strong></p></div>
+        <div class="princ"><div class="princ-n">The Fifth</div><p><strong>Do not use another person as a means to your end.</strong></p></div>
+      </div>
+      <p>Region by region, she restores the crystata &#x2014; fifteen in all. Each activation changes the zone: the light returns, enemies cannot bring themselves to fight, the broken people stop flinching, and a survivor of the Lightwells, inside a restored radius, has the capacity to grieve handed back to them. When the network is whole, only the Wellspring of Union remains broken, still broadcasting three hundred years of suffering. Fiacre walks into it. As Clotho&#x2019;s Avatar, what she does is spin the thread back together. She heals the broken heart of the Realm and ignites a Second Sun, and an entire Realm exhales for the first time in three centuries.</p>
+      <div class="highlight-box">
+        <p>The people of Luxenfall begin to worship her. A woman leaves flowers at the foot of a restored crystata and calls it a shrine. A man names his newborn daughter Fiacre. An elder calls her the goddess returned, and Fiacre &#x2014; who cannot lie &#x2014; says: <em>&#x201C;I am not your goddess.&#x201D;</em> And the elder answers: <em>&#x201C;That is what a goddess would say.&#x201D;</em></p>
+        <p>She refuses the worship, repeatedly, in vocabulary that points past herself. She is not rebuilding their faith in her. She is rebuilding their capacity for self-governance. She is not their goddess. She is their electrician.</p>
+      </div>
+      <p>The work also frightens her, honestly and proportionally. She begins to wonder whether the Gods were right and she should have minded her own business. She has reversed famines and healed villages, and the Lightwells are still running and the occupation is still in place. She can heal a person. She cannot heal a system. She is one woman with a shovel, and it will not stop snowing. It is into exactly this doubt that Algol speaks: <em>Nine threads weave a shroud for this age.</em> She is no longer alone. She does not know who the other eight are or when they will come &#x2014; but the number is real, and the prophecy is architecture, not hope.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- XII. LEGITIMACY -->
+  <section class="fi">
+    <span class="sec-num">XII</span>
+    <h2 class="sec-title">Legitimacy &#x2014; The Origins of Her Standing</h2>
+    <div class="prose">
+      <p>Fiacre&#x2019;s authority does not rest on a single grant. It is layered, and each layer was established differently.</p>
+      <p><strong>The ascension.</strong> She ascended at fourteen, overwhelmingly, with power so great that the Gods themselves came to collect her and elevated her directly to Seraph &#x2014; the only station befitting what she is. She did not climb the mountain. The mountain came to her, because nothing lower would hold her.</p>
+      <p><strong>The cosmic seat.</strong> Above the institutional, her standing is structural. She is the Avatar of Clotho, the Spinner &#x2014; a function of the cosmos itself, not a title any authority conferred. There has never been a living Avatar of Clotho; the concept is a paradox, and she is its first instance. This legitimacy was not given. It is what she is.</p>
+      <p><strong>The refusal of the kill order.</strong> When the Gods sent Algol &#x2014; the one being who could unspeak any Herald out of existence &#x2014; to end the nine threads before they became the prophecy, Algol looked at Fiacre and did nothing. The Heralds have been placed. Chosen and threaded, as the Gods once were. Non-negotiable. The Measurer&#x2019;s refusal is the cosmos itself confirming Fiacre&#x2019;s right to act.</p>
+      <p><strong>The vacated seat.</strong> In Luxenfall she does the work that the seat of Aether, the murdered God of Light, requires. The seat begins to settle on her of its own accord, because the substrate recognizes the shape of what she is doing. It does not depend on her acceptance &#x2014; and she does not claim it. The Spinner stands in the vacant seat of a slain god without ever calling it hers.</p>
+      <p><strong>The recognition of her peers.</strong> Across the Realms she is the much-beloved Angel of Mercy. Rival Realm leaders &#x2014; Aurelius Vorn and Saint Leif Sinclair &#x2014; both honored her. Sol&#x2019;Kheret met her as an equal and taught her one of her most sacred abilities as an act of trust. Her legitimacy is witnessed by the most powerful beings in the cosmos.</p>
+      <p><strong>And the legitimacy she keeps to herself.</strong> Underneath all of it, Fiacre answers to her own standard. She refuses, repeatedly and pointedly, to call her victory over Leviathan a vindication. Winning the fight does not retroactively prove that leaving was right. The Gran Ornea question &#x2014; whether she should have stayed at her post &#x2014; she leaves open. Her capacity is not her judgment, and she will not let the one launder the other. This refusal is itself the deepest source of her standing: she is legitimate because she holds herself to account when nothing in the cosmos could compel it.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- XIII. THREATS -->
+  <section class="fi">
+    <span class="sec-num">XIII</span>
+    <h2 class="sec-title">Threats</h2>
+    <div class="prose">
+      <p>Fiacre cannot be killed, and few things in the cosmos can stand against her directly. The dangers that gather around her are therefore of a different order &#x2014; institutional, environmental, structural, and existential.</p>
+      <p><strong>Leviathan and the Hunt.</strong> The God of War, head of the institution that made her, came to her family&#x2019;s home and killed her sister, then sent her own former peers to hunt her across Luxenfall. The institution turned her brothers-in-arms into her executioners. That the hunt failed &#x2014; that they could not do it &#x2014; does not lessen what it was: the divine order itself, mobilized against her.</p>
+      <p><strong>The Tongue of the Eighth Hell.</strong> In Tempora, the capital of Tenebralis, her core mode becomes the vulnerability. Her empathy &#x2014; the channel through which she does all her work &#x2014; is metabolized as fuel by the Mavarran rhetorical art. In a city built so that what you see is never what is, compassion offered freely is consumed by hospitality before it can land. This is the one environment where the very thing that makes Fiacre Fiacre can be turned against her, not by force, but by design.</p>
+      <p><strong>The economy of desire.</strong> Tenebralis cannot touch her &#x2014; she would break anyone who tried &#x2014; so it sells the fantasy of having touched her. Within hours of the Heralds reaching Tempora, the image of the Goddess of Peace is being defiled for an audience and minted into coin. She cannot be reached, but the appetite of a whole civilization has been pointed at her, and that appetite is already in motion.</p>
+      <p><strong>Dozu.</strong> The God of Magic is going mad watching mortals build power outside his permission, and Fiacre &#x2014; who weaves new deusas, performing the function that defines his domain &#x2014; is among the brightest of those flares. Her existence, simply by being what it is, is an encroachment on a maddening God.</p>
+      <p><strong>The limit of one.</strong> The most patient threat is structural. She can heal a person; she cannot heal a system. Every village she restores leaves the machine that broke it still running. She is one woman with a shovel against snow that does not stop. The danger is not that she will be defeated, but that the scale of the wound will outrun a single pair of hands &#x2014; a danger answered, finally, not by her power but by the other eight threads.</p>
+      <p><strong>The loneliness of stature.</strong> She is without equal, and that is a lonely stature. She has gotten drunk with demigods and fist-fought dragons; she has never danced with a man. The kind of person who could stand beside her without being diminished by the comparison essentially does not exist. This is not a wound and not a flaw. It is simply a true cost of being what she is.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- XIV. HER PLACE IN THE PROPHECY -->
+  <section class="fi">
+    <span class="sec-num">XIV</span>
+    <h2 class="sec-title">Her Place in the Prophecy</h2>
+    <div class="prose">
+      <p><em>Nine threads weave a shroud for this age.</em> Fiacre is the first of them &#x2014; the first Herald, and Thread A of Book One. Algol delivered the Prophecy of Ultima roughly a year before Fiacre was born, which means Leviathan was given custody of the opening move of the thing that ends his world the moment she ascended. Her wariness from him, her precious place at his table, the gap that could never be closed &#x2014; all of it traces back to the fact that she was the first thread, and the Gods knew it before she did.</p>
+      <p>Her Book One arc is The Fall and the Flight, then The Restoration. From EMBERLIGHT she flees to Luxenfall and finds her purpose: she heals villages, reverses famines, reconstructs the Lex Aeterna network of fifteen crystata, mends the broken Wellspring, and ignites the Second Sun. Working in the ruins, and knowing from her Dystan years that Erebus and Aether fought a thousand years ago, she makes the connection no one else has: Aether is not silent, Aether is <em>dead</em>, and the Pantheon has concealed his murder for a millennium. She carries that piece of the cosmic-historical spine. She is hunted across the Realm by the Seraphim; she discovers her invincibility; she fights Brutus, and with Algol&#x2019;s aid temporarily defeats the captured Erion; she crosses permanently into Supreme Clarity against Chikage and later kills him with her own blood; and she fights the longest, hardest battle of her life against Leviathan &#x2014; ending it not with his death but with Eidolon Marionette, lobotomizing him and beheading Ex-Deorum. At Book One&#x2019;s close she is in Aether&#x2019;s vacated seat without claiming it, and she walks out and returns to Luxenfall to keep working, refusing still to call her victory a vindication.</p>
+      <p>She and Uriel are structural mirrors. Both invent a forbidden deusa and turn it on a God &#x2014; one of them ascending from nothing, the other descending from everything. The prophecy connects them before they ever connect themselves. Across the First Act, three threads converge on Luxenfall: Fiacre handles peacemaking and restoration, Alciel handles the unification of a broken people, and Uriel rallies the resistance and burns the Lightwells. Luxenfall is the cradle of the Advent, and her unilateral decision &#x2014; to do for the Luxenfallen what the Gods would not &#x2014; is its foundational moral act.</p>
+      <div class="highlight-box">
+        <p>She will become a Goddess. She was always greater than one &#x2014; the cosmic counterweight to War, the Peace in the polarity &#x2014; and the title of Goddess of Peace is not something anyone gave her. It is what she is. She will resist it, because she has eaten at the table of the Gods and understands that godhood is a job: the governance of a fundamental aspect of reality, forever, or until someone comes to kill you. She does not want that job.</p>
+        <p>She is going to get it anyway. And the heroism is not the power. The heroism is walking away from the institution, knowing it would cost her everything, and then doing the work that was so important she needed to do it.</p>
+      </div>
+      <div class="sub-head">How the Cosmos Regards Her</div>
+      <div class="regard">
+        <div class="regard-item">
+          <div class="who">Leviathan</div>
+          <p>Finds her &#x201C;particularly precious&#x201D; &#x2014; fond, almost paternal &#x2014; and carries a wariness he cannot admit to. He suspected from the beginning that she would not lose.</p>
+        </div>
+        <div class="regard-item">
+          <div class="who">Algol</div>
+          <p>The sister she is cosmologically bound to. Where Fiacre spins the thread, Algol measures the span. If the custodian of reality&#x2019;s continuity stands with them, then wherever they are going is where reality needs to go.</p>
+        </div>
+        <div class="regard-item">
+          <div class="who">Sol&#x2019;Kheret</div>
+          <p>Met her as an equal, found her genuine, and taught her Antaka &#x2014; not as hospitality, but as trust. Two women of extraordinary power who parted with mutual respect.</p>
+        </div>
+        <div class="regard-item">
+          <div class="who">Anberlyn</div>
+          <p>The one woman she does not put in a box. She admires Fiacre not for the pacifism but for the impregnability &#x2014; a being so powerful that violence does not matter around her.</p>
+        </div>
+        <div class="regard-item">
+          <div class="who">Alciel</div>
+          <p>Enjoys her company &#x2014; one of the few who operates at his register. He values powerful figures who stand at full height and are terrifying in their own right.</p>
+        </div>
+        <div class="regard-item">
+          <div class="who">Crex &amp; Ardenne</div>
+          <p>Ardenne, the sister Leviathan killed, was a love of Crex&#x2019;s youth; he names his first Astra after her. Fiacre&#x2019;s empathy is the lens through which he might reach what Ardenne once meant to him.</p>
+        </div>
+      </div>
+      <p style="margin-top:1.4rem;">Saint Cloud Sinclair, surveying the rising Heralds, measures her as something that supersedes Dozu and Anima both &#x2014; Magic and Life. The reader is given the whole pattern at once. Fiacre is the figure who keeps moving, against snow that does not stop falling, because the woman in front of her needs help &#x2014; and who renders, in nine books, the project&#x2019;s claim that the construction of something better does not require certainty about its own legitimacy. She acts in continuous doubt about whether she should be acting at all, and she continues anyway.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- XV. CHROMATIC & MATERIAL SIGNATURE -->
+  <section class="fi">
+    <span class="sec-num">XV</span>
+    <h2 class="sec-title">Chromatic &amp; Material Signature</h2>
+    <div class="sw-grid">
+      <div class="sw">
+        <div class="sw-color" style="background:linear-gradient(135deg,#8a9f3e,#aac24e)"></div>
+        <div class="sw-info"><div class="sw-name">Aetheric Green</div><div class="sw-hex">#AAC24E</div>
+        <div class="sw-desc">Zephyrosian myst &#x2014; the yellow-green of Aeralithe&#x2019;s shed scales, alive in the eyes and veins of those who breathe the Goddess&#x2019;s air. Her origin, carried in her body.</div></div>
+      </div>
+      <div class="sw">
+        <div class="sw-color" style="background:linear-gradient(135deg,#c8a24a,#e4c878)"></div>
+        <div class="sw-info"><div class="sw-name">Honeyed Gold</div><div class="sw-hex">#E4C878</div>
+        <div class="sw-desc">The warm gold of light worked as renewal and life &#x2014; the register of the roll she conjured at fourteen, and of every village where the light comes back behind her.</div></div>
+      </div>
+      <div class="sw">
+        <div class="sw-color" style="background:linear-gradient(135deg,#a8862e,#d4ad3e)"></div>
+        <div class="sw-info"><div class="sw-name">Fulguror Gold</div><div class="sw-hex">#D4AD3E</div>
+        <div class="sw-desc">The divine golden lightning of Zephyros &#x2014; physics, not theology. The gold of judgment held in mercy&#x2019;s hand.</div></div>
+      </div>
+      <div class="sw">
+        <div class="sw-color" style="background:linear-gradient(135deg,#cfcdbd,#e8e6d6)"></div>
+        <div class="sw-info"><div class="sw-name">Moonstone Prism</div><div class="sw-hex">#E8E6D6</div>
+        <div class="sw-desc">The refracted pale light of Zephyrosian moonstone and Luxanian crystal &#x2014; the heritage of the Astral Navigators she carries home.</div></div>
+      </div>
+      <div class="sw">
+        <div class="sw-color" style="background:linear-gradient(135deg,#2c3a20,#4a5e30)"></div>
+        <div class="sw-info"><div class="sw-name">Dragonscale</div><div class="sw-hex">#3A4A28</div>
+        <div class="sw-desc">Her regalia &#x2014; the resplendent armor gifted by a Ferridanian dragon whose dispute she settled. A conflict resolved, worn as honor.</div></div>
+      </div>
+      <div class="sw">
+        <div class="sw-color" style="background:linear-gradient(135deg,#0a0d09,#171b10)"></div>
+        <div class="sw-info"><div class="sw-name">Gran Ornea Black</div><div class="sw-hex">#11140D</div>
+        <div class="sw-desc">The fashionable black of the home she loved &#x2014; the verdant dark she carries in her posture wherever the ground moves beneath her.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- CLOSE -->
+  <section class="fi">
+    <div class="pull">
+      &#x201C;She would tell people to listen to their parents. And when you ask her to question the cosmic order, she would ask you if you have ever seen the cosmos from the top down.&#x201D;
+    </div>
+    <div class="prose" style="text-align:center;">
+      <p>She is Fiacre Athena Chevalier of Gran Ornea, in the Realm of Iles. The weight is real. The responsibility is real. And she inhabits all of it with genuine appetite, without performance, without asking anyone to reconcile it on her behalf.</p>
+      <p>The choice to act like a mere woman &#x2014; while holding the power of a god &#x2014; is the most radical thing about her. And that is just what she is.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer fi">
+    Advent of Ultima <span>&#183;</span> Moirai Codex <span>&#183;</span> Fiacre Athena Chevalier <span>&#183;</span> May 2026
+  </footer>
+
+</div>
+
+<!-- === SCRIPTS === -->
+<script>
+// Accordion — scoped per .acc container so multiple accordions are independent
+document.querySelectorAll('.acc').forEach(acc => {
+  acc.querySelectorAll('.acc-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      const body = item.querySelector('.acc-body');
+      const isOpen = item.classList.contains('open');
+      acc.querySelectorAll('.acc-item').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.acc-body').style.maxHeight = null;
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        body.style.maxHeight = body.scrollHeight + 'px';
+      }
+    });
+  });
+});
+
+// Fade in on scroll
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+
+// Aether motes — drifting light, the light coming back
+(function() {
+  const canvas = document.getElementById('mote-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, motes = [];
+  const COUNT = 58;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Mote {
+    constructor() { this.reset(true); }
+    reset(init) {
+      this.x = Math.random() * W;
+      this.y = init ? Math.random() * H : H + 10;
+      this.r = Math.random() * 2.0 + 0.5;
+      this.vx = (Math.random() - 0.5) * 0.25;
+      this.vy = -(Math.random() * 0.3 + 0.06);
+      this.drift = Math.random() * Math.PI * 2;
+      this.driftSpeed = Math.random() * 0.003 + 0.001;
+      this.driftAmp = Math.random() * 0.4 + 0.1;
+      const roll = Math.random();
+      if (roll < 0.55) {
+        // honeyed gold
+        this.color = `rgba(228,200,120,${Math.random() * 0.32 + 0.06})`;
+      } else if (roll < 0.85) {
+        // aetheric yellow-green
+        const hue = 70 + Math.random() * 16;
+        const alpha = Math.random() * 0.26 + 0.05;
+        this.color = `hsla(${hue},55%,58%,${alpha})`;
+      } else {
+        // moonstone pale
+        this.color = `rgba(232,230,214,${Math.random() * 0.22 + 0.05})`;
+      }
+      this.pulsePhase = Math.random() * Math.PI * 2;
+      this.pulseSpeed = Math.random() * 0.012 + 0.005;
+    }
+    update() {
+      this.drift += this.driftSpeed;
+      this.pulsePhase += this.pulseSpeed;
+      this.x += this.vx + Math.sin(this.drift) * this.driftAmp;
+      this.y += this.vy;
+      if (this.y < -12 || this.x < -20 || this.x > W + 20) this.reset(false);
+    }
+    draw() {
+      const pulse = 1 + Math.sin(this.pulsePhase) * 0.3;
+      const r = this.r * pulse;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+      // soft glow
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, r * 2.6, 0, Math.PI * 2);
+      const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, r * 2.6);
+      g.addColorStop(0, this.color);
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g;
+      ctx.globalAlpha = 0.35;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  for (let i = 0; i < COUNT; i++) motes.push(new Mote());
+
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    motes.forEach(m => { m.update(); m.draw(); });
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+
+</body>
+</html>

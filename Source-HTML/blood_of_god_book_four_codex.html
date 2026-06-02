@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blood of God — Book Four of Advent of Ultima · Moirai Codex</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #070b11;
+  --bg-card: #0d141d;
+  --bg-hover: #131c28;
+  --bg-highlight: #101a26;
+  --bg-blood: #160c10;
+  --blue-abyss: #15314a;
+  --blue-core: #2f6f96;
+  --blue-accent: #57a6cc;
+  --blue-light: #a9d4e6;
+  --blue-ghost: #e3f0f5;
+  --pearl: #d8e4ea;
+  --silver: #aebfc9;
+  --wine-deep: #4a1620;
+  --wine-core: #8a2433;
+  --wine-accent: #b8455a;
+  --rose-light: #e6bcc0;
+  --gold-dim: #9a8240;
+  --text-primary: #c9d6de;
+  --text-secondary: #8c9aa6;
+  --text-dim: #5a6670;
+  --border-subtle: #1a2530;
+  --border-accent: #1f3a4f;
+  --border-blood: #3a1a22;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --max-width: 880px;
+  --section-gap: 4.5rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.78;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--wine-core); color: var(--blue-ghost); }
+
+/* === RISING MOTES — water and blood drawn toward the heavens === */
+#mote-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.5;
+}
+
+/* === AMBIENT GRADIENTS === */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(47,111,150,0.09) 0%, transparent 55%),
+    radial-gradient(ellipse at 82% 18%, rgba(138,36,51,0.08) 0%, transparent 48%),
+    radial-gradient(ellipse at 55% 95%, rgba(138,36,51,0.07) 0%, transparent 42%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page { position: relative; z-index: 1; max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem; }
+
+/* === DIAMOND DIVIDERS === */
+.divider {
+  display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+  margin: var(--section-gap) 0; opacity: 0.55;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--wine-deep), transparent);
+}
+.divider span {
+  width: 7px; height: 7px; background: var(--wine-accent);
+  transform: rotate(45deg); flex-shrink: 0;
+}
+.divider span.blue { background: var(--blue-accent); }
+
+/* === HEADER === */
+.header { text-align: center; padding: 5.5rem 0 1.5rem; }
+.header .tag {
+  font-family: var(--font-display); font-size: 0.6rem;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--wine-accent); display: block; margin-bottom: 2rem;
+}
+.header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, 4.3rem);
+  font-weight: 700; color: var(--rose-light);
+  letter-spacing: 0.11em; line-height: 1.12; margin-bottom: 0.8rem;
+  text-shadow: 0 0 70px rgba(138,36,51,0.4);
+}
+.header .epithet {
+  font-family: var(--font-body); font-style: italic;
+  font-size: 1.2rem; color: var(--silver); margin-bottom: 0.5rem;
+}
+.header .epithet .vint { color: var(--wine-accent); font-style: normal; }
+.header .booknum {
+  font-family: var(--font-display); font-size: 0.72rem;
+  letter-spacing: 0.28em; text-transform: uppercase; color: var(--blue-accent);
+  margin-bottom: 1.1rem;
+}
+.header .sub {
+  font-family: var(--font-display); font-size: 0.68rem;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-dim);
+  line-height: 2;
+}
+
+/* === SECTION FRAMEWORK === */
+.sec-num {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--wine-accent); display: block; margin-bottom: 0.4rem;
+}
+.sec-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-weight: 600; color: var(--blue-light);
+  letter-spacing: 0.05em; margin-bottom: 1.4rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--border-accent);
+}
+.sub-head {
+  font-family: var(--font-display); font-size: 0.92rem;
+  font-weight: 600; color: var(--blue-light);
+  letter-spacing: 0.03em; margin-top: 2rem; margin-bottom: 0.6rem;
+}
+.sub-head.first { margin-top: 0.4rem; }
+.sub-head .act {
+  display: block; font-size: 0.5rem; letter-spacing: 0.28em;
+  color: var(--wine-accent); margin-bottom: 0.15rem; font-weight: 600;
+}
+
+/* === PROSE === */
+.prose p { margin-bottom: 1.2rem; }
+.prose p:last-child { margin-bottom: 0; }
+.prose strong { color: var(--blue-light); font-weight: 600; }
+.prose em { color: var(--silver); }
+.prose .wine { color: var(--wine-accent); font-weight: 600; font-style: normal; }
+.prose .blue { color: var(--blue-accent); font-weight: 600; font-style: normal; }
+
+/* === EPIGRAPH === */
+.epigraph {
+  text-align: center; font-style: italic;
+  font-size: 1.12rem; color: var(--silver);
+  margin: 1.8rem 0; line-height: 1.7;
+}
+.epigraph .who {
+  display: block; font-style: normal; font-family: var(--font-display);
+  font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--wine-accent); margin-top: 0.7rem;
+}
+
+/* === ACCORDION === */
+.acc-item {
+  border: 1px solid var(--border-subtle); margin-bottom: -1px;
+  background: var(--bg-card); overflow: hidden;
+}
+.acc-item:first-child { border-radius: 2px 2px 0 0; }
+.acc-item:last-child { border-radius: 0 0 2px 2px; }
+.acc-btn {
+  width: 100%; background: none; border: none;
+  padding: 1.1rem 1.4rem; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--font-display); font-size: 0.86rem;
+  font-weight: 600; color: var(--blue-light);
+  letter-spacing: 0.04em; text-align: left;
+  transition: background 0.2s;
+}
+.acc-btn:hover { background: var(--bg-hover); }
+.acc-btn .label-wrap { display: flex; flex-direction: column; gap: 0.18rem; }
+.acc-btn .actlabel {
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.25em; color: var(--wine-accent); font-weight: 600;
+}
+.acc-btn .hint {
+  font-family: var(--font-body); font-size: 0.84rem;
+  font-weight: 400; color: var(--text-dim); font-style: italic;
+}
+.acc-btn .arr {
+  width: 7px; height: 7px;
+  border-right: 1.5px solid var(--wine-accent);
+  border-bottom: 1.5px solid var(--wine-accent);
+  transform: rotate(45deg); transition: transform 0.3s;
+  flex-shrink: 0; margin-left: 1rem;
+}
+.acc-item.open .acc-btn .arr { transform: rotate(-135deg); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
+.acc-inner { padding: 0 1.4rem 1.5rem; }
+.acc-inner .atm {
+  font-style: italic; font-size: 0.94rem; color: var(--wine-accent);
+  margin-bottom: 0.8rem; padding-left: 0.8rem;
+  border-left: 2px solid var(--wine-deep);
+}
+.acc-inner p { font-size: 0.93rem; line-height: 1.72; color: var(--text-secondary); margin-bottom: 0.6rem; }
+.acc-inner p:last-child { margin-bottom: 0; }
+.acc-inner strong { color: var(--blue-light); }
+.acc-inner em { color: var(--silver); }
+
+/* === HIGHLIGHT BOX === */
+.highlight-box {
+  background: var(--bg-highlight); border: 1px solid var(--border-accent);
+  border-left: 3px solid var(--blue-accent);
+  padding: 1.7rem 2.1rem; margin: 1.4rem 0; position: relative;
+}
+.highlight-box.wine {
+  background: var(--bg-blood); border: 1px solid var(--border-blood);
+  border-left: 3px solid var(--wine-accent);
+}
+.highlight-box p { position: relative; font-size: 0.99rem; line-height: 1.78; margin-bottom: 0.9rem; }
+.highlight-box p:last-child { margin-bottom: 0; }
+.highlight-box strong { color: var(--blue-light); font-weight: 600; }
+.highlight-box.wine strong { color: var(--wine-accent); }
+.highlight-box .wine { color: var(--wine-accent); font-weight: 600; }
+.highlight-box .blue { color: var(--blue-accent); font-weight: 600; }
+.highlight-box .lead {
+  font-family: var(--font-display); font-size: 0.6rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--wine-accent); display: block; margin-bottom: 0.7rem;
+}
+
+/* === PRINCIPLE / THREAD BLOCKS === */
+.princ { padding: 1.15rem 0; border-bottom: 1px solid var(--border-subtle); }
+.princ:last-child { border-bottom: none; }
+.princ-n {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.2em; color: var(--wine-accent); text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+.princ h4 {
+  font-family: var(--font-display); font-size: 0.97rem; font-weight: 600;
+  color: var(--blue-light); letter-spacing: 0.03em; margin-bottom: 0.3rem;
+}
+.princ p { font-size: 0.93rem; line-height: 1.72; color: var(--text-secondary); }
+.princ p strong { color: var(--blue-light); }
+.princ p .wine { color: var(--wine-accent); font-weight: 600; }
+
+/* === FOOTER === */
+.footer { text-align: center; padding: 3.5rem 0 2.5rem; }
+.footer .mark {
+  font-family: var(--font-body); font-style: italic;
+  font-size: 1.08rem; color: var(--silver); margin-bottom: 1.5rem;
+  line-height: 1.75;
+}
+.footer .mark .wine { color: var(--wine-accent); font-style: normal; }
+.footer .stamp {
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim);
+}
+.footer .stamp span { color: var(--wine-accent); }
+
+/* === FADE === */
+.fi { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fi.vis { opacity: 1; transform: translateY(0); }
+
+/* === RESPONSIVE === */
+@media (max-width: 640px) {
+  body { font-size: 17px; }
+  .header { padding: 3.5rem 0 1rem; }
+  :root { --section-gap: 3rem; }
+  .highlight-box { padding: 1.2rem 1.1rem; }
+  .acc-inner { padding: 0 1rem 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="mote-canvas"></canvas>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="header fi">
+    <span class="tag">Advent of Ultima · Moirai Codex · Book Synthesis</span>
+    <h1>Blood of God</h1>
+    <div class="epithet"><span class="vint">The Tide That Never Stops Rising</span></div>
+    <div class="booknum">Book Four</div>
+    <div class="sub">
+      The Year the Sinclair Dynasty Almost Fell<br>
+      Synopsis · Function · The Apotheosis &amp; the Cost
+    </div>
+  </header>
+
+  <div class="divider"><span></span></div>
+
+  <!-- I. THE COVENANT -->
+  <section class="fi">
+    <span class="sec-num">I</span>
+    <h2 class="sec-title">The Covenant</h2>
+    <div class="prose">
+      <p>Everything in this book hangs from a single sacred fact, and without it the events have no reason. With it, everyone is on the same page.</p>
+
+      <p>Salacia blessed the world at its birth, and gave its waters freely — asking one thing in return: that the gift be <strong>shared</strong>. For a thousand years House Sinclair has kept that one condition from the height of the First Spring Spire. The Sinclairs are not the owners of the waters. They are the <strong>stewards</strong> — and an Exvisar is Salacia's face in the mortal Realms, charged with upholding the faith, steering the realm rightly, and keeping the covenant whole.</p>
+
+      <p>The gods do not need proving. They exist; they are powerful; running afoul of them can drown a civilization. So the healing water of Thalassor was never proof that the divine order holds. It was proof of something simpler and far more fragile — that the goddess <strong>still loves</strong> the realm her stewards keep in her name. Every morning the Krenides closed a wound in a stone-district bathhouse, and the closing said: <em>she is still here, and the covenant still stands.</em></p>
+
+      <p>This is why, when the water goes cold, the people of Thalassor do not blame the goddess. They blame the Sinclairs. The failure is one of stewardship, not of divinity — and that distinction reverberates through every page that follows. The dynasty's mandate, the existence of its enemies, the shape of its ruin: none of it is legible without the covenant beneath it.</p>
+    </div>
+    <div class="highlight-box wine">
+      <span class="lead">The Plain Statement</span>
+      <p>The Sinclairs broke the covenant — badly. If they do not mend it fast, everyone drowns. <em>Blood of God</em> is the year of the breaking, and the year a mortal answers the breaking by killing a god.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span class="blue"></span></div>
+
+  <!-- II. FUNCTION IN THE SERIES -->
+  <section class="fi">
+    <span class="sec-num">II</span>
+    <h2 class="sec-title">Function in the Series</h2>
+    <div class="prose">
+      <p><em>Advent of Ultima</em> is the story of the <strong>Second War</strong>. The First War was fought by the children of gods who looked up at their parents and reached to overtake them; they lost, and Hel was built — purpose-built, eternal, hereditary — to punish the reaching. The Second War is fought from below: by nine mortal Heralds powerful enough to make their morality matter against the order the winners built.</p>
+
+      <p>Book Four is where the Second War acquires its <strong>precedent</strong>. Raiwata killed Aracice. In this book, Saint Cloud Sinclair kills Sanguine — and the two acts become the same kind of act: the deed that defines a combatant in a war over who rules reality. By the close of the book, the cosmos must reckon with a thing it was built to forbid — that a mortal can do what a god does — and the winners' order begins to move against the precedent, as it once moved against the First War.</p>
+
+      <p>It closes the series' opening movement and opens its next. Three books were spent liberating Luxania from the Tenebrali occupation; Book Four is where the freed memory of that realm becomes the hinge of Thalassor's central error. It sets the road ahead — Book Five into Ferridane for open war, Book Six into Tenebralis — and it is the book in which the Clairgate network, the Pantheon's reach, and the Advent's very logistics are all thrown onto the board at once.</p>
+
+      <p>Above all, it is <strong>the lock of Fate sealing</strong>. Cloud does not choose the Advent as a matter of conviction. He leaves this book a god by competence and a man at war on every front — and that, more than any creed, is what makes him, fully and finally, one of the Nine.</p>
+    </div>
+    <p class="epigraph">
+      "Your Dominion has been measured. Nine threads weave a shroud for this age. Three suns will fall, and the second will rise to meet you. The Thrones Eternal are but dust."
+      <span class="who">Algol, Avatar of Lachesis · The Prophecy of Ultima</span>
+    </p>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- III. PREMISE & STRUCTURE -->
+  <section class="fi">
+    <span class="sec-num">III</span>
+    <h2 class="sec-title">Premise &amp; Structure</h2>
+    <div class="prose">
+      <p>The premise is the covenant failing — and a mortal answering the failure with deicide. The book runs across five acts, descending from the gilded surface of the realm to the floor that has always paid for it, and rising again through fire, a god's death, and a final cup poured out.</p>
+    </div>
+    <div class="acc">
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap"><span class="actlabel">Act One</span>The Floor Drops<span class="hint">The cessation of grace and the generational lie</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">"The water still flows. It just doesn't heal."</p>
+          <p>The symposium at concert pitch, and the hour the water goes cold. Cloud learns the foundation of his house: his father abided a rival theology and took its gold. Salacia has withdrawn her love from a dynasty that broke her one condition, and the realm reckons, for the first time in living memory, with the silence of a covenant.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap"><span class="actlabel">Act Two</span>The Harvest and the Truce of Fire<span class="hint">The Mavarran question come due</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">"They've been waiting a thousand years for the covenant to break."</p>
+          <p>The dirty-realism act. The soul-harvest, the pogrom in the Allodas Quarter, the collapse of Thalassan politics. The cost of a failure of right judgment is paid, in full, by the people of the stone districts.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap"><span class="actlabel">Act Three</span>The Crucible and the Shattered Glass<span class="hint">The trial of truth and the sacking of the Oneiron</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">"In the sun, there is nowhere for a shadow to hide."</p>
+          <p>Pyrthera, and the Court of Veritax. The reunion of the Advent in the fire. The reversed trap, the breach of the Oneiron, and the act that spends Arabella past return.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap"><span class="actlabel">Act Four</span>The Leviathans and the Vintage<span class="hint">The approach of the Hydralithe and the death of a god</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">"You kill your god. I will speak to mine."</p>
+          <p>The ocean drawn toward the heavens. Leif's stand upon the Spire. The geometry of execution, and Elysium driven through the heart of the God of Blood.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap"><span class="actlabel">Act Five</span>The Black Communion<span class="hint">The reckoning, the apotheosis, the debt taken up</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">"How long, do you think, before your blood-wine turns to vinegar?"</p>
+          <p>The water returns. The reckoning is served. A mortal drinks a god, and pours what he has become back down toward the people who paid for everything. The book closes on Alciel, lifting the camera to the turning of the age.</p>
+        </div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- IV. THE SYNOPSIS -->
+  <section class="fi">
+    <span class="sec-num">IV</span>
+    <h2 class="sec-title">The Synopsis</h2>
+
+    <div class="prose">
+      <h3 class="sub-head first"><span class="act">Act One</span>The Floor Drops</h3>
+      <p>Salacia blessed the world at its birth and gave its waters freely, asking one thing in return: that the gift be shared. For a thousand years House Sinclair has kept that condition from the height of the First Spring Spire — stewards, not owners, of a blessing that was never theirs. Every morning the Krenides closes a wound in a stone-district bathhouse, and the healing was never proof that the divine order holds. The gods need no proving. The healing was proof of something simpler and more fragile: that the goddess still loves the realm her stewards keep in her name.</p>
+
+      <p>Then, mid-symposium, the Concordant Path goes silent and the water goes cold.</p>
+
+      <p>Cloud rushes to the Spire and learns what his father has done. The <span class="wine">Cult of Sanguine</span> is no mere faction of corrupt aristocrats — it is a <strong>rival theology</strong>, a faith that holds the inverse of everything the covenant asks: that blessing must never flow freely, that it should be hoarded, accumulated, and harvested by those who have earned it by the right of their blood. And Saint Leif Sinclair, who agrees with his son that the realm must be served, abided this heresy for the sake of his own great work. He took Bloodless gold. He turned his eye. He let the Cult gather wealth enough to amass Krenides and crystata toward a draught so pure it might transcend healing itself and become immortality. Salacia has not died. She has withdrawn her love from a house that broke her one condition — and when the water fails, the people of Thalassor do not blame the goddess. They blame the Sinclairs.</p>
+
+      <p>The diseases of poverty return to the stone districts. Cloud and Arabella descend into the lower tiers, and for the first time he is made to see the floor of the civilization his family steward — the people who have always paid, first and most, for every decision made at the top of the Spire. He has been using Arabella's dreamwalking to root out the Cult members funding the immortality draught; now he sees what their funding has bought, and what his father's tolerance has cost. Father and son agree on the end: the realm must be served. They divide, irreconcilably, on the means — on which allegiances may be held, and which heresies may be tolerated. That division is the fault line the whole year runs along.</p>
+
+      <h3 class="sub-head"><span class="act">Act Two</span>The Harvest and the Truce of Fire</h3>
+      <p>Thalassor has always been a refuge. It shelters and houses the Mystics and Nihila of every realm; it is among the most sought-after grounds in the cosmos for the weary of other worlds. The danger is not that Cloud believes in welcome. The danger is specific, and it has a name: the Mavarrans of Tenebralis.</p>
+
+      <p>At the close of the Advent's first long campaign, Luxania was liberated from Tenebrali occupation — three books of war to break those chains. And then the eye turns to Cloud, who looks at the Mavarrans and says: they are not all monsters; some only wish to leave the cave; perhaps they deserve a chance. His father says: not on my watch. The disagreement is not abstract. Beneath the panic of the cold water, the Mavarrans are working — exploiting the fear with memory-coins and shik'piris, and quietly eating the minds of Cloud's own elite. Arabella warns him a pogrom is coming, and names the doctrine of <strong>Isin'Sartu</strong>: corner the Mavarrans, and the refugee posture drops, and the night answers.</p>
+
+      <p>The <span class="wine">Tongue of the Eighth Hell</span> is not a banner raised over this book. It is in the rooms. It is in the gentle Poppets and the Mavarran matchmakers Cloud moves among, in the sophistication that makes a monstrous arrangement feel reasonable to everyone seated at the table. It is in Arabella herself — her cunning growing barer and sharper under pressure, the discipline of her honesty harder to hold the worse things become.</p>
+
+      <p>When the Thalassan mob storms the Allodas Quarter, Isin'Sartu triggers. The light dies, the temperature drops, and the Mavarrans begin a soul-harvest in the streets. Cloud commits the Azure Guard into a meatgrinder — spends his own soldiers — to pull Thalassan citizens from the hands of the predators his own grace helped to invite. The city falls. Amphitran dreadnoughts blockade the harbor and declare the Sinclair mandate dead. And somewhere in the wreckage, a Thalassan who has buried a child says the true thing to Cloud's face: people died because the Prince of Tides extended a hand to a danger he had been warned of, for the love of a Mavarran. He has nothing to say back, and he does not look for anything. It is not an indictment to be argued. It is accountability, and he takes it. The stone districts paid for the disagreement at the top of the Spire — and for his own failure of right judgment.</p>
+
+      <h3 class="sub-head"><span class="act">Act Three</span>The Crucible and the Shattered Glass</h3>
+      <p>Accepting that Thalassor cannot be saved from within, Cloud sets down the Prince of Tides and opens a gate to Pyrthera. In the Court of Sol'Kheret, the Golden Flame strips away all falsehood and leaves only what is true. There Cloud does the thing his entire craft was built to prevent: he speaks the absolute, unsparing truth of his own failure aloud — total disclosure, from the master of the measured word — and the speaking is how he shields the woman beside him.</p>
+
+      <p>And Arabella stands in the sun. The light that strips every mask would burn away any trace of the Pansilion; the suns would blind any reach of her dreamwalking; and were there rot at her center, she would not be standing at all. She stands. The realm that cannot be lied to looks all the way down into the most accomplished mask-craft in the cosmos — and does not burn her. A question that no testimony and no intelligence could ever settle is answered, at last, by a star: <strong>she is true</strong>. Cloud surrendered his last defense for her sake, and learned in the same moment that the faith he had kept for years was not naïveté. It was perception.</p>
+
+      <p>He finds Alciel deep in the magma flows, and Uriel is with him, and the pact is struck. Cloud returns and throws his most lavish symposium yet as bait — but Arabella's dream-dive reveals the trap reversed. The estate is already encircled by a coalition that means to slaughter the guests and take her. The Oneiron is breached. Uriel holds the line as the Red Wolf. And Arabella, to break the besieging army's will and deny the Aesthetes the Poppet they came to make of her, seizes the will of an entire host at once. The act carries her past the body's capacity to return. <strong>She does not die.</strong> She nihilates herself — her power to touch myst spent and gone, her life shortened by what she poured out, and she is left frail and emptied. Watching her come back so changed, the half-smile leaves Cloud's face and does not return. From this night he will keep her, sustaining a frail life by his own hand, with Krenides, every day — and the keeping will be the plainest statement of who he is.</p>
+
+      <h3 class="sub-head"><span class="act">Act Four</span>The Leviathans and the Vintage</h3>
+      <p>Then the sky bruises, and tears, and the water pulls upward. The <span class="wine">Hydralithe</span> — daughter of Aracice and Salacia, a moon-sized seven-headed Gonlan dragon of living, hyper-pressurized water — is approaching the Realm, and the sheer mass of her draws the oceans up toward the heavens, to bury everything beneath the risen tide. She has come before. The Sirens of Sea and Sky have survived every prior instance, and they are the only reason Cloud is warned at all — and the warning indicts no god and no divine order. It indicts the Sinclair dynasty, and the mortals who broke faith.</p>
+
+      <p>Alciel rises to meet his sibling — <em>"You kill your god, I will speak to mine"</em> — taking the colossal Aeralithe form and launching into the exosphere to wrestle a titan he cannot defeat, only delay. Below, Leif Sinclair stands atop the First Spring Spire and shows, at the last, exactly what an Exvisar is: he reaches into the deepest well of his Aestus and holds the risen ocean in suspension by sheer kinetic will, his own body straining toward the same crystalline death that took Arabella's power. He buys his son sixty seconds.</p>
+
+      <p>Cloud does not run to a battlefield. He opens a portal beneath Sanguine's void-throne, and a second above it, onto the surface of a Pyrtheran sun, and the God of Blood is boiled between Thalassan space and solar fire. He drops the smoking, half-cooked god through the ceiling of the Synedrion, onto the floor of the parliament, into the heart of the panicking Bloodless lords — and they hemorrhage from the theological recoil of their god's defeat. Sanguine, twitching, gathers himself to reform. And Cloud summons <span class="wine">Elysium</span> — the god-killer trident, forged by Aether, the God of Light, the weapon with which the God of War, Leviathan, was blinded. He drives it through Sanguine's heart, erasing the god's divine memory and anchoring him to death. The mortal's deicide is the precise and merciful alternative to the dragon's blunt apocalypse — the surgical thing the divine would not trouble itself to do. <em>"How long, Sanguine, before your wine turns to vinegar?"</em> And then, to the bleeding lords: <em>"Call the vintners."</em></p>
+
+      <h3 class="sub-head"><span class="act">Act Five</span>The Black Communion</h3>
+      <p>The Hydralithe, the heresy ended, withdraws. Salacia returns; the water heals again, beneath a hard and militarized order. The Azure Guard occupies the Allodas Quarter; suspected harvesters and Poppet-handlers are exiled back through the gates to Tenebralis. Cloud has not abandoned the Mavarran question — Arabella, standing in the sun, is its living answer — but the naïveté is over.</p>
+
+      <p>Two bottles stand on the Exvisar's desk: the radiant blue-white <span class="blue">Ambrosia</span> of Leif's immortality project, and the dark crimson <span class="wine">Haemoinos</span> distilled from the god Cloud killed. Leif questions the wisdom of giving a wine that bestows a portion of divinity to a realm the dynasty once wronged. Cloud sends the Haemoinos toward Luxania regardless — the first payment on a thousand-year debt — and insists that the Ambrosia be circulated to every Thalassan, beginning with the stone districts. A steward, at last, sharing the waters.</p>
+
+      <p>And he holds one final symposium — the reckoning. The surviving complicit elite are summoned to the restored Oneiron, and they come trembling and greedy, believing they are there to be forgiven and to taste the vintages. Cloud's speech turns from sweet, to cold, to obsidian. He reveals the secret he has kept at every party of his life: that he was always sober; that he never drank their poison; that he never lost his faith in Salacia — and that he hopes they have kept theirs. The wine in their glasses is shik'piris, minted from pure terror. He delivers the reckoning exactly — the right names, the right measure. On his way to the door he watches the towers fall a breath longer than the work requires, and does not pretend the sight gives him nothing; and the scripture that rises in him as he goes is borrowed, Mavarran, a tongue years beside Arabella have set into him. He leaves the rest to Uriel's discretion and walks out into the night, and behind him the hall takes the Red Wolf's fire.</p>
+
+      <p>The book does not close on the fire. It lifts — to Alciel, and the turning of the age.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span class="blue"></span></div>
+
+  <!-- V. THE APOTHEOSIS & THE COST -->
+  <section class="fi">
+    <span class="sec-num">V</span>
+    <h2 class="sec-title">The Apotheosis &amp; the Cost</h2>
+    <div class="prose">
+      <p>At the gravitational center of the book is a single act, and it is the gravest a being can undertake. Cloud's deicide and the apotheosis that follows it are not a power gained and not a glory won. They are the heaviest responsibility in the cosmos, taken up — and the book renders them with the weight that demands.</p>
+
+      <h3 class="sub-head">Reaching Beyond the Horizon</h3>
+      <p>To reach audaciously beyond one's station or capability is, in the language of the Realms, to reach beyond the horizon. It is what Juno Sinclair did when she partnered with Hecate and bridged the worlds. It is what Cloud does when he kills a god and drinks his blood. He is, beneath the powder-white hair and the office, a human man — and in this moment he chooses to step beyond his own manhood. He does not discard the instinct that warns a man against grasping for what is not his. He hears it fully, honors it, and exceeds it on purpose — for others, and at terrible cost.</p>
+
+      <h3 class="sub-head">The Hesitation, and the Word</h3>
+      <div class="highlight-box wine">
+        <p>With his hand on the glass, Cloud sees the whole of the price. The full weight of the heavens is about to come down — on his house, on his twelve sisters, on his newly nihilated Second Heart who can no longer defend herself, on the best friend already fighting this war. He has been faithful to the goddess his whole life, and there is no road back from what that faith has cost him tonight.</p>
+        <p>The most composed man in the cosmos says the one word he never planned. <strong>"Fuck."</strong> It is the maskless host, maskless at last — the single uncomposed syllable of a life built from chosen words. Then, quieter: <em>what is done is done; the only thing to do now is judge rightly.</em> Then he drinks, with no waver in it.</p>
+        <p>This is the distinction the moment turns on. Hesitation is not uncertainty. Uncertainty is not knowing whether to act; it is no foundation for right judgment. Hesitation is knowing exactly what the act will cost, and letting the full weight of it land before the hand moves. The breath is the proof that the price was counted. The drink, certain and unwavering, is the proof that he is still a ruler. He felt the whole of it — and he chose, with eyes open.</p>
+      </div>
+
+      <h3 class="sub-head">The Severance</h3>
+      <p>The winners' order moves to contain the precedent, and Edgerinne will require that Salacia instruct her Exvisar to close the Clairgates against the Advent and all it shelters. Leif is Salacia's man; the demand is his to obey. And Cloud tells his father to obey it. <em>"Do it. Salacia is your God. I am now mine."</em></p>
+      <p>It is not defiance, and it is not a son winning an old argument. It is said gravely — the gravest acknowledgment a being can make of what he has become. His father still belongs to something; still has a covenant; still has a goddess who answers. Cloud has walked out past the last shelter the cosmos offers. No patron, no mandate, no power upstairs obligated to come down for him. It is emancipation — and the first form emancipation takes, before it is anything else, is exposure. He has chosen the full draft of the heavens with everyone he loves standing behind him, and he has chosen it knowingly.</p>
+
+      <h3 class="sub-head">What Power Is For</h3>
+      <p>The question at the center of the series is asked plainly, and Book Four answers it. The gods answered long ago: power is for winning, and winning is for keeping, and everything since has been the administration of that answer. The covenant gives a different one — power is for the keeping of what was given freely, and for the sharing of it.</p>
+      <p>The moral the book renders is one of judgment. Prejudgment is easier and simpler; it lets a ruler skip the slow, costly, person-by-person work of looking, and reach instead for the label, the hoard, the hope. Leif prejudged that a heretic's gold spends like any other coin. Cloud prejudged that welcome is the same thing as wisdom. Cynicism and naïveté are the same sin pointed in opposite directions — a refusal to look — and each easy answer cost almost unbearably. A ruler must exercise right judgment <em>nonetheless</em>. That "nonetheless" is the whole of the ethic: the right answer is harder, slower, and obligatory anyway.</p>
+      <p>And so a reach for power is hubris when it is oriented toward the self — power as glory, as escape, as a thing that serves the one who holds it. The same reach is heroic when it is oriented toward responsibility, weighed at full cost, taken up for others. Cloud kills a god, drinks a god, becomes the God of Blood and Wine — and the first thing he does with a god's power is give it away: the Haemoinos to the realm his house wronged, the Ambrosia down to the stone districts that paid for everything. The giving is the orientation, made visible. It is what makes the reach clean. He enters the Second War as one of the Nine, defined by the single act — a god by competence, and a man by everything it costs him.</p>
+    </div>
+    <p class="epigraph">
+      "Salacia is your God. I am now mine."
+      <span class="who">Saint Cloud Sinclair, to his father</span>
+    </p>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- VI. THE WEIGHT OF THE BOARD -->
+  <section class="fi">
+    <span class="sec-num">VI</span>
+    <h2 class="sec-title">The Weight of the Board — and the Threads Forward</h2>
+    <div class="prose">
+      <p>The apotheosis sits at the summit of the book. Beneath it stand the other events that carry weight — Arabella, the reunion with Uriel, the exposure of the Bloodless — and the conspiracy that, more than any creed, drives Cloud into the war he will spend the rest of the series fighting.</p>
+    </div>
+    <div class="thread-list">
+
+      <div class="princ">
+        <div class="princ-n">Thread · One</div>
+        <h4>The Three-Way Conspiracy Exposed</h4>
+        <p>The sacking reveals a coalition: the <strong>Lykaion Clan</strong> of Ferridane, the <strong>Cult of Sanguine</strong>, and the <strong>Aesthetes</strong> of Tenebralis. Three players who made an attempt on Cloud's life and moved to take Arabella as a pleasure object. He will not let it slide. Book Five carries the war to Ferridane; Book Six lands it in Tenebralis. Cloud leaves <em>Blood of God</em> fighting on every front at once.</p>
+      </div>
+
+      <div class="princ">
+        <div class="princ-n">Thread · Two</div>
+        <h4>The Winners' Order Responds</h4>
+        <p>Mortal apotheosis is the precedent the cosmos was built to forbid, and the order moves to contain it. <span class="wine">Edgerinne</span> will require that Salacia instruct her Exvisar to close the Clairgates against the Advent's enemies — and the Advent has no transit, no logistics, no war without those gates. The heavens turn toward Thalassor. The lock of Fate seals.</p>
+      </div>
+
+      <div class="princ">
+        <div class="princ-n">Thread · Three</div>
+        <h4>The Advent Assembles</h4>
+        <p>Cloud has set the precedent; the Haemoinos proves the barrier can be crossed. The Heralds will weigh that proof differently from one another, because not all of them are ready to take on the cost Cloud accepted with his hand on the glass. Godhood, after this book, is a thing the Nine must each decide about.</p>
+      </div>
+
+      <div class="princ">
+        <div class="princ-n">Thread · Four</div>
+        <h4>The Thousand-Year Debt</h4>
+        <p>The Haemoinos goes to Luxania — the first payment on a debt one thousand years overdue, owed to the realm the dynasty robbed and the Advent has only just freed. It is committed to, not yet paid. The road to Luxania begins as the book ends.</p>
+      </div>
+
+      <div class="princ">
+        <div class="princ-n">Thread · Five</div>
+        <h4>The Tide Still Rising</h4>
+        <p>The Hydralithe is deferred, not resolved — a daughter of the deep the cosmos will not be able to ignore for long. Alciel carries the cosmic scale forward, and the book closes on him. Cloud remains: a god by competence, a man by every cost, beginning the long work of bearing what he has chosen to carry.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"><span class="blue"></span></div>
+
+  <!-- FOOTER -->
+  <footer class="footer fi">
+    <p class="mark">
+      The gods answered that power is for winning, and winning is for keeping.<br>
+      <span class="wine">The covenant answers that power is for the keeping of what was given freely — and the sharing of it.</span>
+    </p>
+    <div class="stamp">Moirai Codex · <span>Advent of Ultima</span> · Book Four · Blood of God</div>
+  </footer>
+
+</div>
+
+<script>
+// === ACCORDIONS ===
+document.querySelectorAll('.acc-item').forEach(item => {
+  const btn = item.querySelector('.acc-btn');
+  const body = item.querySelector('.acc-body');
+  btn.addEventListener('click', () => {
+    const isOpen = item.classList.contains('open');
+    const group = item.parentElement;
+    group.querySelectorAll('.acc-item.open').forEach(sib => {
+      if (sib !== item) {
+        sib.classList.remove('open');
+        sib.querySelector('.acc-body').style.maxHeight = null;
+      }
+    });
+    if (isOpen) {
+      item.classList.remove('open');
+      body.style.maxHeight = null;
+    } else {
+      item.classList.add('open');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+  });
+});
+
+// === FADE IN ON SCROLL ===
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+
+// === RISING MOTES — water and blood drawn toward the heavens ===
+(function() {
+  const canvas = document.getElementById('mote-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  const COUNT = 58;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Mote {
+    constructor() { this.reset(true); }
+    reset(init) {
+      this.x = Math.random() * W;
+      this.y = init ? Math.random() * H : H + 10;
+      this.r = Math.random() * 2.0 + 0.5;
+      this.vx = (Math.random() - 0.5) * 0.22;
+      this.vy = -(Math.random() * 0.34 + 0.08);
+      this.drift = Math.random() * Math.PI * 2;
+      this.driftSpeed = Math.random() * 0.003 + 0.001;
+      this.driftAmp = Math.random() * 0.44 + 0.1;
+      const isBlood = Math.random() < 0.4;
+      if (isBlood) {
+        const lum = 32 + Math.random() * 22;
+        const alpha = Math.random() * 0.3 + 0.06;
+        this.color = `hsla(${350 + Math.random() * 10 - 5},55%,${lum}%,${alpha})`;
+      } else {
+        const hue = 198 + Math.random() * 24 - 12;
+        const sat = 45 + Math.random() * 30;
+        const lum = 60 + Math.random() * 22;
+        const alpha = Math.random() * 0.3 + 0.06;
+        this.color = `hsla(${hue},${sat}%,${lum}%,${alpha})`;
+      }
+      this.pulsePhase = Math.random() * Math.PI * 2;
+      this.pulseSpeed = Math.random() * 0.01 + 0.004;
+    }
+    update() {
+      this.drift += this.driftSpeed;
+      this.pulsePhase += this.pulseSpeed;
+      this.x += this.vx + Math.sin(this.drift) * this.driftAmp;
+      this.y += this.vy;
+      if (this.y < -12 || this.x < -20 || this.x > W + 20) this.reset(false);
+    }
+    draw() {
+      const pulse = 1 + Math.sin(this.pulsePhase) * 0.3;
+      const r = this.r * pulse;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, r * 2.6, 0, Math.PI * 2);
+      const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, r * 2.6);
+      g.addColorStop(0, this.color);
+      g.addColorStop(1, 'transparent');
+      ctx.fillStyle = g;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < COUNT; i++) particles.push(new Mote());
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+</script>
+
+</body>
+</html>

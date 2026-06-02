@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Architecture of the Realms — A Codex of the Living Cosmos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   THE ARCHITECTURE OF THE REALMS
+   Palette reskin: edit the variables in :root and nowhere else.
+   ============================================================ */
+:root{
+  --ground:        #160a0c;   /* deep near-black burgundy ground   */
+  --ground-2:      #1d0e12;   /* panel ground                      */
+  --ground-3:      #240f15;   /* raised panel                      */
+  --burgundy:      #5a1622;   /* deep burgundy                     */
+  --burgundy-deep: #380d15;   /* deepest burgundy                  */
+  --burgundy-warm: #7a2433;   /* warm burgundy accent              */
+  --rose:          #cda3a8;   /* dusty rose                        */
+  --rose-bright:   #e6c4c8;   /* bright dusty rose                 */
+  --rose-mute:     #9d7c81;   /* muted rose                        */
+  --gold:          #c9a154;   /* antique gold thread               */
+  --gold-bright:   #e8c97e;   /* bright gold                       */
+  --gold-deep:     #8a6a30;   /* deep gold                         */
+  --ink:           #ece2da;   /* warm parchment text               */
+  --ink-soft:      #cdbab3;   /* soft parchment text               */
+  --rule:          rgba(201,161,84,0.30); /* gold hairline         */
+  --rule-soft:     rgba(201,161,84,0.14);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:1.22rem;
+  line-height:1.78;
+  font-weight:500;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* layered atmosphere ------------------------------------------ */
+body::before{
+  content:"";
+  position:fixed;inset:0;z-index:-2;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% -8%, rgba(122,36,51,0.55), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 8% 38%, rgba(58,13,21,0.85), transparent 75%),
+    radial-gradient(ellipse 60% 50% at 95% 72%, rgba(58,13,21,0.85), transparent 75%),
+    linear-gradient(180deg, #1a0c0e 0%, #160a0c 45%, #120709 100%);
+}
+body::after{ /* grain + vignette */
+  content:"";
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 55%, rgba(8,3,4,0.7) 100%);
+  opacity:.9;
+}
+.grain{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* ============ NAVIGATION ==================================== */
+nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(18,7,9,0.93);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--rule);
+}
+.nav-inner{
+  max-width:1100px;margin:0 auto;
+  display:flex;align-items:center;gap:1.4rem;
+  padding:0.65rem 1.4rem;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.nav-inner::-webkit-scrollbar{display:none;}
+.nav-mark{
+  font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.22em;
+  color:var(--gold);white-space:nowrap;flex-shrink:0;
+  border-right:1px solid var(--rule);padding-right:1.4rem;
+}
+nav a{
+  font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.14em;
+  color:var(--rose-mute);text-decoration:none;white-space:nowrap;
+  transition:color .3s ease;text-transform:uppercase;
+}
+nav a:hover{color:var(--rose-bright);}
+nav a.active{color:var(--gold-bright);}
+
+/* ============ LAYOUT ======================================== */
+.wrap{max-width:880px;margin:0 auto;padding:0 1.6rem;}
+section{scroll-margin-top:84px;}
+
+/* ============ HERO ========================================== */
+.hero{
+  min-height:92vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:6rem 1.6rem 5rem;position:relative;
+}
+.hero .overline{
+  font-family:'Cinzel',serif;font-size:0.78rem;letter-spacing:0.42em;
+  color:var(--gold);margin-bottom:2.2rem;text-transform:uppercase;
+}
+.hero h1{
+  font-family:'Cinzel',serif;font-weight:500;
+  font-size:clamp(2.3rem,6.4vw,4.6rem);
+  line-height:1.12;letter-spacing:0.04em;
+  color:var(--ink);
+  text-shadow:0 0 38px rgba(122,36,51,0.7);
+}
+.hero h1 .glow{
+  color:var(--gold-bright);
+  background:linear-gradient(180deg,var(--gold-bright),var(--gold));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero .sub{
+  font-style:italic;font-size:clamp(1.05rem,2.4vw,1.4rem);
+  color:var(--rose);max-width:34ch;margin:1.8rem auto 0;line-height:1.55;
+}
+.hero .epigraph{
+  margin-top:3.4rem;max-width:40ch;
+  font-style:italic;font-size:1.18rem;color:var(--ink-soft);
+}
+.hero .epigraph .attr{
+  display:block;margin-top:0.9rem;font-style:normal;
+  font-family:'Cinzel',serif;font-size:0.68rem;letter-spacing:0.2em;
+  color:var(--gold);text-transform:uppercase;
+}
+
+/* ============ DIVIDERS / ORNAMENTS ========================== */
+.divider{
+  display:flex;align-items:center;justify-content:center;gap:1.1rem;
+  margin:3.4rem auto;width:100%;
+}
+.divider .line{
+  height:1px;flex:1;max-width:200px;
+  background:linear-gradient(90deg,transparent,var(--gold) 70%,var(--gold));
+}
+.divider .line.r{background:linear-gradient(270deg,transparent,var(--gold) 70%,var(--gold));}
+.divider .gem{color:var(--gold);font-size:0.7rem;letter-spacing:0.4em;}
+.divider.small{margin:2.2rem auto;}
+.divider.small .line{max-width:90px;}
+
+/* ============ SECTION HEADINGS ============================== */
+.section-head{text-align:center;margin:5.5rem 0 2.6rem;}
+.section-head .kicker{
+  font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.34em;
+  color:var(--gold);text-transform:uppercase;
+}
+.section-head h2{
+  font-family:'Cinzel',serif;font-weight:500;
+  font-size:clamp(1.8rem,4.6vw,2.9rem);letter-spacing:0.05em;
+  color:var(--ink);margin-top:0.7rem;
+}
+.section-head .note{
+  font-style:italic;color:var(--rose);max-width:46ch;
+  margin:1.2rem auto 0;font-size:1.1rem;
+}
+
+/* ============ BODY PROSE ==================================== */
+p{margin-bottom:1.25rem;}
+.lead{font-size:1.3rem;color:var(--ink);}
+.dropcap::first-letter{
+  font-family:'Cinzel',serif;
+  float:left;font-size:4.6rem;line-height:0.82;
+  padding:0.35rem 0.55rem 0 0;
+  color:var(--gold-bright);
+  text-shadow:0 0 22px rgba(201,161,84,0.4);
+}
+em,i{color:var(--rose-bright);}
+
+/* labelled movement -------------------------------------------*/
+.label{
+  font-family:'Cinzel',serif;font-size:0.74rem;letter-spacing:0.26em;
+  color:var(--gold);text-transform:uppercase;
+  display:flex;align-items:center;gap:0.85rem;
+  margin:2.5rem 0 1rem;
+}
+.label::after{
+  content:"";height:1px;flex:1;
+  background:linear-gradient(90deg,var(--rule),transparent);
+}
+
+/* ============ REALM BLOCK =================================== */
+.realm{
+  margin:3rem 0;padding:3rem 2.4rem 3.2rem;
+  background:linear-gradient(180deg,var(--ground-2),rgba(29,14,18,0.4));
+  border:1px solid var(--rule-soft);
+  border-top:2px solid var(--gold-deep);
+  position:relative;
+}
+.realm::before,.realm::after{ /* corner filigree */
+  content:"";position:absolute;width:20px;height:20px;
+  border-color:var(--gold);opacity:.55;
+}
+.realm::before{top:10px;left:10px;border-top:1px solid;border-left:1px solid;}
+.realm::after{bottom:10px;right:10px;border-bottom:1px solid;border-right:1px solid;}
+
+.realm-head{text-align:center;margin-bottom:1.8rem;}
+.sigil{width:78px;height:78px;margin:0 auto 1rem;display:block;}
+.sigil [stroke]{stroke:var(--gold);}
+.realm-head h3{
+  font-family:'Cinzel',serif;font-weight:600;
+  font-size:clamp(1.7rem,4vw,2.5rem);letter-spacing:0.08em;
+  color:var(--gold-bright);
+  text-shadow:0 0 26px rgba(201,161,84,0.35);
+}
+.realm-head .epithet{
+  font-style:italic;color:var(--rose);font-size:1.18rem;margin-top:0.3rem;
+}
+.dataline{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:0.5rem 1.4rem;
+  margin:1.5rem auto 0;padding:1rem 0;max-width:640px;
+  border-top:1px solid var(--rule-soft);border-bottom:1px solid var(--rule-soft);
+}
+.dataline div{font-size:0.95rem;color:var(--ink-soft);text-align:center;}
+.dataline .dk{
+  display:block;font-family:'Cinzel',serif;font-size:0.62rem;
+  letter-spacing:0.18em;color:var(--gold);text-transform:uppercase;
+  margin-bottom:0.15rem;
+}
+
+/* pull quote --------------------------------------------------*/
+.pull{
+  text-align:center;margin:2.6rem auto;max-width:30ch;
+  font-style:italic;font-size:clamp(1.4rem,3.4vw,1.95rem);
+  color:var(--rose-bright);line-height:1.4;position:relative;
+}
+.pull::before,.pull::after{
+  font-family:'Cinzel',serif;color:var(--gold);
+  font-style:normal;font-size:0.9rem;letter-spacing:0.3em;display:block;
+}
+.pull::before{content:"◆";margin-bottom:0.7rem;}
+.pull::after{content:"◆";margin-top:0.7rem;}
+
+/* schools grid ------------------------------------------------*/
+.schools{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1rem;
+}
+.school{
+  padding:1.4rem 1.25rem;
+  background:var(--ground-3);
+  border:1px solid var(--rule-soft);
+  border-bottom:2px solid var(--gold-deep);
+}
+.school h4{
+  font-family:'Cinzel',serif;font-weight:500;font-size:0.94rem;
+  letter-spacing:0.06em;color:var(--gold-bright);margin-bottom:0.2rem;
+}
+.school .gloss{
+  font-style:italic;color:var(--rose);font-size:0.92rem;
+  margin-bottom:0.6rem;display:block;
+}
+.school p{font-size:0.98rem;line-height:1.6;color:var(--ink-soft);margin:0;}
+
+/* accordions --------------------------------------------------*/
+.accordion{margin-top:0.6rem;border-top:1px solid var(--rule-soft);}
+.acc-item{border-bottom:1px solid var(--rule-soft);}
+.acc-head{
+  width:100%;background:none;border:none;cursor:pointer;
+  display:flex;align-items:baseline;justify-content:space-between;gap:1rem;
+  padding:1.15rem 0.3rem;text-align:left;color:var(--ink);
+  font-family:'Cormorant Garamond',serif;
+  transition:color .25s ease;
+}
+.acc-head:hover{color:var(--rose-bright);}
+.acc-head .name{
+  font-family:'Cinzel',serif;font-size:0.98rem;letter-spacing:0.06em;
+  color:var(--gold-bright);
+}
+.acc-head .tag{
+  font-style:italic;color:var(--rose);font-size:1rem;
+  flex:1;margin-left:0.6rem;
+}
+.acc-head .plus{
+  font-family:'Cinzel',serif;color:var(--gold);font-size:1.1rem;
+  transition:transform .35s ease;flex-shrink:0;
+}
+.acc-head[aria-expanded="true"] .plus{transform:rotate(45deg);}
+.acc-panel{
+  max-height:0;overflow:hidden;
+  transition:max-height .45s cubic-bezier(.4,0,.2,1);
+}
+.acc-panel .inner{
+  padding:0 0.3rem 1.5rem;color:var(--ink-soft);
+}
+.acc-panel .inner p{font-size:1.04rem;margin-bottom:0.8rem;}
+.acc-panel .inner p:last-child{margin-bottom:0;}
+
+/* realm-now ---------------------------------------------------*/
+.realm-now{
+  margin-top:2.4rem;padding:1.7rem 1.6rem;
+  background:rgba(56,13,21,0.45);
+  border-left:2px solid var(--gold);
+}
+.realm-now .label{margin-top:0;}
+
+/* the weave / substrate panels --------------------------------*/
+.panel{
+  margin:1.6rem 0;padding:2rem 2.1rem;
+  background:var(--ground-2);
+  border:1px solid var(--rule-soft);
+  border-left:2px solid var(--gold-deep);
+}
+.panel h3{
+  font-family:'Cinzel',serif;font-weight:500;font-size:1.25rem;
+  letter-spacing:0.05em;color:var(--gold-bright);margin-bottom:0.9rem;
+}
+.panel p:last-child{margin-bottom:0;}
+
+/* polarity list ----------------------------------------------*/
+.polarities{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:0.7rem 1.6rem;
+  margin:1.2rem 0 0.4rem;
+}
+.polarity{
+  font-size:1rem;color:var(--ink-soft);
+  padding:0.45rem 0;border-bottom:1px solid var(--rule-soft);
+}
+.polarity b{
+  font-family:'Cinzel',serif;font-weight:500;font-size:0.82rem;
+  letter-spacing:0.08em;color:var(--gold);display:block;
+}
+
+/* closing -----------------------------------------------------*/
+.closing{
+  text-align:center;padding:4rem 1.6rem 2rem;
+}
+.closing .verse{
+  font-style:italic;font-size:clamp(1.2rem,3vw,1.6rem);
+  color:var(--rose-bright);max-width:30ch;margin:0 auto 2.4rem;line-height:1.5;
+}
+.closing .answer{
+  font-family:'Cinzel',serif;font-size:1.05rem;letter-spacing:0.1em;
+  color:var(--gold-bright);
+}
+
+footer{
+  text-align:center;padding:3rem 1.6rem 4rem;
+  border-top:1px solid var(--rule-soft);margin-top:3rem;
+}
+footer .mark{
+  font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.3em;
+  color:var(--gold);text-transform:uppercase;
+}
+footer .sub{
+  font-style:italic;color:var(--rose-mute);font-size:0.95rem;margin-top:0.7rem;
+}
+
+/* reveal animation -------------------------------------------*/
+.reveal{
+  opacity:0;transform:translateY(28px);
+  transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1);
+}
+.reveal.visible{opacity:1;transform:none;}
+
+/* responsive --------------------------------------------------*/
+@media(max-width:680px){
+  body{font-size:1.12rem;}
+  .realm{padding:2.2rem 1.3rem 2.5rem;}
+  .schools{grid-template-columns:1fr;}
+  .polarities{grid-template-columns:1fr;}
+  .dropcap::first-letter{font-size:3.6rem;}
+  .panel{padding:1.5rem 1.3rem;}
+  .acc-head{flex-wrap:wrap;}
+  .acc-head .tag{margin-left:0;flex-basis:100%;}
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<!-- ===================== NAV ===================== -->
+<nav>
+  <div class="nav-inner">
+    <span class="nav-mark">◆ Moirai Codex</span>
+    <a href="#cosmos">The Cosmos</a>
+    <a href="#thalassor">Thalassor</a>
+    <a href="#ferridane">Ferridane</a>
+    <a href="#pyrthera">Pyrthera</a>
+    <a href="#tenebralis">Tenebralis</a>
+    <a href="#zephyros">Zephyros</a>
+    <a href="#luxenfall">Luxenfall</a>
+    <a href="#weave">The Weave</a>
+    <a href="#substrate">The Substrate</a>
+    <a href="#advent">The Advent</a>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="overline">Advent of Ultima</div>
+  <h1>The Architecture<br/>of the <span class="glow">Realms</span></h1>
+  <p class="sub">A codex of the living cosmos — the gift, the doctrine, and the world the doctrine builds.</p>
+  <div class="divider"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div>
+  <p class="epigraph">
+    “The idea of power without corruption is a fantasy befitting those who have never held power.”
+    <span class="attr">Saint Cloud Sinclair</span>
+  </p>
+</header>
+
+<!-- ===================== THE COSMOS ===================== -->
+<section id="cosmos">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Orientation</div>
+      <h2>The Cosmos and the Gift</h2>
+      <p class="note">How a divine element becomes a doctrine, and a doctrine becomes a world.</p>
+    </div>
+    <div class="reveal">
+      <p class="lead dropcap">Five living Realms turn in the cosmos, and each was given a gift by its Patron God. The gift is the seed. Around it a civilization grows; from it a doctrine follows; and the doctrine, carried across a thousand years, becomes the architecture of a world — its cities, its bodies, its laws, its daily devotions, the very shape of a life lived inside it. To know a Realm is to follow that thread: the element, the gift the element made, the doctrine the gift produced, and the way the doctrine shows up in stone and skin and ceremony.</p>
+      <p>A sixth Realm, Luxenfall, stands occupied and present, and the codex counts it among the living. Beneath all six runs an older order — a war whose victors keep the cosmos and distribute its gifts, and a network of roads, opened late, that bound the separate worlds into one weave. Each Realm answers a single question in its own grammar, and the question threads every page that follows.</p>
+      <p style="text-align:center;font-style:italic;color:var(--rose-bright);font-size:1.3rem;margin-top:2rem;">What is power for?</p>
+    </div>
+    <div class="divider"><span class="line"></span><span class="gem">◆</span><span class="line r"></span></div>
+  </div>
+</section>
+
+<!-- ===================== THALASSOR ===================== -->
+<section id="thalassor">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">The First Realm</div>
+      <h2>Thalassor</h2>
+    </div>
+
+    <div class="realm reveal">
+      <div class="realm-head">
+        <svg class="sigil" viewBox="0 0 100 100" fill="none">
+          <path d="M50 16 C50 16 31 42 31 60 a19 19 0 0 0 38 0 C69 42 50 16 50 16Z" stroke="" stroke-width="1.6"/>
+          <path d="M20 80 q30 -15 60 0" stroke="" stroke-width="1.4"/>
+          <path d="M27 90 q23 -12 46 0" stroke="" stroke-width="1.2"/>
+          <circle cx="50" cy="56" r="5" stroke="" stroke-width="1.2"/>
+        </svg>
+        <h3>Thalassor</h3>
+        <div class="epithet">The Gilded Nexus</div>
+      </div>
+      <div class="dataline">
+        <div><span class="dk">Element</span>Water</div>
+        <div><span class="dk">Patron</span>Salacia</div>
+        <div><span class="dk">Exvisar</span>Saint Leif Sinclair</div>
+        <div><span class="dk">Scale</span>~300 million · four continents</div>
+      </div>
+
+      <div class="label">The Gift</div>
+      <p>Salacia gave Thalassor the <em>Krenides</em> — living, restorative springs that permeate every body of water in the Realm. The Krenides heal wounds, replenish myst, and carry ancestral memory; a covenant poured into Krenides water holds with divine weight. A Realm given this gift can refill the tank of any other, and that single fact makes every power in the cosmos dependent on Thalassor.</p>
+
+      <div class="label">The Doctrine</div>
+      <p>From the gift came the Faith of Flow, and a single principle governs it: abundance flows freely. Water flows to all, water heals all, water carries all, and abundance remains infinite for as long as the strong let the weak drink. The First Law of Thalassonomia holds the rest in place — flow cannot stagnate. The doctrine is enforced by the world itself: hoarded water produces real backlash, and the backlash arrives as drought, plague, and collapse.</p>
+      <div class="pull">Abundance, flowing freely.</div>
+
+      <div class="label">The Manifestation</div>
+      <p>Salacia is woven through the day the way water is woven through the body. Shrines stand along every canal. Fountains serve as prayer sites, and public baths serve as temples. A water-drop is cut into the doorframe; a bowl of fresh Krenides is kept on the household shrine; blue thread is sewn into a hem as an act of devotion. Meals open with a blessing that names the water cycle, oaths are sworn over flowing water, and children are named for aspects of the sea. The Temple of Salacia is the most beautiful building in Salacica, lovelier than the Sinclair palace, and its doors stand open to everyone — inside its walls the Krenides heal Mystic and Nihila by the same measure. The hierarchy waits at the threshold. Krenides saturation lights the body itself: the Mystic aristocracy carries a visible luminosity, and the divide between Mystic and Nihila is written into the skin.</p>
+
+      <div class="label">The Three Schools</div>
+      <p>The three schools of Thalassori mysticism are three readings of what water <em>is</em>, and each practices its own claim.</p>
+      <div class="schools">
+        <div class="school">
+          <h4>Hydromantoi</h4>
+          <span class="gloss">Water as Memory</span>
+          <p>Immersion rites and tide-reading reach the memory-stream of the dead. The water remembers everything, and a school that can read it is the keenest threat to the rulers it could expose.</p>
+        </div>
+        <div class="school">
+          <h4>Thalassurgists</h4>
+          <span class="gloss">Water as Living Ecology</span>
+          <p>Symbiotic bonding with aquatic life. Myst is treated as ecology, and nobility is measured by the creatures a person has bonded.</p>
+        </div>
+        <div class="school">
+          <h4>Oathwrights</h4>
+          <span class="gloss">Water as Covenant</span>
+          <p>Symposium-vows and the pacthydria — sacred pact-vessels into which covenants are poured. A covenant sworn on Krenides wine and then broken turns the water within to poison.</p>
+        </div>
+      </div>
+
+      <div class="label">The Four Continents</div>
+      <div class="accordion">
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">Salacica</span><span class="tag">the gilded capital</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>Salacica is the cosmopolitan seat — marble colonnades, sacred waterways, old wealth, and performance carried as a way of life. Symposium culture governs everything; wine, philosophy, and politics are one practice. The Sinclair dynasty rules by theocratic mandate, and the patronage economy sustains its hierarchy through competitive generosity. Pearl is the apex material, and silver is favored over gold.</p>
+            <p>The beauty is genuine in every particular. The history beneath the marble is the question the city keeps below the sound of its fountains.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">Amphitra</span><span class="tag">the martial continent</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>Amphitra is functional, meritocratic, and disciplined — cliff cities built into rock and set half-submerged beneath the ocean. Here Crystata is reserved for military use; to raise a house from a strategic resource reads as decadence. Status is earned through courage, and the veins of its people glow with their emotional state, brightest underwater.</p>
+            <p>The Thalassan Armada and the Azure Guard are raised on Amphitra. Salacican elites name the Amphitrans unsophisticated, and the Amphitrans answer with their work: they are the reason Salacica still stands.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">The Mnemosyne Archipelago</span><span class="tag">the scholarly conscience</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>The Mnemosyne Archipelago is mist and freshwater — islands, lakes, underground rivers, and forested quiet. Its architecture is deliberately humble, raised in wood and stone, with Crystata reserved for the archives, the one material that holds Mnemohydric truth without degrading.</p>
+            <p>An intellectual aristocracy ranks itself by mastery of Memory-Water and stands apart from the ordinary class struggle, naming it a transient current in the long river of history. The Archipelago's myst expression is the subtlest in the Realm — a faint silver to the skin, as of a person standing behind still water — and the Realms trust its people as their impartial archivists.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">The Syndicate Isles</span><span class="tag">the merchant republics</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>The Syndicate Isles are rocky ports and deep natural harbors, severe courthouses, and the most ostentatious Crystata in the Realm — thick, heavy, oversized, worn the way new wealth is worn. In this plutocracy, wealth is the measure of everything.</p>
+            <p>The Isles are the primary entry point for black-market goods, and the eyes of their people run a sharp electric blue. At the trading docks the economy stands at its most candid: Crystata wealth and marble poverty side by side.</p>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="realm-now">
+        <div class="label">The Realm Now</div>
+        <p>The Sinclair dynasty rules through Salacia, and the legal code and the sacred code are one document. The aristocracy receives the doctrine of flow as a doctrine of <em>placement</em>: the current pools where it is meant to pool, and the ocean is the destination toward which all rivers run. The Clairgate network — the roads between every world — was built by Hecate of Luxania and Juno Sinclair together, the Lumen Cradle Luxanian in principle and the stabilization Thalassori in craft. When Luxania fell, Thalassor recovered the work and presented it as its own, and Hecate's name left the record. Every Sinclair heir drinks the Concordant Path, the cumulative memory of the dynasty held in sacramental wine, the dynasty's crimes inside it. Saint Cloud Sinclair's arc carries the house toward its first honest service to the goddess: the return of the Lumen Cradle, and the pouring of inherited abundance back toward Luxenfall.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FERRIDANE ===================== -->
+<section id="ferridane">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">The Second Realm</div>
+      <h2>Ferridane</h2>
+    </div>
+
+    <div class="realm reveal">
+      <div class="realm-head">
+        <svg class="sigil" viewBox="0 0 100 100" fill="none">
+          <path d="M50 14 L86 50 L50 86 L14 50 Z" stroke="" stroke-width="1.6"/>
+          <path d="M50 14 L50 86 M14 50 L86 50" stroke="" stroke-width="1"/>
+          <path d="M32 32 L68 68 M68 32 L32 68" stroke="" stroke-width="0.9"/>
+        </svg>
+        <h3>Ferridane</h3>
+        <div class="epithet">The Anvil of Ages</div>
+      </div>
+      <div class="dataline">
+        <div><span class="dk">Element</span>Earth &amp; Metal</div>
+        <div><span class="dk">Patrons</span>Brokkae &amp; Edgerinne</div>
+        <div><span class="dk">Exvisar</span>Aurelius Vorn, the Steelborn</div>
+        <div><span class="dk">Scale</span>~900 million · one continent</div>
+      </div>
+
+      <div class="label">The Gift</div>
+      <p>Ferridane received its gift in two layers across ten thousand years. Brokkae's world was stone, endurance, and permanence, and the virtue of his long age was stillness — the world already complete, and the highest calling to be a faithful part of it. From within his own depths, pressure upon pressure upon pressure, carbon became crystal. Edgerinne — his daughter, his completion, the thing stone becomes when stone has been stone long enough. He tested her for a thousand years, bringing the full weight of his nature against her in rigor, and she accepted the weight and emerged as living diamond, structure that holds light. Brokkae recognized his era complete, receded into the deep earth, and became the bedrock.</p>
+
+      <div class="label">The Doctrine</div>
+      <p>The Covenant of Pressure follows from that origin. Within a person, as within the stone, sleeps something luminous, and it emerges through pressure, patience, and surrender. The diamond is what the earth produces when its own nature is carried to completion. The lattice — the sacred symbol — is the geometry that lets light pass through crystal cleanly: structure carrying light, light revealing structure.</p>
+      <div class="pull">You are not yet what you will become.</div>
+
+      <div class="label">The Three Sacred Arts</div>
+      <p>Three divine gifts emerged from Edgerinne's covenant. Each carries an original name that holds the theology, and a later name that holds only the function.</p>
+      <div class="schools">
+        <div class="school">
+          <h4>The Art of the True Name</h4>
+          <span class="gloss">later: Transfiguration</span>
+          <p>Speak a True Name over a thing, and the thing becomes the Name. Reality edited at its foundation, in the register of reverence first and shaping second.</p>
+        </div>
+        <div class="school">
+          <h4>The Art of the Vital Current</h4>
+          <span class="gloss">later: Transfusion</span>
+          <p>Tending the sacred flow of myst through all living things — the recognition that one divine current runs through everything, channeled by listening.</p>
+        </div>
+        <div class="school">
+          <h4>The Art of the Forged Self</h4>
+          <span class="gloss">later: Transcension</span>
+          <p>Submitting body and soul to sacred transformation through discipline and ordeal. The Ferridanian is forged: made, through pressure sustained long enough.</p>
+        </div>
+      </div>
+
+      <div class="label">The Manifestation</div>
+      <p>The covenant produced the most durable artifacts in the cosmos and the most materially competent population within it: Galvaneum living steel, Soma-Woven warriors, Compressed Technology that holds a full suit of powered armor inside a ring, Synthetic Deusas that bottle a magical ability into a consumable crystal. All three clans practice all three Arts; they differ in which Art they lead with, and so in which relationship to the divine they place first. From that ordering grows a three-way schism that the temples cannot settle. Brokkae's Children hold that the world was better still, and that endurance is the virtue. Edgerinne's Children, the Faithful and the majority, hold that the stone contains diamond and only pressure reveals it — the process is the point, the duel matters, the years matter. The Secular faction asks why the method matters when the result is the same. Each can claim theological legitimacy; the argument continues.</p>
+
+      <div class="label">The Four Regions</div>
+      <div class="accordion">
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">The Heartland Cantons</span><span class="tag">House Felidae · the ruling synthesis</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>The Heartland Cantons are the ruling center, and Steelheart is their showcase — the gleaming face Ferridane turns toward the nine Realms. The Felidae practice all three Sacred Arts in concert; they consume what the other clans produce and transform it into governance. In Heraldic Form they are golden lions, polished as brass, regal and composed until the instant they are not.</p>
+            <p>A Felidae marriage operates as a single instrument across two domains — his martial authority and her social intelligence. Their monopoly on representing the Realm to the cosmos is itself a cause of war.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">The Northern Reaches</span><span class="tag">House Axipitre · the engineers</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>The Northern Reaches are mountain and mine — cliff-face cities, deep shafts, crystata veins pulsing through the rock. House Axipitre leads with intelligence over force, and an Axipitre woman in the engineering halls comes nearest to professional equality, because intelligence asks nothing of a frame. In Heraldic Form they are avian, dark bronze, their beauty shaped to function.</p>
+            <p>They are the quietest clan and the most intense. They carry the disgrace of Crex's Shot, and the Godmind project recruits from their academy faculty. Their isolation is at once their genius and their exposure.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">The Fractured Marches</span><span class="tag">House Lykaion · two cultures, one clan</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>The Fractured Marches hold two cultures under one name. The Old Lykaion worship Brokkae — stone-gray, lupine, carved as if from the mountainside, the body honored as the original temple — and they hold Edgerinne's ascendancy as a second faith set over their founder. The New Lykaion read Edgerinne's covenant as biological ascent: gilt-bronze jackals, Soma-Weaving practiced as devotional art, ambition rendered as worship.</p>
+            <p>The New Lykaion want what the Felidae hold and believe themselves owed it, which makes them the most politically dangerous faction in Ferridane. A Lykaion household runs as a small enterprise, and the culture asks the same of a wife as of anyone.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">The Outlands</span><span class="tag">Crex's domain · the ungoverned country</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>The Outlands are the ungoverned territories, and Crex keeps them. The ethos is sovereignty: you are your own authority, and the single law is that you finish what you start. The augmentation carried in an Outlands hall outperforms the legal market, built by engineers who tired of being told what they could not build. Cartels, smugglers, unrestricted craftsmen, and the Free Birds hold the country.</p>
+            <p>Edgerinne's covenant is preached elsewhere. The Outlands are the country of the people that covenant exiled, and a stranger who arrives preaching it learns the difference quickly.</p>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="realm-now">
+        <div class="label">The Realm Now</div>
+        <p>Three hundred and fifty years have passed since Crex's Shot, and across them the original names of the Arts drained away while the function-names took their place — each renaming loosening the covenant, because the old names carried the theology and the new ones carry the work alone. The temples stayed open; the covenant quietly emptied, replaced by competence, capability, and progress. Ferridane is now building its own Clairgate network, courting an alliance with the Grounded of Luxenfall, and positioning itself as the alternative to Thalassan hegemony. The positioning is strategically sound. Aurelius Vorn, more integrated material than original biology, is the question whose answer decides whether the covenant of transformation survives in any institutional form.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PYRTHERA ===================== -->
+<section id="pyrthera">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">The Third Realm</div>
+      <h2>Pyrthera</h2>
+    </div>
+
+    <div class="realm reveal">
+      <div class="realm-head">
+        <svg class="sigil" viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="14" stroke="" stroke-width="1.6"/>
+          <g stroke="" stroke-width="1.4">
+            <line x1="50" y1="6" x2="50" y2="24"/>
+            <line x1="50" y1="76" x2="50" y2="94"/>
+            <line x1="6" y1="50" x2="24" y2="50"/>
+            <line x1="76" y1="50" x2="94" y2="50"/>
+            <line x1="19" y1="19" x2="32" y2="32"/>
+            <line x1="68" y1="68" x2="81" y2="81"/>
+            <line x1="81" y1="19" x2="68" y2="32"/>
+          </g>
+        </svg>
+        <h3>Pyrthera</h3>
+        <div class="epithet">The Unassailable Ideal</div>
+      </div>
+      <div class="dataline">
+        <div><span class="dk">Element</span>Fire</div>
+        <div><span class="dk">Patron</span>Hestia</div>
+        <div><span class="dk">Exvisar</span>Sol'Kheret, the Sun Blossom</div>
+        <div><span class="dk">Scale</span>1–3 million · three nations · seven suns</div>
+      </div>
+
+      <div class="label">The Gift</div>
+      <p>Hestia gave Pyrthera seven suns and the biology to metabolize them. The gift is environmental and cellular at once: Solar Synthesis converts radiation that would kill any other Realm's citizens into inexhaustible vitality and myst. The gift asks for no invocation and no ritual. The gift is what they are. Hestia is the goddess of the hearth — the fire at the center of the home, the one that feeds, warms, and gathers the family around it.</p>
+
+      <div class="label">The Doctrine</div>
+      <p>The Hestian faith holds Becoming Through Trial. The Golden Flame burns away the false and leaves what is true, and the brands on Pyrtheran skin — the kafer — are that truth shining through, the light unveiled by the Flame. A complete person experiences the full spectrum: pain and pleasure, combat and intimacy, loss and joy, discipline and abandon, and imbalance in any direction is spiritual sickness. The single sin is to harm another's Ankpyre, the internal sacred flame of selfhood; to test it is a sacrament. Pleasure is held as a biological nutrient, and the civilization is organized around wholeness.</p>
+      <div class="pull">The Flame burns away the false and leaves what is true.</div>
+
+      <div class="label">The Manifestation</div>
+      <p>The doctrine shows up as the Sacred Braid: fighting, dancing, and lovemaking practiced as three expressions of a single discipline — mastery of the body under conditions of intensity. The Braid is the curriculum through which Pyrtherans train, socialize, worship, and govern. It shows up again as the Trial of Flame, Sol'Kheret's judicial practice: she strikes with fists of Golden Flame, and the blows land on the body while the burning is of the soul; the kafer flares and clarifies as ego is expelled; and when the Trial is finished, the same figure who administered it holds the person who remains. It shows up, finally, in the afterlife outcomes themselves — Pyrthera carries the highest ascension rate to angelic status in the cosmos, and a great proportion of living Pyrtherans have personally known someone now serving as an angel. The faith is functional, with results visible in the bodies, the relationships, and the death of its people.</p>
+
+      <div class="label">The Three Nations</div>
+      <p>All three nations worship Hestia, each through a different theological lens, and each names the same fire in the others.</p>
+      <div class="accordion">
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">The Emberate of Khet</span><span class="tag">Becoming Through Trial</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>The Emberate of Khet is the heart and the origin — the Sunscar Desert, crimson dunes, obsidian mesas, oasis-citadels standing under seven suns. Khetians are the purists: fire as judgment, the Golden Flame as revelation. They hunt megafauna in coordinated tactical engagements, and the gathering afterward — cooking, debate, dueling, music, courtship — is where the social fabric renews.</p>
+            <p>Khet is loud, direct, and theologically evangelical. When the Realms say <em>Pyrtheran</em>, they mean Khetian. It is Sol'Kheret's nation, and the Sacred Braid is practiced most visibly here.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">The Freeholds of Rhylos</span><span class="tag">Becoming Through Flow</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>The Freeholds of Rhylos are the pastoral heart — the Ignition Rift, canyons split by rivers of magma, basalt arches spanning the flows. Rhylians hold magma as the blood of the world and themselves as its partners. Their mysticism moves through percussive, grounded dance and rhythmic ritual that shapes stone and guides the magma itself, and they are master architects, raising organic cities that seem grown from the rock.</p>
+            <p>Rhylian magma-dancers built the obsidian citadels for the Glacian refugees — from their most sacred material, with their most sacred art, designed cool for someone else's comfort, and asked for nothing in return. The Aestuel, ritual combat carried to mutual exhaustion, serves them for courtship, communication, and the settling of conflict.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">The Cinderpeak Enclave</span><span class="tag">Becoming Through Insight</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>The Cinderpeak Enclave, the Ashen Vale, is the contemplative reach — dormant volcanoes, a perpetual hazy twilight, cities carved into mountain and lit by bioluminescent fungi. The Vale holds fire as information: the spark, and the ash it leaves behind. Its people are ascetic and monastic, and they have refined Solar Synthesis to the point where ordinary nourishment becomes unnecessary.</p>
+            <p>The Vale supplies the Realm its most sought-after oracles and strategists. Where Khet is loud and Rhylos is rhythmic, the Vale is still, and that stillness gives the other two nations pause.</p>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="realm-now">
+        <div class="label">The Realm Now</div>
+        <p>Sol'Kheret holds Antaka — the power to collapse the distance between a planet and its sun — and six people in the cosmos hold it. It is a deterrent of the highest order, a weapon that governs by remaining unused. Pyrthera refused to take part in the extraction that followed Luxania's fall; the Inquisition understood what the Mavarran infiltration was doing and held its counter-operations while other Realms reasoned their way past the question. The correct reading of the fall produced the correct defense, and it produced the isolation as well — Pyrthera is correct in a register the other Realms experience as reproach, and so it stands alone, and armed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TENEBRALIS ===================== -->
+<section id="tenebralis">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">The Fourth Realm</div>
+      <h2>Tenebralis</h2>
+    </div>
+
+    <div class="realm reveal">
+      <div class="realm-head">
+        <svg class="sigil" viewBox="0 0 100 100" fill="none">
+          <path d="M22 38 C22 26 78 26 78 38 C78 64 62 84 50 84 C38 84 22 64 22 38Z" stroke="" stroke-width="1.6"/>
+          <path d="M32 44 q9 -8 18 0" stroke="" stroke-width="1.4"/>
+          <path d="M50 44 q9 -8 18 0" stroke="" stroke-width="1.4"/>
+          <path d="M50 56 L50 70" stroke="" stroke-width="1.1"/>
+        </svg>
+        <h3>Tenebralis</h3>
+        <div class="epithet">The Realm of Masks</div>
+      </div>
+      <div class="dataline">
+        <div><span class="dk">Element</span>Shadow</div>
+        <div><span class="dk">Patron</span>Erebus (nominal)</div>
+        <div><span class="dk">Sovereign</span>Vex Mavarra, Sovereign of Within</div>
+        <div><span class="dk">Scale</span>&lt;500,000 Mavarrans, with the enslaved Luxenfallen</div>
+      </div>
+
+      <div class="label">The Gift</div>
+      <p>Tenebralis received two gifts, different in character. Erebus gave the Shade — divine cover that dims the divine signal and lets Tenebralis operate beneath the surveillance the other Realms operate under. The Shade was mercy, offered to permit habitation in a region that would otherwise hold no civilization at all. Vex Mavarra gave the Pansilion — biological reshaping from dusk to sunrise, activated at sixteen through the Second Birth ceremony. The Mavarrans evolved inside a mountain with no sky, in permanent hallucinogenic darkness, surrounded by predators that hunt by perception; belladonna-saturated darkness shaped translucent skin and non-blinking eyes across the generations.</p>
+
+      <div class="label">The Doctrine</div>
+      <p>The Shim'zillai, the Shadow Decree, is the operating law of Tenebrali reality — ten axioms holding that everything is permitted and everything has a price, and that these statements stand together without tension. Three rules order the civilization, and each concerns liability rather than ethics: do only what you can carry away from; leave the Aesthetes unprovoked; raise nothing loud enough to shine through the Shade. The Mavarran does not possess a self. The Mavarran performs one, and a mask believed by enough people becomes locally real.</p>
+      <div class="pull">Everything is permitted. Everything has a price.</div>
+
+      <div class="label">Tempora</div>
+      <p>All three schools live within a single city. Tempora is a jewel set into a lightless abyss, lit by bioluminescent water, deep violet flowers, and crystata carried in from Luxania and Ferridane. Fog stands constant. Belladonna scents the air so completely that a Mavarran abroad reads its absence as a kind of exposure.</p>
+
+      <div class="label">The Three Schools</div>
+      <p>Each school holds a different theology of what Shadow is, and the three are arranged by terrace, from the upper city to the deep.</p>
+      <div class="accordion">
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">The Curators</span><span class="tag">Court of Masks · shadow as potentiality</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>The Curators hold the upper terraces and the majority of Tempora. For them shadow is potentiality, the unformed darkness from which an identity is chosen and given form, and the Pansilion is a creative act. They run the symposiums, orchestrate the Isin'sartu, and keep the Veiled Houses; their instruments are secrets and memory coins, and the highest-status removal of a rival is reputational.</p>
+            <p>To take off a mask for another person is an intimacy that runs deeper than most physical contact. The Curators are the ranchers of the civilization: the symposium is the pasture.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">The Oneironauts</span><span class="tag">Dreamscape · shadow as the subconscious</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>The Oneironauts hold the middle terraces. For them shadow is the subconscious mind, the one location of genuinely unmediated reality; the waking world is a stage, and the Dreamscape is where the person actually lives. They navigate it to extract secrets and to perform psychological reconstruction.</p>
+            <p>They keep cloisters where waking and dream run thinnest — abyssal libraries of stacked memory coins. They are the audit of the civilization, cataloguing the inner life of a target before the Aesthetes are called.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">The Aesthetes</span><span class="tag">Temple of Ishtar · shadow as entropy</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>The Aesthetes hold the deep and the Temple of Ishtar. For them shadow is entropy — the sacred void to which all flawed, individual life returns. One Mavarran in twenty is an Aesthete, roughly twenty-five thousand, and they are the single organized institution in a civilization of individuals.</p>
+            <p>They have spent millennia with their hands inside the structure of the soul, and they know with empirical precision how to remove what makes a person specifically themselves while the body keeps its function. Their highest worship is the Ak'lethem, the soul-eating, presented as transfiguration. They are the most intellectually serious people in Tenebralis, and the dread of being noticed by them and found wanting stands behind every mask.</p>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="label">The Isin'sartu</div>
+      <p>The Festival of Lies is the one calendrical event — six days of preparation and a seventh of total darkness and legal amnesty. Every crystata extinguishes, and the social architecture, built on visual legibility, gives way to the hierarchy of what a person can do in the dark. Vex designed the cycle, including the mechanism by which one night of genuine, unmediated feeling keeps the population from settling into total dissociation. She gives them one night of being real, gathers the souls that fall, and the cycle sustains.</p>
+
+      <div class="realm-now">
+        <div class="label">The Realm Now</div>
+        <p>Tenebralis modeled itself, knowingly, on a circle of Hel — the Thanatonauts among the Aesthetes dreamwalk into the Eighth Circle, Fraud, and name it the Motherland. Tenebralis ended Luxania, and the civilization that performed the act continues to operate the Lightwells, refines the captured population into Aesthete-finished product, and exports that product to the other Realms through the commerce the Shade keeps unaccountable. The exports that sustain the economy are harvested joy — courage drawn from a person who no longer holds it, bliss harvested from someone made to feel it. The ongoing operation is the Realm's present basis. This is what the cosmos has been unable to name for a thousand years.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ZEPHYROS ===================== -->
+<section id="zephyros">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">The Fifth Realm</div>
+      <h2>Zephyros</h2>
+    </div>
+
+    <div class="realm reveal">
+      <div class="realm-head">
+        <svg class="sigil" viewBox="0 0 100 100" fill="none">
+          <path d="M24 36 q24 -16 44 0 q12 10 0 20 q-8 6 -16 0" stroke="" stroke-width="1.5"/>
+          <path d="M20 56 q30 -14 56 0 q14 10 2 22 q-10 8 -20 2" stroke="" stroke-width="1.5"/>
+          <path d="M30 78 q20 -8 34 2" stroke="" stroke-width="1.2"/>
+        </svg>
+        <h3>Zephyros</h3>
+        <div class="epithet">The Realm of Breath</div>
+      </div>
+      <div class="dataline">
+        <div><span class="dk">Element</span>Air &amp; Wind</div>
+        <div><span class="dk">Patron</span>Iles, the Breath of All That Lives</div>
+        <div><span class="dk">Exvisar</span>Aeon, Warden of the Wind</div>
+        <div><span class="dk">Scale</span>Sky temples &amp; the Verdant Plains</div>
+      </div>
+
+      <div class="label">The Gift</div>
+      <p>Iles gave Zephyros the discipline of truth, the Aether as the medium of non-violent knowledge, and the Ventus who can draw breath from the lungs of the violent. Iles's covenant applies to everyone who stands on her soil, and the air itself is the enforcement: a lie breaks something in the one who tells it, the dissonance rings audible on the Aether, and the liar's next breath brings no relief. Deceit is physiologically rejected.</p>
+
+      <div class="label">The Doctrine</div>
+      <p>Truth is the air, and this is held as physics rather than metaphor. From the gift comes the Compendium — the shared psychic network connecting every Mystic on the planet, carrying news, scholarship, debate, and emotional weather on the breath. Beauty, peace, wellness, knowledge, and governance all rest on the practice of honesty. Severance from the Compendium is the most devastating punishment the Realm holds: the society sets a person down, and watches them realize they cannot stay.</p>
+      <div class="pull">Truth is the air.</div>
+
+      <div class="label">The Manifestation</div>
+      <p>The doctrine shows up as the knowledge gardens — centuries of accumulated scholarship breathed into flowers, trees, and aerated soil, with the Grand Garden of Meliadas holding the deepest of it; a flower can serve as a self-destructing dead drop, and the Oracles draw on the whole of it. It shows up as the Oracle path itself, open to any Mystic with the discipline to walk the longest road in the world; an Oracle's authority in any debate is the fact of having already weighed the argument against ten thousand years of context and communed with the goddess on its meaning. It shows up in the Divine Cascade: Aeralithe circles above the stratosphere shedding Aetheric particles, which drift into the domain of Xal-Uron, the sky-leviathan, who channels them into Fulguror, the golden lightning that enforces divine justice. And it shows up on Ascension Day at sixteen, when the Halls of Ascension test whether the soul opens — the neighborhood holding its breath while a child emerges a Mystic or walks home into a world where the air is simply air.</p>
+
+      <div class="label">The Three Schools</div>
+      <p>Three schools practice three readings of the wind, and the everyday soul of the Realm lives among the last of them.</p>
+      <div class="accordion">
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">The Crystal Isles</span><span class="tag">Harmonics · wind as breath and word</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>The Crystal Isles are the artistic and spiritual heart — crystalline islands adrift across open seas, their architecture semi-transparent and built for sound, glass bridges and windchime spires painting the air with prismatic light. Wind is breath, breath is word, and existence is an unfolding hymn.</p>
+            <p>Choral Councils govern: arguments are sung, and votes are cast as layered chords. Families gather into choirs, and children learn harmony before number. A lie sounds here as a discordant note the world itself declines to sustain.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">The Temples of Tempest</span><span class="tag">Uronoia · wind as force</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>The Temples of Tempest are the martial arm — jagged peaks crowned with permanent stormcloud, semi-monastic halls carved into the rock. Wind is force: the storm clears corruption and leaves the truth bright. Wind Abbots rise through mastery of Ventus rather than bloodline, and training begins before dawn with storm-breath, the meals communal and plain.</p>
+            <p>Festivals walk into the storm together to commune with Xal-Uron, the sky-leviathan. A child born with Ventus is held sacred, whatever their origin. The Temples are the closest thing Zephyros keeps to warriors, and they would never name themselves so.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">The Cloisters of Gran Ornea</span><span class="tag">wind as silence · the prophetic seat</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>The Cloisters of Gran Ornea are the prophetic seat and the everyday soul of the Realm — sky temples of moonstone and glass above the cloud, and the Verdant Plains below: farmers, traders, children learning philosophy beside the planting. Breath's true essence is held to be the pause, and silence the womb of all resonance; the Oracles study the whole of recorded history, then sit and attune to what is.</p>
+            <p>A promise here outweighs coin. The Oracles of the Cloisters commune with Algol, the First Oracle, and with Iles herself, and the Grand Garden of Meliadas holds centuries of scholarship breathed into its flowers. This is Fiacre's home.</p>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="realm-now">
+        <div class="label">The Realm Now</div>
+        <p>Zephyros knows. The Realm has watched the Luxanian fall, holds the account of it in the Cloisters, and has kept the knowing in custody, choosing silence until the Venturae would arrive. The choice is defensible, and its cost has been a thousand years of holding back from a cosmic harm the Realm could have described. The Twenty-Year Silence about Aracice's exile and the Prophecy is the mature form of that discipline. Fiacre's emergence from Zephyros — the figure who carries the Realm's withheld light into active restoration — is the Twenty-Year Silence becoming the Venturae in a single person, and Aeon authorizing her departure is the Realm's long-held knowledge taking the form of action at the moment that permits it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LUXENFALL ===================== -->
+<section id="luxenfall">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">The Sixth Realm — Present and Counted</div>
+      <h2>Luxenfall</h2>
+      <p class="note">The Realm has two names. Luxania is what it was. Luxenfall is what it is, and the codex counts it among the living.</p>
+    </div>
+
+    <div class="realm reveal">
+      <div class="realm-head">
+        <svg class="sigil" viewBox="0 0 100 100" fill="none">
+          <g stroke="" stroke-width="1.4">
+            <line x1="50" y1="8" x2="50" y2="30"/>
+            <line x1="50" y1="70" x2="50" y2="92"/>
+            <line x1="8" y1="50" x2="30" y2="50"/>
+            <line x1="70" y1="50" x2="92" y2="50"/>
+            <line x1="22" y1="22" x2="36" y2="36"/>
+            <line x1="78" y1="22" x2="64" y2="36"/>
+            <line x1="22" y1="78" x2="36" y2="64"/>
+            <line x1="78" y1="78" x2="64" y2="64"/>
+          </g>
+          <path d="M50 32 L62 50 L50 68 L38 50 Z" stroke="" stroke-width="1.6"/>
+          <path d="M44 40 L56 60" stroke="" stroke-width="1"/>
+        </svg>
+        <h3>Luxenfall</h3>
+        <div class="epithet">The Wellspring and Its Aftermath</div>
+      </div>
+      <div class="dataline">
+        <div><span class="dk">Element</span>Light</div>
+        <div><span class="dk">Patron</span>Aether (slain)</div>
+        <div><span class="dk">Was</span>Luxania, the Realm of Light</div>
+        <div><span class="dk">Is</span>Occupied · the fall ongoing</div>
+      </div>
+
+      <div class="label">The Gift</div>
+      <p>Aether gave Luxania the Wellspring — empathic unity as a literal mechanism. Every Mystic bathed in his light became aware of an undeniable connection, and from that awareness grew the doctrine that everything the light touched was family. It was the most perfect gift any Realm received in the cosmos.</p>
+
+      <div class="label">The Golden Age</div>
+      <p>Astra ruled. Crystal spires, singing forests, the Ancestral Archive, the Crystaturgy, the Pathos-Kinesis. The Astral Navigators reached outward to make contact with other Realms, because the doctrine held that everything the light touched was family, and it was time to find more. Luxania built what its gift asked it to build, and the civilization stood as the gift's most coherent expression anywhere in the cosmos.</p>
+      <div class="pull">Everything the light touched was family.</div>
+
+      <div class="label">The Fall</div>
+      <p>A civilization built on shared empathic connection holds one attack surface — the empathic connection. Vex identified it and operated on it across centuries. The Wellspring built to share joy became the delivery system for concentrated negative emotion at destabilizing volume, and the civilization tore itself apart from inside before a single soldier crossed the border. Aether was slain. Astra was erased. The sun has not shone in a thousand years. Luxania received its gift perfectly, and the perfection was the surface that broke it.</p>
+
+      <div class="label">The Three Factions</div>
+      <p>The diaspora is scattered across the other Realms, and within Luxenfall the population stands in three configurations — three shapes a destroyed civilization's remnants take when the destruction was architected by an enemy that understood the original architecture, and the occupier's discipline is the maintenance of the split.</p>
+      <div class="accordion">
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">The Glassen</span><span class="tag">the Forgotten</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>The Glassen have lost the memory of what their civilization's gift was. Crystata — the sacred material through which the Crystaturges rendered light into structure — is glass to them, the strongest feedstock available, and they mine the Ancestral Archive for ore. The forgetting is the finished outcome of a century of induced cultural amnesia, worked by Tenebrali Oneironauts across generations.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">The Screaming Chorus</span><span class="tag">the Harvested</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>The Chorus are the empathic-network survivors whose biology was turned against them. The Wellspring built to share joy now carries recursive shared trauma, and their Scream is the involuntary eruption of pain cultivated in them by decades of curated amplification. Their empathic apparatus was trained to meet every presence as a variant of the tormentor's, and so it does.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-head" aria-expanded="false">
+            <span class="name">The Grounded</span><span class="tag">the Vengeful</span><span class="plus">+</span>
+          </button>
+          <div class="acc-panel"><div class="inner">
+            <p>The Grounded operate on accurate diagnosis. They have correctly identified that reaching outward cost Luxania its greatest achievement, that trust admitted the infiltration, and that appeal to the gods during the fall met silence. Their doctrine of Final Isolation — drive out the occupier, restore Luxania, and then secure the cosmos against every future threat — follows from a verified betrayal.</p>
+            <p>The observation is correct. The coalition meets the Grounded by demonstrating that the grievance can be answered through means the doctrine of Final Isolation forecloses.</p>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="realm-now">
+        <div class="label">The Realm Now</div>
+        <p>The Lightwells still operate, the occupation is active, and the Wellspring still pulses. The Solarith, Luxania's primal guardian, was not killed but broken — a colossal skeletal wyrm, the largest wound in the cosmos, walking. The memory of the original doctrine lives in specific elders who have not yet died and in fragments of cultural practice the Glassen have forgotten the meaning of and have not entirely destroyed. The population continues to produce figures the occupier cannot fully account for, which is the proof that the civilization is not finished. Luxenfall is the center of the cosmos's moral reality, and the work the series carries through it is the staying — the slow, multi-book labor of sitting with what was done and doing what can be done about it now.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== THE WEAVE ===================== -->
+<section id="weave">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">How the Realms Interlock</div>
+      <h2>The Weave</h2>
+      <p class="note">Each Realm is an answer complete in itself. The roads between them made the answers neighbors.</p>
+    </div>
+
+    <div class="panel reveal">
+      <h3>The Clairgates — the Roads Between Worlds</h3>
+      <p>Before the Clairgates, every world stood alone. A Pyrtheran knew Hestia and the Golden Flame, and that was the whole of the divine; a Ferridanian knew Brokkae and Edgerinne, and that was everything. Each god was <em>the</em> god, each element <em>the</em> element, each way of being the shape of reality entire. Then Hecate of Luxania and Juno Sinclair built the Lumen Cradle and the Leyline together, and the first Clairgates opened. The roads carry trade, travel, force, and word between the Realms, and whoever holds the roads holds force projection, commerce, intelligence, and the movement of people. The Sinclairs do not rule the Realms. They hold the roads between them, which endures longer than ruling.</p>
+    </div>
+
+    <div class="panel reveal">
+      <h3>Crystata, and the Soul on the Open Market</h3>
+      <p>Crystata — crystallized myst — is the primary inter-realm currency and a strategic material at once: myst reservoir, weapon component, building stone, and information store. The comparative frame the Clairgates opened made a new thing possible. A Channeler captures elemental energy in a crystal, and a Nihila who holds that charged crystal can command the element for as long as the charge lasts — the caste line between Mystic and Nihila bridged, for a price, with money. The Axipitres combine charged crystata into Synthetic Deusas, engineering abilities beyond the divine catalog, abilities no soul was ever configured to produce. Each Realm already draws value from the soul's interface with the divine and trades it on the open market. Tenebralis stands at the end of that road: rather than extracting the myst the soul produces, the Lightwells extract the soul itself, and render it directly.</p>
+    </div>
+
+    <div class="panel reveal">
+      <h3>The Standoff</h3>
+      <p>Five powers stand that cannot be taken by force, and each holds for a different reason. Thalassor cannot be reached without Sinclair leave, because the roads are Sinclair roads. Ferridane cannot be invaded, because nine hundred million people in perpetual war have made the most dangerous conventional force in the cosmos, on their own ground. Pyrthera cannot be reached, because seven suns cook any conventional force before the first settlement, and Antaka stands behind that. Tenebralis cannot be entered, because the planet, the slave army, and half a million shapeshifters in the dark make of an invasion a vector that walks back out. Zephyros cannot be touched, because Iles mechanically prevents violence on her soil, and intent to harm draws the golden lightning. And so the whole game is played everywhere except the battlefield — in leverage, trade, intelligence, subversion, and the slow management of complicity.</p>
+    </div>
+
+    <div class="panel reveal">
+      <h3>What Each Realm Holds That the Others Want</h3>
+      <p>Thalassor holds the Krenides — a panacea that restores myst, closes wounds, and extends life — reachable only through Thalassori commerce. Ferridane holds Galvaneum living steel, Synthetic Deusas, and the industrial scale to produce the finest weapons in the cosmos. Pyrthera holds the most sought-after mercenaries in the universe, and Antaka in the hands of six who want for almost nothing. Zephyros holds unassailable land, air that heals, and the total knowledge of past, present, and future kept by Oracles who answer to the wind. Luxania held the Crystaturge's art and the Lumen Cradle, and both now lie behind the occupation and the Grounded's vendetta.</p>
+    </div>
+
+    <div class="panel reveal">
+      <h3>The Exvisarelim and the Symposium</h3>
+      <p>The Exvisarelim is the one inter-realm governing body: five seats, five Exvisars, each authority flowing from a patron god. Aurelius Vorn carries Edgerinne's mandate; Saint Leif Sinclair stewards Salacia's waters; Sol'Kheret earned her seat in a trial against the goddess herself; Aeon answers to Iles alone. The fifth seat is Vex Mavarra, present since the founding and shaping the table from inside it ever since. The Symposium is where the whole order becomes visible in one room — a gathering where beings of apocalyptic power from incompatible honor cultures perform civility, every seating arrangement a statement and every glass of wine a possible weapon. Weapon culture there reads as a literacy of its own: Thalassori ornamental blades, Ferridanian functional steel worn openly, Pyrtheran weapons carried as the record of trials survived, Zephyrian empty hands, and Mavarran ornamental blades worn precisely to belong — the performance itself the weapon.</p>
+    </div>
+
+    <div class="divider"><span class="line"></span><span class="gem">◆</span><span class="line r"></span></div>
+  </div>
+</section>
+
+<!-- ===================== THE SUBSTRATE ===================== -->
+<section id="substrate">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Beneath the Realms</div>
+      <h2>The Deep Substrate</h2>
+      <p class="note">The order that distributes gifts at all, and the mechanics by which a gift becomes power.</p>
+    </div>
+
+    <div class="reveal">
+      <p class="dropcap">The Realms and their gifts rest on an older order. Long before any living memory, the First War was fought over who would rule reality. The victors kept the cosmos, and the would-be usurpers were cast into a realm built for the purpose of their punishment — and all their descendants with them. That realm is Hel: purpose-built, artfully torturous, its sentence hereditary and never revisited. Raiwata emerged from it, refined across a timescale sufficient to turn suffering into a philosophy and a philosophy into a god.</p>
+    </div>
+
+    <div class="accordion reveal">
+      <div class="acc-item">
+        <button class="acc-head" aria-expanded="false">
+          <span class="name">The Winners' Order</span><span class="tag">whose cosmos this is</span><span class="plus">+</span>
+        </button>
+        <div class="acc-panel"><div class="inner">
+          <p>The cosmic order entire — every Realm with its element, its patron, its myst and magic, its Mystics and their deusas — is the victors' world. The gods who rule are the gods who won. The elements are the gifts the winners distributed to their favored children, and the system of Mystics and Nihila and dispensation is the spoils architecture of a war that has passed out of living memory. The gods are powers rather than moral authorities; they embody their domains and operate on cosmic polarities, and they do not exist to be good. They exist to be what they are.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-head" aria-expanded="false">
+          <span class="name">Terrae</span><span class="tag">the magic-dead world</span><span class="plus">+</span>
+        </button>
+        <div class="acc-panel"><div class="inner">
+          <p>Terrae is a world without an element, without a patron, without myst — its people the descendants of the losing side of the First War. They are classed as soulless: their souls exist, and the divine order defines a soul by its connection to the Divine, a connection their world was stripped of by design. On death they pass to Hel by default, ungauged and unweighed. A population of some eight billion lives there with the full capacity for magic and nothing to reach toward, and no frame of reference for what was withheld.</p>
+          <p>Raiwata's calculation runs from this fact, and it is the simplest in the cosmos: why hold an army of eight billion only as they die, when the army could be collected now. The destruction of Glacia, the exile and murder of Aracice on Terrae, and the coming invasion of Terrae are one campaign with one aim.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-head" aria-expanded="false">
+          <span class="name">Myst and the Soul</span><span class="tag">the organ of magic</span><span class="plus">+</span>
+        </button>
+        <div class="acc-panel"><div class="inner">
+          <p>Myst is the fundamental energy of the cosmos, and everything magical runs on it — every deusa, every enchantment, every divine act, every Clairgate transit. It is spent, replenished, stored in Crystata, and fought over. The organ that interfaces with myst is the soul. A Mystic's soul connects to the ambient field; a Nihila's does not. The line is binary — the soul opens, or it does not — and in Zephyros the Halls of Ascension test for it at sixteen. Myst replenishes biologically and by Realm: a Pyrtheran metabolizes sunlight, a Thalassori draws on Krenides, a Ferridanian on the continental Myst-Grid. Home ground is a literal increase in power.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-head" aria-expanded="false">
+          <span class="name">The Deusa Gradient</span><span class="tag">the depth of a soul's connection</span><span class="plus">+</span>
+        </button>
+        <div class="acc-panel"><div class="inner">
+          <p>Each Mystic is born with a single deusa, and the deusas follow a gradient that maps the soul's depth of connection to its element. A <em>pure elemental</em> creates and controls the element from nothing, and stands close to what the element actually is. <em>Command of an existing element</em> directs and shapes the element where it is already present. <em>Narrow elemental application</em> works a single facet of what an element does. <em>Derivative perception</em> reads the element as a medium rather than wielding it as a force — the seers and oracles and diagnosticians, reading what the god leaves behind. Position on the gradient is the quality of the soul's nearness to its divine domain.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-head" aria-expanded="false">
+          <span class="name">True Names, Memory, and the Material Soul</span><span class="tag">the workings of power</span><span class="plus">+</span>
+        </button>
+        <div class="acc-panel"><div class="inner">
+          <p>Speaking a True Name over a thing, with sufficient myst behind it, rewrites what the thing is at its foundation — reality edited in the literal sense, bounded by the great cost of the invocation and the need to know the correct Name. Memory is material: the Concordant Path holds cumulative Sinclair memory in sacramental wine, memory coins hold stolen experience as tradeable objects, and the knowledge gardens hold centuries in flowers and soil. The soul is material as well — it can be separated from a living body while the body keeps its function, rendered into component emotional materials, and refined. The worst things in the cosmos are industrial processes with known inputs and known outputs.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-head" aria-expanded="false">
+          <span class="name">The Gods and the Polarities</span><span class="tag">powers, paired</span><span class="plus">+</span>
+        </button>
+        <div class="acc-panel"><div class="inner">
+          <p>The gods operate on cosmic polarities rather than on morality. Their theologies are genuine and beautiful because the elements they embody are genuine and beautiful, and their failures, where they have them, are the natural consequences of being vast and ancient things that run on a logic of their own.</p>
+          <div class="polarities">
+            <div class="polarity"><b>Ma'at &amp; Vex</b>True or False</div>
+            <div class="polarity"><b>Aracice &amp; Raiwata</b>Order or Chaos</div>
+            <div class="polarity"><b>Leviathan &amp; Fiacre</b>War or Peace</div>
+            <div class="polarity"><b>Crex &amp; Edgerinne</b>Gun or Blade</div>
+            <div class="polarity"><b>Erebus &amp; Aether</b>Darkness or Light</div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="divider"><span class="line"></span><span class="gem">◆</span><span class="line r"></span></div>
+  </div>
+</section>
+
+<!-- ===================== THE ADVENT ===================== -->
+<section id="advent">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">What Moves Within the Architecture</div>
+      <h2>The Advent</h2>
+    </div>
+
+    <div class="reveal">
+      <p class="lead">Algol — Avatar of Lachesis, the Measurer, who predates all and will never die — stood before the Pantheon and spoke a measure of the age:</p>
+      <div class="pull" style="max-width:38ch;font-size:clamp(1.25rem,3vw,1.7rem);">Nine threads weave a shroud for this age. Three suns will fall, and the second will rise to meet you. The Thrones Eternal are but dust. It is as it must be.</div>
+      <p>Nine mortal Heralds carry the Advent — figures powerful enough to operate at the scale where the cosmic equation can shift. They do not change the physics of five unassailable Realms. They break the equilibrium by forcing the buried truth into the open: the Prophecy spoken, the Lightwells exposed, the Godmind revealed, the Sinclair crime surfaced. The standoff depends on the truth staying buried, and the Advent is the light reaching it.</p>
+      <p>Each Realm is an answer complete in itself, and each answer alone produces the failure its own narrative cannot name. No Realm resolves that failure from inside. The work is coalition — six civilizations, Luxenfall counted among them, operating together against the enemy none can face alone. And the heart of the work is the staying: the Heralds arrive at the populations the apparatus has failed, and they remain — through the factional hostility, the recursive trauma, the amnesia, the long patient labor of doing what can be done now.</p>
+    </div>
+
+    <div class="closing reveal">
+      <div class="divider small"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div>
+      <p class="verse">The gods were asked what power is for, and the gods answered: power is for winning, and winning is for keeping.</p>
+      <p class="answer">The Advent answers — we will see.</p>
+      <div class="divider small"><span class="line"></span><span class="gem">◆</span><span class="line r"></span></div>
+      <p style="max-width:42ch;margin:0 auto;color:var(--ink-soft);font-style:italic;">Advent is an epic. The system holds within its own rules — and then morning comes, and someone is still standing, and chooses to begin again.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="mark">◆ Moirai Codex · Advent of Ultima ◆</div>
+  <div class="sub">The Architecture of the Realms — the gift, the doctrine, and the world the doctrine builds.</div>
+</footer>
+
+<script>
+/* ---------- accordions ---------- */
+document.querySelectorAll('.acc-head').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var panel = btn.nextElementSibling;
+    var open = btn.getAttribute('aria-expanded') === 'true';
+    if(open){
+      panel.style.maxHeight = null;
+      btn.setAttribute('aria-expanded','false');
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + 'px';
+      btn.setAttribute('aria-expanded','true');
+    }
+  });
+});
+/* keep open panels sized correctly on resize */
+window.addEventListener('resize', function(){
+  document.querySelectorAll('.acc-head[aria-expanded="true"]').forEach(function(btn){
+    var panel = btn.nextElementSibling;
+    panel.style.maxHeight = panel.scrollHeight + 'px';
+  });
+});
+
+/* ---------- scroll reveal ---------- */
+var revealObserver = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      revealObserver.unobserve(e.target);
+    }
+  });
+},{threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(function(el){ revealObserver.observe(el); });
+
+/* ---------- nav active state ---------- */
+var navLinks = Array.prototype.slice.call(document.querySelectorAll('nav a'));
+var sections = navLinks.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+var navObserver = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      var id = e.target.getAttribute('id');
+      navLinks.forEach(function(a){
+        a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+},{rootMargin:'-45% 0px -50% 0px'});
+sections.forEach(function(s){ if(s) navObserver.observe(s); });
+</script>
+</body>
+</html>

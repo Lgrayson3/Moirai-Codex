@@ -1,0 +1,10 @@
+# Ignore local node packages and configurations
+App-Codebase/node_modules/
+App-Codebase/.env
+
+# Ignore OS files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+desktop.ini
+.DS_Store

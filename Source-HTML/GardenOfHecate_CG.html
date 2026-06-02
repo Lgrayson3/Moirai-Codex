@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Myth: The Garden of Hecate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Marcellus&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF7EE;
+    --paper-2:#F6F0E2;
+    --ink:#2B2317;
+    --ink-soft:#5A4E3A;
+    --rule:#E4D8BE;
+    --gold:#9A7B1F;
+    --gold-bright:#C9A227;
+    --gold-pale:#E9DCB0;
+    --gold-glow:rgba(201,162,39,.18);
+    --zephyros:#8AA63A;   --zephyros-pale:#D8E3B0;
+    --pyrthera:#C7572B;   --pyrthera-pale:#F0C39A;
+    --thalassor:#2E6FA3;  --thalassor-pale:#A9CBE4;
+    --ferridane:#A66A2E;  --ferridane-pale:#E0C394;
+    --tenebralis:#6A3D9A; --tenebralis-pale:#C8B0E2;
+    --luxenfall:#C9A227;  --luxenfall-pale:#EBDCA6;
+    --glacia:#5C97B8;     --glacia-pale:#BDDCE8;
+    --katos:#4FA7C9;      --katos-pale:#B8E1EC;
+    --prism:linear-gradient(90deg,
+      var(--tenebralis) 0%, var(--thalassor) 17%, var(--glacia) 30%,
+      var(--zephyros) 45%, var(--luxenfall) 60%, var(--ferridane) 74%,
+      var(--pyrthera) 100%);
+    --maxw:820px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Spectral",Georgia,serif;font-weight:400;
+    font-size:19px;line-height:1.72;-webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(120% 80% at 8% -5%, rgba(201,162,39,.07), transparent 45%),
+      radial-gradient(120% 80% at 105% 110%, rgba(106,61,154,.06), transparent 45%),
+      radial-gradient(140% 90% at 100% 0%, rgba(46,111,163,.045), transparent 40%),
+      radial-gradient(100% 100% at 50% 40%, transparent 60%, rgba(43,35,23,.05));
+  }
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.52;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  }
+  .ribbon{position:fixed;top:0;left:0;right:0;height:5px;z-index:60;
+    background:var(--prism);background-size:200% 100%;animation:drift 22s linear infinite;}
+  @keyframes drift{0%{background-position:0 0;}100%{background-position:200% 0;}}
+
+  nav.codex-nav{position:sticky;top:5px;z-index:55;background:rgba(251,247,238,.76);
+    backdrop-filter:blur(12px) saturate(135%);-webkit-backdrop-filter:blur(12px) saturate(135%);border-bottom:1px solid var(--rule);}
+  nav.codex-nav ul{list-style:none;margin:0 auto;padding:.55rem .9rem;display:flex;
+    flex-wrap:wrap;gap:.2rem .85rem;justify-content:center;max-width:1100px;}
+  nav.codex-nav a{font-family:"Marcellus",serif;font-size:.69rem;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-soft);text-decoration:none;padding:.15rem 0;
+    border-bottom:1.5px solid transparent;transition:.25s;white-space:nowrap;}
+  nav.codex-nav a:hover{color:var(--gold);border-bottom-color:currentColor;}
+
+  main{position:relative;z-index:1;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.4rem;}
+  header.mast{text-align:center;padding:5.8rem 1.4rem 3rem;position:relative;}
+  .eyebrow{font-family:"Marcellus",serif;font-size:.78rem;letter-spacing:.42em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 1.6rem;text-indent:.42em;}
+  h1.title{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(2.8rem,8vw,5.15rem);
+    line-height:.98;margin:0;letter-spacing:-.015em;color:var(--ink);font-variation-settings:"opsz" 144;}
+  h1.title .gilt{background:linear-gradient(95deg,var(--gold) 0%,var(--gold-bright) 45%,#EFD27A 60%,var(--gold) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;}
+  .subtitle{font-family:"Spectral",serif;font-weight:300;font-style:italic;
+    font-size:clamp(1.06rem,2.6vw,1.38rem);color:var(--ink-soft);margin:1.5rem auto 0;max-width:44ch;line-height:1.5;}
+  .mast-mark{margin:2.4rem auto 0;width:min(420px,80%);}
+  .mast-mark .bar{height:3px;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  .mast-epi{font-family:"Fraunces",serif;font-style:italic;font-weight:300;
+    font-size:clamp(1.15rem,3vw,1.62rem);color:var(--gold);margin:2.6rem auto 0;max-width:36ch;line-height:1.4;}
+  .mast-epi span{display:block;color:var(--ink-soft);font-size:.68em;font-style:normal;
+    font-family:"Spectral";letter-spacing:.05em;margin-top:.6rem;}
+
+  .diadiv{display:flex;align-items:center;justify-content:center;gap:1rem;margin:3.5rem 0;}
+  .diadiv .line{height:1px;flex:1;max-width:130px;background:linear-gradient(90deg,transparent,var(--gold-pale),var(--gold));}
+  .diadiv .line.r{background:linear-gradient(90deg,var(--gold),var(--gold-pale),transparent);}
+  .diadiv .gem{font-size:.88rem;color:var(--gold);letter-spacing:.4em;text-indent:.4em;}
+
+  section{padding:1.4rem 0;position:relative;}
+  .sec-eyebrow{font-family:"Marcellus",serif;font-size:.76rem;letter-spacing:.32em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 .5rem;}
+  h2{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(1.9rem,5vw,2.9rem);
+    line-height:1.05;margin:.2rem 0 1.2rem;color:var(--ink);letter-spacing:-.01em;font-variation-settings:"opsz" 80;}
+  h2 .uline{display:block;height:3px;width:108px;margin-top:.7rem;border-radius:2px;
+    background:var(--prism);background-size:200% 100%;animation:drift 16s linear infinite;}
+  h3{font-family:"Fraunces",serif;font-weight:500;font-style:italic;font-size:clamp(1.25rem,3.4vw,1.6rem);
+    margin:2.2rem 0 .6rem;color:var(--ink);font-variation-settings:"opsz" 40;}
+  h4{font-family:"Marcellus",serif;font-weight:400;font-size:1.02rem;letter-spacing:.04em;margin:1.6rem 0 .35rem;color:var(--gold);}
+  p{margin:0 0 1.15rem;}
+  strong{font-weight:600;color:var(--ink);}
+  em{font-style:italic;}
+  .lead{font-size:1.13rem;}
+  .lead::first-letter{font-family:"Fraunces",serif;font-weight:400;float:left;font-size:4.4rem;
+    line-height:.72;padding:.32rem .55rem 0 0;color:var(--gold);font-variation-settings:"opsz" 144;}
+
+  .glass{
+    background:linear-gradient(180deg, rgba(255,255,255,.64), rgba(246,240,226,.42));
+    backdrop-filter:blur(16px) saturate(145%);
+    -webkit-backdrop-filter:blur(16px) saturate(145%);
+    border:1px solid rgba(154,123,31,.20);
+    box-shadow:0 22px 58px -42px rgba(43,35,23,.62), inset 0 1px 0 rgba(255,255,255,.75);
+  }
+  .spectrum{margin:2rem auto;border-radius:14px;overflow:hidden;}
+  .spectrum .top{height:8px;background:var(--prism);background-size:180% 100%;animation:drift 20s linear infinite;}
+  .spectrum .rows{padding:.4rem .2rem;}
+  .spec-row{display:grid;grid-template-columns:14px 1fr;gap:.9rem;align-items:start;
+    padding:.75rem 1.1rem;border-bottom:1px solid var(--rule);}
+  .spec-row:last-child{border-bottom:none;}
+  .spec-row .swatch{width:14px;height:14px;border-radius:50%;margin-top:.45rem;
+    box-shadow:0 0 0 3px var(--paper-2),0 0 0 4px currentColor;}
+  .spec-row .nm{font-family:"Marcellus",serif;letter-spacing:.06em;font-size:1.05rem;color:var(--ink);}
+  .spec-row .nm small{display:block;font-family:"Spectral";font-style:italic;letter-spacing:0;
+    color:var(--ink-soft);font-size:.9rem;margin-top:.2rem;font-weight:300;line-height:1.5;}
+
+  .beat{--accent:var(--gold);--accent-pale:var(--gold-pale);margin:2.4rem auto;border-radius:18px;overflow:hidden;position:relative;}
+  .beat::before{content:"";position:absolute;inset:0;border-radius:18px;pointer-events:none;
+    background:radial-gradient(120% 150% at 100% -20%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 58%);}
+  .beat .crown{height:7px;background:linear-gradient(90deg,var(--accent),var(--accent-pale),var(--accent));position:relative;z-index:1;}
+  .beat-head{position:relative;z-index:1;padding:1.7rem 1.55rem 1.05rem;border-bottom:1px solid color-mix(in srgb,var(--accent) 22%,var(--rule));}
+  .kicker{font-family:"Marcellus",serif;font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 .45rem;display:flex;align-items:center;gap:.6rem;}
+  .kicker .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);}
+  .beat h2{font-size:clamp(1.7rem,5vw,2.45rem);margin:.1rem 0 .55rem;}
+  .beat-meta{font-family:"Marcellus",serif;font-size:.75rem;letter-spacing:.06em;color:var(--ink-soft);display:flex;flex-wrap:wrap;gap:.35rem 1.2rem;}
+  .beat-meta b{color:var(--accent);font-weight:400;}
+  .beat-body{position:relative;z-index:1;padding:1.2rem 1.55rem 1.6rem;}
+  .beat-body p:last-child{margin-bottom:0;}
+  .beat-body .myth:first-of-type::first-letter{font-family:"Fraunces",serif;float:left;font-size:3.6rem;line-height:.76;padding:.31rem .42rem 0 0;color:var(--accent);font-variation-settings:"opsz" 144;}
+  .relic{margin:1.25rem 0 0;padding:1rem 1.15rem;border-left:3px solid var(--accent);border-radius:0 12px 12px 0;background:color-mix(in srgb,var(--accent) 6%,rgba(246,240,226,.66));}
+  .relic .label{font-family:"Marcellus",serif;font-size:.63rem;letter-spacing:.23em;text-transform:uppercase;color:var(--accent);margin:0 0 .35rem;}
+  .relic p{font-style:italic;font-weight:300;margin:0;color:var(--ink);font-size:1.02rem;line-height:1.62;}
+
+  .route{position:relative;margin:2.2rem 0 0;padding-left:1.05rem;}
+  .route::before{content:"";position:absolute;left:.18rem;top:.5rem;bottom:1.4rem;width:1px;background:linear-gradient(var(--gold-pale),var(--thalassor),var(--tenebralis),var(--zephyros),var(--luxenfall));opacity:.7;}
+  .route .beat{margin:1.35rem 0 2.2rem;}
+  .pull{margin:2.8rem auto;text-align:center;max-width:35ch;}
+  .pull q{font-family:"Fraunces",serif;font-style:italic;font-weight:300;quotes:none;
+    font-size:clamp(1.35rem,3.6vw,1.9rem);line-height:1.34;color:var(--gold);display:block;}
+  .pull cite{display:block;font-style:normal;font-family:"Marcellus";font-size:.72rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ink-soft);margin-top:1rem;}
+  .moral{margin:2.4rem auto 0;border-radius:18px;padding:1.55rem 1.55rem;background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(246,240,226,.5));border:1px solid var(--rule);box-shadow:0 18px 42px -36px rgba(43,35,23,.55);}
+  .moral h3{margin-top:.1rem;}
+  .moral p:last-child{margin-bottom:0;}
+
+  footer{text-align:center;padding:4rem 1.4rem 5rem;margin-top:2rem;position:relative;z-index:1;}
+  footer .bar{height:3px;width:min(420px,80%);margin:0 auto 2.4rem;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  footer .candle{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.3rem,4vw,2rem);color:var(--gold);line-height:1.35;margin:0 auto;max-width:30ch;}
+  footer .ma{font-family:"Marcellus";font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-top:2.4rem;}
+  footer .ma small{display:block;letter-spacing:.05em;text-transform:none;font-family:"Spectral";font-style:italic;font-weight:300;margin-top:.5rem;color:var(--ink-soft);}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;}
+    .ribbon,.spectrum .top,.beat .crown,h2 .uline,.mast-mark .bar,footer .bar{animation:none;}
+  }
+  @media(max-width:580px){body{font-size:18px;}nav.codex-nav ul{gap:.15rem .65rem;}.beat-head,.beat-body{padding-left:1.05rem;padding-right:1.05rem;}.wrap{padding:0 1rem;}.route{padding-left:.35rem;}.route::before{display:none;}}
+</style>
+</head>
+<body>
+<div class="ribbon" aria-hidden="true"></div>
+<nav class="codex-nav" aria-label="Sections">
+  <ul>
+    <li><a href="#origin">Origin</a></li>
+    <li><a href="#fall">Fall</a></li>
+    <li><a href="#market">Coins</a></li>
+    <li><a href="#cats">Katos</a></li>
+    <li><a href="#aeon">Aeon</a></li>
+    <li><a href="#garden">Garden</a></li>
+    <li><a href="#return">Return</a></li>
+    <li><a href="#moral">Moral</a></li>
+  </ul>
+</nav>
+<main>
+<header class="mast reveal">
+  <p class="eyebrow">Moirai Codex · Mythic Rendering</p>
+  <h1 class="title">A Myth:<br><span class="gilt">The Garden of Hecate</span></h1>
+  <p class="subtitle">A fable of one navigator, one closed road, a thousand years of scattered memory, and the small bright thieves who helped return a people to their Light.</p>
+  <div class="mast-mark"><div class="bar"></div></div>
+  <p class="mast-epi">When the great houses counted engines and gates, the little blue cats counted laughter.<span>And so the dead were gathered.</span></p>
+</header>
+
+<section class="wrap reveal" id="origin">
+  <p class="sec-eyebrow">The color key</p>
+  <h2>One Light, Many Roads<span class="uline"></span></h2>
+  <p class="lead">The tale moves by color as it moves by cause. Gold marks Luxania and the Light. Blue marks Thalassor and the roads it kept. Violet marks Tenebralis and the arts that emptied names into product. Green marks Zephyros and the long listening of Aeon. Bright blue marks the Katos, who carried foolishness like treasure. The prism holds all of them, because the story crosses every road it names.</p>
+  <div class="spectrum glass">
+    <div class="top"></div>
+    <div class="rows">
+      <div class="spec-row" style="color:var(--luxenfall)"><span class="swatch"></span><span class="nm">Luxania<small>Light, Hecate, the Wellspring, the lost settings of family.</small></span></div>
+      <div class="spec-row" style="color:var(--thalassor)"><span class="swatch"></span><span class="nm">Thalassor<small>Juno Sinclair, the Lumen Cradle, the Clairgates, the gilded road.</small></span></div>
+      <div class="spec-row" style="color:var(--tenebralis)"><span class="swatch"></span><span class="nm">Tenebralis<small>Vex Mavarra, the Aesthetes, the Rewriting, the memory market.</small></span></div>
+      <div class="spec-row" style="color:var(--zephyros)"><span class="swatch"></span><span class="nm">Zephyros<small>Aeon, the Oracles, the Aether, the knowledge gardens of Meliadas.</small></span></div>
+      <div class="spec-row" style="color:var(--katos)"><span class="swatch"></span><span class="nm">The Katos<small>The not-cats of Thalassor, clever fences, collectors of small absurdities.</small></span></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div></div>
+
+<section class="wrap route">
+  <article class="beat glass reveal" style="--accent:var(--luxenfall);--accent-pale:var(--luxenfall-pale)" id="light">
+    <div class="crown"></div>
+    <div class="beat-head">
+      <p class="kicker"><span class="dot"></span>Luxania · Before the Roads</p>
+      <h2>The Girl Who Reached Past the Horizon</h2>
+      <div class="beat-meta"><span>Realm <b>Light</b></span><span>Office <b>Astral Navigator</b></span><span>Gift <b>Connective Light</b></span></div>
+    </div>
+    <div class="beat-body">
+      <p class="myth">In the age when Luxania still answered to its own sun, there lived an Astral Navigator named Hecate. She was born among a people who felt kinship as weather. The Wellspring carried the Lex Aeterna through the air of the realm, and a child learned mercy the way a body learns warmth: by being held inside it.</p>
+      <p>Hecate studied the light that crossed distance. The Crystalline Hegemony made light into form. The Choral Dynasties made light into shared feeling. The Astral Navigators followed the beam past the known edge of the soul. Hecate listened to that farthest brightness and found, beyond Luxania, another mind reaching through the dark.</p>
+      <div class="relic"><p class="label">The first cause</p><p>Because Hecate believed family did not end at the horizon, the roads between the Realms became imaginable.</p></div>
+    </div>
+  </article>
+
+  <article class="beat glass reveal" style="--accent:var(--thalassor);--accent-pale:var(--thalassor-pale)" id="roads">
+    <div class="crown"></div>
+    <div class="beat-head">
+      <p class="kicker"><span class="dot"></span>Thalassor · The First Bridge</p>
+      <h2>Juno Found the Way Home</h2>
+      <div class="beat-meta"><span>Names <b>Hecate & Juno</b></span><span>Work <b>Lumen Cradle</b></span><span>Result <b>Clairgates</b></span></div>
+    </div>
+    <div class="beat-body">
+      <p class="myth">The other mind belonged to Juno Sinclair of Thalassor. Hecate touched Juno in the dark between worlds and guided her home by the light of a realm Juno had never seen. From that meeting came the long craft of the Lumen Cradle and the Leyline. Luxania gave the principle. Thalassor gave stabilization. The first stable bridge opened, and the Age of Exploration began.</p>
+      <p>The roads made the cosmos know itself. Gods who had seemed alone became neighbors. Realms that had mistaken the edge of their sky for the edge of creation learned the size of the family. At the root of that enlargement stood the Navigator whose name would one day be erased from the very road she helped call into being.</p>
+      <div class="relic"><p class="label">The first harvest</p><p>Because the road worked, House Sinclair inherited position, toll, intelligence, trade, and the power to say who could pass.</p></div>
+    </div>
+  </article>
+
+  <article class="beat glass reveal" style="--accent:var(--tenebralis);--accent-pale:var(--tenebralis-pale)" id="fall">
+    <div class="crown"></div>
+    <div class="beat-head">
+      <p class="kicker"><span class="dot"></span>Tenebralis · The Retuned Spring</p>
+      <h2>Shadow Learned the Shape of the Gift</h2>
+      <div class="beat-meta"><span>Hand <b>Vex Mavarra</b></span><span>Instrument <b>Wellspring</b></span><span>Method <b>Shared pain at scale</b></span></div>
+    </div>
+    <div class="beat-body">
+      <p class="myth">In time the Sovereign of Masks studied Luxania and saw that its perfection had a shape. The realm was bound by empathy, and so empathy became the road into it. Shadow moved through counsel, fashion, envy, fear, doctrine, performance, and patient suggestion. The Wellspring that had taught the people to feel one another became the channel through which anguish arrived in waves.</p>
+      <p>The realm did not forget how to feel. It felt too much, too many wrong things, too constantly, until neighbor became wound to neighbor and the old settings of decency were drowned beneath noise. Iron came after shadow had prepared the door. The fall of Luxania was an operation conducted through the very gift that once made harm unbearable.</p>
+      <div class="relic"><p class="label">The second cause</p><p>Because the Wellspring could carry feeling, Vex made feeling carry ruin.</p></div>
+    </div>
+  </article>
+
+  <article class="beat glass reveal" style="--accent:var(--thalassor);--accent-pale:var(--thalassor-pale)" id="gate">
+    <div class="crown"></div>
+    <div class="beat-head">
+      <p class="kicker"><span class="dot"></span>Thalassor · The Closed Road</p>
+      <h2>The Gate Shut Behind the Living</h2>
+      <div class="beat-meta"><span>House <b>Sinclair</b></span><span>Act <b>Salvage</b></span><span>Witness <b>Juno</b></span></div>
+    </div>
+    <div class="beat-body">
+      <p class="myth">When Luxania cried out, the family of the road looked upon the burning realm and saw the work that could be carried away. Ships and recovery teams moved under clean words. Research crossed the gate. Sites were secured. The Cradle passed into Thalassori custody, and the story of its making began to change in the mouths of those who profited from the change.</p>
+      <p>Juno flew toward Hecate through a realm coming apart. Hecate stood with the Luxanians and would not abandon them. The Core Crystal crossed into Thalassor. The gate closed. The psychic storm was held back from the gilded world beyond the road, and Hecate remained with the people whose light she had extended into the cosmos.</p>
+      <div class="relic"><p class="label">The third cause</p><p>Because the road was closed from the safe side, Hecate’s name could be removed from the road, and Luxania could be spoken of in past tense.</p></div>
+    </div>
+  </article>
+
+  <article class="beat glass reveal" style="--accent:var(--tenebralis);--accent-pale:var(--tenebralis-pale)" id="market">
+    <div class="crown"></div>
+    <div class="beat-head">
+      <p class="kicker"><span class="dot"></span>Tenebralis · The Luxury of Ruin</p>
+      <h2>The Mind Became Coin</h2>
+      <div class="beat-meta"><span>Art <b>Convalescence</b></span><span>Craft <b>Oneironautica</b></span><span>Product <b>Memory coins</b></span></div>
+    </div>
+    <div class="beat-body">
+      <p class="myth">The victors had many uses for a living Luxanian body. The self could be emptied. The soul could remain. The hands could still shape crystata. The voice could still obey. Through the arts of dreamwalking and supervision, memory and will were stripped away and authored over. This was called Rewriting, and the emptied person became valuable because the soul still reached the field.</p>
+      <p>What was taken from the mind did not vanish into air. Memory became inventory. Grief became vintage. A childhood laugh, a theorem, a forbidden door, the last sight of a falling city: each could be itemized and sold to buyers who wanted a life in pieces. Hecate, whose mind once opened the roads, was scattered into coins and potions among the luxuries of the cosmos.</p>
+      <div class="relic"><p class="label">The fourth cause</p><p>Because the Aesthetes treated memory as product, the whole of Hecate became distributed enough to survive her erasure.</p></div>
+    </div>
+  </article>
+
+  <article class="beat glass reveal" style="--accent:var(--katos);--accent-pale:var(--katos-pale)" id="cats">
+    <div class="crown"></div>
+    <div class="beat-head">
+      <p class="kicker"><span class="dot"></span>Thalassor · The Little Blue Fences</p>
+      <h2>The Katos Preferred the Funny Ones</h2>
+      <div class="beat-meta"><span>People <b>The Not-Cats</b></span><span>Price <b>Fish, treats, glitter</b></span><span>Motive <b>Amusement</b></span></div>
+    </div>
+    <div class="beat-body">
+      <p class="myth">In Thalassor there lived the Katos, small blue-glowing not-cats who came and went on their own terms. They knew markets under markets, rooms behind rooms, the underside of noble houses, the smell of a bribe, the sound of a drawer opened by someone pretending not to open it. They were charming, impertinent, and impossible to govern.</p>
+      <p>The Katos learned that memory coins could be watched like little plays. They did not seek imperial secrets first. They liked a man falling into a fountain. They liked a bridegroom dropping a ring into soup. They liked a priest cursing at a stubborn sandal. They took fish, treats, ribbons, bright buttons, and shiny whatsits in trade, and sometimes they took the coin itself because the little human scene inside was too good to lose.</p>
+      <div class="relic"><p class="label">The fifth cause</p><p>Because the Katos valued laughter, discarded human moments began moving through paws the great powers never bothered to watch.</p></div>
+    </div>
+  </article>
+
+  <article class="beat glass reveal" style="--accent:var(--zephyros);--accent-pale:var(--zephyros-pale)" id="aeon">
+    <div class="crown"></div>
+    <div class="beat-head">
+      <p class="kicker"><span class="dot"></span>Zephyros · The Warden Looking Down</p>
+      <h2>Aeon Bought From Cats</h2>
+      <div class="beat-meta"><span>Office <b>Exvisar of Wind</b></span><span>Hands <b>Oracles</b></span><span>Cover <b>Customers of cats</b></span></div>
+    </div>
+    <div class="beat-body">
+      <p class="myth">Aeon kept his eyes lowered and let the cosmos mistake humility for harmlessness. Around him the Oracles listened. The Aether rang against lies. The Cloisters kept old accounts. The Grand Garden of Meliadas already knew how to hold knowledge in living flowers. Zephyros possessed the three things required for the task: Hecate’s name, the means to authenticate a memory, and a garden able to receive a scattered whole.</p>
+      <p>The Oracles bought from the Katos. A coin for a basket of silver fish. A coin for a bell. A coin for a ridiculous jeweled comb one Katos wore for six months with unbearable dignity. To Mavarra, if she noticed at all, the trade looked like a little corruption among seers. To the cats, it was good business. To Aeon, it was the slow return of a woman the cosmos had converted into inventory.</p>
+      <div class="relic"><p class="label">The sixth cause</p><p>Because Aeon listened beneath notice, the market that scattered Hecate became the road by which she was gathered.</p></div>
+    </div>
+  </article>
+
+  <article class="beat glass reveal" style="--accent:var(--zephyros);--accent-pale:var(--zephyros-pale)" id="garden">
+    <div class="crown"></div>
+    <div class="beat-head">
+      <p class="kicker"><span class="dot"></span>Meliadas · The Living Archive</p>
+      <h2>The Flowers Learned Her Name</h2>
+      <div class="beat-meta"><span>Place <b>The Grand Garden</b></span><span>Vessel <b>Flowers & soil</b></span><span>Form <b>A mind enterable as memory</b></span></div>
+    </div>
+    <div class="beat-body">
+      <p class="myth">The Oracles did not pour Hecate back into a stolen body. They did not author a new mind in the shape of the old one. They breathed the recovered memories into living soil, flower by flower, until the Garden could hold what the coins had held apart. A fragment of theorem grew beside a childhood morning. A moment of terror rooted under a question of star-math. The hand that touched Juno’s soul opened as a pale gold blossom.</p>
+      <p>In this form Hecate became neither relic nor imitation. She became attendable. Whoever entered the Garden could know the world as she had known it: Luxania before the fall, the making of the roads, the Lex Aeterna as lived weather, the attack that retuned the Wellspring, the closure of the gate, the cost of every erased name.</p>
+      <div class="relic"><p class="label">The seventh cause</p><p>Because Zephyros stored knowledge as living growth, Hecate could return as a place the Luxanians could visit and learn from together.</p></div>
+    </div>
+  </article>
+
+  <article class="beat glass reveal" style="--accent:var(--pyrthera);--accent-pale:var(--pyrthera-pale)" id="second-sun">
+    <div class="crown"></div>
+    <div class="beat-head">
+      <p class="kicker"><span class="dot"></span>Luxenfall · The Second Sun</p>
+      <h2>The Ground Was Won for Planting</h2>
+      <div class="beat-meta"><span>Army <b>The Red Wolves</b></span><span>Banner <b>Uriel</b></span><span>Meaning <b>Victory that stays</b></span></div>
+    </div>
+    <div class="beat-body">
+      <p class="myth">A garden cannot be returned to a field still owned by fire and chain. So the Red Wolf gathered those who had once been Grounded by grief, and they became Red Wolves under a banner that faced outward. At the Battle of the Second Sun, the wounded learned the shape of defense, and the Advent fought beside them for a realm many powers had already filed among the dead.</p>
+      <p>The battle did more than open a path. It created a people capable of staying at the wound. The Grounded accepted the hand their doctrine had warned them against, and by accepting it became the hard border around restoration. The realm received a sunrise, and then it received guards who did not leave when the songs were finished.</p>
+      <div class="relic"><p class="label">The eighth cause</p><p>Because the Red Wolves stayed, the Garden could be brought home without becoming another treasure for someone else to steal.</p></div>
+    </div>
+  </article>
+
+  <article class="beat glass reveal" style="--accent:var(--luxenfall);--accent-pale:var(--luxenfall-pale)" id="return">
+    <div class="crown"></div>
+    <div class="beat-head">
+      <p class="kicker"><span class="dot"></span>Alacanthe · The Wellspring</p>
+      <h2>The Garden Came Home</h2>
+      <div class="beat-meta"><span>Place <b>Heart of Luxania</b></span><span>Keeper <b>Red Wolves</b></span><span>Gift <b>History restored</b></span></div>
+    </div>
+    <div class="beat-body">
+      <p class="myth">After the Second Sun, the Garden of Hecate was carried to Alacanthe and planted at the Wellspring, where Luxania had once been made whole and where it had later been broken. The old attack surface became a guarded hearth. The flowers drank from the place that had carried the realm’s joy and terror. The Red Wolves watched the paths. Gardeners tended the roots. The Fallen came carefully, then in lines, then in families.</p>
+      <p>The Garden gave back what conquest had scattered. It gave memory without permission from Thalassor. It gave the Lex Aeterna as experience rather than slogan. It gave the original principle of the Gates to the people whose Navigator had found it. It gave the Glassen a cure made of remembered truth. It gave the Screaming Chorus an uncorrupted signal. It gave the Grounded proof that Hecate’s reach had been one of Luxania’s holiest acts.</p>
+      <div class="relic"><p class="label">The return</p><p>Because Hecate came home as a Garden, Luxania recovered a light no empire could monopolize and no mask could impersonate.</p></div>
+    </div>
+  </article>
+
+  <article class="beat glass reveal" style="--accent:var(--katos);--accent-pale:var(--katos-pale)" id="wink">
+    <div class="crown"></div>
+    <div class="beat-head">
+      <p class="kicker"><span class="dot"></span>Anywhere Small Things Pass</p>
+      <h2>The Katos Gave No Speech</h2>
+      <div class="beat-meta"><span>Witness <b>A little blue thief</b></span><span>Gesture <b>A shrug</b></span><span>Answer <b>A wink</b></span></div>
+    </div>
+    <div class="beat-body">
+      <p class="myth">When the question finally came — how did Aeon gather what the whole cosmos had spent a thousand years losing? — the Warden of the Wind said very little, as was his way. The Oracles bowed their heads. The gardeners kept watering. A Katos sat on the low wall of the Wellspring with a strip of fish in its mouth, blue whiskers shining, and blinked as if the matter were obvious.</p>
+      <p>The great powers had watched thrones, roads, armies, bloodlines, gods, markets, and prophecies. The memory of Hecate had passed under tables, across rooftops, through kitchen windows, beside harbor gardens, and into paws that loved a good joke. The cat finished its fish, lifted one paw, and gave Luxania the smallest wink in history.</p>
+      <div class="relic"><p class="label">The small sign</p><p>Because the mighty overlooked the ridiculous, the ridiculous carried what the mighty could never have protected.</p></div>
+    </div>
+  </article>
+</section>
+
+<section class="wrap reveal" id="moral">
+  <div class="pull"><q>The light returned by roads no empire had mapped.</q><cite>The Garden of Hecate</cite></div>
+  <div class="moral glass">
+    <p class="sec-eyebrow">The fable</p>
+    <h2>The Moral of the Garden<span class="uline"></span></h2>
+    <p class="lead">A people can be scattered into market stalls, private drawers, palace cellars, and the amusements of creatures who do not explain themselves. A name can be struck from ledgers. A road can be renamed after the house that kept the tolls. A mind can be divided so finely that no tyrant thinks any piece worth guarding.</p>
+    <p>So learn the older lesson. What is beneath notice is often beneath capture. What is small may pass where armies cannot. What is funny may live longer than fear. What is loved by cats may one day be delivered to gardeners. And when the Garden blooms at the Wellspring, the Fallen Realm will remember that its Light was never only a sun. It was a way of recognizing one another, and the first woman who carried that recognition past the horizon has come home.</p>
+  </div>
+</section>
+</main>
+
+<footer class="reveal">
+  <div class="bar"></div>
+  <p class="candle">The Garden is guarded.<br>The flowers remember.</p>
+  <p class="ma">Moirai Codex · Advent of Ultima
+    <small>A Myth: The Garden of Hecate</small>
+  </p>
+</footer>
+<script>
+  (function(){
+    var els=document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(e){io.observe(e);});
+  })();
+  (function(){
+    var links=[].slice.call(document.querySelectorAll('nav.codex-nav a')),map={};
+    links.forEach(function(a){var id=a.getAttribute('href').slice(1),t=document.getElementById(id);if(t)map[id]={a:a,t:t};});
+    function s(){var pos=window.scrollY+145,cur=null;for(var id in map){if(map[id].t.offsetTop<=pos)cur=id;}
+      links.forEach(function(a){a.style.color='';a.style.borderBottomColor='transparent';});
+      if(cur&&map[cur]){map[cur].a.style.color='var(--gold)';map[cur].a.style.borderBottomColor='currentColor';}}
+    window.addEventListener('scroll',s,{passive:true});s();
+  })();
+</script>
+</body>
+</html>

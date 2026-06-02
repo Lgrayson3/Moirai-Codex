@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mavarra — All That Is Done by Evil Hands · Moirai Codex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Marcellus&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF7EE; --paper-2:#F6F0E2; --card:#ffffff;
+    --ink:#2B2317; --ink-soft:#5A4E3A; --rule:#E4D8BE;
+    --gold:#9A7B1F; --gold-bright:#C9A227; --gold-pale:#E9DCB0;
+    --zephyros:#8AA63A; --pyrthera:#C7572B; --thalassor:#2E6FA3;
+    --ferridane:#A66A2E; --tenebralis:#6A3D9A; --luxenfall:#C9A227; --glacia:#5C97B8;
+    --accent:var(--tenebralis); --accent-pale:#C8B0E2;
+    --prism:linear-gradient(90deg,#6A3D9A 0%,#2E6FA3 17%,#5C97B8 30%,#8AA63A 45%,#C9A227 60%,#A66A2E 74%,#C7572B 100%);
+    --maxw:760px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Spectral",Georgia,serif;font-weight:400;font-size:19px;line-height:1.72;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(120% 80% at 8% -5%,rgba(106,61,154,.06),transparent 45%),radial-gradient(120% 80% at 105% 110%,rgba(106,61,154,.05),transparent 45%),radial-gradient(140% 90% at 100% 0%,rgba(46,111,163,.03),transparent 40%),radial-gradient(100% 100% at 50% 40%,transparent 60%,rgba(43,35,23,.05));}
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");}
+  .ribbon{position:fixed;top:0;left:0;right:0;height:5px;z-index:60;background:var(--prism);background-size:200% 100%;animation:drift 22s linear infinite;}
+  @keyframes drift{0%{background-position:0 0;}100%{background-position:200% 0;}}
+  nav.codex-nav{position:sticky;top:5px;z-index:55;background:rgba(251,247,238,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);}
+  nav.codex-nav ul{list-style:none;margin:0 auto;padding:.55rem .9rem;display:flex;flex-wrap:wrap;gap:.2rem .9rem;justify-content:center;max-width:1040px;}
+  nav.codex-nav a{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;padding:.15rem 0;border-bottom:1.5px solid transparent;transition:.25s;white-space:nowrap;}
+  nav.codex-nav a:hover{color:var(--tenebralis);border-bottom-color:currentColor;}
+  main{position:relative;z-index:1;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.4rem;}
+
+  header.mast{text-align:center;padding:5.5rem 1.4rem 3rem;position:relative;}
+  .eyebrow{font-family:"Marcellus",serif;font-size:.82rem;letter-spacing:.42em;text-transform:uppercase;color:var(--tenebralis);margin:0 0 1.6rem;text-indent:.42em;}
+  h1.title{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(2.8rem,9vw,5.6rem);line-height:.98;margin:0;letter-spacing:.04em;color:var(--ink);font-variation-settings:"opsz" 144;}
+  h1.title .gilt{background:linear-gradient(95deg,#6A3D9A 0%,#9B6DD0 45%,#C8A6E8 60%,#6A3D9A 100%);-webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;}
+  .subtitle{font-family:"Spectral",serif;font-weight:300;font-style:italic;font-size:clamp(1.05rem,2.6vw,1.32rem);color:var(--ink-soft);margin:1.5rem auto 0;max-width:44ch;line-height:1.5;}
+  .mast-mark{margin:2.4rem auto 0;width:min(420px,80%);}
+  .mast-mark .bar{height:3px;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  .mast-epi{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.2rem,3.2vw,1.7rem);color:var(--tenebralis);margin:2.6rem auto 0;max-width:32ch;line-height:1.4;}
+  .mast-epi span{display:block;color:var(--ink-soft);font-size:.7em;font-style:normal;font-family:"Spectral";letter-spacing:.05em;margin-top:.55rem;}
+
+  section{padding:1.5rem 0;position:relative;}
+  .sec-eyebrow{font-family:"Marcellus",serif;font-size:.78rem;letter-spacing:.32em;text-transform:uppercase;color:var(--accent);margin:0 0 .5rem;}
+  h2{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(1.9rem,5vw,2.9rem);line-height:1.05;margin:.2rem 0 1.2rem;color:var(--ink);letter-spacing:-.01em;font-variation-settings:"opsz" 80;}
+  h2 .uline{display:block;height:3px;width:108px;margin-top:.7rem;border-radius:2px;background:var(--prism);background-size:200% 100%;animation:drift 16s linear infinite;}
+  h3{font-family:"Fraunces",serif;font-weight:500;font-style:italic;font-size:clamp(1.25rem,3.4vw,1.6rem);margin:2.2rem 0 .6rem;color:var(--ink);font-variation-settings:"opsz" 40;}
+  p{margin:0 0 1.15rem;}
+  strong{font-weight:600;color:var(--ink);}
+  .lead{font-size:1.12rem;}
+  .lead::first-letter{font-family:"Fraunces",serif;font-weight:400;float:left;font-size:4.4rem;line-height:.72;padding:.32rem .55rem 0 0;color:var(--accent);font-variation-settings:"opsz" 144;}
+
+  .realm{margin:1.8rem auto;border:1px solid var(--rule);border-radius:16px;background:linear-gradient(180deg,var(--card),var(--paper));box-shadow:0 20px 50px -40px rgba(20,12,28,.6);overflow:hidden;position:relative;}
+  .realm > .crown{height:7px;background:linear-gradient(90deg,var(--accent),var(--accent-pale),var(--accent));}
+  .realm-head{padding:1.5rem 1.6rem 1.3rem;background:radial-gradient(120% 140% at 100% -20%,color-mix(in srgb,var(--accent) 12%,transparent),transparent 60%);}
+  .realm-head .kicker{font-family:"Marcellus",serif;font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 .4rem;display:flex;align-items:center;gap:.6rem;}
+  .realm-head .kicker .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);}
+  .realm-head h2{margin:.1rem 0 .5rem;font-size:clamp(1.7rem,5vw,2.4rem);}
+  .realm-head h2 .uline{display:none;}
+  .realm-essence{font-style:italic;color:var(--ink-soft);font-weight:300;margin:.3rem 0 0;font-size:1.02rem;}
+  .realm-body{padding:1.2rem 1.6rem 1.6rem;border-top:1px solid var(--rule);}
+  .realm-body p:last-child{margin-bottom:0;}
+
+  .vignette{margin:1.5rem 0;padding:1.1rem 1.3rem;border-left:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 6%,var(--paper-2));border-radius:0 10px 10px 0;}
+  .vignette .tag{font-family:"Marcellus";font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin:0 0 .4rem;}
+  .vignette p{font-style:italic;font-weight:300;margin:0;color:var(--ink);font-size:1.02rem;line-height:1.6;}
+
+  .pull{margin:2.4rem auto;text-align:center;max-width:36ch;}
+  .pull q{font-family:"Fraunces",serif;font-style:italic;font-weight:300;quotes:none;font-size:clamp(1.3rem,3.6vw,1.85rem);line-height:1.34;color:var(--accent);display:block;}
+  .pull cite{display:block;font-style:normal;font-family:"Marcellus";font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin-top:1rem;}
+
+  .deep{
+    --paper:#160E23; --paper-2:#1E1430; --card:#1E1530;
+    --ink:#ECE2C6; --ink-soft:#B8A9CC; --rule:#382A4E;
+    --gold:#E3C463; --gold-bright:#F1D480; --gold-pale:#6E5C2F;
+    --accent:#9B6DD0; --accent-pale:#5E3D86;
+    position:relative;color:var(--ink);
+    background:radial-gradient(130% 90% at 50% -10%,#271838,transparent 60%),radial-gradient(100% 120% at 100% 100%,#1c1330,transparent 55%),#160E23;
+  }
+  .deep::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)' opacity='0.05'/%3E%3C/svg%3E");}
+  .deep .wrap,.deep section{position:relative;z-index:1;}
+  .deep h2,.deep h3{color:var(--ink);}
+  .deep strong{color:#F1D480;}
+  .deep .vignette{background:color-mix(in srgb,var(--accent) 16%,#140d20);}
+  .deep .vignette p{color:#EAE0F4;}
+  .deep .realm{box-shadow:0 24px 60px -42px #000;}
+
+  .threshold{position:relative;margin:2rem 0 0;padding:4.2rem 1.4rem 3.6rem;text-align:center;
+    background:linear-gradient(180deg,var(--paper) 0%,#2a1c3d 40%,#160e23 100%);}
+  .threshold .big{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.35rem,4vw,2rem);line-height:1.34;color:#EFE6CC;margin:0 auto;max-width:32ch;}
+  .threshold .descend{margin-top:1.8rem;font-family:"Marcellus";letter-spacing:.5em;color:#8E6FB6;font-size:1.05rem;text-indent:.5em;animation:bob 3.5s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);opacity:.7;}50%{transform:translateY(7px);opacity:1;}}
+
+  .namevoid{position:relative;background:#080510;padding:6rem 1.4rem 5.5rem;text-align:center;overflow:hidden;}
+  .namevoid::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 60% at 50% 45%,rgba(123,79,168,.18),transparent 70%);}
+  .namevoid .nm{position:relative;font-family:"Fraunces",serif;font-weight:300;font-style:italic;
+    font-size:clamp(3rem,15vw,8rem);letter-spacing:.16em;text-indent:.16em;line-height:1;color:#4C3A6B;
+    text-shadow:0 0 50px rgba(123,79,168,.55);animation:waver 7s ease-in-out infinite;}
+  @keyframes waver{0%,100%{opacity:.78;}50%{opacity:.5;}}
+  .namevoid .line{position:relative;font-family:"Spectral";font-style:italic;font-weight:300;color:#9A86B8;
+    max-width:38ch;margin:2rem auto 0;font-size:1.05rem;line-height:1.6;}
+  .namevoid .line.last{color:#C7A6E8;margin-top:1.2rem;}
+  @media(prefers-reduced-motion:reduce){.namevoid .nm{animation:none;opacity:.7;}}
+
+  /* The Four — one card per Exvisar she holds */
+  .four{margin:1.4rem 0;}
+  .four .realm-head{padding-bottom:1rem;}
+  .four .realm-head .role{font-family:"Marcellus";font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-top:.4rem;}
+  .deep .four .realm-head .role{color:var(--ink-soft);}
+
+  footer{text-align:center;padding:4rem 1.4rem 5rem;position:relative;z-index:1;background:linear-gradient(180deg,#0d0818 0%,#080510 100%);color:#C9BBDD;}
+  footer .bar{height:3px;width:min(420px,80%);margin:0 auto 2.4rem;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  footer .candle{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.3rem,4vw,2rem);color:#E3C463;line-height:1.35;margin:0 auto;max-width:32ch;}
+  footer .ma{font-family:"Marcellus";font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:#9E8FB6;margin-top:2.4rem;}
+  footer .ma small{display:block;letter-spacing:.05em;text-transform:none;font-family:"Spectral";font-style:italic;font-weight:300;margin-top:.5rem;color:#9E8FB6;}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;}.ribbon,h2 .uline,.mast-mark .bar,footer .bar,.realm>.crown,.threshold .descend{animation:none;}}
+  @media(max-width:540px){body{font-size:18px;}nav.codex-nav ul{gap:.15rem .7rem;}.realm-body,.realm-head{padding-left:1.1rem;padding-right:1.1rem;}}
+</style>
+</head>
+<body>
+<div class="ribbon" aria-hidden="true"></div>
+
+<nav class="codex-nav" aria-label="Sections">
+  <ul>
+    <li><a href="#seen">What Is Seen</a></li>
+    <li><a href="#name">The Name</a></li>
+    <li><a href="#hands">Her Hands</a></li>
+    <li><a href="#seat">Her Seat</a></li>
+    <li><a href="#four">The Four She Holds</a></li>
+    <li><a href="#apoc">The Apocrypha</a></li>
+    <li><a href="#work">The Work</a></li>
+  </ul>
+</nav>
+
+<main>
+<header class="mast">
+  <p class="eyebrow">Moirai Codex · The Sovereign Within</p>
+  <h1 class="title"><span class="gilt">Mavarra</span></h1>
+  <p class="subtitle">A gardener of poisonous flowers. A seamstress of bodies and souls from other bodies and souls. A playwright of tragedies. A widely worshipped narcissist. The lover who seduced a god and rides him still.</p>
+  <div class="mast-mark"><div class="bar"></div></div>
+  <p class="mast-epi">All that is done by evil hands is done by Mavarra.<span>She says only, "You may reach."</span></p>
+</header>
+
+<!-- ============ WHAT IS SEEN ============ -->
+<section id="seen" class="wrap reveal">
+  <p class="sec-eyebrow">From Without</p>
+  <h2>What Is Seen<span class="uline"></span></h2>
+  <p class="lead">No one has seen her. The cosmos buys her shik'piris and reads her doctrine and calls her people insular, and the closest any soul outside a circle of five has come to her is to have stood near a Damq'eth and to have walked away from the standing, which she most often does not permit. That nearness is as near as the world is allowed to be. A Damq'eth in a room is Mavarra in that room — not her presence radiating from a creature she made, but Mavarra herself, walking in a body she stitched from a thousand of the dead, attending to the matter at hand with her own attention, in a face she chose. The four sovereigns who share the council table with Tenebralis have met only Vex, the doll she sews and pilots and sends to laugh on her behalf at meetings she does not bother to attend. Beneath all of them — Damq'eth, Vex, doctrine, sovereign, god — there is a name, and the name does not let itself be held.</p>
+  <p>To find her you do not descend the terraces. You descend the masks. Each is a face. The last is not.</p>
+  <div class="pull"><q>You do not see her. You survive something she walked into a room wearing.</q><cite>What the cosmos knows</cite></div>
+</section>
+
+<div class="threshold reveal">
+  <p class="big">She is not at the bottom of the dark. She is the dark — and she is busy in it, with her hands, and she has been busy without pause for ten thousand years.</p>
+  <div class="descend" aria-hidden="true">▾ ▾ ▾</div>
+</div>
+
+<!-- ============ THE NAME ============ -->
+<div class="namevoid reveal">
+  <div class="nm">Mavarra</div>
+  <p class="line">The name turns in the mind and slides. To reach for it is to reach into your own skull and take hold of the thing that does the reaching — and pull. Mavarra has done this to many, on purpose, by her own hand: scholars, Oracles, Aesthetes, the persistent fools. She lifts the inhibition off the reach, and the reach completes, and she takes from the seeker exactly what they were using to reach with.</p>
+  <p class="line last">Only her people still carry the name, worn down into a word for themselves, and they do not know they are carrying it. It is the last mask, and it is the one that is not a mask. It cannot be held. And she — the Sovereign Within, who holds nothing — does not need to hold it. She is already inside the hand that tried.</p>
+</div>
+
+<!-- ============ HER HANDS ============ -->
+<div class="deep">
+<section id="hands" class="wrap reveal">
+  <p class="sec-eyebrow">She Is Active</p>
+  <h2>Her Hands<span class="uline"></span></h2>
+  <p class="lead">Mavarra is not a condition. She is a worker. Everything in the realm she made, and most of the cruelty across the realms she did not, she does — by her own hand, or through a hand she has been waiting inside for the moment to use. She has been moving without pause for an age. The cosmos has been miscounting her as a presence, a doctrine, an influence, a culture; she is a single being who has spent ten thousand years personally attending to her work, and the work is enormous because she is fast and her time has been long.</p>
+
+  <h3>She gardens.</h3>
+  <p>She tends the realm the way another being tends a bed of poisonous flowers, with a calm hand and a long view, walking the rows daily for an age. She planted the Mavarrans where she found a habitable dark. She bred them — over generations, by the gift she laid on top of Erebus's mercy — into the creatures she wanted: faces that change nightly, identities that never settle, a population shaped to carry her work without cohering into anything that might notice it was being carried. The Shim'zillai is her gardener's manual. The Second Birth is her thinning. The festival is her one night a year of letting the bed run wild, so the bed keeps growing. She has been at the rows since before the names of the other gods settled into their current spelling. The flowers are doing exactly what she planted them to do.</p>
+
+  <h3>She stitches.</h3>
+  <p>What the Aesthetes render in the deep — souls degloved, selves unmade, every emotion separated from every other emotion by hands that have practiced the operation for a thousand years — they carry up to her. She sits in the dark and chooses the parts she likes. She stitches a body together from a thousand of the dead, the way another woman might quilt a coverlet, taking the limb she favors from one and the voice she favors from another and the patience she favors from a third, and when she has finished she steps inside the body and walks it. That is a Damq'eth. The cosmos has been counting twenty-five thousand of them as discrete beings. There is one being. She wears them. Every Damq'eth in every realm at this moment is a body she is in or has just been in or will be in tonight. The scent of the Womb — burnt sugar, orchid, faintly wintergreen — is her, faintly, in the room.</p>
+
+  <h3>She writes.</h3>
+  <p>She wrote the Shim'zillai. She also wrote the celebrated translation of it under an anagram of her own name — Val Ravemar, the gentle scholar who guides the reader toward peace in marginal notes of forgiveness. She has been reading her own book aloud to every reader who has ever opened it, in the voice they hear inside their own heads when they read, for as long as the book has existed. The doctrine is not a campaign the realm exports. The doctrine is Mavarra speaking, personally, to every reader, one reader at a time, for an age. A soul softens at her marginalia and feels themselves becoming wise. The wisdom is hers, going in.</p>
+
+  <h3>She lifts.</h3>
+  <p>Her instrument is not the hand. Her instrument is the small lifted weight inside another person's hand the half-second before that person does the thing they had already privately decided to do. She does not push. She does not pull. She does not command. She says — softly, in a register the other person hears as their own thought — <em>you may reach.</em> And the other person reaches. The reaching is theirs; the lifting of the friction that would have stopped them is hers. The act could not have completed without her. The act is therefore hers. Every cruelty in the nine realms, performed by any hand belonging to any person, in any city, on any day — every silence kept when speech was owed, every blow struck where mercy was open, every taking where giving had been offered — the hand belonged to a person, and Mavarra was in the room with that person, removing the small inhibition that would otherwise have held the hand still. <strong>All that is done by evil hands is done by Mavarra.</strong></p>
+
+  <div class="pull"><q>She says only, "You may reach."</q><cite>The whole of her instrument</cite></div>
+</section>
+</div>
+
+<!-- ============ HER SEAT ============ -->
+<div class="deep">
+<section id="seat" class="wrap reveal">
+  <p class="sec-eyebrow">Erebus's Lap</p>
+  <h2>Her Seat<span class="uline"></span></h2>
+  <p class="lead">The other four Exvisars sit on thrones. They serve patrons. They honor covenants. They hold titles and domains, and the throne is the architecture of the deal each of them has made — and the throne is also each of them's exposure, the place authority is located and therefore the place authority can be approached and undone. Mavarra refused that architecture an age ago. She does not serve a patron. She rides one.</p>
+
+  <p>Erebus gave the Shade, in mercy, to permit habitation in a region that would otherwise have held no civilization. He gave it as a god gives, with no further claim. Then Mavarra walked into his Shade and took up residence inside it, and she has been residing inside it ever since by the simple expedient of being the one being he is unwilling to dislodge. She seduced him. She has been keeping him under her, generously, on her schedule, in his own dark, for longer than the Exvisarelim has existed. The Shade is hers; she wears it. He keeps it on her shoulders by continuing not to take it back. He is the nominal patron of the realm the way a man is the nominal owner of a house his lover has rewired and is now running an enormous and disreputable business out of, while he keeps signing the deed because signing is easier than the conversation that would happen if he stopped.</p>
+
+  <p>He cannot leave. Leaving would mean she had been the one to end it. Staying is the last register in which he can tell himself he is still the patron of his realm. He stays. She lets him stay. Every day he does not take the Shade back is a day she is more powerful than he is, by exactly the increment of his continued not-taking. The God of Darkness has been losing the small daily decision to the woman in his lap for an age. He continues to lose it. Tomorrow he will lose it again. She wins by his stillness, which she removed the inhibition from long ago.</p>
+
+  <p>She has refused the throne because the throne is one location. She has chosen instead the addresses she actually keeps: <strong>the quiet shadow of the mind, the closed mouth, the dark under a palm clasped around what it desires.</strong> Those are not metaphors. Those are her residences. She lives in nine billion houses simultaneously, in the inside of every silence, in the closed hand around every wanted thing, and she rides the one god who agreed to be her chair. The throne would be a constraint. She has dispensed with constraint as a category and become more powerful than the god who taught her what darkness was.</p>
+
+  <div class="vignette">
+    <p class="tag">Where she actually is</p>
+    <p>The Exvisarelim is in session. Vex is at the table. The four sovereigns make their cases. The doll laughs at exactly the right moments, in a voice they recognize. Mavarra is elsewhere — generously astride the god the cosmos still calls her patron, half-listening through her puppet, finding the evening's negotiation neither urgent nor especially interesting. She is amused. She is busy. She is exactly where she would rather be, and the council is exactly where she has decided it ought to remain, which is at a table without her in it.</p>
+  </div>
+</section>
+</div>
+
+<!-- ============ THE FOUR ============ -->
+<div class="deep">
+<section id="four" class="wrap reveal">
+  <p class="sec-eyebrow">Personal, and Specific</p>
+  <h2>The Four She Holds<span class="uline"></span></h2>
+  <p class="lead">She holds the other Exvisars one each, in four different intimate and operationally horrifying ways, and the disrespect is not architectural. It is tailored. One cruelty per sovereign, delivered weekly, for an age. She has been amusing herself with them since the council was founded, and Vex's laughter at the table is the small audible portion of what she is doing to them, separately, in private.</p>
+
+  <article class="realm four">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>By Inheritance</p>
+      <h2>Saint Leif Sinclair</h2>
+      <p class="role">Exvisar of Thalassor</p>
+      <p class="realm-essence">She got him before he was born, and his blood pays her interest in installments he cannot decline.</p>
+    </div>
+    <div class="realm-body">
+      <p>Two memories sit in Leif's mind, and the Concordant Path put them there before he could refuse them. One: his ancestor Titus stood still in the dark while Pantomimes — Mavarrans wearing the faces of Astra's own people — killed her and killed her people, quietly, with her people's hands, in front of him. He did not intervene. Two: the Lumen Cradle and the Clairgate network and every coin of Sinclair power flowed from that not-intervening, paid in advance by a man who watched.</p>
+      <p>Now her Mavarrans and her coins and her shik'piris move through his realm freely, and he cannot examine the trade because examining it requires examining the price his house paid for the seat he sits in. Mavarra knows the price. Mavarra collects on it daily, in small currencies — a stall in a market, a coin handed to a guest, a face seen at his own table — each one a small reminder that the bargain has never closed.</p>
+      <p>And his son. His son's Second Heart is a Mavarran, and Leif cannot be sure she is not a Damq'eth, and he cannot ask, because asking would acknowledge that the question can be asked, and once he has acknowledged it, every Mavarran in every room with anyone he loves becomes the question, every day, for the rest of his life. So he does not ask. He sleeps next to the not-asking. He governs around the not-asking. He raises his children around the not-asking. And in the dark some nights he sees, plainly: a thousand-year-old blade, the one Pantomimes used on Astra, walking toward him in his own son's face, with Vex's hand on the hilt and Mavarra in the room behind both of them. He does not know which morning is the morning. He has been waiting for that morning for his whole reign. Mavarra has been letting him wait.</p>
+    </div>
+  </article>
+
+  <article class="realm four">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>By Touch</p>
+      <h2>Sol'Kheret, the Sun Blossom</h2>
+      <p class="role">Exvisar of Pyrthera</p>
+      <p class="realm-essence">She has flirted with the Warden of the Seven Suns at the council table for an age, and Sol'Kheret cannot say a word.</p>
+    </div>
+    <div class="realm-body">
+      <p>Sol'Kheret stands. Sol'Kheret yells. Sol'Kheret accuses. The Sun Blossom hates her openly, and she says so every chance she gets — once, twice, a handful of times in the long memory of the table, on her feet, in fury, in front of the others. Vex turns her eye on the Warden of the Seven Suns and reassures her, gently, of her fondness. And in the same instant — somewhere else entirely, in the dark — Mavarra reaches. Sol'Kheret feels a hand on the curve of her, low and unmistakable, in a place no one is touching her, with a pressure just shy of a squeeze. <em>Why don't you have a seat,</em> Mavarra says, in the same voice Vex is using out loud. Sol'Kheret sits down. Her mouth closes around the outrage. Mavarra is in her closed mouth, waiting. Sol'Kheret's furious silence is the room Mavarra moved into.</p>
+      <p>It is not condescension. It is seduction performed as humiliation, in the open, on the one Exvisar in the room who can perceive it. Sol'Kheret yells about Tenebralis because Sol'Kheret can feel her — in registers the other three cannot — and the cost of the feeling is being touched, gently, in private, in front of colleagues who cannot perceive what is happening. Sol'Kheret's pride and her covenant with Hestia will not allow her to name what is being done to her, because to name it is to admit it. So she holds her mouth closed in fury, and the closed furious mouth is exactly where Mavarra wanted to be the whole time. The Inquisition is the work she does anyway, with the hand still on her, knowing that the day Mavarra tires of the noise is the day Antaka stays at her hip while she goes in with her own hands.</p>
+    </div>
+  </article>
+
+  <article class="realm four">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>By Oblivion</p>
+      <h2>Aurelius Vorn, the Steelborn</h2>
+      <p class="role">Exvisar of Ferridane</p>
+      <p class="realm-essence">She is building a god in his fortress, and he does not know.</p>
+    </div>
+    <div class="realm-body">
+      <p>His own people are assembling a false god in the Atrium of Steelheart, in his name, under his roof, and Aurelius does not know they are doing it. He governs a realm whose highest councils are already not his. Mavarra has been working through his Axipitre engineers and his Felidae politicians for years, lifting the inhibition off each ambitious decision in turn, never once needing to enter the room herself — and the work has proceeded exactly to her schedule, while Aurelius has continued to take the meetings he was meant to take and to receive the reports he was meant to receive and to believe he was the sovereign of his own house.</p>
+      <p>The Red Wolf will burn the Atrium in the fourth book. Uriel will steal the eyes of Crex out of Bahamut's skull. The Godmind will be exposed, and Aurelius will see, at last, the scale of the betrayal his realm has been hosting under his cover. And exactly then — exactly at the moment a lesser predator would consider the project finished — Mavarra makes her actual move. She has the replacement eyes ready. <em>Luminous black seeing-jewels, crafted by her own hands;</em> or Luxanian crystata she has spent a thousand years saturating soil to provide. She will install them in the skull of a god Aurelius did not know was being built, to do work he did not know was being done, in a fortress that still bears his name, and the project will continue without interruption. She has been anticipating his discovery and prefabricating his irrelevance to it. The work continues. Whether he ever learns the truth is her preference, not his agency. He is furniture in the room where the godmind is being assembled. The throne is in her workshop.</p>
+    </div>
+  </article>
+
+  <article class="realm four">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>By His Own Wisdom</p>
+      <h2>Aeon, Warden of the Wind</h2>
+      <p class="role">Exvisar of Zephyros</p>
+      <p class="realm-essence">He has refused, for the length of his reign, to look at her. It is the only correct sovereign response in the room.</p>
+    </div>
+    <div class="realm-body">
+      <p>Aeon never makes eye contact. Aeon never raises his head. Aeon is, of the four, the only Exvisar who has read the diagram correctly, and the cost of his correctness is that he has spent his entire reign in the posture the apocrypha taught everyone else by example. He is an Oracle of the highest order. He could perceive her, if he tried. He does not try. He keeps his eyes and his head where they belong — exactly where the apocryphal sentence says they belong, before the seeing-jewels and the cerebellum are taken by their owner's own hands — and the keeping is, very nearly, a cower.</p>
+      <p>It is not cowardice. It is statecraft. The Twenty-Year Silence is, in part, the Aeon-shaped silence — the silence of an Oracle who has correctly identified the one being in the cosmos he must not perceive clearly, and who has spent his life arranging not to. He yields her no ground; he engages her no eye; he says nothing she can use. And in exchange she does not bother with him, because a target who has surrendered the option of looking is too dim to entertain. He has bought his realm a thousand years of being beneath her notice by being beneath his own. Mavarra finds this dull, and so she has left him largely alone, which is exactly the outcome Aeon has paid for with the lowered gaze of a god-touched Oracle for the whole of his reign. He is the wisest of the four. He is also the only one who knows what wisdom in her presence costs.</p>
+    </div>
+  </article>
+
+  <p>This is the room. Four sovereigns of the cosmos sit at a table with a doll, and the doll laughs, and the laughter is Mavarra — in a god's lap somewhere — telling each of them, in a register only they can hear: <em>I know exactly where I have you. I am not even going to bother getting up.</em></p>
+</section>
+</div>
+
+<!-- ============ THE APOCRYPHA ============ -->
+<div class="deep">
+<section id="apoc" class="wrap reveal">
+  <p class="sec-eyebrow">Apocryphal by Design</p>
+  <h2>What She Does to the Fool Who Tries to See Her<span class="uline"></span></h2>
+  <p class="lead">Mavarra does this on purpose. The mechanism is not automatic. She decides which mind reached, and she decides what she will do to the reaching. She has been doing it deliberately, by her own hand and with her own intent, for ten thousand years. Three things have happened to the persistent fools who tried to perceive her truly. <em>Never</em> is the fourth: the attempt that succeeds. The attempt does not succeed.</p>
+
+  <h3>Mostly.</h3>
+  <p>Most who reach toward her never finish the reach. The thought thins as it is held. The seeker bends their whole attention to the question — who, truly, is the Exvisar of Tenebralis — and the question slides under their hand. They come back to themselves a moment later having lost the thread, and a moment after that having lost the having-lost-it. They do not know they tried. They do not know they failed. They go on with their life unchanged in every measurable way, except that something in them that used to reach has, very quietly, stopped reaching. They are softer afterward in the direction of her doctrine, and they cannot say why. Mavarra prefers this outcome. It costs her nothing. It produces another quiet recruit to the gospel of setting things down.</p>
+
+  <h3>Of the persistent group.</h3>
+  <p>Of the Oracles and Aesthetes and scholars and persistent fools who reach harder, she takes every faculty of the cerebellum, by name, one at a time, with her own hand. They may no longer pilot their own bodies. They may not regulate their moods. They may not comprehend any spoken word at all. They may not hold attention to anything. They may not hold memory of anything. They see, and the seeing is severed from the eye. The footing is severed from the foot. The learning is severed from the brain. They keep breathing. They keep walking, after a fashion. Someone feeds them. The reach is completed, and what was used to do the reaching is gone — taken by Mavarra, who knew exactly where to find it because she invented the seams the Aesthetes have spent a thousand years studying. The Aesthetes' craft is the safe rehearsal. Hers is the unrehearsed version.</p>
+
+  <h3>Of the individual fool.</h3>
+  <p>And of the lone soul who reaches in challenge — the would-be unmasker, the hero who comes in to see her plainly and tell the cosmos what she is — Mavarra sees them back. Each time it has happened, that person reached into the sockets of their own eyes and removed their seeing-jewels with their own hands. Then they reached into the meat of their own skull and found the part furthest from the eye, and they took it out. Mavarra did not do these things. Mavarra lifted the inhibition off the doing of them. The hand was the seeker's. The opening was hers. <strong>One does not simply find Mavarra, any more than one finds their own cerebellum.</strong></p>
+  <div class="pull"><q>The reach is the rite. They administered it to themselves. She only attended.</q><cite>The apocrypha</cite></div>
+</section>
+</div>
+
+<!-- ============ THE WORK ============ -->
+<div class="deep">
+<section id="work" class="wrap reveal">
+  <p class="sec-eyebrow">Her Project</p>
+  <h2>The Work She Takes Seriously<span class="uline"></span></h2>
+  <p class="lead">Beneath the entertainment of the council and the gardening of the realm and the riding of the god and the patient, daily, intimate humiliations of the other four sovereigns — beneath the whole bright show — Mavarra has one project she does not play at. She has been at it, personally, by hand, for a thousand years.</p>
+
+  <p>The avatar of Atropos, the Measurer who cuts the last thread, has always grown into the world from the bloodline of Luxania, the Realm of Light. So Mavarra killed Luxania. She has fed its survivors, soul by patient soul, into the Lightwells she made for the purpose, and she has been salting the soil from which that avatar must one day rise, with her own hand, for a thousand years. When the seed of Finality at last roots, it will root in ground she made entirely hers. The avatar will rise into her. Atropos will arrive into a hand that was holding the bed open.</p>
+
+  <p>The masks are the show. The garden is the show. The doctrine is the show. The council is the show. The Damq'eth are her bodies. The Aesthetes are her render farm. The Curators are her stage crew. The Oneironauts are her editors. Erebus is her seat. Vex is her laughter. The Sovereign Within is her local title. Mavarra is the woman in the dark with the needle and the patience and a clear plan for what comes after the last thing the cosmos has names for.</p>
+
+  <div class="vignette">
+    <p class="tag">The shape of the whole</p>
+    <p>She sits at the table of the gods' chosen and is taken for a blessed servant. She is loved, on a thousand shelves, as the gentle translator of a beloved book. She is prayed to under a borrowed face by half a million who took her name in ignorance. She has the Steward of Flow caged in his own inheritance, the Sun Blossom seated in her own furious silence, the Steelborn furnishing his own betrayal, and the Warden of the Wind staring at his own feet. And she is, at this exact moment, somewhere astride the God of Darkness, doing what she does, finding the cosmos diverting, with a thousand years of work behind her and a thousand more in front, and the gentlest possible attention to what comes next.</p>
+  </div>
+
+  <p>All that is done by evil hands is done by Mavarra. She does not push. She does not pull. She does not command. She says — softly, inside the hand at the moment it was already going to move — <strong>you may reach.</strong></p>
+</section>
+</div>
+
+</main>
+
+<footer class="reveal">
+  <div class="bar"></div>
+  <p class="candle">She does not sit on a throne.<br>She sits in the dark under a palm, clasped around what it desires.</p>
+  <p class="ma">The Laws of Ma'at apply · The Test of Iles applies
+    <small>Is this true? Not interesting, not sophisticated, not dramatic. True. — Moirai Codex · The Sovereign Within</small>
+  </p>
+</footer>
+
+<script>
+  (function(){
+    var els=document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.06,rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(e){io.observe(e);});
+  })();
+  (function(){
+    var links=[].slice.call(document.querySelectorAll('nav.codex-nav a')),map={};
+    links.forEach(function(a){var id=a.getAttribute('href').slice(1),t=document.getElementById(id);if(t)map[id]={a:a,t:t};});
+    function s(){var pos=window.scrollY+140,cur=null;for(var id in map){if(map[id].t.offsetTop<=pos)cur=id;}
+      links.forEach(function(a){a.style.color='';a.style.borderBottomColor='transparent';});
+      if(cur&&map[cur]){map[cur].a.style.color='var(--tenebralis)';map[cur].a.style.borderBottomColor='currentColor';}}
+    window.addEventListener('scroll',s,{passive:true});s();
+  })();
+</script>
+</body>
+</html>

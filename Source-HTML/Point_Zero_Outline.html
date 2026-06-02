@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Point Zero — Book One · Advent of Ultima</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0d0b0a;
+  --bg-card: #161210;
+  --bg-card-hi: #1d1815;
+  --bg-rail: #110e0c;
+
+  --uriel: #d8542f;
+  --uriel-glow: #f0a878;
+  --fiacre: #d4b15e;
+  --fiacre-glow: #ecd9a0;
+  --alciel: #7d8ad6;
+  --alciel-glow: #b6c0f2;
+
+  --gold-vein: #c4a052;
+  --text-primary: #dccfc1;
+  --text-secondary: #9d8e7f;
+  --text-dim: #6b5d51;
+  --border-subtle: #271d16;
+  --border-mid: #38291f;
+
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --max-width: 940px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: #3a221a; color: var(--uriel-glow); }
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 40% 50% at 12% 8%, rgba(216,84,47,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 50% at 50% 4%, rgba(212,177,94,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 50% at 88% 8%, rgba(125,138,214,0.09) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(20,15,12,0.5) 0%, transparent 50%);
+  pointer-events: none; z-index: 0;
+}
+/* faint woven threads */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(to bottom, transparent, rgba(216,84,47,0.05) 50%, transparent),
+    linear-gradient(to bottom, transparent, rgba(212,177,94,0.04) 50%, transparent),
+    linear-gradient(to bottom, transparent, rgba(125,138,214,0.05) 50%, transparent);
+  background-size: 1px 100%, 1px 100%, 1px 100%;
+  background-position: 30% 0, 50% 0, 70% 0;
+  background-repeat: no-repeat;
+  pointer-events: none; z-index: 0; opacity: 0.6;
+}
+
+.wrap { position: relative; z-index: 1; max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem; }
+
+/* ---- NAV ---- */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(13,11,10,0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.nav-inner {
+  max-width: var(--max-width); margin: 0 auto;
+  padding: 0.7rem 1.5rem;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.4rem;
+}
+.nav-brand {
+  font-family: var(--font-display); font-size: 0.62rem;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-dim);
+  margin-right: auto;
+}
+.nav-brand b { color: var(--uriel-glow); font-weight: 600; }
+.nav-group { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+.nav-lbl {
+  font-family: var(--font-display); font-size: 0.5rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--text-dim);
+  align-self: center; margin-right: 0.15rem;
+}
+.nav-btn {
+  font-family: var(--font-display); font-size: 0.58rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  background: none; border: 1px solid var(--border-mid);
+  color: var(--text-secondary); padding: 0.32rem 0.62rem;
+  cursor: pointer; border-radius: 2px; transition: all 0.18s;
+}
+.nav-btn:hover { color: var(--text-primary); border-color: var(--text-dim); }
+.nav-btn.act-jump { border-color: transparent; padding: 0.32rem 0.4rem; }
+.nav-btn.act-jump:hover { color: var(--uriel-glow); }
+.nav-btn[data-thread].on { color: var(--bg-deep); font-weight: 600; }
+.nav-btn[data-thread="all"].on { background: var(--text-primary); border-color: var(--text-primary); }
+.nav-btn[data-thread="uriel"].on { background: var(--uriel); border-color: var(--uriel); }
+.nav-btn[data-thread="fiacre"].on { background: var(--fiacre); border-color: var(--fiacre); }
+.nav-btn[data-thread="alciel"].on { background: var(--alciel); border-color: var(--alciel); }
+.nav-btn[data-thread="uriel"] { border-color: var(--uriel); color: var(--uriel-glow); }
+.nav-btn[data-thread="fiacre"] { border-color: var(--fiacre); color: var(--fiacre-glow); }
+.nav-btn[data-thread="alciel"] { border-color: var(--alciel); color: var(--alciel-glow); }
+
+/* ---- HEADER ---- */
+.header { text-align: center; padding: 5rem 0 2rem; }
+.header .tag {
+  font-family: var(--font-display); font-size: 0.6rem;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--text-dim); display: block; margin-bottom: 1.6rem;
+}
+.header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 11vw, 6rem);
+  font-weight: 700; letter-spacing: 0.06em; line-height: 0.98;
+  background: linear-gradient(100deg, var(--uriel-glow) 0%, var(--fiacre-glow) 50%, var(--alciel-glow) 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+.header .booktag {
+  font-family: var(--font-display); font-size: 0.72rem;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-secondary);
+}
+.header .epigraph {
+  margin: 2.2rem auto 0; max-width: 540px;
+  font-style: italic; font-size: 1.08rem; color: var(--text-secondary);
+  line-height: 1.65;
+}
+.header .epigraph cite {
+  display: block; margin-top: 0.6rem; font-style: normal;
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-dim);
+}
+
+.divider {
+  display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+  margin: 3.4rem 0; opacity: 0.55;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--border-mid), transparent);
+}
+.divider span {
+  width: 6px; height: 6px; background: var(--gold-vein);
+  transform: rotate(45deg); flex-shrink: 0;
+}
+
+/* ---- THREAD INTRO ---- */
+.threads-head {
+  font-family: var(--font-display); font-size: 0.6rem;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim);
+  text-align: center; margin-bottom: 1.4rem;
+}
+.threads { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+.thread-card {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-top: 2px solid var(--tc); border-radius: 2px;
+  padding: 1.5rem 1.4rem;
+}
+.thread-card .tname {
+  font-family: var(--font-display); font-size: 1rem; font-weight: 600;
+  color: var(--tc); letter-spacing: 0.05em; margin-bottom: 0.15rem;
+}
+.thread-card .trole {
+  font-family: var(--font-display); font-size: 0.54rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 0.7rem;
+}
+.thread-card p { font-size: 0.92rem; line-height: 1.62; color: var(--text-secondary); }
+.tc-uriel { --tc: var(--uriel); }
+.tc-fiacre { --tc: var(--fiacre); }
+.tc-alciel { --tc: var(--alciel); }
+
+/* ---- ACT ---- */
+.act { padding-top: 1rem; }
+.act-head { text-align: center; margin-bottom: 2.2rem; }
+.act-head .anum {
+  font-family: var(--font-display); font-size: 0.62rem;
+  letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold-vein);
+  display: block; margin-bottom: 0.5rem;
+}
+.act-head .atitle {
+  font-family: var(--font-display); font-size: clamp(1.5rem, 4vw, 2.1rem);
+  font-weight: 600; color: var(--text-primary); letter-spacing: 0.04em;
+}
+.act-head .asub {
+  margin-top: 0.5rem; font-style: italic; font-size: 0.95rem; color: var(--text-dim);
+}
+
+/* ---- CHAPTER ---- */
+.chapter {
+  display: flex; gap: 1.3rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--cc);
+  border-radius: 2px;
+  padding: 1.25rem 1.4rem;
+  margin-bottom: 0.7rem;
+  transition: opacity 0.3s, filter 0.3s, background 0.2s;
+}
+.chapter:hover { background: var(--bg-card-hi); }
+.chapter.dim { opacity: 0.24; filter: saturate(0.4); }
+
+.ch-num {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 1.85rem; line-height: 1;
+  color: var(--cc); flex-shrink: 0; width: 2.4rem; text-align: right;
+  padding-top: 0.1rem;
+}
+.ch-body { flex: 1; min-width: 0; }
+.ch-top {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.6rem;
+  margin-bottom: 0.35rem;
+}
+.ch-title {
+  font-family: var(--font-display); font-size: 1rem; font-weight: 600;
+  color: var(--text-primary); letter-spacing: 0.02em;
+}
+.ch-pill {
+  font-family: var(--font-display); font-size: 0.48rem;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  padding: 0.2rem 0.5rem; border-radius: 2px;
+  border: 1px solid var(--cc); color: var(--cc-glow);
+  white-space: nowrap;
+}
+.ch-spine {
+  font-family: var(--font-display); font-size: 0.48rem;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  padding: 0.2rem 0.5rem; border-radius: 2px;
+  border: 1px solid var(--gold-vein); color: var(--gold-vein);
+  background: rgba(196,160,82,0.07);
+  white-space: nowrap;
+}
+.ch-desc { font-size: 0.94rem; line-height: 1.62; color: var(--text-secondary); }
+.ch-desc em { color: var(--text-primary); font-style: italic; }
+.ch-desc strong { color: var(--cc-glow); font-weight: 600; }
+.ch-note {
+  margin-top: 0.55rem; padding-top: 0.55rem;
+  border-top: 1px dashed var(--border-mid);
+  font-size: 0.86rem; font-style: italic; color: var(--text-dim);
+}
+.ch-note b { color: var(--cc-glow); font-weight: 600; font-style: normal; }
+
+.c-uriel { --cc: var(--uriel); --cc-glow: var(--uriel-glow); }
+.c-fiacre { --cc: var(--fiacre); --cc-glow: var(--fiacre-glow); }
+.c-alciel { --cc: var(--alciel); --cc-glow: var(--alciel-glow); }
+.c-conv {
+  --cc-glow: var(--text-primary);
+  border-left: 3px solid transparent;
+  border-image: linear-gradient(to bottom, var(--uriel), var(--alciel)) 1;
+}
+.c-conv .ch-num { color: var(--text-primary); }
+.c-conv .ch-pill { border-color: var(--text-dim); color: var(--text-primary); }
+
+/* ---- FOOTER ---- */
+.summary {
+  background: var(--bg-card); border: 1px solid var(--border-mid);
+  border-radius: 2px; padding: 2rem; text-align: center; margin-top: 1rem;
+}
+.summary .big {
+  font-family: var(--font-display); font-size: 1.05rem; font-weight: 600;
+  color: var(--text-primary); letter-spacing: 0.05em; margin-bottom: 0.6rem;
+}
+.summary p { font-size: 0.95rem; color: var(--text-secondary); font-style: italic; }
+.footer {
+  text-align: center; padding: 2.5rem 0 3rem;
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim);
+}
+.footer span { color: var(--gold-vein); }
+
+.fade { opacity: 0; transform: translateY(12px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.fade.vis { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 680px) {
+  body { font-size: 16.5px; }
+  .threads { grid-template-columns: 1fr; }
+  .chapter { gap: 0.9rem; padding: 1.1rem 1rem; }
+  .ch-num { font-size: 1.4rem; width: 1.8rem; }
+  .nav-brand { width: 100%; margin-bottom: 0.2rem; }
+  .header { padding: 3rem 0 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-brand">Advent of Ultima · <b>Point Zero</b></span>
+    <div class="nav-group">
+      <span class="nav-lbl">Act</span>
+      <button class="nav-btn act-jump" data-jump="act1">I</button>
+      <button class="nav-btn act-jump" data-jump="act2">II</button>
+      <button class="nav-btn act-jump" data-jump="act3">III</button>
+    </div>
+    <div class="nav-group">
+      <span class="nav-lbl">Thread</span>
+      <button class="nav-btn on" data-thread="all">All</button>
+      <button class="nav-btn" data-thread="uriel">Uriel</button>
+      <button class="nav-btn" data-thread="fiacre">Fiacre</button>
+      <button class="nav-btn" data-thread="alciel">Alciel</button>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header class="header fade">
+    <span class="tag">Advent of Ultima · The Moirai Codex</span>
+    <h1>Point Zero</h1>
+    <div class="booktag">Book One · Chapter Outline</div>
+    <p class="epigraph">
+      "Nine threads weave a shroud for this age. Three suns will fall, and the second sun will rise to meet you. The Thrones Eternal are but dust. It is as it must be."
+      <cite>— Algol, to Fiacre</cite>
+    </p>
+  </header>
+
+  <div class="divider"><span></span></div>
+
+  <!-- THREADS -->
+  <section class="fade">
+    <div class="threads-head">Three Threads</div>
+    <div class="threads">
+      <div class="thread-card tc-uriel">
+        <div class="tname">Uriel</div>
+        <div class="trole">The Boy · Terrae</div>
+        <p>A kid from Bed-Stuy who says no to a soft life because the soft life means leaving his people. Book One is his honest attempt to give heroism a fair shake — and the one year his soul's closed loop runs through someone else. He keeps every commitment he makes, until the last, and breaks it to save everyone. He dies believing he failed. The reader knows otherwise. Nobody tells him.</p>
+      </div>
+      <div class="thread-card tc-fiacre">
+        <div class="tname">Fiacre</div>
+        <div class="trole">The Refusal · Luxenfall</div>
+        <p>The Goddess of Peace before she has the word for it. She abandons her purpose, loses Ardenne for it, and uncovers a capacity she never wanted. She will not call the capacity vindication. The Gran Ornea question — was she right to refuse? — stays open through every victory she wins.</p>
+      </div>
+      <div class="thread-card tc-alciel">
+        <div class="tname">Alciel</div>
+        <div class="trole">The Witness · Atlantis</div>
+        <p>Raised for twenty years to listen first. He watches the cosmos deliberate, watches his father prepare, watches his father die doing exactly what the preparation was for. He carries the whole cosmic-historical spine and not yet all the words. The book leaves him at the door of Zephyros.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ACT ONE -->
+  <section class="act" id="act1">
+    <div class="act-head fade">
+      <span class="anum">Act One</span>
+      <div class="atitle">The Inciting Conditions</div>
+      <div class="asub">Three lives displaced from the positions they began in.</div>
+    </div>
+
+    <div class="chapter c-alciel fade" data-threads="alciel">
+      <div class="ch-num">01</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Atlantis</span><span class="ch-pill">Alciel</span></div>
+        <p class="ch-desc">Aracice convenes the Exvisarelim in the compound. Tein-Enhotep stands at the entrance; Nyx is present; Baou is present. The Exvisars debate the news from Terrae — a natural-born Mystic has Ascended on the prison world, the first ever. Aracice carries the gravity of a man who knows what is at stake without naming it. The phrase <em>what is to come</em> recurs. Alciel, twenty, witnesses and does not speak; he has been raised to listen first. The chapter closes on the household after the Exvisars leave — the gravity of the meeting settling into the texture of family.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">02</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Bed-Stuy</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">Uriel's sixteenth birthday. The morning. Aya arrives. The haircut. The offer of a place at her family's table. He takes the haircut. He refuses the place. The Wolves call; he goes to the run. The bombing goes wrong. He Ascends. Brooklyn burns. He passes out in the wreckage.</p>
+        <p class="ch-note"><b>The Ascension is the thing that happens to him.</b> Overwhelmed, not deciding — the genuine no-choice. Render it so the reader can say <em>that was not his fault</em> and mean it.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">03</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Emberlight, into Gran Ornea</span><span class="ch-pill">Fiacre</span></div>
+        <p class="ch-desc">Fiacre at the village. The order. The children. The tears. The unauthorized return. The Clairgate home. She arrives at her family's house — Ardenne in the kitchen, the warmth, the teasing, the way sisters talk when the world is not listening. The reader is given Ardenne in one scene so that what comes later is unbearable. In the air that does not carry lies, Fiacre begins to work out what she actually thinks.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">04</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Reckless Thing</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">Uriel hides, hunted by the Pax. He plans the seizure of a major Brooklyn building for the Wolves, and executes it. He partially succeeds — he is powerful, and willing to act with that power. The operation goes catastrophically wrong. People are hurt. The damage is real. The Pax come down with full institutional force. There is no longer a path that ends with him still on Earth.</p>
+        <p class="ch-note"><b>The thing he chooses.</b> Already Ascended, he knows what he can do — he plans it, aims it, and tells himself the cost was acceptable. The first signature. The hairline difference from Chapter 02 should be barely perceptible.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">05</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Francesca</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">She has watched him for years. She knew his parents. She offers him exile to Thalassor in exchange for his life. He takes it. The chapter is short and intimate — the reader meets Francesca as a Frost matriarch holding more than she is saying.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">06</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Request</span><span class="ch-pill">Fiacre</span></div>
+        <p class="ch-desc">Fiacre asks Leviathan if she may serve another way. The Request is delivered audibly in Gran Ornea, where the air does not carry lies. Leviathan arrives at her family's home — fond, paternal, almost loving. <em>Desire would be the poison in her honey. May you die as you have lived, with grace.</em> She tells him the truth: she intends to abandon her purpose. Fulgoror strikes Leviathan, repeatedly. He pushes through the strikes.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">07</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Ardenne Falls</span><span class="ch-pill">Fiacre</span></div>
+        <p class="ch-desc">Ardenne walks in. Leviathan kills her. He keeps coming. Fiacre blocks his weapon — and in that one motion learns she is more than she was ever supposed to be. She does not have time to think. She runs. To Luxenfall. To be out of sight of the Gods.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">08</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Clairgate</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">Uriel says goodbye to Brooklyn. The ashes. The Wolves. The only home he has ever known. Aya goes with him. They step through; Earth disappears behind them. The chapter mirrors Chapter 07 — both protagonists displaced from their starting positions, by different routes, both leaving behind people they loved.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-alciel fade" data-threads="alciel">
+      <div class="ch-num">09</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Compound, Quieter Now</span><span class="ch-pill">Alciel</span></div>
+        <p class="ch-desc">Alciel in Atlantis after the Exvisarelim has left — the household at its most ordinary. Aracice teaches Alciel about Glacia. The Sun-Caller. Antaka, used by something that should not have it. The Pantheon's silence. The certainty that the perpetrator is real, somewhere, preparing. A window onto twenty years of formation, rendered through one of its quieter days. <em>What is to come</em> recurs in the air.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ACT TWO -->
+  <section class="act" id="act2">
+    <div class="act-head fade">
+      <span class="anum">Act Two</span>
+      <div class="atitle">The Work and the Pressure</div>
+      <div class="asub">The cosmic-historical spine assembled, piece by piece, while the world compresses.</div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">10</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Rosorae</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">Uriel and Aya arrive, met by Saint Cloud Sinclair and Dorado Casanova — polite, refined, aware that Uriel does not belong. The terms: a duel tomorrow, two clean strikes, or Rosorae forgets him forever. He stares at weapons he does not know how to name.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">11</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Simulacra</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">The duel. Brooklyn tactics, raw Ignis, desperation. He lands the first strike through recklessness. He lands the second because Cloud allows it. He collapses. <em>Welcome to Rosorae.</em></p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">12</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Luxenfall</span><span class="ch-pill">Fiacre</span></div>
+        <p class="ch-desc">Fiacre lands — the thousand-year-old corpse of a realm under permanent eclipse. The Lightwells. The Refugee Processing Centers. She does not understand what she is looking at. She does the work in front of her. She heals a village. The Glassen weaponsmith calls a crystata shard <em>glass.</em></p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">13</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Oneiron</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">Uriel's first party — the most magical party in the cosmos, for a kid from Bed-Stuy. He meets Serket (predatory, interested) and Arabella (coiling around Aya). Distilled bliss. Floating platforms. He watches someone "die" in a simulation and reform laughing. He is seduced and repulsed at once. Aya is slipping into this world. He stands alone on a crystal platform.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">14</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Clairgates</span><span class="ch-pill">Uriel</span><span class="ch-spine">Spine · I</span></div>
+        <p class="ch-desc">Cloud teaches Uriel the history — Titus and Hecate, a thousand years ago; the Lumen Cradle; the connectivity of the realms. The Sinclair version. Uriel hears the version told at Rosorae, and the reader notices the gaps before Uriel does. The first piece of the cosmic-historical spine is delivered.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">15</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Grounded Elder</span><span class="ch-pill">Fiacre</span></div>
+        <p class="ch-desc">Fiacre encounters the Grounded for the first time. The elder distrusts her, then slowly accepts her — only because she cannot lie. The Zephyrosian incapacity for deception is the diagnostic. The elder begins to tell her stories of Luxania the Pantheon never told.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-alciel fade" data-threads="alciel">
+      <div class="ch-num">16</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Atlantis Compressing</span><span class="ch-pill">Alciel</span></div>
+        <p class="ch-desc">Alciel at home. The Exvisarelim's deliberations have grown more urgent. The Infernal Plague's signs intensify across the cosmos. Aracice teaches Alciel more directly about what is coming. Nyx prepares for something she does not name. Tein-Enhotep stands closer to the door than he used to. The household is becoming a place that is preparing.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">17</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Serket</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">She trains Uriel. The chemistry is undeniable. Aya walks in, sees them, says nothing, leaves. Uriel and Aya fight for the first time in their lives.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">18</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Lex Aeterna</span><span class="ch-pill">Fiacre</span></div>
+        <p class="ch-desc">Fiacre, working in the ruins, reconstructs the deusa. She tries. She fails. She tries again. She begins to understand what was destroyed here. Five principles. Decency so ambient it once felt like weather.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">19</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Fusion</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">Uriel and Aya, reconciling, push the limits of what they can do together and learn the forbidden technique: soul-fusion. They are warned. They do it anyway. They feel each other from inside one shared interior. Part of each bleeds into the other. The bond becomes physical at the level of soul.</p>
+        <p class="ch-note"><b>The only time the loop runs through someone else.</b> For one year, the closed circuit is not fully closed — a piece of it runs through Aya. The single most load-bearing relationship in the series begins here.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">20</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Ifris</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">Out of the fusion, they create something — fire and ice in perfect balance, a purple flame that burns from inside. Almost no one in the cosmos has ever held this combination. They are warned again, more seriously. Ifris is forbidden. The cosmos's rules do not have a column for it.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">21</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The First Crystata</span><span class="ch-pill">Fiacre</span></div>
+        <p class="ch-desc">Fiacre's first restoration. The empathic field comes back online inside the radius. The Mavarran functionary feels the field land on him, walks out of his building, and does not go home.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">22</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Brutus</span><span class="ch-pill">Fiacre</span><span class="ch-spine">Spine · II</span></div>
+        <p class="ch-desc">Brutus arrives at the village she has been healing — the Lykaion Galvaneum body, the hundred arms, the ax Edgerinne gave him. He breaks all her bones; they reform; the shield holds. He stops holding back. She begins deflecting every blow, and the deflections destroy the houses around them. Mid-fight he drops the line about Crex: <em>I killed the last one who took a swipe at the Gods.</em> She denies that is what she is doing. She runs to stop the deflections from killing the people behind her. The second piece of the spine is delivered.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">23</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Pushing Too Hard</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">Uriel tries to use Ifris alone, without Aya, in training. He nearly crystallizes. Cloud saves him — and reprimands him, for pushing too hard, for using a forbidden deusa. <em>Do not take for granted what it costs to keep saving you.</em> Cloud does not spare him the reality of that.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">24</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Erion</span><span class="ch-pill">Fiacre</span></div>
+        <p class="ch-desc">Atropos arrives. Cuts that should not heal. She bleeds badly. The cuts close. He is more disturbed by the failure than he will let himself register. Algol intervenes — the seventh seat moves with Fiacre against the captured Cutter. They temporarily defeat Erion together. No body. He retreats.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">25</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Discipline</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">Uriel quits smoking. The discipline begins. He commits: no more Ifris, no more pushing too hard. He tries to be the disciplined fighter Cloud has been trying to make him.</p>
+        <p class="ch-note"><b>The commitment must be sincere.</b> No wink, no foreshadowing. The reader has to believe the discipline might hold — or Chapter 45 cannot detonate.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">26</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Aether is Dead</span><span class="ch-pill">Fiacre</span><span class="ch-spine">Spine · III</span></div>
+        <p class="ch-desc">Fiacre, working in the ruins — knowing from her years in Dystan that Erebus and Aether fought a thousand years ago and Erebus won — makes the connection. Luxenfall is what becomes of Aether's realm. Aether is not silent. Aether is dead. Erebus killed him. The Pantheon has concealed it for a millennium. She holds the discovery. She has no one to tell. The third piece of the spine is delivered.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">27</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Revelation</span><span class="ch-pill">Uriel</span><span class="ch-spine">Spine · IV</span></div>
+        <p class="ch-desc">Saint Leif summons Uriel. His mother was Archangel Evangeline. His father was Archangel Raphael. They were at Glacia's fall. They sent him to Earth to protect him. Francesca knew. Aya already knew. He does not rage. He deflates. <em>Everyone loves me just enough to lie to me.</em> Aya reframes it; their bond crystallizes — brother and sister, family. He decides to stop being reckless and commits to the discipline. The fourth piece of the spine is delivered — Uriel's parents at Glacia rhyme with what Aracice has been teaching Alciel for twenty years. The reader holds the convergence.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">28</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Garson</span><span class="ch-pill">Fiacre</span></div>
+        <p class="ch-desc">The friend from home. He confronts Fiacre, asks her to come back, accepts that she will not. He cannot raise his hand against her. He stands down and walks away. He returns to Ex-Deorum without her. The institution has lost its negotiator.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">29</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Worship</span><span class="ch-pill">Fiacre</span></div>
+        <p class="ch-desc">People begin to worship Fiacre. A woman leaves flowers at a restored crystata. A man names his newborn daughter Fiacre. An elder calls her the goddess returned. <em>I am not your goddess.</em> The elder answers: <em>That is what a goddess would say.</em> She refuses, repeatedly, in vocabulary that points past herself. She begins to feel, without language for it, that something is settling on her.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">30</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Aether Seat</span><span class="ch-pill">Fiacre</span></div>
+        <p class="ch-desc">Fiacre, in private, working out what is settling on her. The realm has been mourning a god whose body it did not know it had. She is doing the work the dead god's seat requires. She refuses worship. The seat does not depend on her acceptance. She holds this alongside the Aether discovery and continues the work.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-alciel fade" data-threads="alciel">
+      <div class="ch-num">31</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Atlantis Preparing</span><span class="ch-pill">Alciel</span></div>
+        <p class="ch-desc">Alciel at home. The Plague's signs are converging on Terrae. Aracice begins to gather. Tein-Enhotep is gathering. Nyx is preparing for a separation she has not named. Baou is present. The compound is no longer just a household. It is becoming a defense — and Alciel is in the defense by virtue of being in the household.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ACT THREE -->
+  <section class="act" id="act3">
+    <div class="act-head fade">
+      <span class="anum">Act Three</span>
+      <div class="atitle">The Climaxes</div>
+      <div class="asub">Three threads, three climaxes, converging on the prison world.</div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">32</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Solareth</span><span class="ch-pill">Fiacre</span></div>
+        <p class="ch-desc">Chikage finds Fiacre in the corrupted forest — chosen for the Chorus's psychic cacophony layered with Verum Personale. He intends to drive her mad before he kills her. The training, the heat of the battle, the clarity required to pierce his illusion push her into Supreme Clarity. The crossing is permanent. He retreats.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">33</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Erion Returns</span><span class="ch-pill">Fiacre</span></div>
+        <p class="ch-desc">Atropos cannot let go of an unfinished cut. He comes harder. He cuts her more times than she can count. She bleeds from everywhere. The cuts are deeper. What is fated to die does not die. The second failure breaks something in him. He retreats.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">34</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Raiwata Moves</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">News arrives at Rosorae. The Sun-Caller is moving on Terrae. The Exvisarelim has been tracking; Aracice has been preparing. Uriel does not yet know who Raiwata is. He knows only that something terrible is coming, and Earth is in its path.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">35</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Choice</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">Uriel could stay. Aya begs him to stay. Cloud lays out the case. Serket offers the exit. Dorado is cruel about Earth. He gets over himself. Earth is where he is from in the only sense that matters to the people still there. The grievance does not get to vote. He decides to go back.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">36</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Saints Follow</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">Cloud, Aya, Arabella, Serket, Dorado. They open an unauthorized Clairgate. They go through with Uriel.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">37</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Algol</span><span class="ch-pill">Fiacre</span><span class="ch-spine">Spine · V</span></div>
+        <p class="ch-desc">Algol comes to Fiacre and delivers what she has decided to deliver. <em>Nine threads weave a shroud for this age. Three suns will fall, and the second sun will rise to meet you. The Thrones Eternal are but dust. It is as it must be.</em> Fiacre cannot dismiss this from Algol. She receives that she is one of nine, that the shroud is for the age, that Aether's death is the first in a sequence and another is coming. She holds it alongside the Gran Ornea question, which remains open. The fifth piece of the spine is delivered, to its rightful carrier.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">38</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The House of Wings</span><span class="ch-pill">Fiacre</span></div>
+        <p class="ch-desc">Fiacre stops running. She walks back into Ex-Deorum. Chikage finds her there and nearly kills her. She lets him think he has. She turns her own spilled blood into spikes and impales him. He dies.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-conv fade" data-threads="uriel alciel">
+      <div class="ch-num">39</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Atlantis Convenes</span><span class="ch-pill">Convergence</span></div>
+        <p class="ch-desc">Aracice has gathered — Tein-Enhotep, Nyx, Baou, the best and brightest mortal humans of Earth. Uriel arrives with the Saints. Uriel and Alciel meet; they do not have time to know what they are to each other. Aracice and Uriel acknowledge each other in some brief, charged way — the Star-Eater and the orphaned son of his fallen peers. The defense forms.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">40</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Leviathan</span><span class="ch-pill">Fiacre</span></div>
+        <p class="ch-desc">Fiacre fights the God of War — the longest, hardest fight of her life. Bones break in patterns Brutus did not manage. The Pax Aegis is now operational. She studies him as he hits her; by the late stage of the fight she knows him better than he knows her. Time inside the seats does not work the way time outside the seats works. He is older. She is more fundamental.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">41</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Point Zero Begins</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">Aracice fights Raiwata; the defense fights with him. Uriel fights well. He listens to Cloud's tactics. He is not reckless. He is keeping his commitment. He is doing it right.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-alciel fade" data-threads="alciel">
+      <div class="ch-num">42</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Aracice Falls</span><span class="ch-pill">Alciel</span></div>
+        <p class="ch-desc">Raiwata invokes Antaka — the same weapon that destroyed Glacia. Eight billion souls on a magic-dead prison world, about to be sun-killed by the apotheosing Destroyer. Aracice puts himself in the way of the call. He breaks the weapon on his body. Antaka does not complete on Earth. Aracice pays for the interruption with his life. Alciel watches his father do exactly what Aracice has been preparing him to do — at the cost of his life.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">43</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Lobotomy</span><span class="ch-pill">Fiacre</span></div>
+        <p class="ch-desc">Fiacre does not kill Leviathan. She lobotomizes him. Ex-Deorum loses its head. The institution that produced her is structurally beheaded.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">44</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Apotheosis</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">Raiwata begins absorbing the Divine Aspect Aracice held. The defense freezes. There is no plan. The math says wait. <em>You cannot interrupt an apotheosis.</em></p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">45</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Forbidden Thing</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">Uriel breaks his commitment. He fuses with Aya again. He wreathes his fists in Ifris. He runs at the ascending god.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">46</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Punch</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">The Ifris burns Raiwata's flesh — partially, imperfectly, enough. The Destroyer's flesh blackens from a fire that should not be able to touch him. Raiwata's focus breaks. The defense unfreezes — because someone moved first, and the moving worked because someone broke a rule the cosmos's rules said could not be broken. The signal to the rest is the sight of Raiwata staggered. He retreats.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">47</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">The Escape</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">Cloud, Aya, Arabella, Serket, Dorado. They live because Uriel went first and used the forbidden thing.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-uriel fade" data-threads="uriel">
+      <div class="ch-num">48</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Uriel Dies</span><span class="ch-pill">Uriel</span></div>
+        <p class="ch-desc">He dies with part of Aya's soul still fused to his own. The unsanctioned fusion. The forbidden deusa. The accounting weighs both. <em>They were right. I fucked it up. I always do.</em> He thinks it because the available evidence, from his vantage on the ground, looks exactly like every prior time he has been told he ruined something. He does not have the rest of the picture. He ran out of time.</p>
+        <p class="ch-note"><b>The verdict is false, and it goes uncorrected into the dark.</b> He went first; the defense unfroze because he moved; five people he loves live because of him. He dies certain he failed — and nobody tells him otherwise. The reader holds the true account alone, for the rest of the series. No line of narration may correct him here. The fused fragment of Aya goes down with him.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-alciel fade" data-threads="alciel">
+      <div class="ch-num">49</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Nyx</span><span class="ch-pill">Alciel</span></div>
+        <p class="ch-desc">The Goddess of the Veil. Her son has just watched his father die preventing Antaka from completing on Earth. She is being sealed behind the Veil — and in the act of the seal closing, her last reach is to put her son where he needs to be. Not a Clairgate. Her own power. She transports Alciel to Zephyros. The Pantheon does not authorize this. The Pantheon does not assist. A mother moves her son out of the wreckage by the only power she has left.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-fiacre fade" data-threads="fiacre">
+      <div class="ch-num">50</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Fiacre Walks Out</span><span class="ch-pill">Fiacre</span></div>
+        <p class="ch-desc">She refuses to call her victory vindication. The Gran Ornea question is still open. Her capacity does not retroactively prove her judgment. She returns to Luxenfall to keep working. She does not know Aracice has died. She does not know Uriel punched the apotheosis. She does not know about Alciel.</p>
+      </div>
+    </div>
+
+    <div class="chapter c-alciel fade" data-threads="alciel">
+      <div class="ch-num">51</div>
+      <div class="ch-body">
+        <div class="ch-top"><span class="ch-title">Alciel Arrives at Zephyros</span><span class="ch-pill">Alciel</span></div>
+        <p class="ch-desc">Twenty years old. Father dead. Mother sealed. He carries his father's twenty years of teaching, his witnessing of Antaka invoked and prevented at Aracice's cost, the convergence at Atlantis where Uriel — the orphaned son of Glacia's fallen Archangels — fought beside him and died interrupting Raiwata's apotheosis, and the full cosmic-historical spine the reader has assembled across all three threads. He has the framework. He does not yet have all the words. Tein-Enhotep is waiting for him. The Oracles will speak. The Wind has been holding the breath of his existence for twenty years. He arrives. <em>The book ends.</em></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <div class="summary fade">
+    <div class="big">Fifty-one chapters. Three threads. Three climaxes converging.</div>
+    <p>One survivor of the spine.</p>
+  </div>
+
+  <footer class="footer">
+    Advent of Ultima <span>·</span> Book One: Point Zero <span>·</span> Chapter Outline <span>·</span> The Moirai Codex
+  </footer>
+
+</div>
+
+<script>
+// fade-in on scroll
+const obs = new IntersectionObserver(es => {
+  es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); } });
+}, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.fade').forEach((el, i) => {
+  el.style.transitionDelay = Math.min(i * 12, 120) + 'ms';
+  obs.observe(el);
+});
+
+// act jump
+document.querySelectorAll('.act-jump').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const t = document.getElementById(btn.dataset.jump);
+    if (t) window.scrollTo({ top: t.offsetTop - 70, behavior: 'smooth' });
+  });
+});
+
+// thread filter
+const threadBtns = document.querySelectorAll('.nav-btn[data-thread]');
+const chapters = document.querySelectorAll('.chapter');
+threadBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const sel = btn.dataset.thread;
+    threadBtns.forEach(b => b.classList.toggle('on', b === btn));
+    chapters.forEach(ch => {
+      const threads = (ch.dataset.threads || '').split(' ');
+      const show = sel === 'all' || threads.includes(sel);
+      ch.classList.toggle('dim', !show);
+    });
+  });
+});
+</script>
+
+</body>
+</html>

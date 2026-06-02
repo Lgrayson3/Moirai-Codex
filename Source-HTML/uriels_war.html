@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uriel's War — From Hell to the Restoration of Luxania · Advent of Ultima</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0b0807;
+  --bg-card: #15100d;
+  --bg-hover: #1d1611;
+  --bg-highlight: #1f1410;
+  --ember-dark: #4f1c14;
+  --ember-core: #b23a2a;
+  --ember-accent: #d8542f;
+  --ember-glow: #f0a878;
+  --ifris-core: #7e2da0;
+  --ifris-accent: #9b4dca;
+  --ifris-light: #c98fe0;
+  --gold-vein: #c4a052;
+  --gold-dim: #7c6736;
+  --text-primary: #d9cbbd;
+  --text-secondary: #9c8c7e;
+  --text-dim: #6a5c50;
+  --border-subtle: #261b15;
+  --border-accent: #4f1c14;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --max-width: 880px;
+  --section-gap: 4.5rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.78;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--ember-dark); color: var(--ember-glow); }
+
+#ember-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.55;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 18% 35%, rgba(178,58,42,0.09) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 20%, rgba(126,45,160,0.05) 0%, transparent 48%),
+    radial-gradient(ellipse at 50% 100%, rgba(79,28,20,0.14) 0%, transparent 42%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page { position: relative; z-index: 1; max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem; }
+
+.divider {
+  display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+  margin: var(--section-gap) 0; opacity: 0.5;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--ember-dark), transparent);
+}
+.divider span {
+  width: 7px; height: 7px; background: var(--ember-accent);
+  transform: rotate(45deg); flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(216,84,47,0.6);
+}
+
+.header { text-align: center; padding: 5.5rem 0 1.5rem; }
+.header .tag {
+  font-family: var(--font-display); font-size: 0.6rem;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--ember-accent); display: block; margin-bottom: 2rem;
+}
+.header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 8vw, 4.1rem);
+  font-weight: 700; color: var(--ember-glow);
+  letter-spacing: 0.1em; line-height: 1.1; margin-bottom: 0.7rem;
+  text-shadow: 0 0 70px rgba(216,84,47,0.35);
+}
+.header .sub {
+  font-family: var(--font-display); font-size: 0.72rem;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-dim);
+}
+.header .epitaph {
+  margin-top: 1.8rem; font-style: italic; font-size: 1.1rem;
+  color: var(--text-secondary); letter-spacing: 0.02em;
+  max-width: 30ch; margin-left: auto; margin-right: auto; line-height: 1.5;
+}
+
+.sec-num {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--ember-accent); display: block; margin-bottom: 0.4rem;
+}
+.sec-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 3vw, 1.55rem);
+  font-weight: 600; color: var(--ember-glow);
+  letter-spacing: 0.05em; margin-bottom: 1.4rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--border-accent);
+}
+.sub-head {
+  font-family: var(--font-display); font-size: 0.92rem;
+  font-weight: 600; color: var(--ember-glow);
+  letter-spacing: 0.03em; margin-top: 1.7rem; margin-bottom: 0.5rem;
+}
+
+.prose p { margin-bottom: 1.2rem; }
+.prose p:last-child { margin-bottom: 0; }
+.prose strong { color: var(--ember-glow); font-weight: 600; }
+.prose em { color: var(--text-secondary); }
+.prose .ifris { color: var(--ifris-light); font-style: normal; font-weight: 600; }
+.lead-first::first-letter {
+  font-family: var(--font-display); font-weight: 700; float: left;
+  font-size: 3.6rem; line-height: 0.8; padding: 0.3rem 0.5rem 0 0; color: var(--ember-accent);
+}
+
+.id-card {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: 2px; padding: 2.2rem; position: relative; overflow: hidden;
+}
+.id-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, var(--ember-dark), var(--ember-accent), var(--ifris-core), var(--ember-dark));
+}
+.id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem 2rem; }
+.id-item .lbl {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--ember-accent); margin-bottom: 0.2rem;
+}
+.id-item .val { font-size: 0.95rem; color: var(--text-primary); line-height: 1.6; }
+.id-item.wide { grid-column: 1 / -1; }
+
+.acc-item {
+  border: 1px solid var(--border-subtle); margin-bottom: -1px;
+  background: var(--bg-card); overflow: hidden;
+}
+.acc-item:first-child { border-radius: 2px 2px 0 0; }
+.acc-item:last-child { border-radius: 0 0 2px 2px; }
+.acc-btn {
+  width: 100%; background: none; border: none;
+  padding: 1.1rem 1.4rem; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--font-display); font-size: 0.88rem;
+  font-weight: 600; color: var(--ember-glow);
+  letter-spacing: 0.04em; text-align: left;
+  transition: background 0.2s;
+}
+.acc-btn:hover { background: var(--bg-hover); }
+.acc-btn .hint {
+  font-family: var(--font-body); font-size: 0.82rem;
+  font-weight: 400; color: var(--text-dim); font-style: italic; margin-left: 0.8rem;
+  flex: 1; text-align: right; padding-right: 0.6rem;
+}
+.acc-btn .arr {
+  width: 7px; height: 7px;
+  border-right: 1.5px solid var(--ember-accent);
+  border-bottom: 1.5px solid var(--ember-accent);
+  transform: rotate(45deg); transition: transform 0.3s;
+  flex-shrink: 0; margin-left: 0.4rem;
+}
+.acc-item.open .acc-btn .arr { transform: rotate(-135deg); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.45s ease; }
+.acc-inner { padding: 0 1.4rem 1.4rem; }
+.acc-inner .atm {
+  font-style: italic; font-size: 0.92rem; color: var(--ember-accent);
+  margin-bottom: 0.8rem; padding-left: 0.8rem;
+  border-left: 2px solid var(--ember-dark);
+}
+.acc-inner p { font-size: 0.92rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 0.6rem; }
+.acc-inner p:last-child { margin-bottom: 0; }
+.acc-inner p strong { color: var(--ember-glow); }
+.acc-inner p .ifris { color: var(--ifris-light); font-weight: 600; }
+
+.highlight-box {
+  background: var(--bg-highlight); border: 1px solid var(--ember-dark);
+  border-left: 3px solid var(--ember-accent);
+  padding: 1.8rem 2.2rem; margin-top: 1.2rem; position: relative;
+}
+.highlight-box::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(216,84,47,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.highlight-box p { position: relative; font-size: 1rem; line-height: 1.8; margin-bottom: 0.9rem; }
+.highlight-box p:last-child { margin-bottom: 0; }
+.highlight-box p strong { color: var(--ember-glow); }
+.highlight-box.ifris-box { border-left-color: var(--ifris-accent); }
+.highlight-box.ifris-box::before { background: radial-gradient(ellipse at 50% 0%, rgba(155,77,202,0.06) 0%, transparent 70%); }
+.highlight-box.ifris-box .ifris { color: var(--ifris-light); font-weight: 600; }
+.highlight-box.gold-box { border-left-color: var(--gold-vein); }
+.highlight-box.gold-box::before { background: radial-gradient(ellipse at 50% 0%, rgba(196,160,82,0.06) 0%, transparent 70%); }
+.highlight-box.gold-box p strong { color: var(--gold-vein); }
+
+.princ { padding: 1rem 0; border-bottom: 1px solid var(--border-subtle); }
+.princ:last-child { border-bottom: none; }
+.princ-n {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.2em; color: var(--ember-accent); text-transform: uppercase; margin-bottom: 0.3rem;
+}
+.princ p { font-size: 0.95rem; line-height: 1.7; }
+.princ p strong { color: var(--ember-glow); }
+.princ.passed .princ-n { color: var(--gold-vein); }
+.princ.pending .princ-n { color: var(--ifris-light); }
+
+.obj-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin-top: 1.2rem; }
+.obj {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: 2px; padding: 1.2rem 1.3rem; position: relative;
+}
+.obj::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 1px;
+  background: linear-gradient(to right, var(--gold-dim), transparent);
+}
+.obj .oname {
+  font-family: var(--font-display); font-size: 0.72rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold-vein); margin-bottom: 0.45rem;
+}
+.obj .ogift {
+  font-style: italic; font-size: 0.8rem; color: var(--ember-accent); margin-bottom: 0.45rem;
+}
+.obj p { font-size: 0.86rem; line-height: 1.62; color: var(--text-secondary); }
+.obj.wide { grid-column: 1 / -1; }
+
+.dual { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 1.2rem; }
+.dual-col {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: 2px; padding: 1.6rem 1.8rem;
+}
+.dual-col.self { border-top: 2px solid var(--ifris-accent); }
+.dual-col.others { border-top: 2px solid var(--ember-accent); }
+.dual-col h4 {
+  font-family: var(--font-display); font-size: 0.78rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+.dual-col.self h4 { color: var(--ifris-light); }
+.dual-col.others h4 { color: var(--ember-glow); }
+.dual-col p { font-size: 0.9rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 0.7rem; }
+.dual-col p:last-child { margin-bottom: 0; }
+.dual-col p strong { color: var(--text-primary); }
+
+.footer {
+  text-align: center; padding: 3.5rem 0 2.5rem;
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim);
+}
+.footer span { color: var(--ember-accent); }
+
+.fi { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fi.vis { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 640px) {
+  body { font-size: 17px; }
+  .id-grid { grid-template-columns: 1fr; }
+  .obj-grid { grid-template-columns: 1fr; }
+  .id-card { padding: 1.5rem; }
+  .header { padding: 3.5rem 0 1rem; }
+  :root { --section-gap: 3rem; }
+  .highlight-box { padding: 1.3rem 1.2rem; }
+  .acc-btn .hint { display: none; }
+}
+</style>
+</head>
+<body>
+<canvas id="ember-canvas"></canvas>
+
+<div class="page">
+
+  <header class="header">
+    <span class="tag">Advent of Ultima · The War of the Red Wolf</span>
+    <h1>Uriel's War</h1>
+    <div class="sub">From Hell to the Restoration of Luxania</div>
+    <p class="epitaph">A man who lost his whole world, and then built a new one.</p>
+  </header>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ ORIENTATION ============ -->
+  <section class="fi">
+    <span class="sec-num">The Shape of It</span>
+    <h2 class="sec-title">One Continuous Swing</h2>
+    <div class="prose">
+      <p class="lead-first">He begins swinging in Hell and does not stop. The motion that the Eighth Circle taught his body across eighteen years carries him out the far side and keeps carrying him, and every place it lands is a rung on the same chain: from the street, to a broken realm, to the people who broke it. Uriel's war is a single arc of fury given direction, and the direction it finally takes is the measure of the man.</p>
+      <p>The chain has two possible ends, and which one he reaches turns on a single thing he has not yet learned. He could climb past every cruelty of the living realms to the divine order itself, and there punch a hole through every face of every god. Or he could stop one rung lower, at the realm that holds the stolen people, and lead the charge to bring them home. The first is the war he says he wants. The second is the war he is actually for. The difference between them is whether he learns, in time, to do the right thing despite himself.</p>
+      <p>Everything in between is the long work of becoming the kind of being who can choose the second. He arrives a vicious, dread-inspiring bastard who fights for the lowest rung of every society he passes through. He spends a great while being feared and hated for it. And the realm he starts with is the realm he ends with: <strong>Luxania</strong>, the first realm of the old world, restored as the first realm of the new one. The restoration of Luxania is the spine. The rest is how he gets there, and what it costs him to stay.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ ID CARD ============ -->
+  <section class="fi">
+    <span class="sec-num">The Combatant</span>
+    <h2 class="sec-title">What Comes Out of the Abyss</h2>
+    <div class="id-card">
+      <div class="id-grid">
+        <div class="id-item">
+          <div class="lbl">Title</div>
+          <div class="val">The Red Wolf · God of Storm · The Twice-Damned</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Origin</div>
+          <div class="val">Brooklyn, on Terrae — a magic-dead prison world, and the first thing he lost</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Tier</div>
+          <div class="val">Five. One of the Nine. The smallest-born of them, and the only one who climbed.</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Answer to What Power Is For</div>
+          <div class="val">To fight for the ones who cannot fight</div>
+        </div>
+        <div class="id-item wide">
+          <div class="lbl">The Way He Fights</div>
+          <div class="val">He does not draw his own blade. He picks up the enemy's, uses it, discards it, and mostly he punches holes — through demons, through walls, through whatever stands between him and the thing he came to end. He dismembers one and beats the next with the limb, to break the will of the rest, and he runs down the ones who flee. He teaches the Red Wolves to fight the same way. The cruelty is genuine, and it is pointed.</div>
+        </div>
+        <div class="id-item wide">
+          <div class="lbl">The Mind No One Can Enter</div>
+          <div class="val">Eighteen years in the Eighth Circle left nothing inside him but the loops, the dying, the wrath. An Oneironaut who walks in to read him arrives in that place with themselves at its center, and withdraws with a flinch, if they survive the contact at all. The instrument that makes every other soul legible to the predators of the dark returns only Hell when turned on him. The defense and the wound are the same fact, and he is the one who has to live in it.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ THE THREE LOSSES ============ -->
+  <section class="fi">
+    <span class="sec-num">Before the War</span>
+    <h2 class="sec-title">Everything He Lost</h2>
+    <div class="prose">
+      <p>To understand what the restoration of Luxania means to him, hold what he carried into it: a man who had already lost his whole world, three times over, and learned each time that the answer to losing a thing is to build it again.</p>
+      <p><strong>He lost Terrae.</strong> The winter that never ended, the broken home, the parents executed before he could know them, the brawl in Brooklyn he was fighting to free — all of it left behind when Francesca sent him off-world to keep him alive. He went, and gave the safe path an honest try, and excelled at it, and could have kept it.</p>
+      <p><strong>He lost Uriel.</strong> At Point Zero he could have stayed seated and grieved the world burning behind him. He chose the punch instead, threw it at the thing that started the First War, and paid for the choice with eighteen years in the Eighth Circle. The man who came out is not the boy who went in. He can almost not remember a time before the loops. The life called Uriel — the friends, the love, the future — was the second world taken from him, and the taking was the price of a decision he would make again.</p>
+      <p><strong>He lost the Red Wolves.</strong> Every phase of his life is him gathering people, naming the group, and watching it be taken or changed past holding — the pack in Brooklyn, the friends at Rosorae, each one built and lost. He keeps building anyway. He will not stop, and he will not say so.</p>
+    </div>
+    <div class="highlight-box ifris-box fi">
+      <p>And then he found <span class="ifris">Luxania</span> — and fought to gain all of it back. A home, taken from him, rebuilt as a realm. A self, burned away, recovered as a purpose. A pack, lost twice, forged a third time and never lost again. The man who lost his whole world walks into the most thoroughly broken realm in the cosmos and recognizes it, because it is the shape of everything that was done to him, and he knows the only answer to it: build it again.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ THE SWING / STATIONS ============ -->
+  <section class="fi">
+    <span class="sec-num">The March</span>
+    <h2 class="sec-title">The Stations of the Swing</h2>
+    <div class="prose">
+      <p>The fury moves up the chain, and the chain follows the place where class and active cruelty meet, realm by realm. Each station is both a fight and a gathering — the fist landing and the pack growing.</p>
+    </div>
+    <div class="acc-group" style="margin-top:1.4rem;">
+
+      <div class="acc-item">
+        <button class="acc-btn">I · The First Fist <span class="hint">Crex, and the God-Eyes</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">The first thing the swing does on the outside is gather a second fist.</p>
+          <p>Out of the abyss, the earliest act is recruitment. The God-Eyes laid at Crex's feet, and a man who had spent his power on display and self-defense finally seeing something larger than himself. Before the realms, before the war, the swing reaches for another hand to swing beside it. Uriel does not build alone because he prefers company. He builds because a pack is what survives.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn">II · Thavriel <span class="hint">the hearth that was kept</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">He does not arrive at an empty ruin. He arrives at a fire someone kept lit.</p>
+          <p>Pyrthera held a single point in the dying realm for a thousand years — a sanctuary and vigil at Thavriel, defended under unbroken assault, fresh soldiers rotated into the watch generation after generation, asking nothing. Sol'Kheret's people read the fall correctly when no one else would, and refused to let the candle go out. The Advent forms around that fire. <strong>Alciel</strong>, sent by Sol'Kheret to assist the vigil, closes the thousand-year siege with the ease of the thing he is, and frees the others to do what holding ground would not allow.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn">III · "Oh, hell no" <span class="hint">the realm with its sun put out</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">He hears the one fact his whole being was configured to answer, and answers it.</p>
+          <p>A realm did nothing wrong, received the most perfect gift the cosmos ever gave, and had its sun blotted out, its god killed, its people farmed for a thousand years, while five unassailable powers did the arithmetic and decided the door was too dangerous to open. To Uriel the arithmetic does not even load. He moves through the dark and finds it himself — the Lightwells, the relocation programs, the ones who flinch from eye contact, the ones wearing a different face the next day. He is not briefed into his fury. He earns it on sight. And he goes, for no reason except that he looked at a forsaken people and saw people.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn">IV · The Goddess of Peace <span class="hint">an alliance without a friendship</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">He hears of a goddess who unmade a god, and thinks: that sounds like an ally.</p>
+          <p>He reasons from function, the way he recruited the first fist — a power on the scale he needs, pointed near his enemy. What he meets is <strong>Fiacre</strong>, restoring the Lex Aeterna to the realm, defending the regions with the warding wind that forgives a blade mid-swing. Her register is the one Hell burned out of him. She catches him mid-work, doing a great deal of suffering that a gentler hand might have prevented, gloriously, on the right side. The circumstances do not flatter him, and they do not become friends. But an Avatar of Clotho reads the thread, and she knows, past every preference, that he is one of the Nine. Recognition runs below liking. When it becomes plain that they fight the same war against the same enemy, they join hands without pretending the difference away.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn">V · The Breaking of the Lightwells <span class="hint">the pack forged a third time</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">Tempora pissed off the wrong guy.</p>
+          <p>The predators of the dark built their power on knowing you before you can know them, and their signature instrument breaks against him, because to read Uriel is to arrive in Hell. He walks into the place war was never supposed to apply and is worse than the thing that lives there. The dens, the rings, the slow-drained in the Lightwells — and through them, the Grounded, the warlords and factions of a shattered people, rallied into something like a nation and taught to fight like him. They name themselves the <strong>Red Wolves</strong>. The pack he lost twice, built a third time, from the most forsaken material in the cosmos.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn">VI · The Battle of the Second Sun <span class="hint">the line held alone</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">A sun rising over an occupied realm is a sun rising over a prison. Someone has to drive the dark back so the light can mean something.</p>
+          <p>Fiacre carves the Second Sun into the sky. Uriel holds the line for it, single-handed at the worst of it, while the Red Wolves become an army that can keep ground rather than only take it. This is the hinge of the whole restoration: the Sun, the Garden, the gifts to come — none of them land while the occupation still holds, and the breaking of the occupation is the thing only a creature like him will do, because everything gentler was tried, and nothing gentler survives the reach of Tempora.</p>
+        </div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ THE SEVEN GIFTS ============ -->
+  <section class="fi">
+    <span class="sec-num">The Point</span>
+    <h2 class="sec-title">The Restoration — A New World Assembled at the Origin</h2>
+    <div class="prose">
+      <p>Luxania was the first realm of the old world, the place Aether gave the Wellspring, the origin from which the cosmos was first connected. It becomes the first realm of the new one. The old world was given to Luxania from above, by a god. The new world is assembled for Luxania from below, by its peers, each realm carrying back the hardest-won thing its own crisis forced it to produce, and laying it down at the place where connection began.</p>
+      <p>This is the spine the entire war serves. Uriel's fighting is the precondition for the gifts arriving at all, and the gift that is his to give is the only one that cannot be set down and walked away from.</p>
+    </div>
+    <div class="obj-grid">
+      <div class="obj">
+        <div class="oname">Pyrthera</div>
+        <div class="ogift">the hearth</div>
+        <p>The sanctuary and vigil at Thavriel — given first, sustained a thousand years, asking nothing. The fire the Advent gathered around. The gift that made the gathering possible.</p>
+      </div>
+      <div class="obj">
+        <div class="oname">Glacia</div>
+        <div class="ogift">the protectors</div>
+        <p>The lost realm's gift of survival itself — Alciel, and the Gonlan-forms that shield every realm, Solarith chief among them. The dead realm gives the cosmos its guardians.</p>
+      </div>
+      <div class="obj">
+        <div class="oname">Dystan</div>
+        <div class="ogift">the sun</div>
+        <p>Fiacre's defection from the order of the completed dead, and the Second Sun ignited over the living. The realm of death gives the gift of light.</p>
+      </div>
+      <div class="obj">
+        <div class="oname">Zephyros</div>
+        <div class="ogift">the past</div>
+        <p>The Garden of Hecate, assembled across the very thousand years Aeon endured a reputation for standing silent before a great horror. The silence was the assembly. The realm's whole history, returned as living memory.</p>
+      </div>
+      <div class="obj">
+        <div class="oname">Thalassor</div>
+        <div class="ogift">the future</div>
+        <p>The immortality Ambrosia that Leif nearly brought ruin upon his realm to create, poured into the people the dynasty was built to forget. Time without end, to build inside.</p>
+      </div>
+      <div class="obj">
+        <div class="oname">Ferridane</div>
+        <div class="ogift">the goddess, and the steel</div>
+        <p>Tiamat, the Diamond Gonlan, leaving with Alciel to become the goddess of the new realm of light. And steel of the new kind — Crex's armaments, carried for show and self-defense, given over as the force that is not the old world's blade.</p>
+      </div>
+      <div class="obj wide">
+        <div class="oname">Tenebralis</div>
+        <div class="ogift">the people — taken back</div>
+        <p>The one gift that is not freely offered. Six realms give from their crisis; the seventh is made to surrender what it stole. The Rewritten in the dens and the mines and the manors, the souls in the Lightwells, the scattered and the sold. This gift is returned by force, by the man who never took anything that was not offered — except his own life, and then the same act again, for them.</p>
+      </div>
+    </div>
+    <div class="highlight-box gold-box fi">
+      <p><strong>And Uriel's gift is the staying.</strong> Every other gift is a thing, delivered and set down while the giver moves on. His is people — a freed nation that needs leadership, an army that needs a hand, a realm that needs defending while it learns to defend itself. It cannot be handed over and left. It requires presence: sustained, unglamorous, nation-building presence. The staying is the one thing he has never been able to do, and it is the thing they most need, because freedom without a structure to hold it is a vacuum, and a vacuum is filled by whatever moves first.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ THE LEX AETERNA AUDIT ============ -->
+  <section class="fi">
+    <span class="sec-num">The Measure</span>
+    <h2 class="sec-title">Why the Seat Is His — and Why He Cannot Yet Take It</h2>
+    <div class="prose">
+      <p>An Exvisar is many things — divine representative, theological paragon, political figure. Mostly, the Exvisar is the person who most represents the people of the realm. The Luxanians are a people condemned and discarded by a cosmos that did the arithmetic and found them not worth the cost. The one who most represents them is the being who was condemned the same way and refused the discarding: small, forsaken, un-forsaking himself by sheer refusal. He is not Luxanian. He is, in the only way that signifies, one of them.</p>
+      <p>The Lex Aeterna were the settings of the Wellspring — the parameters that once made decency ambient on Luxania. Measured against them, Uriel passes four as settled facts of his nature, having never stood inside the field that was supposed to be required to produce them. The fifth is the whole of his journey.</p>
+    </div>
+    <div style="margin-top:1.2rem;">
+      <div class="princ passed">
+        <div class="princ-n">Do not deceive those who trust you</div>
+        <p>He does not deceive the trusting. He will be brutal and cold and terrifying, and the people who trust him are never the ones he tricks. <strong>Kept.</strong></p>
+      </div>
+      <div class="princ passed">
+        <div class="princ-n">Do not use another person as a means to your end</div>
+        <p>Anything he wants done, he does himself or not at all. Those who join him join willingly. He would rather act alone than conscript a single soul. <strong>Kept.</strong></p>
+      </div>
+      <div class="princ passed">
+        <div class="princ-n">Do not turn away from someone in pain</div>
+        <p>Not at all, not ever. He turned toward the suffering the whole cosmos spent a thousand years turning from. <strong>Kept, as the defining act of the war.</strong></p>
+      </div>
+      <div class="princ passed">
+        <div class="princ-n">Do not take what is not offered</div>
+        <p>The only thing he ever took unoffered was his own life, back — and then the same act for Luxania. He does not take from others; he returns what was stolen. <strong>Kept, at a depth past mere compliance.</strong></p>
+      </div>
+      <div class="princ pending">
+        <div class="princ-n">Do not cause suffering you can prevent — the lesson unlearned</div>
+        <p>This is the one he fails, and the only one. He causes a great deal of preventable suffering, on the right side, in the manner of his fury: the freed who are also terrified, the enemy broken past necessity, the cost a gentler hand could see and he cannot. <strong>The whole of his arc is the long, incomplete movement toward this. He never becomes gentle. He learns the discipline of not causing the harm that need not be caused — far enough that the people he represents come to trust that he is trying, which is the most a people shown no gentleness can recognize as love.</strong></p>
+      </div>
+    </div>
+    <div class="highlight-box fi">
+      <p>He embodies the realm's defining principle from outside the mechanism that was supposed to produce it — a man who treats the forsaken as family with no Wellspring tuning him toward it, the hard way, on nothing but having recognized their humanity. He is the proof the gift was real all along. And until he learns the fifth principle, he cannot take the seat — because taking a seat is the one thing he could never do, and it is exactly what these people need most. The seat is gated behind the growth. He cannot lead them honestly until the staying has made him their leader and not only their liberator.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ THE FORK ============ -->
+  <section class="fi">
+    <span class="sec-num">The Two Ends</span>
+    <h2 class="sec-title">Where the Swing Terminates</h2>
+    <div class="prose">
+      <p>The chain has carried him from the street to a broken realm to the threshold of its enemy. From here it forks, and which end he reaches turns on whether he has learned the fifth principle — whether he can do the right thing despite himself.</p>
+    </div>
+    <div class="dual">
+      <div class="dual-col self">
+        <h4>The War He Says He Wants — Dystan</h4>
+        <p>To climb past every present cruelty of the living realms to the divine order itself, reach the realm of the completed dead, and punch a hole through every face of every god. The structural root: the hereditary sentence, the withheld field, the spoils system of a war no one remembers, the verdict the gods drew and never reopened.</p>
+        <p>It is righteous, and it frees no one. The condemned are still condemned the morning after. It is the war with no faces in it — and a war with no faces is the one where the fury has nothing to keep it pointed outward. It is the road on which the grievance turns inward and a man becomes the thing he is fighting. This is the end he reaches only if he never learns the lesson.</p>
+      </div>
+      <div class="dual-col others">
+        <h4>The War He Is For — Tenebralis</h4>
+        <p>To stop one rung lower, at the realm that holds the stolen people, and lead the Luxanians back into the dark that ate them, to bring their own home. The living root, where the cruelty of every realm converges in the present age. A war with faces on both ends, fought for specific people, won when specific people come home.</p>
+        <p>It is the addressable war. The enemy is an army holding hostages, guilty in the present and not only the deep past. And it is the war the predators of the dark have won against every configuration of heroes who walked in before — beaten by the grammar that makes surrender feel sophisticated. The one thing that grammar cannot parse is a man who chooses the plain right thing despite himself. This is the end he reaches if he learns the fifth principle — and the gift it completes is the last one: the people, taken back.</p>
+      </div>
+    </div>
+    <div class="highlight-box gold-box fi">
+      <p>The first thing the forsaken-made-sovereign does with his sovereignty is lead his people into the realm that destroyed them, to recover the ones still inside it. The endpoint of the journey is not the heavens. It is the charge into Tenebralis, at the head of the nation he built, to bring home the gift no one gives freely. He does not burn the divine order. He empties the hell that was actually hurting people — and pointing the fury at the war that frees real faces, over the war that would only have been about his rage, is the final proof of what he became, and what he refused to become.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ CLOSE ============ -->
+  <section class="fi">
+    <span class="sec-num">The Title</span>
+    <h2 class="sec-title">Exvisar of Luxania</h2>
+    <div class="prose">
+      <p>He freed them from the Lightwells. He reunited the warlords and factions and rallied them into a nation. He fought the war for their freedom and held the line alone at the Second Sun. He trained their army and gave it a name. He pulled the attention of the cosmos back to them, again and again, with no institutional backing, no divine mandate, and no support from them or anyone until he had earned it — feared and hated everywhere he went for what his damnation made of him, and what he made of his damnation.</p>
+      <p>The man who only knew how to swing learns where to aim. The man who lost his whole world three times builds a new one and, at last, does the thing he could never do: he stays. He becomes the person who most represents a people no longer forsaken — the forsaken made sovereign over the forsaken, until they are forsaken no longer, and neither, finally, is he.</p>
+    </div>
+    <div class="highlight-box ifris-box fi">
+      <p>He lost Terrae. He lost the life called Uriel. He lost the Red Wolves. And then he found <span class="ifris">Luxania</span>, and fought to gain all of it back — a home, a self, a pack — rebuilt into a realm restored at the origin of the world. The answer to losing a thing is to build it again. He had learned that lesson before any of this began. Luxania is where he finally got to keep what he built.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <footer class="footer">
+    Advent of Ultima &nbsp;·&nbsp; <span>The War of the Red Wolf</span> &nbsp;·&nbsp; The Restoration of Luxania
+  </footer>
+
+</div>
+
+<script>
+// Accordion
+document.querySelectorAll('.acc-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const body = item.querySelector('.acc-body');
+    const isOpen = item.classList.contains('open');
+    const siblings = item.parentElement.querySelectorAll('.acc-item');
+    siblings.forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.acc-body').style.maxHeight = null;
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+  });
+});
+
+// Fade in on scroll
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+
+// Ember particle system — embers rising
+(function() {
+  const canvas = document.getElementById('ember-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  const COUNT = 64;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Ember {
+    constructor() { this.reset(true); }
+    reset(initial) {
+      this.x = Math.random() * W;
+      this.y = initial ? Math.random() * H : H + 12;
+      this.r = Math.random() * 1.6 + 0.5;
+      this.vx = (Math.random() - 0.5) * 0.25;
+      this.vy = -(Math.random() * 0.5 + 0.15);
+      this.drift = Math.random() * Math.PI * 2;
+      this.driftSpeed = Math.random() * 0.004 + 0.0015;
+      this.driftAmp = Math.random() * 0.5 + 0.15;
+      const roll = Math.random();
+      if (roll < 0.12) {
+        this.color = 'hsla(' + (282 + Math.random() * 16 - 8) + ',' + (52 + Math.random() * 28) + '%,' + (58 + Math.random() * 14) + '%,';
+      } else {
+        const hue = 12 + Math.random() * 24;
+        const sat = 78 + Math.random() * 20;
+        const lum = 48 + Math.random() * 22;
+        this.color = 'hsla(' + hue + ',' + sat + '%,' + lum + '%,';
+      }
+      this.baseAlpha = Math.random() * 0.4 + 0.12;
+      this.pulsePhase = Math.random() * Math.PI * 2;
+      this.pulseSpeed = Math.random() * 0.018 + 0.008;
+      this.life = 0;
+      this.maxLife = Math.random() * 320 + 240;
+    }
+    update() {
+      this.drift += this.driftSpeed;
+      this.pulsePhase += this.pulseSpeed;
+      this.life++;
+      this.x += this.vx + Math.sin(this.drift) * this.driftAmp;
+      this.y += this.vy;
+      if (this.y < -12 || this.life > this.maxLife) this.reset(false);
+    }
+    draw() {
+      const pulse = 1 + Math.sin(this.pulsePhase) * 0.4;
+      const fade = Math.min(1, this.life / 40) * Math.min(1, (this.maxLife - this.life) / 80);
+      const a = this.baseAlpha * pulse * fade;
+      const r = this.r * pulse;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = this.color + a + ')';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, r * 3, 0, Math.PI * 2);
+      const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, r * 3);
+      g.addColorStop(0, this.color + (a * 0.6) + ')');
+      g.addColorStop(1, this.color + '0)');
+      ctx.fillStyle = g;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < COUNT; i++) particles.push(new Ember());
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+</script>
+
+</body>
+</html>

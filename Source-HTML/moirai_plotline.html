@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Moirai Plotline — Advent of Ultima</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0e0f;
+  --bg-panel: #161618;
+  --bg-panel-2: #1c1c1f;
+  --bg-raised: #232327;
+  --line: #2e2e33;
+  --line-soft: #242428;
+  --thread: #6f7176;
+  --thread-bright: #b9bbc0;
+  --ink: #d9dadd;
+  --ink-soft: #9a9ba1;
+  --ink-dim: #67686e;
+  --white: #f4f4f5;
+  --warn: #9c9ea4;
+  --font-d: 'Cinzel', serif;
+  --font-b: 'Cormorant Garamond', serif;
+  --maxw: 920px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-b);
+  font-size: 19px;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--thread-bright); color: var(--bg); }
+
+/* thread-weave backdrop */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 38px, rgba(255,255,255,0.012) 38px 39px),
+    radial-gradient(ellipse at 20% 0%, rgba(255,255,255,0.035) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 100%, rgba(255,255,255,0.02) 0%, transparent 50%);
+  pointer-events: none; z-index: 0;
+}
+#weave { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.5; }
+
+.wrap { position: relative; z-index: 1; max-width: var(--maxw); margin: 0 auto; padding: 0 1.5rem; }
+
+/* ---- header ---- */
+.hd { text-align: center; padding: 6rem 0 2rem; }
+.hd .kicker {
+  font-family: var(--font-d); font-size: 0.6rem; letter-spacing: 0.42em;
+  text-transform: uppercase; color: var(--thread); margin-bottom: 2rem;
+}
+.hd h1 {
+  font-family: var(--font-d); font-weight: 700;
+  font-size: clamp(2.3rem, 7vw, 3.8rem); letter-spacing: 0.12em;
+  color: var(--white); line-height: 1.12;
+  text-shadow: 0 0 60px rgba(255,255,255,0.12);
+}
+.hd .spindle {
+  display: flex; align-items: center; justify-content: center; gap: 0.7rem;
+  margin: 1.4rem 0 1.2rem;
+}
+.hd .spindle .ln { width: 48px; height: 1px; background: var(--line); }
+.hd .spindle .dot { width: 5px; height: 5px; background: var(--thread); transform: rotate(45deg); }
+.hd .sub {
+  font-family: var(--font-d); font-size: 0.72rem; letter-spacing: 0.24em;
+  text-transform: uppercase; color: var(--ink-dim);
+}
+.hd .epi {
+  font-style: italic; color: var(--ink-soft); max-width: 33rem;
+  margin: 1.8rem auto 0; font-size: 1.05rem; line-height: 1.7;
+}
+
+/* ---- the spine premise ---- */
+.spine {
+  background: linear-gradient(180deg, var(--bg-panel-2), var(--bg-panel));
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--thread);
+  padding: 2.4rem 2.6rem;
+  margin: 2rem 0;
+}
+.spine .lbl {
+  font-family: var(--font-d); font-size: 0.58rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--thread); margin-bottom: 1rem;
+}
+.spine p { font-size: 1.08rem; line-height: 1.85; }
+.spine p + p { margin-top: 0.9rem; }
+.spine strong { color: var(--white); font-weight: 600; }
+.spine em { color: var(--ink-soft); }
+
+/* ---- dividers ---- */
+.div {
+  display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+  margin: 4rem 0; opacity: 0.6;
+}
+.div::before, .div::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--line), transparent);
+}
+.div span { width: 6px; height: 6px; background: var(--thread); transform: rotate(45deg); }
+
+/* ---- section heads ---- */
+.sec { padding-top: 0.5rem; }
+.sec-k {
+  font-family: var(--font-d); font-size: 0.56rem; letter-spacing: 0.34em;
+  text-transform: uppercase; color: var(--thread); margin-bottom: 0.4rem;
+}
+.sec-t {
+  font-family: var(--font-d); font-weight: 600;
+  font-size: clamp(1.3rem, 3.2vw, 1.7rem); letter-spacing: 0.04em;
+  color: var(--white); padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--line); margin-bottom: 1.5rem;
+}
+.prose p { margin-bottom: 1.1rem; }
+.prose p:last-child { margin-bottom: 0; }
+.prose strong { color: var(--white); font-weight: 600; }
+.prose em { color: var(--ink-soft); }
+
+/* ---- the three moirai cards ---- */
+.three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 0.5rem; }
+.fate {
+  background: var(--bg-panel); border: 1px solid var(--line);
+  padding: 1.6rem 1.4rem; position: relative;
+}
+.fate::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, transparent, var(--thread), transparent);
+}
+.fate .role {
+  font-family: var(--font-d); font-size: 0.54rem; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--thread); margin-bottom: 0.3rem;
+}
+.fate .who {
+  font-family: var(--font-d); font-size: 1.05rem; font-weight: 600;
+  color: var(--white); margin-bottom: 0.1rem;
+}
+.fate .epithet { font-style: italic; font-size: 0.85rem; color: var(--ink-dim); margin-bottom: 0.7rem; }
+.fate p { font-size: 0.9rem; line-height: 1.65; color: var(--ink-soft); }
+
+/* ---- beat blocks ---- */
+.beat {
+  background: var(--bg-panel); border: 1px solid var(--line);
+  border-left: 3px solid var(--thread);
+  padding: 1.5rem 1.8rem; margin-bottom: 1rem;
+}
+.beat .bn {
+  font-family: var(--font-d); font-size: 0.55rem; letter-spacing: 0.24em;
+  text-transform: uppercase; color: var(--thread); margin-bottom: 0.35rem;
+}
+.beat .bt {
+  font-family: var(--font-d); font-size: 1rem; font-weight: 600;
+  color: var(--white); margin-bottom: 0.5rem; letter-spacing: 0.02em;
+}
+.beat p { font-size: 0.94rem; line-height: 1.72; color: var(--ink-soft); }
+.beat p + p { margin-top: 0.6rem; }
+.beat strong { color: var(--thread-bright); font-weight: 600; }
+.beat em { color: var(--ink); font-style: italic; }
+
+/* ---- the operation panel (Mavarra) ---- */
+.op {
+  background: var(--bg); border: 1px solid var(--line);
+  padding: 0; margin: 0.5rem 0; overflow: hidden;
+}
+.op-hd {
+  background: var(--bg-panel-2); border-bottom: 1px solid var(--line);
+  padding: 1.1rem 1.6rem;
+  font-family: var(--font-d); font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.1em; color: var(--white);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.op-hd .tag {
+  font-family: var(--font-b); font-style: italic; font-weight: 400;
+  font-size: 0.8rem; color: var(--thread); letter-spacing: 0.02em;
+}
+.op-body { padding: 1.5rem 1.6rem; }
+.op-body p { font-size: 0.95rem; line-height: 1.74; color: var(--ink-soft); }
+.op-body p + p { margin-top: 0.8rem; }
+.op-body strong { color: var(--white); }
+.op-body em { color: var(--ink); }
+
+/* ---- win condition strip ---- */
+.wincon {
+  background: var(--bg-raised); border: 1px solid var(--thread);
+  padding: 1.5rem 1.8rem; margin: 1.2rem 0;
+  text-align: center;
+}
+.wincon .wc-l {
+  font-family: var(--font-d); font-size: 0.54rem; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--thread); margin-bottom: 0.6rem;
+}
+.wincon .wc-t {
+  font-family: var(--font-d); font-size: clamp(0.95rem, 2.3vw, 1.15rem);
+  font-weight: 600; color: var(--white); letter-spacing: 0.03em; line-height: 1.5;
+}
+
+/* ---- detection ladder ---- */
+.ladder { counter-reset: rung; }
+.rung {
+  display: grid; grid-template-columns: auto 1fr; gap: 1.2rem;
+  padding: 1.2rem 0; border-bottom: 1px solid var(--line-soft);
+}
+.rung:last-child { border-bottom: none; }
+.rung .num {
+  font-family: var(--font-d); font-size: 1.5rem; font-weight: 700;
+  color: var(--line); line-height: 1; min-width: 2.2rem;
+}
+.rung .rt {
+  font-family: var(--font-d); font-size: 0.92rem; font-weight: 600;
+  color: var(--white); margin-bottom: 0.3rem; letter-spacing: 0.02em;
+}
+.rung p { font-size: 0.92rem; line-height: 1.7; color: var(--ink-soft); }
+.rung .muffle {
+  display: inline-block; font-family: var(--font-d); font-size: 0.5rem;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ink-dim); border: 1px solid var(--line);
+  padding: 0.15rem 0.5rem; margin-top: 0.5rem;
+}
+
+/* ---- pull / scripture ---- */
+.scr {
+  text-align: center; font-family: var(--font-d);
+  font-size: clamp(1rem, 2.4vw, 1.25rem); font-weight: 600;
+  color: var(--white); letter-spacing: 0.05em; line-height: 1.55;
+  margin: 2rem auto; max-width: 36rem;
+  text-shadow: 0 0 44px rgba(255,255,255,0.14);
+}
+.scr .s { display: block; font-family: var(--font-b); font-style: italic;
+  font-weight: 400; font-size: 0.82rem; color: var(--ink-dim);
+  letter-spacing: 0.03em; margin-top: 0.8rem; }
+
+.pull {
+  font-style: italic; font-size: 1.12rem; color: var(--thread-bright);
+  border-left: 2px solid var(--line); padding-left: 1.3rem;
+  margin: 1.3rem 0; line-height: 1.7;
+}
+
+/* ---- proofs grid ---- */
+.proofs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 0.5rem; }
+.proof {
+  background: var(--bg-panel); border: 1px solid var(--line);
+  padding: 1.2rem 1.3rem;
+}
+.proof .pn {
+  font-family: var(--font-d); font-size: 0.5rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--thread); margin-bottom: 0.35rem;
+}
+.proof p { font-size: 0.9rem; line-height: 1.62; color: var(--ink-soft); }
+.proof strong { color: var(--white); }
+
+/* ---- convergence / finale ---- */
+.fin {
+  background: linear-gradient(180deg, var(--bg-panel-2), var(--bg));
+  border: 1px solid var(--line); border-top: 2px solid var(--thread-bright);
+  padding: 2.2rem 2.4rem; margin: 1.5rem 0;
+}
+.fin p { font-size: 1.02rem; line-height: 1.82; }
+.fin p + p { margin-top: 0.9rem; }
+.fin strong { color: var(--white); }
+.fin em { color: var(--ink-soft); }
+
+/* ---- step sequence ---- */
+.steps { margin-top: 1rem; }
+.step {
+  display: grid; grid-template-columns: auto 1fr; gap: 1.3rem;
+  padding: 1rem 0;
+}
+.step .sd {
+  font-family: var(--font-d); font-size: 0.56rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--thread);
+  border: 1px solid var(--line); padding: 0.4rem 0.6rem;
+  height: fit-content; white-space: nowrap;
+}
+.step .sc { }
+.step .sc .sct {
+  font-family: var(--font-d); font-size: 0.9rem; font-weight: 600;
+  color: var(--white); margin-bottom: 0.25rem;
+}
+.step .sc p { font-size: 0.93rem; line-height: 1.68; color: var(--ink-soft); }
+.step:not(:last-child) .sd { position: relative; }
+
+/* ---- open seams ---- */
+.seam {
+  background: var(--bg-panel); border: 1px dashed var(--line);
+  padding: 1.3rem 1.6rem; margin-bottom: 0.8rem;
+}
+.seam .skq {
+  font-family: var(--font-d); font-size: 0.85rem; font-weight: 600;
+  color: var(--thread-bright); margin-bottom: 0.35rem;
+}
+.seam p { font-size: 0.9rem; line-height: 1.68; color: var(--ink-soft); }
+
+/* ---- footer ---- */
+.ft {
+  text-align: center; padding: 3.5rem 0 2.5rem;
+  font-family: var(--font-d); font-size: 0.5rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--ink-dim);
+}
+.ft span { color: var(--thread); }
+
+/* ---- fade ---- */
+.fi { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fi.vis { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 680px) {
+  body { font-size: 17px; }
+  .three { grid-template-columns: 1fr; }
+  .proofs { grid-template-columns: 1fr; }
+  .spine, .fin { padding: 1.6rem 1.4rem; }
+  .op-body, .beat { padding: 1.3rem 1.2rem; }
+  .hd { padding: 4rem 0 1.5rem; }
+  .div { margin: 2.6rem 0; }
+  .step { grid-template-columns: 1fr; gap: 0.5rem; }
+  .rung { grid-template-columns: 1fr; gap: 0.3rem; }
+  .rung .num { font-size: 1.1rem; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="weave"></canvas>
+
+<div class="wrap">
+
+  <header class="hd fi">
+    <div class="kicker">Advent of Ultima · Moirai Codex · Plot Architecture</div>
+    <h1>The Moirai Plotline</h1>
+    <div class="spindle"><span class="ln"></span><span class="dot"></span><span class="ln"></span></div>
+    <div class="sub">The Buried Engine of the Second Act</div>
+    <p class="epi">The thread the noise is designed to cover. The crime nobody is meant to see &mdash; including the one telling the story.</p>
+  </header>
+
+  <div class="spine fi">
+    <div class="lbl">The Premise in One Breath</div>
+    <p>The age is <strong>ending</strong> &mdash; not dying. An ending is a threshold; the prior age closes and the next age begins, and the word is precise. While the cosmos watches the spectacle of that turning &mdash; synthetic gods, a covenant failing, a misread prophecy, a war &mdash; a second operation runs underneath it, a thousand years old, and its entire design is to never be seen.</p>
+    <p>Vex Mavarra intends to reach the end of the story <strong>in possession of the Avatar of Atropos, undetected.</strong> Possession is a power grab. Possession <em>unseen</em> is the masterwork: Mavarra owning Death itself while every eye in creation is pointed elsewhere. This page exists so the thread is never lost again &mdash; because it is built, deliberately, to slip the mind.</p>
+  </div>
+
+  <div class="div"><span></span></div>
+
+  <!-- THE THREE -->
+  <section class="sec fi">
+    <div class="sec-k">I · The Players</div>
+    <h2 class="sec-t">The Three Sisters, and the Rule That Was an Exploit</h2>
+    <div class="prose">
+      <p>The Moirai are not gods. They are the apportionment itself &mdash; the terms reality runs on. Three sisters, three incarnations, three different relationships to the form they wear.</p>
+    </div>
+    <div class="three">
+      <div class="fate">
+        <div class="role">Lachesis · the Measurer</div>
+        <div class="who">Algol</div>
+        <div class="epithet">has always Been, will never die</div>
+        <p>Perpetual presence. She knows everything &mdash; and speaks the future forward only when the threads converge upon a single undeniable point in time. Fiacre is banking on that word arriving.</p>
+      </div>
+      <div class="fate">
+        <div class="role">Clotho · the Spinner</div>
+        <div class="who">Fiacre</div>
+        <div class="epithet">an Avatar never born &mdash; until now</div>
+        <p>The principle of commencement. She consented to be born, and is speed-running a prophecy she fundamentally misunderstands the purpose of.</p>
+      </div>
+      <div class="fate">
+        <div class="role">Atropos · the Cutter</div>
+        <div class="who">Lilia</div>
+        <div class="epithet">always dies, maddened &mdash; and is reborn</div>
+        <p>The mantle of Death. By fixed cosmic law it always re-homes through the Crystaturges of Luxania &mdash; a rule with a known address. An address that can be owned.</p>
+      </div>
+    </div>
+    <div class="prose" style="margin-top:1.4rem;">
+      <p>That last rule is the hinge of everything. <em>The Avatar of Atropos always dies, and is reborn from the Crystaturges of Luxania.</em> The cosmos read this as cosmology. Vex Mavarra read it as a <strong>vulnerability</strong> &mdash; the one fixed return-point of the mantle of Death, a soil that Death is forced to grow back into. You do not have to defeat a Moira. You only have to own the ground she is compelled to be reborn from.</p>
+    </div>
+  </section>
+
+  <div class="div"><span></span></div>
+
+  <!-- THE OPERATION -->
+  <section class="sec fi">
+    <div class="sec-k">II · The Thousand-Year Operation</div>
+    <h2 class="sec-t">The Lightwells Were Never About Myst</h2>
+    <div class="op">
+      <div class="op-hd">The True Function of the Occupation <span class="tag">running for one thousand years</span></div>
+      <div class="op-body">
+        <p>The murder of Luxania, the renaming and erasure, the soul-harvest, the Lightwells, the products sold across every Realm &mdash; the cosmos saw a predatory vice economy. The vice economy was real, profitable, and self-funding. It was also the <strong>cover.</strong></p>
+        <p>The true operation beneath it was the slow capture and cultivation of the Luxanian Crystaturge line &mdash; so that when the Cutter&rsquo;s mantle next fell, it would fall into a vessel Mavarra had already shaped, already prepared, already owned. Everything Fiacre healed in the First Act &mdash; the famines, the crystata, the Wellspring, the Second Sun &mdash; was, without her knowing it, the prying of Mavarra&rsquo;s hand off the vessel of Atropos. <strong>Luxenfall was not collateral. It was the target.</strong></p>
+      </div>
+    </div>
+    <div class="prose" style="margin:1.3rem 0 0.4rem;">
+      <p>And so Lilia is not a tragic figure adjacent to the plot. Lilia is the operation&rsquo;s <strong>product.</strong> Erion fell; the mantle had to re-home through a Luxanian Crystaturge; it landed on Lilia because Lilia was inside the very population Mavarra had spent a thousand years cultivating for exactly this. The Lightwells did not merely break a girl. They <em>manufactured the vessel.</em> Her violated agency goes all the way down: her village, her father, her deusa, her mantle &mdash; not a string of misfortunes, but a designed outcome.</p>
+    </div>
+    <div class="wincon">
+      <div class="wc-l">Mavarra&rsquo;s Win Condition</div>
+      <div class="wc-t">To reach the end of the story possessing the Avatar of Atropos &mdash; and to have done so without ever being detected.</div>
+    </div>
+  </section>
+
+  <div class="div"><span></span></div>
+
+  <!-- THE ENGINE: LILIA -->
+  <section class="sec fi">
+    <div class="sec-k">III · The Engine, First Half</div>
+    <h2 class="sec-t">Lilia &mdash; Recruited to Kill the Nine</h2>
+    <div class="beat">
+      <div class="bn">The Commission</div>
+      <div class="bt">The gods give her the order</div>
+      <p>Lilia is recruited by the gods and bidden to <strong>kill the Nine.</strong> She believes in it &mdash; Order, judgment, the recklessness of the Heralds &mdash; and she has every farmed and every genuine reason to want it done. She <em>wants</em> to.</p>
+    </div>
+    <div class="beat">
+      <div class="bn">The Wall</div>
+      <div class="bt">She cannot do it, and cannot find out why</div>
+      <p>She cannot. She cannot figure out why she cannot. It is maddening &mdash; an impulse in her head driving her toward the act, and a wall she cannot name stopping her. She thinks the wall is the mantle of Atropos.</p>
+      <p><strong>It is Vex.</strong> Mavarra does not want the Nine dead &mdash; a dead Nine is a dead prophecy, and her win condition needs the prophecy to <em>complete</em> so she can ride it out, undetected, in possession of Atropos. So Lilia is driven and braked by the same hijacked voice, toward and away from the same act, and calls the whole churning mess her office.</p>
+    </div>
+    <div class="beat">
+      <div class="bn">The Mistaken Voice</div>
+      <div class="bt">She thinks Mavarra is the voice of Atropos</div>
+      <p>Lilia has been taking dictation from her own captor and calling it Death. She has no reference sample &mdash; the voice speaks with the authority of the mantle, and she is the being built to receive it. Some unknown portion of her conviction, her philosophy, her very indictments is not Lilia, and not Atropos. It is the stranger in Death&rsquo;s seat.</p>
+    </div>
+  </section>
+
+  <div class="div"><span></span></div>
+
+  <!-- THE ENGINE: FIACRE -->
+  <section class="sec fi">
+    <div class="sec-k">IV · The Engine, Second Half</div>
+    <h2 class="sec-t">Fiacre &mdash; Speed-Running a Prophecy She Misreads</h2>
+    <div class="prose">
+      <p>Fiacre is trying to clear the prophecy fast, and without killing anyone &mdash; the no-kill speed run, the want to finish the conscription and be released to the small life. But the math will not close. She has more than nine allies now, and things still are not in alignment. The Realms keep failing in strange ways: synthetic gods, the water going cold in Thalassor. She begins to fear she is doing something wrong, or that events are not happening on time. A sense settles in her that time is running out, and she does not want to let everyone die.</p>
+    </div>
+    <div class="beat">
+      <div class="bn">The Misread &mdash; Corrected</div>
+      <div class="bt">Her error is not that she stands outside the Nine</div>
+      <p>Her error is that she believes <strong>the Nine are all supposed to be allies.</strong> She is assembling a coalition. But nine threads that weave a shroud are not nine friends &mdash; a shroud is woven from whatever the weaving requires. She is succeeding, with total competence, at the wrong task.</p>
+    </div>
+    <div class="beat">
+      <div class="bn">The Fact That Breaks It</div>
+      <div class="bt">Lilia is one of the Nine. Worse &mdash; Raiwata is the ninth Herald.</div>
+      <p>One of the Nine is under divine commission to kill the others. And the ninth thread of the shroud is <strong>Raiwata himself</strong> &mdash; the Sun-Caller, the root of the ending age, the devil she held in her palm and let go. The coalition model cannot survive this. The prophecy structurally contains the being everyone most wants dead, as a load-bearing thread.</p>
+    </div>
+    <div class="beat">
+      <div class="bn">The Word She Cannot Hear</div>
+      <div class="bt">Ending is not extinction</div>
+      <p>The age is <em>ending</em>, and the word is precise &mdash; the prior age closes so the next age may <strong>begin.</strong> Fiacre, of all beings the principle of beginning, experiences the prophecy as a countdown to everyone dying. Her own purpose is the answer to her own terror, and the speed-run, the misread, and the want-to-be-out keep her from seeing it. The Spinner grieves an ending as though it were an extinction.</p>
+    </div>
+    <div class="scr">
+      She is the principle of beginning, and she cannot see that an ending is where she comes in.
+    </div>
+  </section>
+
+  <div class="div"><span></span></div>
+
+  <!-- ALGOL & THE TARGET -->
+  <section class="sec fi">
+    <div class="sec-k">V · The Keystone Under the Plan</div>
+    <h2 class="sec-t">Algol, and Why Mavarra Wants the Seer Broken</h2>
+    <div class="prose">
+      <p>Algol knows everything. As the Measurer, she speaks the future forward only when the threads have converged upon a single, undeniable point in time &mdash; she will not name a future that is still plural. At exactly the right moment, Algol will tell Fiacre what must be done. <strong>Fiacre is banking on that.</strong> The Measurer&rsquo;s word, arriving on time, is the load-bearing certainty beneath the entire Second Act &mdash; the thing that lets Fiacre tolerate the not-knowing and the not-adding-up.</p>
+    </div>
+    <div class="op">
+      <div class="op-hd">Mavarra&rsquo;s Second Front <span class="tag">break the seer</span></div>
+      <div class="op-body">
+        <p>So Mavarra means to <strong>break Algol.</strong> She need not defeat the Moirai if she can sever the one thing holding their plan together. Break the seer, corrupt her, delay her, or merely make Fiacre <em>doubt</em> her &mdash; and the moment Fiacre is banking on never comes, or comes wrong, and the Spinner is left speed-running a misunderstood prophecy with no one to correct her course.</p>
+        <p>It rhymes exactly with the Lilia operation. Mavarra&rsquo;s whole method is the corruption of <em>true voices</em> &mdash; she speaks as Atropos into Lilia; she would speak as, or against, Lachesis to break Fiacre. The captive Cutter and the targeted Seer are two fronts of one war: <strong>control what the Moirai hear.</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="div"><span></span></div>
+
+  <!-- DETECTION -->
+  <section class="sec fi">
+    <div class="sec-k">VI · How the Undetectable Is Detected</div>
+    <h2 class="sec-t">The Tell Is a Cadence</h2>
+    <div class="prose">
+      <p>Mavarra cannot be caught by force, by surveillance, or by divine sight &mdash; she is distributed, concealed, the realm whose nature is the hiding of things. The one thing concealment cannot fully suppress is <strong>idiolect.</strong> The Tongue of the Eighth Hell has a grammar, and a grammar leaves fingerprints. The operation is exposed not by catching Mavarra in an act, but by catching her in a <em>cadence</em> &mdash; someone hearing Lilia speak and recognizing, beneath the words, the original mouth. Not Lilia imitating Mavarran style; the Tongue arriving <em>through</em> her as if from the source. Intermittently. Only sometimes.</p>
+    </div>
+    <div class="ladder">
+      <div class="rung">
+        <div class="num">A</div>
+        <div>
+          <div class="rt">Arabella &mdash; the ear that knows the mouth</div>
+          <p>Years steeped in the Tongue have set its rhythms into her; she can hear the original mouth surfacing through Lilia. But by the time she and Cloud have joined the Advent and stand anywhere near Lilia, Arabella has <strong>nihilated herself</strong> &mdash; the dreamspace is gone. She has lost the one secure, silent channel by which she could have warned Cloud. To detect the undetectable, she would have to say it aloud, in the open, in a cosmos full of Mavarran ears.</p>
+          <span class="muffle">Detection without a safe channel</span>
+        </div>
+      </div>
+      <div class="rung">
+        <div class="num">B</div>
+        <div>
+          <div class="rt">Anberlyn &mdash; the messenger nobody believes</div>
+          <p>Anberlyn is Mavarran-attuned enough to hear it too. But she has been abrasive to everyone for the length of the story, and so when she says <em>there is something wrong with how Lilia speaks</em>, it reads as Anberlyn being Anberlyn. Her one vital perception is camouflaged by her own reputation. The truth is set on the table &mdash; and the room&rsquo;s contempt for the messenger buries it.</p>
+          <span class="muffle">Detection that is dismissed</span>
+        </div>
+      </div>
+      <div class="rung">
+        <div class="num">C</div>
+        <div>
+          <div class="rt">Lilia herself &mdash; the Tongue of the Reaper</div>
+          <p>In <strong>Book Seven</strong>, Lilia gains the Tongue of the Reaper: command over the Reapers who, until then, had simply followed and served her, autonomous and unspeaking. The instant she can command them, she can also &mdash; for the first time &mdash; <em>hear what Death actually sounds like.</em> She gets a reference sample. She hears the true voice of her own office, and recognizes, by the contrast, that the voice she has trusted, obeyed, and built a self around is something else. The captive learns she is captive by finally hearing what her own mind was supposed to sound like.</p>
+          <span class="muffle">Detection from inside the prison</span>
+        </div>
+      </div>
+    </div>
+    <div class="prose" style="margin-top:1.3rem;">
+      <p>The detection is built, by design, to be weak &mdash; a true perception lodged in messengers who cannot deliver it cleanly. That keeps faith with the win condition: even the detection that exists is hobbled. The suspicions must <em>coalesce</em> &mdash; and they coalesce upon one structural fact.</p>
+    </div>
+    <div class="wincon">
+      <div class="wc-l">The Keystone</div>
+      <div class="wc-t">The story completes when all the Gonlan are communed with. Mavarra is the last Gonlan.</div>
+    </div>
+    <div class="prose" style="margin-top:1.3rem;">
+      <p>Alciel&rsquo;s quest is the communion with every Realm&rsquo;s Gonlan &mdash; and the final, completing Gonlan is Tenebralis&rsquo;s, which is Mavarra herself: its Exvisar, its doctrine, its distributed concealed sovereign. The prophecy cannot resolve while one Gonlan remains uncommuned. <strong>The completion of</strong> Advent <strong>is, by the structural law of its own ending, the detection of Mavarra.</strong> She can stay hidden through eight books of noise. She cannot stay hidden through the completion &mdash; because completion <em>is</em> being communed-with, and one cannot commune with what stays concealed. Her thousand-year exploit and the story&rsquo;s own resolution mechanism are on a collision course written into the prophecy itself.</p>
+    </div>
+  </section>
+
+  <div class="div"><span></span></div>
+
+  <!-- THE NINE SURVIVE -->
+  <section class="sec fi">
+    <div class="sec-k">VII · The Law Beneath the Stakes</div>
+    <h2 class="sec-t">Why the Nine Cannot Be Killed</h2>
+    <div class="prose">
+      <p>The Nine will survive the story, because they are the story &mdash; fate, in this cosmos, is not suspense. It is structure. Four proofs make their survival as a <em>set</em> a law of reality.</p>
+    </div>
+    <div class="proofs">
+      <div class="proof">
+        <div class="pn">Proof One</div>
+        <p>You cannot kill the Nine if <strong>one of them is one of you.</strong> Lilia is bidden to do it, and is herself a thread.</p>
+      </div>
+      <div class="proof">
+        <div class="pn">Proof Two</div>
+        <p>You cannot kill the Nine if <strong>one of them is unkillable.</strong> Fiacre cannot be ended by any hand.</p>
+      </div>
+      <div class="proof">
+        <div class="pn">Proof Three</div>
+        <p>You cannot kill the Nine if <strong>one of them was never alive</strong> to begin with.</p>
+      </div>
+      <div class="proof">
+        <div class="pn">Proof Four</div>
+        <p>You cannot kill the Nine if <strong>all of existence would cease</strong> were it done &mdash; the cosmos annuls a world without the Spinner.</p>
+      </div>
+    </div>
+    <div class="prose" style="margin-top:1.3rem;">
+      <p>But the survival of the Nine <em>as a set</em> is not the survival of every thread within it. <strong>Some of the Nine are more disposable than others.</strong> The reader who knows the prophecy endures still cannot rest &mdash; because enduring-as-a-prophecy and every-individual-living are not the same promise.</p>
+    </div>
+  </section>
+
+  <div class="div"><span></span></div>
+
+  <!-- THE FINALE -->
+  <section class="sec fi">
+    <div class="sec-k">VIII · Where Every Thread Converges</div>
+    <h2 class="sec-t">To Kill the Ninth Herald, the Spinner Must First Give Him Life</h2>
+    <div class="fin">
+      <p>Raiwata is the ninth Herald &mdash; a thread of the shroud, and yet the thing the age must be rid of. The reactionary Heralds want the clean kill; Uriel, Crex, the ones who would simply <em>end</em> him. But Raiwata, as the Sun-Caller, is not a finite, properly-commenced thread. <strong>You cannot cut a thread that was never spun.</strong></p>
+      <p>So the ending belongs to the Moirai, and to no one else &mdash; the one act only the three sisters together can perform.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="sd">Clotho</div>
+        <div class="sc">
+          <div class="sct">Fiacre spins him a thread</div>
+          <p>The Spinner must first give the devil a <em>beginning</em> &mdash; draw him into the weave as a finite, real, authored thing. The hardest act the principle of beginning will ever perform: to commence something for the express purpose of its ending.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sd">Lachesis</div>
+        <div class="sc">
+          <div class="sct">Algol measures it</div>
+          <p>Only a thread that has been spun can be measured. The Measurer gives the devil&rsquo;s now-finite thread a length &mdash; finds him, bounds him, makes him a thing with an extent.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sd">Atropos</div>
+        <div class="sc">
+          <div class="sct">Lilia cuts it</div>
+          <p>Only what has been spun and measured can be ended. The Cutter &mdash; free of Vex, her own voice restored &mdash; makes the cut. The apportionment, doing at last the one thing it was always for.</p>
+        </div>
+      </div>
+    </div>
+    <div class="prose" style="margin-top:1.3rem;">
+      <p>This is Fiacre&rsquo;s lesson resolved &mdash; not into &ldquo;she learns to kill,&rdquo; but into an act of <strong>beginning.</strong> To destroy Raiwata she must first give him life. The cut and the commencement are revealed as one gesture, which the true myth always said they were. And it requires all three sisters &mdash; which means it requires Lilia free of Mavarra, Algol unbroken, and Fiacre having abandoned the coalition-misread and understood what the shroud is for. Every thread of the Moirai plotline converges here: three sisters at one loom, doing the one work the apportionment exists to do.</p>
+    </div>
+    <div class="scr">
+      The age does not die. It is wound for burial by nine hands &mdash;<br>and the Spinner is already turning toward the next.
+    </div>
+  </section>
+
+  <div class="div"><span></span></div>
+
+  <!-- OPEN SEAMS -->
+  <section class="sec fi">
+    <div class="sec-k">IX · Held Open, Not Yet Spun</div>
+    <h2 class="sec-t">The Threads Still Being Decided</h2>
+    <div class="seam">
+      <div class="skq">Does detection of Mavarra succeed, or is the horror that it nearly doesn&rsquo;t?</div>
+      <p>The win condition is to win <em>undetected</em>. The completion mechanism &mdash; communing with the last Gonlan &mdash; structurally forces detection. The open question is the margin: clean exposure, or exposure that arrives almost too late, by the narrowest convergence of three hobbled tells.</p>
+    </div>
+    <div class="seam">
+      <div class="skq">Whose hand closes on Lilia &mdash; Mavarra&rsquo;s, or the winners&rsquo; order?</div>
+      <p>The operation collecting its asset, or the Pantheon seizing the vessel of Death as a lock against the Advent. The answer decides who Fiacre is truly contending with in the Glass Castle.</p>
+    </div>
+    <div class="seam">
+      <div class="skq">Is Algol broken &mdash; or does Mavarra do what none has done, and blind a Fate?</div>
+      <p>Whether the seer is genuinely compromised, or whether the threat to her is the threat itself &mdash; the doubt, the delay, the corrupted word &mdash; without ever fully landing.</p>
+    </div>
+    <div class="seam">
+      <div class="skq">When Fiacre spins Raiwata&rsquo;s thread &mdash; is it mercy, or only the cold prerequisite of the cut?</div>
+      <p>To give the devil a beginning, a place in the weave: does it understand him, complete him, redeem him by a degree &mdash; or is it spun purely so that he can, at last, properly end?</p>
+    </div>
+  </section>
+
+  <div class="ft">
+    Moirai Codex &middot; <span>Advent of Ultima</span> &middot; The Buried Engine of the Second Act
+  </div>
+
+</div>
+
+<script>
+// fade-in
+const obs = new IntersectionObserver(es => {
+  es.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+
+// woven-thread canvas — slow vertical threads with faint horizontal weft
+(function(){
+  const c = document.getElementById('weave');
+  const x = c.getContext('2d');
+  let W, H, threads = [];
+  function size(){ W = c.width = innerWidth; H = c.height = innerHeight; }
+  addEventListener('resize', size); size();
+
+  class Thread {
+    constructor(){ this.reset(true); }
+    reset(init){
+      this.x = Math.random() * W;
+      this.len = Math.random() * 180 + 90;
+      this.y = init ? Math.random() * H : -this.len;
+      this.v = Math.random() * 0.35 + 0.12;
+      this.sway = Math.random() * Math.PI * 2;
+      this.swaySpeed = Math.random() * 0.004 + 0.001;
+      this.swayAmp = Math.random() * 0.5 + 0.15;
+      this.alpha = Math.random() * 0.16 + 0.04;
+      this.w = Math.random() < 0.5 ? 1 : 1.4;
+    }
+    update(){
+      this.sway += this.swaySpeed;
+      this.x += Math.sin(this.sway) * this.swayAmp;
+      this.y += this.v;
+      if (this.y - this.len > H) this.reset(false);
+    }
+    draw(){
+      const g = x.createLinearGradient(this.x, this.y - this.len, this.x, this.y);
+      g.addColorStop(0, 'rgba(185,187,192,0)');
+      g.addColorStop(0.5, 'rgba(185,187,192,' + this.alpha + ')');
+      g.addColorStop(1, 'rgba(185,187,192,0)');
+      x.strokeStyle = g;
+      x.lineWidth = this.w;
+      x.beginPath();
+      x.moveTo(this.x, this.y - this.len);
+      x.lineTo(this.x, this.y);
+      x.stroke();
+    }
+  }
+  for (let i = 0; i < 26; i++) threads.push(new Thread());
+
+  function loop(){
+    x.clearRect(0,0,W,H);
+    threads.forEach(t => { t.update(); t.draw(); });
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+</script>
+
+</body>
+</html>

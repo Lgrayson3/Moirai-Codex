@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Myth: The Garden of Hecate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Marcellus&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     THE TOKENS — the house style, verbatim.
+     ============================================================ */
+  :root{
+    --paper:#FBF7EE;
+    --paper-2:#F6F0E2;
+    --ink:#2B2317;
+    --ink-soft:#5A4E3A;
+    --rule:#E4D8BE;
+
+    --gold:#9A7B1F;
+    --gold-bright:#C9A227;
+    --gold-pale:#E9DCB0;
+    --gold-glow:rgba(201,162,39,.18);
+
+    --zephyros:#8AA63A;   --zephyros-pale:#D8E3B0;
+    --pyrthera:#C7572B;   --pyrthera-pale:#F0C39A;
+    --thalassor:#2E6FA3;  --thalassor-pale:#A9CBE4;
+    --ferridane:#A66A2E;  --ferridane-pale:#E0C394;
+    --tenebralis:#6A3D9A; --tenebralis-pale:#C8B0E2;
+    --luxenfall:#C9A227;  --luxenfall-pale:#EBDCA6;
+    --glacia:#5C97B8;     --glacia-pale:#BDDCE8;
+
+    --prism:linear-gradient(90deg,
+      var(--tenebralis) 0%, var(--thalassor) 17%, var(--glacia) 30%,
+      var(--zephyros) 45%, var(--luxenfall) 60%, var(--ferridane) 74%,
+      var(--pyrthera) 100%);
+
+    --maxw:760px;
+  }
+
+  /* ============================================================
+     THE SYSTEM — copied verbatim from the house style.
+     ============================================================ */
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Spectral",Georgia,serif;font-weight:400;
+    font-size:19px;line-height:1.72;-webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;overflow-x:hidden;
+  }
+  body::before{ /* warm vignette + corner prismatic light-leaks */
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(120% 80% at 8% -5%, rgba(201,162,39,.07), transparent 45%),
+      radial-gradient(120% 80% at 105% 110%, rgba(106,61,154,.05), transparent 45%),
+      radial-gradient(140% 90% at 100% 0%, rgba(46,111,163,.05), transparent 40%),
+      radial-gradient(100% 100% at 50% 40%, transparent 60%, rgba(43,35,23,.05));
+  }
+  body::after{ /* fine paper grain */
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  }
+  .ribbon{position:fixed;top:0;left:0;right:0;height:5px;z-index:60;
+    background:var(--prism);background-size:200% 100%;animation:drift 22s linear infinite;}
+  @keyframes drift{0%{background-position:0 0;}100%{background-position:200% 0;}}
+
+  nav.codex-nav{position:sticky;top:5px;z-index:55;background:rgba(251,247,238,.86);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);}
+  nav.codex-nav ul{list-style:none;margin:0 auto;padding:.55rem .9rem;display:flex;
+    flex-wrap:wrap;gap:.2rem .9rem;justify-content:center;max-width:1040px;}
+  nav.codex-nav a{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-soft);text-decoration:none;padding:.15rem 0;
+    border-bottom:1.5px solid transparent;transition:.25s;white-space:nowrap;}
+  nav.codex-nav a:hover{color:var(--gold);border-bottom-color:currentColor;}
+
+  main{position:relative;z-index:1;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.4rem;}
+
+  header.mast{text-align:center;padding:5.5rem 1.4rem 2.6rem;position:relative;}
+  .eyebrow{font-family:"Marcellus",serif;font-size:.82rem;letter-spacing:.42em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 1.6rem;text-indent:.42em;}
+  h1.title{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(2.7rem,8vw,5.1rem);
+    line-height:.98;margin:0;letter-spacing:-.01em;color:var(--ink);font-variation-settings:"opsz" 144;}
+  h1.title .gilt{background:linear-gradient(95deg,var(--gold) 0%,var(--gold-bright) 45%,#EFD27A 60%,var(--gold) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;}
+  .subtitle{font-family:"Spectral",serif;font-weight:300;font-style:italic;
+    font-size:clamp(1.05rem,2.6vw,1.32rem);color:var(--ink-soft);margin:1.6rem auto 0;max-width:46ch;line-height:1.55;}
+  .mast-mark{margin:2.4rem auto 0;width:min(420px,80%);}
+  .mast-mark .bar{height:3px;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  .mast-epi{font-family:"Fraunces",serif;font-style:italic;font-weight:300;
+    font-size:clamp(1.15rem,3vw,1.6rem);color:var(--gold);margin:2.6rem auto 0;max-width:30ch;line-height:1.4;}
+  .mast-epi span{display:block;color:var(--ink-soft);font-size:.62em;font-style:normal;
+    font-family:"Spectral";letter-spacing:.12em;text-transform:uppercase;margin-top:.7rem;}
+
+  .diadiv{display:flex;align-items:center;justify-content:center;gap:1rem;margin:3rem 0 2.4rem;}
+  .diadiv .line{height:1px;flex:1;max-width:120px;background:linear-gradient(90deg,transparent,var(--gold-pale),var(--gold));}
+  .diadiv .line:last-child{background:linear-gradient(90deg,var(--gold),var(--gold-pale),transparent);}
+  .diadiv .dot{width:7px;height:7px;transform:rotate(45deg);background:var(--gold);box-shadow:0 0 0 4px var(--gold-glow);}
+
+  h2.movement{font-family:"Marcellus",serif;font-weight:400;font-size:.82rem;letter-spacing:.36em;
+    text-transform:uppercase;color:var(--gold);text-align:center;margin:0 0 .2rem;}
+
+  .lead{font-size:1.06rem;}
+  .lead::first-letter{font-family:"Fraunces",serif;font-weight:400;float:left;font-size:4rem;
+    line-height:.7;padding:.34rem .5rem 0 0;color:var(--accent,var(--gold));font-variation-settings:"opsz" 144;}
+
+  /* ============================================================
+     THE BEAT CARD — the workhorse, given a frosted-glass body
+     and crowned in the hue of the Realm where the beat happens.
+     One accent per card, set via --accent. The prism stays thin.
+     ============================================================ */
+  .beat{--accent:var(--gold);--accent-pale:var(--gold-pale);
+    margin:2.3rem auto;border:1px solid var(--rule);border-radius:18px;
+    background:linear-gradient(180deg,rgba(255,255,255,.66),rgba(251,247,238,.46));
+    -webkit-backdrop-filter:blur(10px) saturate(118%);backdrop-filter:blur(10px) saturate(118%);
+    box-shadow:0 26px 64px -44px rgba(43,35,23,.6),0 1px 0 rgba(255,255,255,.7) inset;
+    overflow:hidden;position:relative;}
+  .beat>.crown{height:6px;background:linear-gradient(90deg,var(--accent),var(--accent-pale),var(--accent));}
+  .beat-head{padding:1.6rem 1.7rem .2rem;
+    background:radial-gradient(130% 150% at 100% -20%,color-mix(in srgb,var(--accent) 11%,transparent),transparent 62%);}
+  .beat-kicker{font-family:"Marcellus",serif;font-size:.71rem;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 .55rem;display:flex;align-items:center;gap:.6rem;}
+  .beat-kicker .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);flex:0 0 auto;
+    box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);}
+  .beat-kicker .num{color:var(--ink-soft);letter-spacing:.18em;}
+  .beat-kicker .loc{color:var(--accent);}
+  .beat-title{font-family:"Fraunces",serif;font-weight:400;font-variation-settings:"opsz" 60;
+    font-size:clamp(1.5rem,4.6vw,2.15rem);line-height:1.05;margin:.1rem 0 .1rem;color:var(--ink);letter-spacing:-.01em;}
+  .beat-body{padding:.7rem 1.7rem 1.7rem;}
+  .beat-body p{margin:0 0 1rem;}
+  .beat-body p:last-child{margin-bottom:0;}
+  @media(max-width:540px){.beat-head,.beat-body{padding-left:1.2rem;padding-right:1.2rem;}}
+
+  .pull{margin:2.6rem auto;text-align:center;max-width:34ch;}
+  .pull q{font-family:"Fraunces",serif;font-style:italic;font-weight:300;quotes:none;
+    font-size:clamp(1.3rem,3.6vw,1.8rem);line-height:1.34;color:var(--gold);display:block;}
+  .pull cite{display:block;font-style:normal;font-family:"Marcellus";font-size:.74rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ink-soft);margin-top:1rem;}
+
+  footer{text-align:center;padding:4rem 1.4rem 5rem;margin-top:2rem;position:relative;z-index:1;}
+  footer .bar{height:3px;width:min(420px,80%);margin:0 auto 2.4rem;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  footer .candle{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.3rem,4vw,2rem);
+    color:var(--gold);line-height:1.35;margin:0 auto;max-width:30ch;}
+  footer .ma{font-family:"Marcellus";font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-top:2.4rem;}
+  footer .ma small{display:block;letter-spacing:.05em;text-transform:none;font-family:"Spectral";font-style:italic;font-weight:300;margin-top:.5rem;color:var(--ink-soft);}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;}
+    .ribbon,.mast-mark .bar,footer .bar{animation:none;}
+  }
+  @media(max-width:540px){body{font-size:18px;}nav.codex-nav ul{gap:.15rem .7rem;}}
+</style>
+</head>
+<body>
+<div class="ribbon"></div>
+
+<nav class="codex-nav" aria-label="Movements">
+  <ul>
+    <li><a href="#light">The Light</a></li>
+    <li><a href="#fall">The Fall</a></li>
+    <li><a href="#coins">The Coins</a></li>
+    <li><a href="#quiet">The Quiet</a></li>
+    <li><a href="#sun">The Second Sun</a></li>
+    <li><a href="#garden">The Garden</a></li>
+  </ul>
+</nav>
+
+<main>
+  <header class="mast">
+    <p class="eyebrow">Moirai Codex · A Myth</p>
+    <h1 class="title">The Garden of<br><span class="gilt">Hecate</span></h1>
+    <p class="subtitle">A thousand years ago the cosmos took its most luminous mind apart into coins. This is the tale of how she was carried home — by a man who would not lift his eyes, and the little cats no one was watching.</p>
+    <div class="mast-mark"><div class="bar"></div></div>
+    <p class="mast-epi">Everything the light touched was family.<span>Aether, God of Light — slain</span></p>
+  </header>
+
+  <div class="wrap">
+
+    <!-- ===================== I. THE GIFT ===================== -->
+    <h2 class="movement reveal" id="light">First · The Light</h2>
+
+    <article class="beat reveal" style="--accent:var(--luxenfall);--accent-pale:var(--luxenfall-pale)">
+      <div class="crown"></div>
+      <div class="beat-head">
+        <p class="beat-kicker"><span class="dot"></span><span class="num">I</span><span class="loc">The Realm of Light</span></p>
+        <h3 class="beat-title">The Gift</h3>
+      </div>
+      <div class="beat-body">
+        <p class="lead">In the years before the roads, the Realm of Light stood alone, and was content. Aether, god of light, had given his people the Wellspring, and within its radius a soul knew every other soul as its own. A child there never had to be taught to be kind. It felt another's pain the way it felt its own, and drew back from causing it the way a hand draws back from flame.</p>
+        <p>The five small principles they called the Lex Aeterna were not laws but the settings of that field. Decency in Luxania was ambient as weather. The cosmos, in all its reckoning, kept no record of a gift more perfect.</p>
+      </div>
+    </article>
+
+    <!-- ===================== II. THE REACH ===================== -->
+    <article class="beat reveal" style="--accent:var(--luxenfall);--accent-pale:var(--luxenfall-pale)">
+      <div class="crown"></div>
+      <div class="beat-head">
+        <p class="beat-kicker"><span class="dot"></span><span class="num">II</span><span class="loc">The Realm of Light</span></p>
+        <h3 class="beat-title">The Reach</h3>
+      </div>
+      <div class="beat-body">
+        <p class="lead">Because everything the light touched was family, in time the people reasoned that the family did not end at the horizon. The Astral Navigators learned to cast their souls outward, across the dark between worlds, looking for more to belong to.</p>
+        <p>It was the gift acting upon itself — and it was the most luminous thing their civilization ever did.</p>
+      </div>
+    </article>
+
+    <div class="pull reveal">
+      <q>Everything the light touched was family. So they went looking for more of it.</q>
+      <cite>The reaching-out, before it was called a sin</cite>
+    </div>
+
+    <!-- ===================== III. THE ROADS ===================== -->
+    <article class="beat reveal" style="--accent:var(--luxenfall);--accent-pale:var(--luxenfall-pale)">
+      <div class="crown"></div>
+      <div class="beat-head">
+        <p class="beat-kicker"><span class="dot"></span><span class="num">III</span><span class="loc">Light &amp; Water</span></p>
+        <h3 class="beat-title">The Roads Between Worlds</h3>
+      </div>
+      <div class="beat-body">
+        <p class="lead">One Navigator reached farther than any before her. Her name was Hecate. She threw her soul so far into the dark that it touched another — Juno Sinclair, of the water-realm Thalassor — and finding her, guided the stranger safely home.</p>
+        <p>The two of them, a mystic and a magus, built from light and water the first Lumen Cradle and the first of the roads. World upon isolated world, each certain its own god was the only god, woke to find the others standing at the door. Every gate that has ever joined one realm to another began with a single woman's reach.</p>
+      </div>
+    </article>
+
+    <div class="diadiv reveal"><span class="line"></span><span class="dot"></span><span class="line"></span></div>
+
+    <!-- ===================== IV. THE CALCULATION ===================== -->
+    <h2 class="movement reveal" id="fall">Second · The Fall</h2>
+
+    <article class="beat reveal" style="--accent:var(--thalassor);--accent-pale:var(--thalassor-pale)">
+      <div class="crown"></div>
+      <div class="beat-head">
+        <p class="beat-kicker"><span class="dot"></span><span class="num">IV</span><span class="loc">Thalassor</span></p>
+        <h3 class="beat-title">The Calculation</h3>
+      </div>
+      <div class="beat-body">
+        <p class="lead">Juno's heirs were not Juno. As the wonder cooled into commerce, the patriarchs of House Sinclair looked at the roads and saw a thing they did not wholly own. The craft was Luxanian at its root; the crystals were Luxanian; the dependence galled them.</p>
+        <p>Quietly, across generations, they set themselves to making the roads theirs alone — and waited, without quite admitting they were waiting, for a day when letting the alliance fall might cost them nothing.</p>
+      </div>
+    </article>
+
+    <!-- ===================== V. THE RETUNING ===================== -->
+    <article class="beat reveal" style="--accent:var(--tenebralis);--accent-pale:var(--tenebralis-pale)">
+      <div class="crown"></div>
+      <div class="beat-head">
+        <p class="beat-kicker"><span class="dot"></span><span class="num">V</span><span class="loc">Tenebralis</span></p>
+        <h3 class="beat-title">The Retuning</h3>
+      </div>
+      <div class="beat-body">
+        <p class="lead">That a realm so kind could be unmade was a question of patience, and patience was the one thing Vex Mavarra held in surplus. A civilization built entirely on shared feeling has exactly one door, and the door is the feeling itself.</p>
+        <p>She did not break the Wellspring. She tuned it. The field that had made another's suffering unbearable to witness she set, by slow degrees across centuries, to manufacture suffering at volume. A people who could not look away from one another's pain were made to drown in it, and Luxania tore itself apart from the inside before a single soldier crossed its border.</p>
+        <p>And when the dying realm called out — to its gods, and to its oldest ally — the gods answered with silence. That silence is load-bearing. It is the root of everything the survivors became.</p>
+      </div>
+    </article>
+
+    <div class="pull reveal">
+      <q>A people who could not look away from another's pain were made to drown in it.</q>
+      <cite>The Wellspring, retuned</cite>
+    </div>
+
+    <!-- ===================== VI. THE DOOR CLOSED ===================== -->
+    <article class="beat reveal" style="--accent:var(--thalassor);--accent-pale:var(--thalassor-pale)">
+      <div class="crown"></div>
+      <div class="beat-head">
+        <p class="beat-kicker"><span class="dot"></span><span class="num">VI</span><span class="loc">Thalassor</span></p>
+        <h3 class="beat-title">The Door Closed Behind Them</h3>
+      </div>
+      <div class="beat-body">
+        <p class="lead">Thalassor answered the call for aid with recovery teams. The Sinclairs judged the war too dangerous to enter, and so they did not enter it; they sent no armies, only salvors, who under the cover of mercy carried off the craft of the roads and a handful of Navigators, and closed the way behind them.</p>
+        <p>No Sinclair lifted a blade against Luxania. They lifted nothing at all — only, afterward, the secret of the roads from the wreckage, and the name of the woman who made them out of the record. The gates they unveiled to the cosmos were now a Thalassori miracle. Juno was hailed a lone genius. Hecate was erased. Aether was slain, the guardian Solarith was broken, and the sun went out over the Realm of Light, and did not rise again for a thousand years.</p>
+      </div>
+    </article>
+
+    <div class="diadiv reveal"><span class="line"></span><span class="dot"></span><span class="line"></span></div>
+
+    <!-- ===================== VII. THE COINS ===================== -->
+    <h2 class="movement reveal" id="coins">Third · The Coins</h2>
+
+    <article class="beat reveal" style="--accent:var(--tenebralis);--accent-pale:var(--tenebralis-pale)">
+      <div class="crown"></div>
+      <div class="beat-head">
+        <p class="beat-kicker"><span class="dot"></span><span class="num">VII</span><span class="loc">The Markets of Nine Worlds</span></p>
+        <h3 class="beat-title">The Coins</h3>
+      </div>
+      <div class="beat-body">
+        <p class="lead">What Tenebralis took, it sold. Each conquered mind was stripped to the root and itemized — every memory drawn off as a coin, every feeling rendered to a potion — and scattered across the luxury markets of nine worlds, until no realm's comfort ran clean of it and no realm could accuse the seller without first naming what it had been buying.</p>
+        <p>Hecate went into that flood with the rest. The single most consequential mind in the history of the cosmos, sold off by the ounce. The hand that sold her did not look up from the ledger. To Mavarra she was one casualty in a genocide, and beneath her notice.</p>
+      </div>
+    </article>
+
+    <div class="diadiv reveal"><span class="line"></span><span class="dot"></span><span class="line"></span></div>
+
+    <!-- ===================== VIII. THE WARDEN ===================== -->
+    <h2 class="movement reveal" id="quiet">Fourth · The Quiet</h2>
+
+    <article class="beat reveal" style="--accent:var(--zephyros);--accent-pale:var(--zephyros-pale)">
+      <div class="crown"></div>
+      <div class="beat-head">
+        <p class="beat-kicker"><span class="dot"></span><span class="num">VIII</span><span class="loc">Zephyros</span></p>
+        <h3 class="beat-title">The Warden Who Would Not Look</h3>
+      </div>
+      <div class="beat-body">
+        <p class="lead">In the wind-realm of Zephyros there reigned a man who kept his eyes on the ground. Aeon, Warden of the Wind, an Oracle of the highest order, who could have lifted his head and read the whole of Mavarra — and never once did.</p>
+        <p>For those who looked upon her had the eyes taken from their skulls by her own hands, and their minds taken after. So he kept his head bowed, year upon year, until the bowing cost him nothing, and bought his realm a thousand years of being beneath her notice by being beneath his own. She found him dull. A sovereign who would not even raise his head was no threat worth the watching. She looked past him, well satisfied — which was the whole of what he had spent his reign arranging for her to do.</p>
+      </div>
+    </article>
+
+    <!-- ===================== IX. THE CATS ===================== -->
+    <article class="beat reveal" style="--accent:var(--thalassor);--accent-pale:var(--thalassor-pale)">
+      <div class="crown"></div>
+      <div class="beat-head">
+        <p class="beat-kicker"><span class="dot"></span><span class="num">IX</span><span class="loc">Thalassor</span></p>
+        <h3 class="beat-title">Those Damn Cats</h3>
+      </div>
+      <div class="beat-body">
+        <p class="lead">In the harbor-cities there live small blue creatures that belong to no one — the Katos, who keep a society of their own, run little shops in the corners too narrow for a man, and fence stolen trinkets so brazenly that the tax collector finds it simpler to go home.</p>
+        <p>They had developed, over the centuries, a particular taste. They collected memory coins — only the amusing ones, a man walking into a door, a wedding gone sideways, a child's first clumsy lie — for the simple pleasure of watching the little lives play back, the way a child keeps shells. No one ever thought to ask a cat why it kept a shiny thing. And the oldest of them, alive for generations, sat in the gardens of the dead and remembered what every living soul had forgotten, and could tell a true coin from a false one in the dark.</p>
+      </div>
+    </article>
+
+    <!-- ===================== X. WHAT SHE COULD NOT SEE ===================== -->
+    <article class="beat reveal" style="--accent:var(--zephyros);--accent-pale:var(--zephyros-pale)">
+      <div class="crown"></div>
+      <div class="beat-head">
+        <p class="beat-kicker"><span class="dot"></span><span class="num">X</span><span class="loc">Zephyros</span></p>
+        <h3 class="beat-title">What She Could Not See</h3>
+      </div>
+      <div class="beat-body">
+        <p class="lead">The Oracles of Zephyros began to buy coins off the cats. This was seen; it was meant to be seen. Mavarra noticed it the way she noticed all small things — sidelong, half-bored — and what she saw pleased her: the one honest realm, the realm she had never managed to buy, turning up at the soul-markets with an appetite at last. There was the crack she had always known would come. She filed it among her confirmations and thought no more of it.</p>
+        <p>Every reckoning she had ever made ran the same way. Every soul had its price; every clean floor hid a dirty one. Her grammar held no word for a thing done out of love, and so, when love walked past her in plain sight, she called it shopping.</p>
+        <p>Coin by coin, for a thousand years, off the very market she had used to take Hecate apart, the murdered mind of the woman who opened the roads was carried home. Mavarra watched the grand finale gathering on the horizon. She never once looked down.</p>
+      </div>
+    </article>
+
+    <div class="diadiv reveal"><span class="line"></span><span class="dot"></span><span class="line"></span></div>
+
+    <!-- ===================== XI. THE SECOND SUN ===================== -->
+    <h2 class="movement reveal" id="sun">Fifth · The Second Sun</h2>
+
+    <article class="beat reveal" style="--accent:var(--luxenfall);--accent-pale:var(--luxenfall-pale)">
+      <div class="crown"></div>
+      <div class="beat-head">
+        <p class="beat-kicker"><span class="dot"></span><span class="num">XI</span><span class="loc">The Realm of Light</span></p>
+        <h3 class="beat-title">The Second Sun</h3>
+      </div>
+      <div class="beat-body">
+        <p class="lead">At last the Advent came to the murdered realm. Uriel the Red Wolf burned the engines of the occupation and gave the unbroken survivors a name to fight beneath. Fiacre carved a second sun and set it alight above ground that had not seen a dawn in a thousand years. Alciel went down to the broken guardian Solarith and rose into it.</p>
+        <p>And the survivors who had sworn to trust no outsider ever again took one offered hand — exactly once — and became the army that would hold the ground. The Realm of Light had its light back. The harder thing was what to give the living, now that the living could be reached.</p>
+      </div>
+    </article>
+
+    <div class="diadiv reveal"><span class="line"></span><span class="dot"></span><span class="line"></span></div>
+
+    <!-- ===================== XII. THE GARDEN COMES HOME ===================== -->
+    <h2 class="movement reveal" id="garden">Last · The Garden</h2>
+
+    <article class="beat reveal" style="--accent:var(--luxenfall);--accent-pale:var(--luxenfall-pale)">
+      <div class="crown"></div>
+      <div class="beat-head">
+        <p class="beat-kicker"><span class="dot"></span><span class="num">XII</span><span class="loc">The Realm of Light</span></p>
+        <h3 class="beat-title">The Garden Comes Home</h3>
+      </div>
+      <div class="beat-body">
+        <p class="lead">There was no body to wake her into, and no one tried; a mind written into an emptied shell would be one more authored thing, and the realm had suffered enough of those. So the thousand-year cache of her was not made a woman again. It was breathed into living soil — the way Zephyros has always kept a mind — and it became a garden.</p>
+        <p>The garden was brought home to the heart of Alacanthe and planted at the Wellspring itself, in the very place she had been broken, where the Red Wolves keep watch over it and do not sleep. To walk it is to remember: the golden age, the reach, the breaking, and the name of the hand that did it. It gives back the settings of the Wellspring, so that decency may be made ambient again. It gives back the craft of the roads, so the people who first made them need ask no one's leave to make them anew. It gives them their innocence returned, carrying the memory of how that innocence was once used — so the same hand can never play the same move twice.</p>
+        <p>And when it is finished, and the impossible thing stands rooted in the new sun, someone will ask the only question left to ask. How did one quiet man find a whole murdered mind, scattered to the corners of nine worlds, and not a soul the wiser?</p>
+        <p>And a small blue cat, sitting on the garden wall, will look at the one who asked. And shrug. And wink.</p>
+      </div>
+    </article>
+
+    <div class="pull reveal">
+      <q>She is given back as a place the living can walk into and remember what was theirs — arriving on the day the light came home.</q>
+      <cite>The Garden of Hecate</cite>
+    </div>
+
+  </div>
+
+  <footer class="reveal">
+    <div class="bar"></div>
+    <p class="candle">She is a garden now, in the place where they broke her, and the wolves do not sleep.</p>
+    <p class="ma">Moirai Codex · A Myth · The Garden of Hecate
+      <small>The light is one. The colors are many.</small>
+    </p>
+  </footer>
+</main>
+
+<script>
+  (function(){
+    var els=document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(e){io.observe(e);});
+  })();
+  (function(){
+    var links=[].slice.call(document.querySelectorAll('nav.codex-nav a')),map={};
+    links.forEach(function(a){var id=a.getAttribute('href').slice(1),t=document.getElementById(id);if(t)map[id]={a:a,t:t};});
+    function s(){var pos=window.scrollY+140,cur=null;for(var id in map){if(map[id].t.offsetTop<=pos)cur=id;}
+      links.forEach(function(a){a.style.color='';a.style.borderBottomColor='transparent';});
+      if(cur&&map[cur]){map[cur].a.style.color='var(--gold)';map[cur].a.style.borderBottomColor='currentColor';}}
+    window.addEventListener('scroll',s,{passive:true});s();
+  })();
+</script>
+</body>
+</html>

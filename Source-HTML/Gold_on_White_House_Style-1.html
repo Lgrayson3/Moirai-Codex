@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gold on White — The House Style of the Moirai Codex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Marcellus&family=Spectral+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     THE TOKENS — change these, and the whole document changes.
+     This is the entire house style. Everything below references it.
+     ============================================================ */
+  :root{
+    /* Ground & ink — never pure white, never pure black */
+    --paper:#FBF7EE;
+    --paper-2:#F6F0E2;
+    --ink:#2B2317;
+    --ink-soft:#5A4E3A;
+    --rule:#E4D8BE;
+
+    /* Gold — the primary accent and the color of headings */
+    --gold:#9A7B1F;          /* text-weight gold */
+    --gold-bright:#C9A227;   /* accent / gradient gold */
+    --gold-pale:#E9DCB0;
+    --gold-glow:rgba(201,162,39,.18);
+
+    /* The prism — one light, seven readings. Thin accents ONLY. */
+    --zephyros:#8AA63A;   --zephyros-pale:#D8E3B0;
+    --pyrthera:#C7572B;   --pyrthera-pale:#F0C39A;
+    --thalassor:#2E6FA3;  --thalassor-pale:#A9CBE4;
+    --ferridane:#A66A2E;  --ferridane-pale:#E0C394;
+    --tenebralis:#6A3D9A; --tenebralis-pale:#C8B0E2;
+    --luxenfall:#C9A227;  --luxenfall-pale:#EBDCA6;
+    --glacia:#5C97B8;     --glacia-pale:#BDDCE8;
+
+    --prism:linear-gradient(90deg,
+      var(--tenebralis) 0%, var(--thalassor) 17%, var(--glacia) 30%,
+      var(--zephyros) 45%, var(--luxenfall) 60%, var(--ferridane) 74%,
+      var(--pyrthera) 100%);
+
+    --maxw:760px;
+  }
+
+  /* ============================================================
+     THE SYSTEM — copy this block verbatim into any new piece.
+     ============================================================ */
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Spectral",Georgia,serif;font-weight:400;
+    font-size:19px;line-height:1.72;-webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;overflow-x:hidden;
+  }
+  body::before{ /* warm vignette + corner prismatic light-leaks */
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(120% 80% at 8% -5%, rgba(106,61,154,.05), transparent 45%),
+      radial-gradient(120% 80% at 105% 110%, rgba(199,87,43,.05), transparent 45%),
+      radial-gradient(140% 90% at 100% 0%, rgba(46,111,163,.04), transparent 40%),
+      radial-gradient(100% 100% at 50% 40%, transparent 60%, rgba(43,35,23,.05));
+  }
+  body::after{ /* fine paper grain */
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  }
+  .ribbon{position:fixed;top:0;left:0;right:0;height:5px;z-index:60;
+    background:var(--prism);background-size:200% 100%;animation:drift 22s linear infinite;}
+  @keyframes drift{0%{background-position:0 0;}100%{background-position:200% 0;}}
+
+  nav.codex-nav{position:sticky;top:5px;z-index:55;background:rgba(251,247,238,.86);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);}
+  nav.codex-nav ul{list-style:none;margin:0 auto;padding:.55rem .9rem;display:flex;
+    flex-wrap:wrap;gap:.2rem .9rem;justify-content:center;max-width:1040px;}
+  nav.codex-nav a{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-soft);text-decoration:none;padding:.15rem 0;
+    border-bottom:1.5px solid transparent;transition:.25s;white-space:nowrap;}
+  nav.codex-nav a:hover{color:var(--gold);border-bottom-color:currentColor;}
+
+  main{position:relative;z-index:1;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.4rem;}
+
+  header.mast{text-align:center;padding:5.5rem 1.4rem 3rem;position:relative;}
+  .eyebrow{font-family:"Marcellus",serif;font-size:.82rem;letter-spacing:.42em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 1.6rem;text-indent:.42em;}
+  h1.title{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(2.7rem,8vw,5.1rem);
+    line-height:.98;margin:0;letter-spacing:-.01em;color:var(--ink);font-variation-settings:"opsz" 144;}
+  h1.title .gilt{background:linear-gradient(95deg,var(--gold) 0%,var(--gold-bright) 45%,#EFD27A 60%,var(--gold) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;}
+  .subtitle{font-family:"Spectral",serif;font-weight:300;font-style:italic;
+    font-size:clamp(1.05rem,2.6vw,1.35rem);color:var(--ink-soft);margin:1.5rem auto 0;max-width:38ch;line-height:1.5;}
+  .mast-mark{margin:2.4rem auto 0;width:min(420px,80%);}
+  .mast-mark .bar{height:3px;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  .mast-epi{font-family:"Fraunces",serif;font-style:italic;font-weight:300;
+    font-size:clamp(1.15rem,3vw,1.6rem);color:var(--gold);margin:2.6rem auto 0;max-width:32ch;line-height:1.4;}
+  .mast-epi span{display:block;color:var(--ink-soft);font-size:.7em;font-style:normal;
+    font-family:"Spectral";letter-spacing:.05em;margin-top:.5rem;}
+
+  .diadiv{display:flex;align-items:center;justify-content:center;gap:1rem;margin:3.4rem 0;}
+  .diadiv .line{height:1px;flex:1;max-width:120px;background:linear-gradient(90deg,transparent,var(--gold-pale),var(--gold));}
+  .diadiv .line.r{background:linear-gradient(90deg,var(--gold),var(--gold-pale),transparent);}
+  .diadiv .gem{font-size:.9rem;color:var(--gold);letter-spacing:.4em;text-indent:.4em;}
+
+  section{padding:1.5rem 0;position:relative;}
+  .sec-eyebrow{font-family:"Marcellus",serif;font-size:.78rem;letter-spacing:.32em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 .5rem;}
+  h2{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(1.9rem,5vw,2.9rem);
+    line-height:1.05;margin:.2rem 0 1.2rem;color:var(--ink);letter-spacing:-.01em;font-variation-settings:"opsz" 80;}
+  h2 .uline{display:block;height:3px;width:108px;margin-top:.7rem;border-radius:2px;
+    background:var(--prism);background-size:200% 100%;animation:drift 16s linear infinite;}
+  h3{font-family:"Fraunces",serif;font-weight:500;font-style:italic;font-size:clamp(1.25rem,3.4vw,1.6rem);
+    margin:2.2rem 0 .6rem;color:var(--ink);font-variation-settings:"opsz" 40;}
+  h4{font-family:"Marcellus",serif;font-weight:400;font-size:1.02rem;letter-spacing:.04em;margin:1.6rem 0 .35rem;color:var(--gold);}
+  p{margin:0 0 1.15rem;}
+  p a{color:var(--gold);}
+  strong{font-weight:600;color:var(--ink);}
+  .lead{font-size:1.12rem;}
+  .lead::first-letter{font-family:"Fraunces",serif;font-weight:400;float:left;font-size:4.4rem;
+    line-height:.72;padding:.32rem .55rem 0 0;color:var(--gold);font-variation-settings:"opsz" 144;}
+
+  .spectrum{margin:2rem auto;border:1px solid var(--rule);border-radius:14px;overflow:hidden;
+    background:var(--paper-2);box-shadow:0 1px 0 #fff inset, 0 14px 36px -28px rgba(43,35,23,.45);}
+  .spectrum .top{height:8px;background:var(--prism);background-size:180% 100%;animation:drift 20s linear infinite;}
+  .spectrum .rows{padding:.4rem .2rem;}
+  .spec-row{display:grid;grid-template-columns:14px 1fr;gap:.9rem;align-items:start;
+    padding:.7rem 1.1rem;border-bottom:1px solid var(--rule);}
+  .spec-row:last-child{border-bottom:none;}
+  .spec-row .swatch{width:14px;height:14px;border-radius:50%;margin-top:.45rem;
+    box-shadow:0 0 0 3px var(--paper-2),0 0 0 4px currentColor;}
+  .spec-row .nm{font-family:"Marcellus",serif;letter-spacing:.06em;font-size:1.05rem;}
+  .spec-row .nm small{display:block;font-family:"Spectral";font-style:italic;letter-spacing:0;
+    color:var(--ink-soft);font-size:.86rem;margin-top:.15rem;font-weight:300;}
+
+  .realm{--accent:var(--gold);--accent-pale:var(--gold-pale);margin:3rem auto;border:1px solid var(--rule);
+    border-radius:16px;background:linear-gradient(180deg,#fff,var(--paper));
+    box-shadow:0 20px 50px -40px rgba(43,35,23,.6);overflow:hidden;position:relative;}
+  .realm > .crown{height:7px;background:linear-gradient(90deg,var(--accent),var(--accent-pale),var(--accent));}
+  .realm-head{padding:1.8rem 1.6rem 1.3rem;border-bottom:1px solid var(--rule);
+    background:radial-gradient(120% 140% at 100% -20%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%);}
+  .realm-head .kicker{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 .4rem;display:flex;align-items:center;gap:.6rem;}
+  .realm-head .kicker .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);}
+  .realm-head h2{margin:.1rem 0 .55rem;font-size:clamp(2rem,6vw,3rem);}
+  .realm-head h2 .uline{display:none;}
+  .realm-meta{font-family:"Marcellus",serif;font-size:.8rem;letter-spacing:.05em;color:var(--ink-soft);
+    display:flex;flex-wrap:wrap;gap:.4rem 1.3rem;margin-top:.5rem;}
+  .realm-meta b{color:var(--accent);font-weight:400;}
+  .realm-essence{font-style:italic;color:var(--ink-soft);font-weight:300;margin:.9rem 0 0;font-size:1.04rem;}
+  .realm-body{padding:.4rem 1.6rem 1.7rem;}
+
+  details.thread{border-bottom:1px solid var(--rule);}
+  details.thread:last-of-type{border-bottom:none;}
+  details.thread > summary{list-style:none;cursor:pointer;padding:1.15rem .2rem 1rem;display:flex;
+    align-items:center;gap:.85rem;font-family:"Fraunces",serif;font-size:1.15rem;font-weight:500;color:var(--ink);}
+  details.thread > summary::-webkit-details-marker{display:none;}
+  details.thread > summary .ico{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--accent);
+    color:var(--accent);display:grid;place-items:center;font-family:"Spectral";font-size:1rem;transition:.3s;
+    background:color-mix(in srgb,var(--accent) 6%,transparent);}
+  details.thread[open] > summary .ico{transform:rotate(45deg);}
+  details.thread > summary .lbl small{display:block;font-family:"Marcellus";font-size:.66rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);font-weight:400;margin-top:.15rem;}
+  .thread-body{padding:.1rem .3rem 1.5rem 0;}
+  @media(min-width:540px){.thread-body{padding-left:3.5rem;}}
+
+  .vignette{margin:1.5rem 0;padding:1.1rem 1.3rem;border-left:3px solid var(--accent);
+    background:color-mix(in srgb,var(--accent) 5%,var(--paper-2));border-radius:0 10px 10px 0;}
+  .vignette .tag{font-family:"Marcellus";font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin:0 0 .4rem;}
+  .vignette p{font-style:italic;font-weight:300;margin:0;color:var(--ink);font-size:1.02rem;line-height:1.6;}
+
+  .pull{margin:2.4rem auto;text-align:center;max-width:32ch;}
+  .pull q{font-family:"Fraunces",serif;font-style:italic;font-weight:300;quotes:none;
+    font-size:clamp(1.3rem,3.6vw,1.8rem);line-height:1.34;color:var(--gold);display:block;}
+  .pull cite{display:block;font-style:normal;font-family:"Marcellus";font-size:.74rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ink-soft);margin-top:1rem;}
+
+  .feature{margin:2.2rem 0;padding:1.4rem 1.5rem;border:1px solid var(--rule);border-radius:14px;
+    background:linear-gradient(180deg,#fff,var(--paper));box-shadow:0 14px 40px -36px rgba(43,35,23,.5);}
+  .feature h3{margin-top:.2rem;}
+
+  footer{text-align:center;padding:4rem 1.4rem 5rem;margin-top:2rem;position:relative;z-index:1;}
+  footer .bar{height:3px;width:min(420px,80%);margin:0 auto 2.4rem;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  footer .candle{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.3rem,4vw,2rem);
+    color:var(--gold);line-height:1.35;margin:0 auto;max-width:26ch;}
+  footer .ma{font-family:"Marcellus";font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-top:2.4rem;}
+  footer .ma small{display:block;letter-spacing:.05em;text-transform:none;font-family:"Spectral";font-style:italic;font-weight:300;margin-top:.5rem;color:var(--ink-soft);}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;}
+    .ribbon,.spectrum .top,.realm>.crown,h2 .uline,.mast-mark .bar,footer .bar{animation:none;}
+  }
+  @media(max-width:540px){body{font-size:18px;}nav.codex-nav ul{gap:.15rem .7rem;}
+    .realm-body,.realm-head{padding-left:1.1rem;padding-right:1.1rem;}}
+
+  /* ============================================================
+     SPEC-ONLY HELPERS (not part of the reusable system —
+     used here to document and demonstrate it)
+     ============================================================ */
+  .codeblock{margin:1.4rem 0;border:1px solid var(--rule);border-radius:12px;overflow:hidden;
+    background:#2B2317;box-shadow:0 16px 40px -34px rgba(43,35,23,.7);}
+  .codeblock .cb-head{display:flex;align-items:center;gap:.6rem;padding:.6rem 1rem;background:#221B11;
+    border-bottom:1px solid #3a3020;font-family:"Marcellus";font-size:.68rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--gold-bright);}
+  .codeblock .cb-head .gem{color:var(--gold);}
+  .codeblock pre{margin:0;padding:1.1rem 1.2rem;overflow-x:auto;}
+  .codeblock code{font-family:"SFMono-Regular",ui-monospace,"Cascadia Code","Menlo",monospace;
+    font-size:.8rem;line-height:1.65;color:#EBDCA6;white-space:pre;}
+  .codeblock code .c{color:#9c8a63;font-style:italic;}     /* comment */
+  .codeblock code .v{color:#8AB6D6;}                        /* value/var */
+  .codeblock code .k{color:#D9A441;}                        /* key */
+
+  .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:.7rem;margin:1.4rem 0;}
+  .sw{border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:#fff;}
+  .sw .chip{height:54px;}
+  .sw .lab{padding:.45rem .6rem;font-family:"Marcellus";font-size:.66rem;letter-spacing:.05em;color:var(--ink);}
+  .sw .lab small{display:block;font-family:"SFMono-Regular",monospace;letter-spacing:0;color:var(--ink-soft);font-size:.66rem;margin-top:.1rem;}
+
+  .note{margin:1.5rem 0;padding:1rem 1.2rem;border-radius:10px;border:1px dashed var(--gold);
+    background:color-mix(in srgb,var(--gold) 6%,var(--paper-2));}
+  .note .t{font-family:"Marcellus";font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:0 0 .35rem;}
+  .note p{margin:0;font-size:.98rem;}
+
+  .twocol{display:grid;gap:1rem;margin:1.6rem 0;}
+  @media(min-width:620px){.twocol{grid-template-columns:1fr 1fr;}}
+  .card-rule{border:1px solid var(--rule);border-radius:12px;padding:1.1rem 1.2rem;background:linear-gradient(180deg,#fff,var(--paper));}
+  .card-rule.do{border-color:color-mix(in srgb,var(--zephyros) 50%,var(--rule));}
+  .card-rule.dont{border-color:color-mix(in srgb,var(--pyrthera) 45%,var(--rule));}
+  .card-rule h4{margin-top:0;}
+  .card-rule.do h4{color:var(--zephyros);}
+  .card-rule.dont h4{color:var(--pyrthera);}
+  .card-rule ul{margin:.3rem 0 0;padding-left:1.1rem;}
+  .card-rule li{margin:.4rem 0;font-size:.97rem;}
+
+  .demo{border:1px dashed var(--rule);border-radius:12px;padding:1.2rem;margin:1.3rem 0;background:var(--paper);}
+  .demo > .demo-tag{font-family:"Marcellus";font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 .9rem;}
+
+  .typescale > div{margin:.6rem 0;border-bottom:1px dotted var(--rule);padding-bottom:.6rem;}
+  .typescale .rolelab{font-family:"SFMono-Regular",monospace;font-size:.7rem;color:var(--ink-soft);display:block;margin-bottom:.15rem;}
+</style>
+</head>
+<body>
+<div class="ribbon" aria-hidden="true"></div>
+
+<nav class="codex-nav" aria-label="Sections">
+  <ul>
+    <li><a href="#what">What This Is</a></li>
+    <li><a href="#idea">The Idea</a></li>
+    <li><a href="#tokens">The Palette</a></li>
+    <li><a href="#type">The Type</a></li>
+    <li><a href="#parts">The Components</a></li>
+    <li><a href="#motion">Motion</a></li>
+    <li><a href="#machine">For the Machine</a></li>
+  </ul>
+</nav>
+
+<main>
+<header class="mast">
+  <p class="eyebrow">Moirai Codex · The House Style</p>
+  <h1 class="title">Gold on <span class="gilt">White</span></h1>
+  <p class="subtitle">The one visual standard for everything made for Advent of Ultima — written in the style it describes, so it is both the rulebook and the proof.</p>
+  <div class="mast-mark"><div class="bar"></div></div>
+  <p class="mast-epi">The light is one.<br>The colors are many.<span>Set the rules once. Inherit them forever.</span></p>
+</header>
+
+<!-- WHAT THIS IS -->
+<section id="what" class="wrap reveal">
+  <p class="sec-eyebrow">Orientation</p>
+  <h2>What This Is<span class="uline"></span></h2>
+  <p class="lead">This is the visual companion to <em>Algol's Hand</em>. Where that document tells any model how the prose should sound, this one tells any model how the page should look. It exists so that nothing you make ever has to climb back up to this quality again — it starts here, every time. You do not need to read code to use it. You point at it and say <em>make it look like the house style,</em> and any competent model can read this document and obey it.</p>
+  <p>The entire look is controlled by a small block of named values at the top of every file — the <strong>tokens</strong>. Change one token and the whole document shifts in concert: make the gold deeper, every heading and divider follows; swap the paper warmer, the whole ground warms with it. You will never have to describe the look again from scratch. It is written down now, in two places: here, explained in plain language, and in the companion <strong>starter template</strong>, which is a blank document already wearing the style, waiting for words.</p>
+  <div class="note"><p class="t">◆ The promise</p><p>Hand this file (or the starter) to any future session, on any model, and say <em>"house style."</em> That is the whole instruction. Everything needed to honor it is contained in these two documents.</p></div>
+</section>
+
+<!-- THE IDEA -->
+<section id="idea" class="wrap reveal">
+  <p class="sec-eyebrow">The Concept</p>
+  <h2>The Idea<span class="uline"></span></h2>
+  <p>Three commitments hold the whole aesthetic together. Break any one of them and it stops being the house style.</p>
+  <h3>One — warm light, never clinical</h3>
+  <p>The ground is <strong>ivory, not white</strong>; the ink is <strong>warm near-black, not pure black</strong>. A faint paper grain and soft prismatic light-leaks bleed in from the corners. The page should feel like an illuminated manuscript held near a candle — lit from within, never the flat glare of a screen. This is luxury and restraint, not maximalist noise. Whitespace does as much work as ink.</p>
+  <h3>Two — gold is the voice</h3>
+  <p>Gold carries the headings, the eyebrows, the dividers, the drop-caps, the quotes. It is the color of everything sacred and load-bearing. Two golds do the work: a deeper antique gold at text weight, and a brighter gold for gradients and gilt. Used against ivory, gold reads as value, warmth, and age all at once.</p>
+  <h3>Three — the prism is the signature</h3>
+  <p>One white light, split into the colors of the Realms — the visual argument of the whole project, that the cosmos is one source read seven ways. The prism appears as <strong>thin accents only</strong>: the ribbon pinned to the top of every page, the underline beneath each section heading, the diamond dividers, the spectrum legend, the bar in the footer. It is never a large fill. The body stays calm gold-on-ivory; the prism is the one flourish you remember. Restraint is what keeps it from becoming a rainbow.</p>
+  <div class="pull"><q>A calm gold ground, and one ribbon of broken light across the top of it.</q><cite>The whole style in a sentence</cite></div>
+</section>
+
+<!-- THE TOKENS -->
+<section id="tokens" class="wrap reveal">
+  <p class="sec-eyebrow">The Palette</p>
+  <h2>The Colors<span class="uline"></span></h2>
+  <p>Every color in the system, with its token name. An accent color is applied per-section through one variable, <code>--accent</code>; the prism is simply the union of all the Realm accents laid side by side.</p>
+
+  <h4>Ground &amp; Ink</h4>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#FBF7EE"></div><div class="lab">Paper<small>--paper #FBF7EE</small></div></div>
+    <div class="sw"><div class="chip" style="background:#F6F0E2"></div><div class="lab">Paper 2<small>--paper-2 #F6F0E2</small></div></div>
+    <div class="sw"><div class="chip" style="background:#2B2317"></div><div class="lab">Ink<small>--ink #2B2317</small></div></div>
+    <div class="sw"><div class="chip" style="background:#5A4E3A"></div><div class="lab">Ink soft<small>--ink-soft #5A4E3A</small></div></div>
+    <div class="sw"><div class="chip" style="background:#E4D8BE"></div><div class="lab">Rule<small>--rule #E4D8BE</small></div></div>
+  </div>
+
+  <h4>Gold</h4>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#9A7B1F"></div><div class="lab">Gold<small>--gold #9A7B1F</small></div></div>
+    <div class="sw"><div class="chip" style="background:#C9A227"></div><div class="lab">Gold bright<small>--gold-bright #C9A227</small></div></div>
+    <div class="sw"><div class="chip" style="background:#E9DCB0"></div><div class="lab">Gold pale<small>--gold-pale #E9DCB0</small></div></div>
+  </div>
+
+  <h4>The Prism — the Realm accents</h4>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#8AA63A"></div><div class="lab">Zephyros<small>--zephyros #8AA63A</small></div></div>
+    <div class="sw"><div class="chip" style="background:#C7572B"></div><div class="lab">Pyrthera<small>--pyrthera #C7572B</small></div></div>
+    <div class="sw"><div class="chip" style="background:#2E6FA3"></div><div class="lab">Thalassor<small>--thalassor #2E6FA3</small></div></div>
+    <div class="sw"><div class="chip" style="background:#A66A2E"></div><div class="lab">Ferridane<small>--ferridane #A66A2E</small></div></div>
+    <div class="sw"><div class="chip" style="background:#6A3D9A"></div><div class="lab">Tenebralis<small>--tenebralis #6A3D9A</small></div></div>
+    <div class="sw"><div class="chip" style="background:#C9A227"></div><div class="lab">Luxenfall<small>--luxenfall #C9A227</small></div></div>
+    <div class="sw"><div class="chip" style="background:#5C97B8"></div><div class="lab">Glacia<small>--glacia #5C97B8</small></div></div>
+  </div>
+
+  <div class="note"><p class="t">◆ Rule of accent</p><p>A section, card, or vignette may carry <strong>one</strong> accent hue, set via <code>--accent</code>. Neutral or non-Realm pieces default to gold. Never tint a whole section in a strong color — accents live in borders, dots, small fills, and left-rules, not backgrounds.</p></div>
+
+  <div class="codeblock">
+    <div class="cb-head"><span class="gem">◆</span> Paste this at the top of any file — it is the entire palette</div>
+    <pre><code><span class="c">/* THE TOKENS — change these, the whole document changes */</span>
+<span class="k">:root</span>{
+  <span class="c">/* ground &amp; ink — never pure white, never pure black */</span>
+  <span class="v">--paper</span>:#FBF7EE;   <span class="v">--paper-2</span>:#F6F0E2;
+  <span class="v">--ink</span>:#2B2317;     <span class="v">--ink-soft</span>:#5A4E3A;  <span class="v">--rule</span>:#E4D8BE;
+  <span class="c">/* gold — the voice */</span>
+  <span class="v">--gold</span>:#9A7B1F;   <span class="v">--gold-bright</span>:#C9A227;   <span class="v">--gold-pale</span>:#E9DCB0;
+  <span class="c">/* the prism — thin accents only */</span>
+  <span class="v">--zephyros</span>:#8AA63A;  <span class="v">--pyrthera</span>:#C7572B;  <span class="v">--thalassor</span>:#2E6FA3;
+  <span class="v">--ferridane</span>:#A66A2E; <span class="v">--tenebralis</span>:#6A3D9A; <span class="v">--luxenfall</span>:#C9A227;
+  <span class="v">--glacia</span>:#5C97B8;
+  <span class="v">--prism</span>:linear-gradient(90deg, var(--tenebralis), var(--thalassor),
+    var(--glacia), var(--zephyros), var(--luxenfall), var(--ferridane), var(--pyrthera));
+  <span class="v">--maxw</span>:760px;
+}</code></pre>
+  </div>
+</section>
+
+<!-- THE TYPE -->
+<section id="type" class="wrap reveal">
+  <p class="sec-eyebrow">The Letters</p>
+  <h2>The Type<span class="uline"></span></h2>
+  <p>Three typefaces, each with one job. They never trade roles. Using anything else — Inter, Roboto, Arial, system fonts, Space Grotesk — breaks the style instantly.</p>
+
+  <div class="demo">
+    <p class="demo-tag">Live · the three voices</p>
+    <div class="typescale">
+      <div><span class="rolelab">FRAUNCES · display, headings, drop-caps, pull-quotes</span>
+        <span style="font-family:'Fraunces';font-size:2rem;font-variation-settings:'opsz' 80;">The Texture of Days</span></div>
+      <div><span class="rolelab">SPECTRAL · all body text, the reading voice</span>
+        <span style="font-family:'Spectral';font-size:1.1rem;">One candle in every city. Still dark, but still lit — and the light is one, though the colors are many.</span></div>
+      <div><span class="rolelab">MARCELLUS · eyebrows, labels, nav, meta (uppercase, letter-spaced)</span>
+        <span style="font-family:'Marcellus';font-size:.9rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);">Moirai Codex · Cultural Architecture</span></div>
+    </div>
+  </div>
+
+  <h4>The roles, fixed</h4>
+  <p><strong>Fraunces</strong> is the display face — warm, high-contrast, soft, with real personality at large sizes. It carries titles, every heading, the drop-cap that opens a section, and pull-quotes (always italic for quotes). Push its optical-size setting high for big type. <strong>Spectral</strong> is the body — an elegant reading serif that holds long passages without fatigue; light weight (300) for italic asides, regular for prose. <strong>Marcellus</strong> is the inscriptional label face — Roman, carved, used only small, uppercase, and widely letter-spaced for eyebrows, navigation, metadata, and tags. The contrast between soft Fraunces and carved Marcellus is part of the signature.</p>
+
+  <h4>Scale</h4>
+  <p>Every size uses <code>clamp()</code> so type breathes between phone and desktop without breakpoints. Titles <code>clamp(2.7rem, 8vw, 5.1rem)</code>; section headings <code>clamp(1.9rem, 5vw, 2.9rem)</code>; body holds at 19px (18px on small screens); line-height stays generous at ~1.7 for the reading column.</p>
+
+  <div class="codeblock">
+    <div class="cb-head"><span class="gem">◆</span> The font import — one line in the &lt;head&gt;</div>
+    <pre><code>&lt;link href=<span class="v">"https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&amp;family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&amp;family=Marcellus&amp;display=swap"</span> rel=<span class="v">"stylesheet"</span>&gt;</code></pre>
+  </div>
+</section>
+
+<!-- THE COMPONENTS -->
+<section id="parts" class="wrap reveal">
+  <p class="sec-eyebrow">The Kit</p>
+  <h2>The Components<span class="uline"></span></h2>
+  <p>A fixed set of building blocks. Compose pages from these; do not invent a new visual language per piece. Each is shown live below, with the class you call it by. The starter template contains a working copy of every one.</p>
+
+  <h4>Section heading with prism underline</h4>
+  <div class="demo"><p class="demo-tag">.sec-eyebrow + h2 + .uline</p>
+    <p class="sec-eyebrow">Eyebrow Label</p>
+    <h2 style="margin-top:0">A Section Title<span class="uline"></span></h2>
+  </div>
+
+  <h4>The drop-cap lead paragraph</h4>
+  <div class="demo"><p class="demo-tag">p.lead</p>
+    <p class="lead" style="margin-bottom:0">Hold a single light to a cut of glass and it does not stay single. It breaks — not into pieces, but into colors, each one already present in the white. The opening paragraph of any section may take the gold drop-cap.</p>
+  </div>
+
+  <h4>Diamond divider &amp; spectrum legend</h4>
+  <div class="demo"><p class="demo-tag">.diadiv · .spectrum</p>
+    <div class="diadiv" style="margin:.5rem 0 1.5rem"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div>
+    <div class="spectrum" style="margin:0">
+      <div class="top"></div>
+      <div class="rows">
+        <div class="spec-row" style="color:var(--thalassor)"><span class="swatch"></span><span class="nm">A Labeled Entry<small>The legend doubles as a key and a navigation device.</small></span></div>
+        <div class="spec-row" style="color:var(--pyrthera)"><span class="swatch"></span><span class="nm">Another Entry<small>Each row carries its own accent color.</small></span></div>
+      </div>
+    </div>
+  </div>
+
+  <h4>Accent card with accordion threads</h4>
+  <p>The workhorse. A bordered card with a colored crown, a header (kicker, title, meta row, one-line essence), and collapsible <code>&lt;details&gt;</code> threads inside. Set the card's hue once with <code>style="--accent:var(--thalassor);--accent-pale:var(--thalassor-pale)"</code> and every part inherits it.</p>
+  <article class="realm" style="--accent:var(--thalassor);--accent-pale:var(--thalassor-pale)">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>Kicker Label</p>
+      <h2>Card Title</h2>
+      <div class="realm-meta"><span>Field <b>Value</b></span><span>Field <b>Value</b></span></div>
+      <p class="realm-essence">A one-line essence sits beneath the metadata in soft italic.</p>
+    </div>
+    <div class="realm-body">
+      <details class="thread" open>
+        <summary><span class="ico">+</span><span class="lbl">A Thread<small>Subtitle in caps</small></span></summary>
+        <div class="thread-body"><p style="margin-bottom:0">Open by default or closed; the <code>+</code> rotates to <code>×</code> when open. Use threads to chunk a long entry into navigable parts.</p></div>
+      </details>
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">A Second Thread<small>Tap to open</small></span></summary>
+        <div class="thread-body"><p style="margin-bottom:0">Native HTML, accessible, no JavaScript required.</p></div>
+      </details>
+    </div>
+  </article>
+
+  <h4>Vignette — the "in the room" block</h4>
+  <p>For the close human moment, the single concrete image. Left-ruled in the accent color, italic, faintly tinted.</p>
+  <div class="vignette" style="--accent:var(--pyrthera)">
+    <p class="tag">In the room</p>
+    <p>She is sixteen, just ascended, and the whole world is singing to her now — and somewhere in all that light she is wondering what it will sound like when she finally tells the boy who saves her the good figs.</p>
+  </div>
+
+  <h4>Pull-quote &amp; feature block</h4>
+  <div class="pull" style="margin:1.6rem auto"><q>The thing stated as the thing, the silence around it doing the work.</q><cite>A centered pull-quote</cite></div>
+  <div class="feature">
+    <h3 style="margin-top:0">A Feature Block</h3>
+    <p style="margin-bottom:0">A bordered, softly shadowed panel for a self-contained idea inside a longer section — used in <em>The Weave</em> to hold each inter-Realm theme. Heading in italic Fraunces, body in Spectral.</p>
+  </div>
+
+  <div class="note"><p class="t">◆ Also in the kit</p><p>The fixed <strong>prism ribbon</strong> (top of page), the <strong>sticky nav</strong>, the <strong>masthead</strong> (eyebrow + gilt title + subtitle + epigraph), and the <strong>footer coda</strong> (prism bar + italic line + Ma'at sign-off). All are in the starter template, ready to fill.</p></div>
+</section>
+
+<!-- MOTION -->
+<section id="motion" class="wrap reveal">
+  <p class="sec-eyebrow">Behavior</p>
+  <h2>Motion &amp; the Small Print<span class="uline"></span></h2>
+  <p>Motion is subtle and serves the light, never the eye's distraction. Three movements only: the prism gradients <strong>drift</strong> slowly across the ribbon, underlines, and bars (a 16–22s loop, so it shimmers rather than scrolls); sections <strong>fade up</strong> gently as they enter view; and the accordion <code>+</code> <strong>rotates</strong> to <code>×</code> on open. Everything honors <code>prefers-reduced-motion</code> — a reader who asks for stillness gets a fully static, equally complete page.</p>
+  <div class="twocol">
+    <div class="card-rule do"><h4>◆ Always</h4>
+      <ul>
+        <li>One readable column, ~760px max, generously margined.</li>
+        <li>Mobile-responsive by default, via <code>clamp()</code> — no fragile breakpoints.</li>
+        <li>Vanilla JavaScript only, and only for reveal + nav highlight.</li>
+        <li>The prism kept thin: ribbon, underline, divider, legend, footer bar.</li>
+      </ul>
+    </div>
+    <div class="card-rule dont"><h4>◆ Never</h4>
+      <ul>
+        <li><code>localStorage</code> / <code>sessionStorage</code> — they fail in this environment.</li>
+        <li>Large prism fills, neon, or more than one accent per element.</li>
+        <li>Generic fonts or purple-gradient-on-white "AI" looks.</li>
+        <li>A new layout language invented per document.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FOR THE MACHINE -->
+<section id="machine" class="wrap reveal">
+  <p class="sec-eyebrow">Operating Instructions</p>
+  <h2>For the Machine<span class="uline"></span></h2>
+  <p>This is the block to hand any model — paste it, or just say <em>"follow the Gold-on-White house style."</em> It is written for an LLM, in the imperative.</p>
+
+  <div class="codeblock">
+    <div class="cb-head"><span class="gem">◆</span> House Style — directives for any LLM</div>
+    <pre><code><span class="c">PRODUCE a single self-contained .html file in the Moirai Codex</span>
+<span class="c">"Gold on White / prismatic" house style. Obey all of the following.</span>
+
+<span class="k">1. FONTS.</span> Import Fraunces, Spectral, Marcellus (one Google line).
+   Fraunces = display/headings/drop-caps/pull-quotes (italic for quotes).
+   Spectral = ALL body text. Marcellus = eyebrows/labels/nav/meta, small
+   + uppercase + letter-spaced. Never Inter, Roboto, Arial, system, or
+   Space Grotesk.
+
+<span class="k">2. GROUND.</span> Ivory paper (--paper #FBF7EE), warm ink (--ink #2B2317).
+   Never pure white or black. Add faint grain + corner prism light-leaks.
+
+<span class="k">3. GOLD is the voice.</span> Headings, eyebrows, dividers, drop-caps, quotes
+   are gold. --gold #9A7B1F for text, --gold-bright #C9A227 for gradients.
+
+<span class="k">4. THE PRISM is the signature</span> — one light split into the Realm hues.
+   Use THIN accents only: top ribbon, section-heading underline, diamond
+   dividers, spectrum legend, footer bar. NEVER a large fill. Body stays
+   calm gold-on-ivory. Restraint is what keeps it from being a rainbow.
+
+<span class="k">5. ACCENT.</span> Each section/card carries ONE hue via --accent (defaults
+   to gold). Accents live in borders, dots, small fills, left-rules.
+
+<span class="k">6. COMPONENTS.</span> Compose only from the kit: masthead, sticky nav,
+   section heading + .uline, .lead drop-cap, .diadiv divider, .spectrum
+   legend, .realm accent card + details.thread accordions, .vignette,
+   .pull quote, .feature block, footer coda. Do not invent new ones.
+
+<span class="k">7. LAYOUT.</span> One column, --maxw 760px, generous space, clamp() type
+   scale, mobile-responsive. Refined/editorial/illuminated — NOT maximal.
+
+<span class="k">8. MOTION.</span> Subtle only: prism "drift", scroll fade-up, accordion
+   +→× rotate. Always honor prefers-reduced-motion. Vanilla JS only.
+   NO localStorage / sessionStorage.
+
+<span class="k">9. SOURCE OF TRUTH.</span> Copy the :root tokens and component CSS from the
+   starter template VERBATIM. Change content, never the system.</code></pre>
+  </div>
+
+  <div class="note"><p class="t">◆ The shortest version</p><p>Ivory ground, gold voice, one thin ribbon of broken light. Fraunces, Spectral, Marcellus. Build from the kit. Keep it calm and let the prism be the only thing that shimmers.</p></div>
+</section>
+
+</main>
+
+<footer class="reveal">
+  <div class="bar"></div>
+  <p class="candle">Set the rules once.<br>Inherit them forever.</p>
+  <p class="ma">Companion to Algol's Hand · The Visual Standard
+    <small>The light is one. The colors are many. — Moirai Codex · House Style</small>
+  </p>
+</footer>
+
+<script>
+  (function(){
+    var els=document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(e){io.observe(e);});
+  })();
+  (function(){
+    var links=[].slice.call(document.querySelectorAll('nav.codex-nav a')),map={};
+    links.forEach(function(a){var id=a.getAttribute('href').slice(1),t=document.getElementById(id);if(t)map[id]={a:a,t:t};});
+    function s(){var pos=window.scrollY+140,cur=null;for(var id in map){if(map[id].t.offsetTop<=pos)cur=id;}
+      links.forEach(function(a){a.style.color='';a.style.borderBottomColor='transparent';});
+      if(cur&&map[cur]){map[cur].a.style.color='var(--gold)';map[cur].a.style.borderBottomColor='currentColor';}}
+    window.addEventListener('scroll',s,{passive:true});s();
+  })();
+</script>
+</body>
+</html>

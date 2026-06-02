@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thalassor — Advent of Ultima</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --realm-primary: #1a5276;
+  --realm-light: #7fb3d4;
+  --realm-accent: #a8d4ef;
+  --realm-glow: #5ba3cf;
+  --realm-deep: #0d2137;
+  --realm-abyss: #060e18;
+  --realm-surface: #c4dff0;
+  --realm-foam: #e8f1f8;
+  --bg: #080c12;
+  --bg-card: #0a1220;
+  --bg-card-hover: #0e1a2e;
+  --text-primary: #d6e8f4;
+  --text-secondary: #8aa8c0;
+  --text-muted: #4a6a82;
+  --border: #1a3a54;
+  --border-light: #2a4f6e;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --section-gap: 4.5rem;
+  --content-max: 820px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(26,82,118,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 100%, rgba(91,163,207,0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+.container {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+section { margin-bottom: var(--section-gap); }
+
+/* Divider */
+.divider {
+  text-align: center;
+  margin: 3.5rem 0;
+  position: relative;
+}
+.divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+.divider span {
+  position: relative;
+  background: var(--bg);
+  padding: 0 1.5rem;
+  color: var(--realm-glow);
+  font-size: 14px;
+  letter-spacing: 0.3em;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  padding: 6rem 0 3rem;
+}
+.header-tag {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--realm-glow);
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeDown 1s ease 0.2s forwards;
+}
+.header-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  color: var(--realm-light);
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  opacity: 0;
+  animation: fadeUp 1.2s ease 0.4s forwards;
+  text-shadow: 0 0 60px rgba(127,179,212,0.15);
+}
+.header-subtitle {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  opacity: 0;
+  animation: fadeUp 1s ease 0.7s forwards;
+}
+
+/* Section headers */
+.section-num {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--realm-glow);
+  margin-bottom: 0.75rem;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--realm-light);
+  margin-bottom: 1.5rem;
+  line-height: 1.3;
+}
+
+/* Identity card */
+.id-card {
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.id-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--realm-glow), transparent);
+}
+.id-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem 3rem;
+}
+.id-item {
+  border-left: 2px solid var(--border);
+  padding-left: 1rem;
+}
+.id-item.full { grid-column: 1 / -1; }
+.id-key {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+.id-val {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+/* Prose */
+.prose {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 1.85;
+  color: var(--text-primary);
+}
+.prose p + p { margin-top: 1.25rem; }
+
+/* Accordion */
+.acc-item {
+  border: 1px solid var(--border);
+  margin-bottom: -1px;
+  background: var(--bg-card);
+  transition: background 0.3s ease;
+}
+.acc-item:first-child { border-radius: 2px 2px 0 0; }
+.acc-item:last-child { border-radius: 0 0 2px 2px; }
+.acc-hd {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.75rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.3s ease;
+}
+.acc-hd:hover { background: var(--bg-card-hover); }
+.acc-left { flex: 1; }
+.acc-name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--realm-light);
+}
+.acc-tag {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+.acc-icon {
+  color: var(--realm-glow);
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+.acc-item.active .acc-icon { transform: rotate(45deg); }
+.acc-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+.acc-inner {
+  padding: 0 1.75rem 1.75rem;
+  border-top: 1px solid var(--border);
+}
+.d-row { margin-top: 1rem; }
+.d-label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--realm-glow);
+  margin-bottom: 0.3rem;
+}
+.d-text {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+
+/* Palette */
+.pal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+.pal-swatch { text-align: center; }
+.sw-color {
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  border-radius: 2px;
+  margin-bottom: 0.75rem;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.sw-name {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--realm-light);
+  margin-bottom: 0.2rem;
+}
+.sw-hex {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+.sw-role {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+/* Highlight box */
+.highlight-box {
+  border: 1px solid var(--realm-glow);
+  background: linear-gradient(135deg, rgba(13,33,55,0.8), rgba(6,14,24,0.9));
+  padding: 2.5rem;
+  position: relative;
+}
+.highlight-box::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px; right: -1px; bottom: -1px;
+  background: linear-gradient(135deg, var(--realm-glow), transparent, var(--realm-primary));
+  z-index: -1;
+  opacity: 0.3;
+}
+.highlight-text {
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  font-weight: 400;
+  line-height: 1.85;
+  color: var(--realm-surface);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 3rem 0 4rem;
+  border-top: 1px solid var(--border);
+}
+.footer-text {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  body { font-size: 17px; }
+  .container { padding: 0 1.25rem; }
+  .header { padding: 4rem 0 2rem; }
+  .id-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .id-card { padding: 1.75rem; }
+  .pal-grid { grid-template-columns: repeat(2, 1fr); }
+  .acc-hd { padding: 1rem 1.25rem; }
+  .acc-inner { padding: 0 1.25rem 1.25rem; }
+  .highlight-box { padding: 1.75rem; }
+  :root { --section-gap: 3.5rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 1. HEADER -->
+  <header class="header">
+    <div class="header-tag">Advent of Ultima · Moirai Codex</div>
+    <h1 class="header-title">Thalassor</h1>
+    <div class="header-subtitle">Water · Abundance, Flowing Freely</div>
+  </header>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- 2. REALM IDENTITY CARD -->
+  <section class="reveal">
+    <div class="section-num">I</div>
+    <h2 class="section-title">Realm Identity</h2>
+    <div class="id-card">
+      <div class="id-grid">
+        <div class="id-item">
+          <div class="id-key">Element</div>
+          <div class="id-val">Water</div>
+        </div>
+        <div class="id-item">
+          <div class="id-key">Population</div>
+          <div class="id-val">~300 million across four nations</div>
+        </div>
+        <div class="id-item">
+          <div class="id-key">Chromatic Signature</div>
+          <div class="id-val">Blue on white — Krenides cerulean, Crystata translucence, marble warmth, ocean depth</div>
+        </div>
+        <div class="id-item">
+          <div class="id-key">Material Hierarchy</div>
+          <div class="id-val">Crystata (translucent) → Marble (warm) → Stone (functional)</div>
+        </div>
+        <div class="id-item">
+          <div class="id-key">Cultural Analogs</div>
+          <div class="id-val">Hellenic Mediterranean, Renaissance Italian city-states, colonial maritime empires</div>
+        </div>
+        <div class="id-item full">
+          <div class="id-key">Role in the Story</div>
+          <div class="id-val">The cosmopolitan nexus of the inter-realm order — the civilization that controls the Clairgate network connecting the nine worlds, whose culture sets the baseline upon which contemporary Mystic society is built, and whose internal contradictions mirror those of every functional society that has ever chosen stability over justice.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- 3. THE DIVINE COVENANT -->
+  <section class="reveal">
+    <div class="section-num">II</div>
+    <h2 class="section-title">The Divine Covenant</h2>
+    <div class="prose">
+      <p>Salacia is the Goddess of Water. Her domain is water, healing, and abundance. Her blessing is the Krenides — sacred waters originating from the First Spring in Salacica, flowing through engineered channels in every city on every continent of the planet. The Krenides heal wounds, cure illness, and slow aging in those with sustained exposure. They are available to everyone — Mystic and Nihila, aristocrat and dockworker, native and visitor. The healing is immediate, unconditional, and empirically verifiable.</p>
+      <p>Salacia's covenant is with Thalassor specifically. Her provision is for her people — the approximately three hundred million who live under her care on her world. The covenant does not extend to other realms. The Krenides are exported abroad as commerce, not as obligation. Salacia has no jurisdiction over crystata, no interest in wealth distribution, no mechanism for enforcing economic behavior. She provides the water. What mortals build on top of that provision is their own responsibility.</p>
+      <p>The theological relationship is not a matter of faith. It is empirically confirmed every morning. The water heals. The goddess is real. The population's compliance with the theocratic order originates in this daily confirmation. The religion holds because it is demonstrably true. The Temple of Salacia administers the institutional interpretation of what the covenant requires of mortal behavior, including the patronage economy, the suppression of heresy, and the maintenance of the cultural narrative. Salacia does not enforce these institutions. The Temple does, in her name.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- 4. THE EXVISAR -->
+  <section class="reveal">
+    <div class="section-num">III</div>
+    <h2 class="section-title">The Exvisar</h2>
+    <div class="prose">
+      <p><strong>Saint Leif Sinclair</strong> — the Exvisar of Thalassor, divinely appointed steward of the First Spring, head of the Sinclair dynasty, and the most politically significant individual in the inter-realm order. He governs from the Spire of the First Spring in Salacica, where his family has held position for over a millennium.</p>
+      <p>He is recognizable by the powder-white hair — a physiological marker produced by generations of the Vintage of the Veil, the sacrament that transmits the cumulative memory of every preceding Exvisar into the successor. Through the Concordant Path, Leif carries the experiential weight of a thousand years of governance — not as historical knowledge but as lived memory. Titus's calculations, Juno's grief, every decision made on the Spire persists in his body.</p>
+      <p>His governing orientation is moderate. He holds the Temple — the narrative apparatus managing three hundred million people's relationship to the divine order. He fights the Shik'piris trade, the Mavarran infiltration, piracy, and smuggling, at a pace that does not threaten the system. He is pursuing the distillation of Krenides to a potency that may grant eternal life — the immortality project — amassing crystata at extraordinary scale with the stated intent of universal distribution.</p>
+      <p>He has sat across from Vex Mavarra, the ruler of Tenebralis, at meetings of the Exvisarelim — the inter-realm governing body — and watched her wear a different body every time. The same ancient presence behind new eyes. He knows what is out there. He governs accordingly: preserve the system, manage the threats, do not introduce variables that destabilize the realm. His mandate is not to be brave. It is to protect.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- 5. THE LAND -->
+  <section class="reveal">
+    <div class="section-num">IV</div>
+    <h2 class="section-title">The Land</h2>
+    <div class="prose">
+      <p>Thalassor is a planetary archipelago — two major continents and scattered island chains distributed across a world-ocean, connected by maritime trade routes and the Clairgate portal network. The planet is predominantly water. The Krenides originate from the First Spring in Salacica and flow through engineered channel systems across every settled region. The ocean itself is not Krenides — it is saltwater, vast, deep, and home to the Siren civilization that predates every humanoid settlement on the planet.</p>
+      <p>Salacica and Amphitra are the two major continents — large, contiguous landmasses with the population density, resource depth, and territorial extent that continental scale provides. Between them lie the Syndicate Isles — several clusters of islands scattered across a wide oceanic region, colonized by Salacican aristocratic houses. Beyond the major trade routes, the Mnemosyne Archipelago sits in geographic isolation — a remote cluster of islands surrounded by vast oceans, physically distant from both continental centers of power.</p>
+      <p>The climate is temperate to Mediterranean across the settled regions — warm coastlines, mild seasons, the kind of environment that produces outdoor market culture, open-air architecture, and a population that lives as much in public space as in private. The Krenides channels running through every city create a constant ambient sound — flowing water beneath the market noise, beneath the gulls. The architecture negotiates with water rather than resisting it: cantilevered structures over harbors, bridges that curve like surface tension, colonnades where the columns are channels of flowing Krenides rather than solid stone.</p>
+      <p>The planet is beautiful. Genuinely, structurally beautiful — not as aesthetic choice but as emergent property of healing water, Mediterranean climate, and a thousand years of patronage-funded art. The ocean between the continents is not empty space. It is Siren territory. Every ship that crosses between landmasses is traversing someone else's domain.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- 6. NATIONS -->
+  <section class="reveal">
+    <div class="section-num">V</div>
+    <h2 class="section-title">The Nations</h2>
+
+    <div class="acc-item" data-acc>
+      <div class="acc-hd">
+        <div class="acc-left">
+          <div class="acc-name">Salacica</div>
+          <div class="acc-tag">The capital continent — seat of the Sinclair dynasty, the Symposium, the Clairgate nexus</div>
+        </div>
+        <div class="acc-icon">+</div>
+      </div>
+      <div class="acc-body"><div class="acc-inner">
+        <div class="d-row"><div class="d-label">Governing Philosophy</div><div class="d-text">Abundance as institutional mandate. The Sinclairs hold the Spring, the Temple holds the doctrine, and the Symposium provides the diplomatic infrastructure where every realm's business is conducted over wine. Salacica projects power across the planet through the Clairgate network, the military apparatus, and the Temple's institutional reach.</div></div>
+        <div class="d-row"><div class="d-label">Sacred Art</div><div class="d-text">Oinomancy — the art of wine-based magic, invented by Saint Cloud Sinclair. Clairmancy — the art of portal creation, discovered by Juno Sinclair and the foundational technology of the inter-realm order. Both are practiced primarily within the Sinclair bloodline and its affiliated institutions.</div></div>
+        <div class="d-row"><div class="d-label">Architecture &amp; Environment</div><div class="d-text">The capital city descends from the Spire — the Sinclair palace in near-transparent Crystata — through the luminous Heights, the terraced marble districts, to the stone waterfront. Krenides flow through open channels in every district. Shrines line every waterway. The Temple of Salacia is more beautiful than the palace, because the dynasty would never visually outshine the goddess it claims to serve. The Synedrion occupies a structure resembling a cathedral functioning as a parliament.</div></div>
+        <div class="d-row"><div class="d-label">Key Visual Details</div><div class="d-text">Crystata refracting Krenides light into prisms. Blue thread woven into clothing hems as devotional practice. Water-drop motifs on doorframes. Patron sigils on workshop doors. The visual gradient is the social gradient — translucent at the top, warm in the middle, functional at the base.</div></div>
+        <div class="d-row"><div class="d-label">Atmospheric Read</div><div class="d-text">A living city where every person is simultaneously genuine and performing, and the performance is the genuine article.</div></div>
+      </div></div>
+    </div>
+
+    <div class="acc-item" data-acc>
+      <div class="acc-hd">
+        <div class="acc-left">
+          <div class="acc-name">Amphitra</div>
+          <div class="acc-tag">The old world — maritime, bioluminescent, total when committed</div>
+        </div>
+        <div class="acc-icon">+</div>
+      </div>
+      <div class="acc-body"><div class="acc-inner">
+        <div class="d-row"><div class="d-label">Governing Philosophy</div><div class="d-text">Strength remembered. Amphitra predates the Sinclair dynasty and claims to predate every humanoid settlement on the planet. The alliance with Salacica is honored because it serves Amphitran interests. The blockade doctrine — the capacity for total magical warfare demonstrated by the Violet Line — remains foundational to Amphitran strategic identity.</div></div>
+        <div class="d-row"><div class="d-label">Sacred Art</div><div class="d-text">Hydromancy — the manipulation of water in all its states, practiced with a fluency that reflects millennia of deep-water adaptation. Amphitran Hydromancers are the most formidable water-based combatants in the civilization, and their capabilities extend to environmental manipulation at scales sufficient to reshape coastlines.</div></div>
+        <div class="d-row"><div class="d-label">Architecture &amp; Environment</div><div class="d-text">Half-submerged cliff cities built into the water rather than on top of it. Streets become channels. Buildings descend below the waterline into functional submerged chambers. No clear boundary between terrestrial and aquatic space. The architecture originated in the sea and extended upward.</div></div>
+        <div class="d-row"><div class="d-label">Key Visual Details</div><div class="d-text">Bioluminescence — veins tracing blue-white patterns beneath dark olive skin, shifting with emotional state. Gargantuan serpentine dragons. Sky-leviathan fleets. Boneships. Deep Rider Ligeia at the head of the most martially formidable navy in the civilization. Amphitrans glow when they feel — physiologically incapable of concealing emotion.</div></div>
+        <div class="d-row"><div class="d-label">Atmospheric Read</div><div class="d-text">Standing inside the ocean's memory of itself — ancient, luminous in the dark, and quietly certain that everything built on the surface is temporary.</div></div>
+      </div></div>
+    </div>
+
+    <div class="acc-item" data-acc>
+      <div class="acc-hd">
+        <div class="acc-left">
+          <div class="acc-name">The Syndicate Isles</div>
+          <div class="acc-tag">The colonial throughput — fragmented, secular, praying you've got crystal</div>
+        </div>
+        <div class="acc-icon">+</div>
+      </div>
+      <div class="acc-body"><div class="acc-inner">
+        <div class="d-row"><div class="d-label">Governing Philosophy</div><div class="d-text">Commerce as the only universal sacrament. The Isles are colonized by Salacican aristocratic houses — nominally Salacian in religious language, secular in practice. They pay heavy taxes to the Temple on everything, legitimate and gray alike — not from devotion but because the taxes are cheaper than the alternative. The colonial governor's loyalty runs to his house first, the Synedrion second, the Exvisar third, and the Temple when observed.</div></div>
+        <div class="d-row"><div class="d-label">Sacred Art</div><div class="d-text">No dominant school. The Isles import and transship magical goods from every realm without developing a proprietary tradition. Cosmetic myst-application — the use of mystical energy for aesthetic enhancement — is the closest thing to a native practice. The body itself is a commercial instrument, optimized for the transaction at hand.</div></div>
+        <div class="d-row"><div class="d-label">Architecture &amp; Environment</div><div class="d-text">Scattered island clusters across a wide oceanic region. Colonial estates on cliffs above deep harbors. Port towns dense with throughput — warehouses, customs terminals, market wharves, and back channels that move what the front channels officially prohibit. Indigenous settlements persist in the interior hills and reef systems.</div></div>
+        <div class="d-row"><div class="d-label">Key Visual Details</div><div class="d-text">Everything passes through. Katos fencing stolen goods from market stalls too small for humanoid vendors. Sky-Sirens nesting on cliffs. Governor's mansions transplanted from Salacican architecture onto tropical geology. The ocean is Siren territory and the islanders know it.</div></div>
+        <div class="d-row"><div class="d-label">Atmospheric Read</div><div class="d-text">A port that exists because it has to — where everything in the cosmos passes through on its way to somewhere more important and less interesting.</div></div>
+      </div></div>
+    </div>
+
+    <div class="acc-item" data-acc>
+      <div class="acc-hd">
+        <div class="acc-left">
+          <div class="acc-name">The Mnemosyne Archipelago</div>
+          <div class="acc-tag">The memory — remote, silvered, listening to what the water holds</div>
+        </div>
+        <div class="acc-icon">+</div>
+      </div>
+      <div class="acc-body"><div class="acc-inner">
+        <div class="d-row"><div class="d-label">Governing Philosophy</div><div class="d-text">The water remembers. The archivists tend it. The information belongs to the water, not to them. Mnemosyne does not volunteer what the water holds and does not leverage its holdings for political influence. The institutional doctrine distinguishes between volunteering and responding to inquiry. The archivists will not offer. They may, if properly asked, answer.</div></div>
+        <div class="d-row"><div class="d-label">Sacred Art</div><div class="d-text">Hydromnemesis — the practice of listening to the Krenides' recorded memory. The water that has flowed through a place carries the impression of what it touched. The Mnemosynean archivists sit with the Krenides in deep archives and extract the information stored within the current. Their archives hold a millennium of Sinclair governance recorded in the medium itself.</div></div>
+        <div class="d-row"><div class="d-label">Architecture &amp; Environment</div><div class="d-text">Remote islands surrounded by vast oceans. Smaller settlements, lower density, dispersed. The Krenides' ambient presence dominates the sensory environment without competition from urban noise. Deep archives where the water's memory is tended. Gardens where centuries of history live in the roots.</div></div>
+        <div class="d-row"><div class="d-label">Key Visual Details</div><div class="d-text">A faint silvery quality to the skin — almost imperceptible. The sense of a person standing slightly behind still water, not quite fully present. Few Clairgate terminals, operated with deliberate restraint. The quietest nation. The withdrawal may be custodianship. It may be xenophobia. Mnemosyne does not clarify.</div></div>
+        <div class="d-row"><div class="d-label">Atmospheric Read</div><div class="d-text">The silence that contains everything, offered to no one, available to anyone willing to sit with the water long enough to hear it.</div></div>
+      </div></div>
+    </div>
+
+    <div class="acc-item" data-acc>
+      <div class="acc-hd">
+        <div class="acc-left">
+          <div class="acc-name">The Sirens of the Sea and Sky</div>
+          <div class="acc-tag">The indigenous civilization — ancient, sapient, tired of the noise on their roof</div>
+        </div>
+        <div class="acc-icon">+</div>
+      </div>
+      <div class="acc-body"><div class="acc-inner">
+        <div class="d-row"><div class="d-label">Civilization</div><div class="d-text">Two distinct sapient races sharing a single subaquatic society that predates every humanoid settlement. Sea-Sirens present humanoid above the waist and aquatic below — passive, immobile, singing from coastal rocks. What lies beneath the waves functions as a one-way door. Sky-Sirens present as bird body with woman's head — active, airborne, not harpies, and will respond to the comparison with immediate violence.</div></div>
+        <div class="d-row"><div class="d-label">Primary Grievance</div><div class="d-text">Stop doing war on their roof. Every naval engagement, every military exercise, every piracy interdiction happens on the ceiling of their civilization. The surface world has treated Siren territory as open water for a millennium without once acknowledging that another civilization lives under it.</div></div>
+        <div class="d-row"><div class="d-label">Alliances</div><div class="d-text">Amphitra maintains the oldest formal defense alliance — generations of coexistence, mutual benefit, amphibious training, deep-water magical knowledge. Cloud Sinclair maintains an independent channel through Lupe Volantis, bypassing Amphitran primacy — a strategic intelligence asset and a diplomatic powder keg if discovered.</div></div>
+        <div class="d-row"><div class="d-label">Atmospheric Read</div><div class="d-text">The reminder that the surface world is a guest on a planet it does not own, and the landlord has been patient, but patience is not the same as permission.</div></div>
+      </div></div>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- 7. THE PEOPLE -->
+  <section class="reveal">
+    <div class="section-num">VI</div>
+    <h2 class="section-title">The People</h2>
+    <div class="prose">
+      <p>Thalassans are a Mediterranean-analog population — olive-skinned, dark-haired, shaped by generations of proximity to healing water. Their defining cultural characteristic is social fluency. Salacicans in particular navigate ambiguity as a native competence, reading rooms the way other populations read weather. The warmth is genuine. The performance is also genuine. Both operate simultaneously. This is not duplicity. It is the specific personality produced by a civilization where hospitality is statecraft and statecraft is hospitality.</p>
+      <p>The element transforms the population physically. Sustained Krenides exposure produces a gradual luminosity in those with mystical attunement — clarity of skin, slower aging, brighter eyes. The effect compounds across generations in Crystata-saturated environments. At the highest tiers, the body itself becomes faintly translucent at the edges. The Nihila — those without mystical attunement — age normally and look ordinary. The biological class divide is aesthetic, not mortal. Standing in a room of Thalassans, the social hierarchy is readable in the skin before a word is spoken.</p>
+      <p>Amphitrans are physiologically distinct — bioluminescent veins trace blue-white patterns beneath dark olive skin, shifting with emotional state. They cannot conceal their feelings, which produces a directness that Salacicans find aggressive and Amphitrans consider basic honesty. Mnemosyneans carry a faint silvery quality, as though standing behind still water. Isles populations are the most physically diverse, reflecting generations of colonial mixing.</p>
+      <p>In a room full of people from every realm, the Thalassan reads as composed and socially fluid — the specific body language of a civilization where reading the room is a survival skill refined across a millennium into an art. The Ferridanian next to them looks forged. The Pyrtheran looks branded. The Zephyrosian looks translucent. The Thalassan looks like they already know what you're about to say.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- 8. SCHOOLS OF MAGIC -->
+  <section class="reveal">
+    <div class="section-num">VII</div>
+    <h2 class="section-title">Schools of Magic</h2>
+    <div class="prose">
+      <p><strong>Clairmancy</strong> — the art of portal creation, discovered by Juno Sinclair during the founding crisis. Clairmancy allows the practitioner to open stable gateways between locations — from across a room to across the cosmos. The Clairgate network that connects the nine Realms is the industrial-scale application of this art. As a combat discipline, Clairmancy makes distance irrelevant: a practitioner can open a gate beneath a target's feet and relocate them anywhere, instantly. The art is primarily practiced within the Sinclair bloodline and its institutional affiliates.</p>
+      <p><strong>Oinomancy</strong> — wine-based magic, invented by Saint Cloud Sinclair. Oinomancy uses sacramentally prepared wine as a medium for mystical effects ranging from shared experiential states to binding covenants. The Wine of Shared Dreams synchronizes perception across a group, enabling shared tactical awareness. The Wine of Shared Horizons creates persistent bonds of empathy and mutual understanding. The Wine of Shared Fates binds outcomes — an oath sworn on it carries enforceable consequences for violation. The Vintage of the Veil — the sacrament that transmits cumulative Exvisar memory — is the oldest and most sacred application of wine-based mysticism.</p>
+      <p><strong>Hydromancy</strong> — the manipulation of water in all its states, practiced most extensively in Amphitra, where millennia of deep-water adaptation have produced the most formidable water-based combatants in the civilization. Hydromancers operate at scales ranging from surgical precision — manipulating water within a single body — to environmental — reshaping coastlines, redirecting currents, weaponizing the ocean itself.</p>
+      <p><strong>Aestus</strong> — Cloud Sinclair's pre-Oinomantic martial technique. Aestus involves conducting the bloodflow of allied soldiers to optimize their physiological state during combat — regulating adrenaline, managing fatigue, synchronizing reaction times. It is a direct, biological application of Hydromantic principles to human bodies, and it constitutes one of the foundations of Cloud's reputation as a Conductor.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- 9. FASHION -->
+  <section class="reveal">
+    <div class="section-num">VIII</div>
+    <h2 class="section-title">Fashion &amp; Material Culture</h2>
+    <div class="prose">
+      <p>The governing principle of Thalassan dress is fluidity — draped silhouettes, layered translucencies, fabrics that move like water. The material hierarchy reads at a glance. Crystata-tier garments incorporate actual crystata thread, catching and refracting light, making the wearer appear dressed in the surface tension of the Krenides. Marble-tier dress favors clean white and blue linen — well-made, modest, the specific beauty of competence without extravagance. Stone-tier clothing is practical, durable, and identifiable by the blue thread woven into the hems — the devotional marker that unifies all three tiers.</p>
+      <p>Patron sigils appear on clothing at the marble tier and above — discreet embroidery indicating house affiliation. At the Symposium level, sigils become fashion statements, and the absence of a patron sigil communicates as loudly as its presence. Status at a glance is luminosity and translucency — the glow of the body mirrored in the glow of the garment. Poverty at a glance is opacity and weight — heavier fabrics, darker tones, the absence of light in the clothing echoing the absence of luminosity in the skin.</p>
+      <p>Amphitrans dress for amphibious life — close-fitting garments that function equally in air and water. The Syndicate Isles favor tropical practicality and cosmetic myst-application. The Allodas quarter introduces Tenebrali elements into the street — darker fabrics, masks visible as cultural practice, bioluminescent accents from imported flora that glow in the evening.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- 10. WEAPONS AND FORCE -->
+  <section class="reveal">
+    <div class="section-num">IX</div>
+    <h2 class="section-title">Weapons &amp; the Relationship to Force</h2>
+    <div class="prose">
+      <p>Thalassor's relationship to force is defined by containment. Beneath every social interaction, at every tier, the ambient awareness persists: escalation past the social threshold means someone with magic ends the conversation. The civilization has built its institutions specifically to ensure this kinetic layer remains a layer rather than a surface.</p>
+      <p>The dueling system formalizes the kinetic layer at the Crystata tier — personal combat, officiated, never to the death, terms sworn on wine. A Crystata-tier Mystic is their own champion. At the marble tier, hired champions fight on behalf of clients who cannot personally operate at the kinetic level. At the stone tier, violence is raw and policed by the Squalls rather than formalized. The duels serve a dual function: controlled release for the upper class and public education for everyone else. A stone-district Nihila who watches a Crystata duel understands viscerally what the agreement to remain in the social layer is protecting them from.</p>
+      <p>The Azure Guard — Cloud Sinclair's personal military instrument — wears living Crystata armor that retracts into a shoulder crest shaped like a shark. Deployed, they are figures encased in living crystal, refracting light, moving with fluid precision. Off duty, they are beautiful people at the Symposium with an ornate badge. The transition between states is one of the most visually striking moments in the Realm's visual lexicon.</p>
+      <p>The weapon that defines Thalassor's strategic position is not a blade or a deusa. It is the Clairgate. The portal network that carries commerce and diplomacy can project military force instantaneously across the planet or across the cosmos. Cloud Sinclair's demonstrated doctrine — locate the target, open the gate, deliver the resolution directly — makes distance irrelevant and renders conventional military geography obsolete. In Thalassor, the weapon you can see is never the one that kills you.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- 11. RELATIONSHIP TO OTHER REALMS -->
+  <section class="reveal">
+    <div class="section-num">X</div>
+    <h2 class="section-title">Relationship to the Other Realms</h2>
+    <div class="prose">
+      <p>Thalassor occupies the center of the inter-realm order by virtue of controlling the Clairgate network — the portal infrastructure that makes travel, trade, and diplomacy between worlds possible. Every realm's relationship to Thalassor is mediated by this dependency. The Sinclairs hold the gates. The gates hold the cosmos together.</p>
+      <p><strong>Ferridane</strong> — economic entanglement and strategic tension. Ferridane produces the military hardware and augmentation technology that Thalassor imports, while Thalassor controls the gates through which Ferridane's power must flow. The relationship is a cold war conducted through proxies, trade dependencies, and the person who sits at the intersection: Saint Cloud Sinclair, who has taken Ferridani weapons, crystata, and simulation technology and uses all of it to throw parties while the pressure builds underneath.</p>
+      <p><strong>Tenebralis</strong> — civilizational infiltration conducted as cultural exchange. Mavarran operatives are embedded at every tier of Thalassan society. Their products — memory coins, Shik'piris, poppets — circulate through the economy. The cultural presence that Cloud has publicly embraced provides cover for the infiltration regardless of intent. The Sinclair foreign doctrine ensures non-intervention in Tenebralis's subjugation of Luxenfall. The relationship is simultaneously diplomatic, commercial, and parasitic.</p>
+      <p><strong>Pyrthera</strong> — mutual respect with fundamental incompatibility. Sol'Kheret's Inquisition burns Mavarran operations across the realms, providing an external immune response that Thalassor would never deploy domestically but benefits from existing. Pyrtheran culture — rooted in radical honesty and the refusal to perform — reads Thalassan social fluency as spiritual sickness.</p>
+      <p><strong>Zephyros</strong> — intellectual alliance and diplomatic friendship. Rosorae Templar serves as the primary point of connection, educating the next generation of leaders from both realms. Zephyrosian scholars and diplomats are the most welcome visitors in Salacica after Thalassans themselves.</p>
+      <p><strong>Luxenfall</strong> — the unresolved guilt. Thalassor built its inter-realm dominance on technology taken from Luxania as that civilization was destroyed by Tenebralis. Luxenfallen slaves are kept as luxury goods by the Crystata tier. The non-interventionist doctrine ensures the occupation continues. The Clairgate monopoly is threatened by any scenario in which Luxenfall is restored. The question of Luxenfall is the question the civilization cannot afford to answer.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- 12. LEADERSHIP AND GOVERNANCE -->
+  <section class="reveal">
+    <div class="section-num">XI</div>
+    <h2 class="section-title">Leadership &amp; Governance</h2>
+    <div class="prose">
+      <p>Thalassor is a theocracy in which the legal code and the sacred code are the same document. The Exvisar rules by divine mandate — the theological claim that Salacia appointed the Sinclair bloodline to steward the First Spring. The Temple of Salacia administers the institutional interpretation of doctrine, operates the education system, manages public festivals, and enforces orthodoxy. The Exvisar holds interpretive authority over doctrine, making him simultaneously head of state and head of church.</p>
+      <p>The Synedrion serves as the deliberative governing body, incorporating aristocratic houses, Temple clergy, guild representatives, and military command from all four nations. Salacica holds the center through the Sinclair mandate and Clairgate control. Amphitra holds more deliberative sway than observers assume. The Syndicate Isles send fragmented delegations. Mnemosyne participates minimally.</p>
+      <p>Enforcement scales with the tier of society it addresses. The Squalls — the civilian police — handle street-level crime. The Tides serve as the general military force. The Azure Guard is Cloud Sinclair's personal instrument. Rosorae Templar produces personnel capable of confronting Crystata-tier threats. The Temple maintains its own enforcement authority over doctrinal matters. Clairgate security is military — every gate monitored by trained soldiers.</p>
+      <p>The Sinclair foreign doctrine is non-interventionist, established at the founding when Titus Sinclair declined to intervene in the destruction of Luxania. The doctrine holds that Salacia's covenant is with Thalassor, not the cosmos. Other realms are functionally exoplanets connected by artificial proximity. Intervention would mean interplanetary war. The doctrine is theologically clean and strategically convenient — a convergence that no Exvisar has been required to acknowledge publicly.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- 13. MATERIAL PALETTE -->
+  <section class="reveal">
+    <div class="section-num">XII</div>
+    <h2 class="section-title">Material Palette</h2>
+    <div class="pal-grid">
+      <div class="pal-swatch">
+        <div class="sw-color" style="background: linear-gradient(135deg, #7fb3d4, #a8d4ef);"></div>
+        <div class="sw-name">Krenides Cerulean</div>
+        <div class="sw-hex">#7FB3D4</div>
+        <div class="sw-role">Sacred water, healing channels, divine presence</div>
+      </div>
+      <div class="pal-swatch">
+        <div class="sw-color" style="background: linear-gradient(135deg, #c4dff0, #e8f1f8);"></div>
+        <div class="sw-name">Crystata Translucence</div>
+        <div class="sw-hex">#C4DFF0</div>
+        <div class="sw-role">Aristocratic glow, the Spire, divine mandate</div>
+      </div>
+      <div class="pal-swatch">
+        <div class="sw-color" style="background: linear-gradient(135deg, #1a5276, #0d2137);"></div>
+        <div class="sw-name">Abyssal Blue</div>
+        <div class="sw-hex">#1A5276</div>
+        <div class="sw-role">Ocean depth, Amphitran heritage, Siren territory</div>
+      </div>
+      <div class="pal-swatch">
+        <div class="sw-color" style="background: linear-gradient(135deg, #f5f0e8, #e8ddd0);"></div>
+        <div class="sw-name">Marble Warm</div>
+        <div class="sw-hex">#F5F0E8</div>
+        <div class="sw-role">Middle-tier architecture, Mediterranean warmth</div>
+      </div>
+      <div class="pal-swatch">
+        <div class="sw-color" style="background: linear-gradient(135deg, #8aa8c0, #4a6a82);"></div>
+        <div class="sw-name">Stone Harbor</div>
+        <div class="sw-hex">#8AA8C0</div>
+        <div class="sw-role">Working districts, docks, functional beauty</div>
+      </div>
+      <div class="pal-swatch">
+        <div class="sw-color" style="background: linear-gradient(135deg, #5ba3cf, #3d8ab8);"></div>
+        <div class="sw-name">Sinclair Azure</div>
+        <div class="sw-hex">#5BA3CF</div>
+        <div class="sw-role">Azure Guard, Sinclair authority, Oinomantic glow</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- 14. SOCIETAL DYSFUNCTION -->
+  <section class="reveal">
+    <div class="section-num">XIII</div>
+    <h2 class="section-title">Societal Dysfunction</h2>
+    <div class="prose">
+      <p>Thalassor's structural fault line is the gap between the system's administrative function and its investigative capacity. The civilization was engineered to prevent another blockade — to maintain a social contract in which the rich give enough that revolution is irrational and the floor remains high enough that desperation does not produce violence. It succeeds at this. The floor is high. The patronage provides. The water heals.</p>
+      <p>The system was not engineered to detect corruption operating within its upper tiers. The Cult of Sanguine — an active blood cult embedded in the Crystata aristocracy — worships a rival god, practices eugenics, conducts blood sacrifice of Nihila citizens, and aims to replace Salacia's universal covenant with one conditional on bloodline purity. Their collective magical power, concentrated through centuries of selective breeding, is sufficient to threaten the ruling order. They fund the Synedrion at levels that make them structurally indispensable. Their disposal practices bypass the Krenides' memory function entirely — remains are incinerated and sent off-world through the Clairgate network. The divine surveillance system never receives the evidence.</p>
+      <p>Simultaneously, the Tenebrali infiltration constitutes the early-stage cycle of an exported civilizational dissolution — the same process that destroyed Luxania over decades, operating at every tier of Thalassan society through the poppet trade, the Shik'piris supply chain, the memory coin economy, and long-term social cultivation. Thalassor absorbs this assault better than Luxania did because its internal fractures — Amphitran suspicion, Temple rigidity, stone-district prejudice, Mnemosynean silence — function as distributed immune responses. But the assault continues, and the fractures that constitute the defense also constitute the divisions the assault is designed to exploit.</p>
+      <p>The Exvisar's moderate pace addresses both threats without resolving either. The heir's covert operation against the Bloodless and his integration project to recruit Mavarran refugees represent the most ambitious proposed solution — and the most dangerous, given that every strategic asset is attached to one man whose removal collapses the entire architecture.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- 15. THE GONLAN -->
+  <section class="reveal">
+    <div class="highlight-box">
+      <div class="section-num">XIV</div>
+      <h2 class="section-title">The Gonlan — Hydralithe</h2>
+      <p class="highlight-text">Hydralithe is a moon-sized hydra — one of Aracice's Gonlan children, the category of divine constructs that exist at the intersection of god and weapon. In ancient times, before the Sinclair dynasty, before the Synedrion, before the founding history that every Thalassan child learns, Hydralithe drowned the world. The waters rose and covered the planet and washed away what Salacia could no longer tolerate. This is not myth. This is recorded in the Krenides. The water remembers it because the water did it.</p>
+      <p class="highlight-text" style="margin-top: 1.25rem;">The precedent exists within the divine architecture for catastrophic correction on a planetary scale. Salacia's patience is not infinite. Her silence on the Bloodless, on the Mavarran infiltration, on the slow corruption of the covenant she established — this silence may not indicate approval. It may indicate a threshold that has not yet been crossed. The civilization built on water lives at the pleasure of the water. The goddess who heals can also drown. She has done it before. The water remembers. Hydralithe still exists. The moon still watches.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span>◆</span></div>
+
+  <!-- 16. FOOTER -->
+  <footer class="footer">
+    <div class="footer-text">Advent of Ultima · Moirai Codex · April 2026</div>
+  </footer>
+
+</div>
+
+<script>
+document.querySelectorAll('[data-acc]').forEach(function(item) {
+  item.querySelector('.acc-hd').addEventListener('click', function() {
+    var wasActive = item.classList.contains('active');
+    document.querySelectorAll('[data-acc]').forEach(function(o) {
+      o.classList.remove('active');
+      o.querySelector('.acc-body').style.maxHeight = null;
+    });
+    if (!wasActive) {
+      item.classList.add('active');
+      var b = item.querySelector('.acc-body');
+      b.style.maxHeight = b.scrollHeight + 'px';
+    }
+  });
+});
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+</script>
+</body>
+</html>

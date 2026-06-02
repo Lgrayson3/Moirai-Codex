@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moirai Codex · Uriel — The Red Wolf · Advent of Ultima</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0b0807;
+  --bg-card: #15100d;
+  --bg-hover: #1d1611;
+  --bg-highlight: #1f1410;
+  --bg-ash: #141210;
+
+  --ember-dark: #4f1c14;
+  --ember-core: #b23a2a;
+  --ember-accent: #d8542f;
+  --ember-glow: #f0a878;
+
+  --ifris-core: #7e2da0;
+  --ifris-accent: #9b4dca;
+  --ifris-light: #c98fe0;
+
+  --ash: #6f6a66;
+  --ash-pale: #9a948d;
+  --ash-dim: #4a4642;
+
+  --gold-vein: #c4a052;
+  --gold-dim: #7c6736;
+
+  --text-primary: #d9cbbd;
+  --text-secondary: #9c8c7e;
+  --text-dim: #6a5c50;
+  --border-subtle: #261b15;
+  --border-accent: #4f1c14;
+  --border-ash: #332f2b;
+
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --max-width: 880px;
+  --section-gap: 4.5rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--ember-dark); color: var(--ember-glow); }
+
+#ember-canvas {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 9999; opacity: 0.5;
+}
+
+body::before {
+  content: '';
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 18% 30%, rgba(178,58,42,0.09) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 18%, rgba(126,45,160,0.05) 0%, transparent 48%),
+    radial-gradient(ellipse at 50% 100%, rgba(79,28,20,0.13) 0%, transparent 42%);
+  pointer-events: none; z-index: 0;
+}
+
+.page { position: relative; z-index: 1; max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem; }
+
+.divider {
+  display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+  margin: var(--section-gap) 0; opacity: 0.5;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--ember-dark), transparent);
+}
+.divider span {
+  width: 7px; height: 7px; background: var(--ember-accent);
+  transform: rotate(45deg); flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(216,84,47,0.6);
+}
+.divider.ash::before, .divider.ash::after {
+  background: linear-gradient(to right, transparent, var(--border-ash), transparent);
+}
+.divider.ash span { background: var(--ash); box-shadow: none; }
+
+/* ---- HEADER ---- */
+.header { text-align: center; padding: 5.5rem 0 1rem; }
+.header .tag {
+  font-family: var(--font-display); font-size: 0.6rem;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--ember-accent); display: block; margin-bottom: 2rem;
+}
+.header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 9vw, 4.6rem);
+  font-weight: 700; color: var(--ember-glow);
+  letter-spacing: 0.12em; line-height: 1.1; margin-bottom: 0.7rem;
+  text-shadow: 0 0 70px rgba(216,84,47,0.35);
+}
+.header .sub {
+  font-family: var(--font-display); font-size: 0.72rem;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-dim);
+}
+.header .epitaph {
+  margin: 1.9rem auto 0; max-width: 600px;
+  font-style: italic; font-size: 1.05rem;
+  color: var(--text-secondary); letter-spacing: 0.01em; line-height: 1.6;
+}
+
+/* ---- SECTIONS ---- */
+.sec-num {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--ember-accent); display: block; margin-bottom: 0.4rem;
+}
+.sec-num.hinge { color: var(--ash); }
+.sec-num.cold { color: var(--ember-core); }
+.sec-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 3vw, 1.55rem);
+  font-weight: 600; color: var(--ember-glow);
+  letter-spacing: 0.05em; margin-bottom: 1.4rem;
+  padding-bottom: 0.7rem; border-bottom: 1px solid var(--border-accent);
+}
+.sub-head {
+  font-family: var(--font-display); font-size: 0.92rem;
+  font-weight: 600; color: var(--ember-glow);
+  letter-spacing: 0.03em; margin-top: 1.7rem; margin-bottom: 0.5rem;
+}
+
+.prose p { margin-bottom: 1.2rem; }
+.prose p:last-child { margin-bottom: 0; }
+.prose strong { color: var(--ember-glow); font-weight: 600; }
+.prose em { color: var(--text-secondary); }
+.prose .ifris { color: var(--ifris-light); font-style: normal; font-weight: 600; }
+.prose .cold-name { color: var(--ash-pale); font-style: normal; }
+
+/* ---- ID CARD ---- */
+.id-card {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: 2px; padding: 2.2rem; position: relative; overflow: hidden;
+}
+.id-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, var(--ember-dark), var(--ember-accent), var(--ifris-core), var(--ash), var(--ember-dark));
+}
+.id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem 2rem; }
+.id-item .lbl {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--ember-accent); margin-bottom: 0.2rem;
+}
+.id-item .val { font-size: 0.95rem; color: var(--text-primary); line-height: 1.6; }
+.id-item.wide { grid-column: 1 / -1; }
+
+/* ---- THE TWO SENTENCES ---- */
+.sentences {
+  display: grid; grid-template-columns: 1fr auto 1fr; gap: 0;
+  margin: 1.4rem 0; align-items: stretch;
+}
+.sentence { padding: 1.7rem 1.5rem; background: var(--bg-card); border: 1px solid var(--border-subtle); }
+.sentence.s-uriel { border-top: 2px solid var(--ember-accent); }
+.sentence.s-wolf { border-top: 2px solid var(--ash); }
+.sentence .who {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.7rem;
+}
+.sentence.s-uriel .who { color: var(--ember-accent); }
+.sentence.s-wolf .who { color: var(--ash-pale); }
+.sentence .line {
+  font-family: var(--font-display); font-size: 1.04rem; font-weight: 500;
+  line-height: 1.42; margin-bottom: 0.6rem;
+}
+.sentence.s-uriel .line { color: var(--ember-glow); }
+.sentence.s-wolf .line { color: var(--text-primary); }
+.sentence .gloss { font-style: italic; font-size: 0.84rem; color: var(--text-dim); line-height: 1.6; }
+.sentence-mid {
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg-deep); padding: 0 0.9rem;
+}
+.sentence-mid span {
+  font-family: var(--font-display); font-size: 0.48rem;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim);
+  writing-mode: vertical-rl; text-orientation: mixed;
+}
+
+/* ---- HIGHLIGHT BOXES ---- */
+.highlight-box {
+  background: var(--bg-highlight); border: 1px solid var(--ember-dark);
+  border-left: 3px solid var(--ember-accent);
+  padding: 1.8rem 2.2rem; margin-top: 1.2rem; position: relative;
+}
+.highlight-box::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(216,84,47,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.highlight-box p { position: relative; font-size: 1rem; line-height: 1.8; margin-bottom: 0.9rem; }
+.highlight-box p:last-child { margin-bottom: 0; }
+.highlight-box p strong { color: var(--ember-glow); }
+.highlight-box p em { color: var(--text-primary); font-style: italic; }
+.highlight-box.ifris-box { border-left-color: var(--ifris-accent); }
+.highlight-box.ifris-box::before { background: radial-gradient(ellipse at 50% 0%, rgba(155,77,202,0.06) 0%, transparent 70%); }
+.highlight-box.ifris-box .ifris { color: var(--ifris-light); font-weight: 600; }
+.highlight-box.ash-box {
+  border-color: var(--border-ash); border-left-color: var(--ash);
+  background: var(--bg-ash);
+}
+.highlight-box.ash-box::before { background: radial-gradient(ellipse at 50% 0%, rgba(154,148,141,0.04) 0%, transparent 70%); }
+.highlight-box.ash-box p strong { color: var(--ash-pale); }
+
+/* the hinge marker */
+.hinge-marker {
+  text-align: center; margin: 1.6rem 0;
+  padding: 1.3rem 1.6rem;
+  border-top: 1px solid var(--border-ash);
+  border-bottom: 1px solid var(--border-ash);
+}
+.hinge-marker p {
+  font-family: var(--font-display); font-size: 0.74rem;
+  letter-spacing: 0.06em; color: var(--ash-pale); line-height: 1.7;
+  font-weight: 500;
+}
+.hinge-marker .small {
+  font-family: var(--font-body); font-style: italic;
+  font-size: 0.92rem; letter-spacing: 0; color: var(--text-dim);
+  margin-top: 0.5rem; text-transform: none;
+}
+
+/* ---- ACCORDION ---- */
+.acc-item {
+  border: 1px solid var(--border-subtle); margin-bottom: -1px;
+  background: var(--bg-card); overflow: hidden;
+}
+.acc-item:first-child { border-radius: 2px 2px 0 0; }
+.acc-item:last-child { border-radius: 0 0 2px 2px; }
+.acc-btn {
+  width: 100%; background: none; border: none;
+  padding: 1.1rem 1.4rem; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--font-display); font-size: 0.88rem;
+  font-weight: 600; color: var(--ember-glow);
+  letter-spacing: 0.04em; text-align: left; transition: background 0.2s;
+}
+.acc-btn:hover { background: var(--bg-hover); }
+.acc-btn .hint {
+  font-family: var(--font-body); font-size: 0.82rem;
+  font-weight: 400; color: var(--text-dim); font-style: italic;
+  margin-left: 0.8rem; flex: 1; text-align: right; padding-right: 0.6rem;
+}
+.acc-btn .arr {
+  width: 7px; height: 7px;
+  border-right: 1.5px solid var(--ember-accent);
+  border-bottom: 1.5px solid var(--ember-accent);
+  transform: rotate(45deg); transition: transform 0.3s;
+  flex-shrink: 0; margin-left: 0.4rem;
+}
+.acc-item.open .acc-btn .arr { transform: rotate(-135deg); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.45s ease; }
+.acc-inner { padding: 0 1.4rem 1.4rem; }
+.acc-inner .atm {
+  font-style: italic; font-size: 0.92rem; color: var(--ember-accent);
+  margin-bottom: 0.8rem; padding-left: 0.8rem; border-left: 2px solid var(--ember-dark);
+}
+.acc-inner p { font-size: 0.92rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 0.6rem; }
+.acc-inner p:last-child { margin-bottom: 0; }
+.acc-inner p strong { color: var(--ember-glow); }
+.acc-inner p em { color: var(--text-primary); font-style: italic; }
+.acc-inner p .ifris { color: var(--ifris-light); font-weight: 600; }
+.acc-inner p .cold-name { color: var(--ash-pale); }
+
+/* ---- LAYERS ---- */
+.layer-grid { display: grid; grid-template-columns: 1fr; gap: 0.8rem; margin-top: 1.2rem; }
+.layer {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--ember-dark); border-radius: 2px;
+  padding: 1.2rem 1.5rem;
+}
+.layer.breach { border-left-color: var(--ash); }
+.layer .lname {
+  font-family: var(--font-display); font-size: 0.62rem;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ember-accent); margin-bottom: 0.4rem;
+}
+.layer.breach .lname { color: var(--ash-pale); }
+.layer .ltraits {
+  font-family: var(--font-display); font-size: 0.78rem;
+  color: var(--ember-glow); letter-spacing: 0.05em; margin-bottom: 0.5rem;
+}
+.layer p { font-size: 0.92rem; line-height: 1.68; color: var(--text-secondary); }
+.layer p em { color: var(--text-primary); font-style: italic; }
+
+/* ---- LEDGER ---- */
+.ledger-wrap { margin-top: 1.2rem; }
+.ledger-row {
+  display: grid; grid-template-columns: 8.5rem 1fr 1fr;
+  border: 1px solid var(--border-ash); border-bottom: none;
+}
+.ledger-row:last-child { border-bottom: 1px solid var(--border-ash); }
+.ledger-row:first-child { border-radius: 2px 2px 0 0; }
+.ledger-row:last-child { border-radius: 0 0 2px 2px; }
+.ledger-row > div { padding: 0.8rem 0.95rem; }
+.ledger-circle {
+  font-family: var(--font-display); font-size: 0.6rem;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ash-pale);
+  background: rgba(20,18,16,0.7); border-right: 1px solid var(--border-ash);
+  display: flex; align-items: center;
+}
+.ledger-lost { border-right: 1px solid var(--border-ash); background: rgba(31,20,16,0.4); }
+.ledger-gained { background: rgba(18,14,12,0.35); }
+.ledger-lbl {
+  font-family: var(--font-display); font-size: 0.44rem;
+  letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 0.25rem;
+}
+.ledger-lost .ledger-lbl { color: var(--ember-accent); }
+.ledger-gained .ledger-lbl { color: var(--ash-pale); }
+.ledger-val { font-size: 0.85rem; line-height: 1.5; color: var(--text-secondary); font-style: italic; }
+.ledger-head {
+  display: grid; grid-template-columns: 8.5rem 1fr 1fr;
+  margin-bottom: -1px;
+}
+.ledger-head div {
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-dim);
+  padding: 0 0.95rem 0.4rem;
+}
+
+/* ---- OBJECTS ---- */
+.obj-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin-top: 1.2rem; }
+.obj {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: 2px; padding: 1.2rem 1.3rem; position: relative;
+}
+.obj::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 1px;
+  background: linear-gradient(to right, var(--gold-dim), transparent);
+}
+.obj .oname {
+  font-family: var(--font-display); font-size: 0.72rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold-vein); margin-bottom: 0.45rem;
+}
+.obj .ogift {
+  font-style: italic; font-size: 0.8rem; color: var(--ember-accent); margin-bottom: 0.45rem;
+}
+.obj p { font-size: 0.86rem; line-height: 1.62; color: var(--text-secondary); }
+
+/* ---- PRINCIPLES / CONTINUITY ROWS ---- */
+.princ { padding: 1rem 0; border-bottom: 1px solid var(--border-subtle); }
+.princ:last-child { border-bottom: none; }
+.princ-n {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.2em; color: var(--ember-accent); text-transform: uppercase; margin-bottom: 0.3rem;
+}
+.princ-n.ash-n { color: var(--ash-pale); }
+.princ-n.gold-n { color: var(--gold-vein); }
+.princ p { font-size: 0.95rem; line-height: 1.7; }
+.princ p strong { color: var(--ember-glow); }
+.princ p em { color: var(--text-primary); font-style: italic; }
+
+/* ---- DUAL ---- */
+.dual { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 1.2rem; }
+.dual-col {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: 2px; padding: 1.6rem 1.8rem;
+}
+.dual-col.self { border-top: 2px solid var(--ifris-accent); }
+.dual-col.others { border-top: 2px solid var(--ember-accent); }
+.dual-col h4 {
+  font-family: var(--font-display); font-size: 0.78rem;
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.8rem;
+}
+.dual-col.self h4 { color: var(--ifris-light); }
+.dual-col.others h4 { color: var(--ember-glow); }
+.dual-col p { font-size: 0.9rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 0.7rem; }
+.dual-col p:last-child { margin-bottom: 0; }
+.dual-col p strong { color: var(--text-primary); }
+
+/* ---- FOOTER ---- */
+.footer {
+  text-align: center; padding: 3.5rem 0 2.5rem;
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim);
+}
+.footer span { color: var(--ember-accent); }
+
+.fi { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fi.vis { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 640px) {
+  body { font-size: 17px; }
+  .id-grid { grid-template-columns: 1fr; }
+  .obj-grid { grid-template-columns: 1fr; }
+  .id-card { padding: 1.5rem; }
+  .header { padding: 3.5rem 0 1rem; }
+  :root { --section-gap: 3rem; }
+  .highlight-box { padding: 1.3rem 1.2rem; }
+  .acc-btn .hint { display: none; }
+  .sentences { grid-template-columns: 1fr; }
+  .sentence-mid { padding: 0.5rem 0; }
+  .sentence-mid span { writing-mode: horizontal-tb; }
+  .ledger-row, .ledger-head { grid-template-columns: 1fr; }
+  .ledger-circle { border-right: none; border-bottom: 1px solid var(--border-ash); }
+  .ledger-lost { border-right: none; border-bottom: 1px solid var(--border-ash); }
+  .ledger-head { display: none; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="ember-canvas"></canvas>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="header fi">
+    <span class="tag">Advent of Ultima · Moirai Codex · The Definitive Synthesis</span>
+    <h1>Uriel</h1>
+    <div class="sub">The Red Wolf · The Twice-Damned · The Burn That Doesn't Heal</div>
+    <p class="epitaph">One boy says "I fucked it up." One devil says "I died for nothing." It is the same person — and the distance between those two sentences is the whole of him.</p>
+  </header>
+
+  <div class="divider"><span></span></div>
+
+  <!-- I. IDENTITY -->
+  <section class="fi">
+    <span class="sec-num">I</span>
+    <h2 class="sec-title">Character Identity</h2>
+    <div class="id-card">
+      <div class="id-grid">
+        <div class="id-item">
+          <div class="lbl">The Name That Went Cold</div>
+          <div class="val">Uriel — son of Brooklyn, of Terrae. The boy who tried to give heroism a fair shake. The name a girl who loved him called him, before the abyss took it.</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">The Name He Made</div>
+          <div class="val">The Red Wolf — the name he gave himself in the dark, on the far side of the worst of it, when there was no one left to call him anything. Also: the Twice-Damned, the Burn That Doesn't Heal, the One Who Climbed.</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Element</div>
+          <div class="val">Fire — soul-fire, the flame that burns ego and architecture both. Reforged once, in Hel, from a source the Gods never made.</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Realm of Origin</div>
+          <div class="val">Terrae Exilis (Earth) — Brooklyn, under the Pax. Pyrtheran by the configuration of his soul; a fire-soul born to a fireless prison.</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Classification</div>
+          <div class="val">Tier Five — Deusaex. A Herald of the Advent. By the close of Book Two, a being of a magnitude Hel cannot contain.</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Affiliations</div>
+          <div class="val">The Red Wolves (founder, twice over) · The Advent</div>
+        </div>
+        <div class="id-item wide">
+          <div class="lbl">Primary Powers</div>
+          <div class="val">Ignis — pure-elemental pyrokinesis at massive capacity · Ifris — the self-sustaining fire-ice loop forged with Aya Frost · Ifris II — the same loop rebuilt in Hel from infernal energy · Wings · Flight</div>
+        </div>
+        <div class="id-item wide">
+          <div class="lbl">Function in the Cosmos</div>
+          <div class="val">The monstrous arm of the revolution, without whom no war is fought or won. The boy who tried heroism, was given a true chance at it, and — by his own repeated choice and by the literal law of his cosmos — became a devil the wronged are right to cheer. The figure on whom a single question is being tried: what is power for, and what does it cost to mean it.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- II. THE TWO SENTENCES -->
+  <section class="fi">
+    <span class="sec-num">II</span>
+    <h2 class="sec-title">The Two Sentences — How to Read This Codex</h2>
+    <div class="prose">
+      <p>There are two sentences at the center of this character, and everything else in this document is the distance between them.</p>
+    </div>
+
+    <div class="sentences">
+      <div class="sentence s-uriel">
+        <div class="who">Spoken by Uriel</div>
+        <div class="line">"They were right. I fucked it up. I always do."</div>
+        <div class="gloss">Point Zero. Nineteen years old. Dying, at his most heroic moment. A false verdict — he triumphed — but a sentence with a floor under it: it still believes there was a right thing, and a right thing real enough to fall short of.</div>
+      </div>
+      <div class="sentence-mid"><span>The Ledger</span></div>
+      <div class="sentence s-wolf">
+        <div class="who">Spoken by the Red Wolf</div>
+        <div class="line">"I died for nothing."</div>
+        <div class="gloss">The ashes of Terrae. Decades of experienced time later. Not grief — a charge, flung at the sky with the full fury of the fire that tore the hole. The same sentence, with the one word — <em>worth</em> — burned out of it.</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p><strong>"I fucked it up" indicts a performance. "I died for nothing" indicts the premise.</strong> The first believes the stage was real and the actor failed. The second has been taught, across thousands of deaths, that the stage was always empty. The distance between them is not distance traveled. It is distance <em>excavated</em> — a boy standing still while an abyss digs out everything beneath him.</p>
+      <p>And the crucial fact, the one this entire codex is built to hold: <strong>they are not the same speaker.</strong> The first sentence is the last thing said by Uriel. The second is the first verdict rendered by the thing Uriel was traded <em>for</em>. He does not become the Red Wolf. He is the price. The Red Wolf is what the price purchased. Hel is the counterparty.</p>
+    </div>
+
+    <div class="hinge-marker">
+      <p>From his origin through Point Zero, this codex speaks of Uriel — a boy, a real one, and for one year a happy one.<br>The hinge is Hel.</p>
+      <p class="small">After the hinge, this document speaks the name <span style="color:var(--ash-pale);font-style:normal;">Uriel</span> the way one speaks a dead man's name. The living subject — who burns the Prime Court, who holds the line at the Second Sun, who walks the other eight books of the Advent — is the Red Wolf. The reader should feel the name go cold at the exact place it went cold for the cosmos.</p>
+    </div>
+
+    <div class="prose">
+      <p>This is the synthesis of three working documents: the character codex proper, the <em>Point Zero</em> chapter outline (Book One), and <em>The Oubliette</em> — the Book Two Hel thread. It holds, throughout, two facts that the modern instinct will want to collapse into one: that Uriel is <strong>genuinely wronged</strong>, and that he is <strong>genuinely accountable</strong>. Neither dissolves the other. A reading that lets his suffering excuse his choices, or lets his choices erase his suffering, is a false reading. The truth is the <em>and</em>.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- III. THE MAN -->
+  <section class="fi">
+    <span class="sec-num">III</span>
+    <h2 class="sec-title">The Man</h2>
+    <div class="prose">
+      <p>Uriel is a simple man. Genuinely, constitutionally simple. Not stupid — he is one of the most brilliant strategic minds the Realms have ever produced, a man who unified dozens of warring factions across a planet, waged simultaneous military and psychological campaigns against the divine order's elite enforcers, and built a nation from rubble. But the man underneath all of that wants what he has always wanted: to eat, to watch a good fight, to talk shit with people who know him, and to not be asked to perform.</p>
+      <p>He is the most dangerous man in the Realms, and what he wants when nobody is making him want something bigger is a cold drink and a good fight on a Tuesday night. He is built from conditions and from decisions, and the layers of him stack in a clean order — the man, then the damage, then what he did back to the world, then the place where right judgement should sit and does not.</p>
+    </div>
+
+    <div class="layer-grid">
+      <div class="layer">
+        <div class="lname">Base Layer — the man without the damage</div>
+        <div class="ltraits">Loyal · Competitive · Social · Present · Direct · Ordinary · Simple · Warm</div>
+        <p>Loyal to specific people and the specific things those people need, not to ideology in the abstract. Social — he gravitates toward noise and company and the bar and the crowd. Present, fully in the room when he is in it. Brooklyn direct: says the thing, means the thing. This layer is so indestructible that Hel could not kill it, the Wolf could not bury it, and the void could not swallow it. <em>It is the proof there was ever a boy.</em></p>
+      </div>
+      <div class="layer">
+        <div class="lname">Second Layer — what the damage built</div>
+        <div class="ltraits">Guarded · Performative · Cruel · Relentless · Funny · Proud · Angry · Lonely</div>
+        <p>He does not let people close without making them pass through something first. He is <em>on</em> — in the bar, in conversation, in the way he argues his gladiator picks. Relentless, because Hel taught his body that stopping is dying and the body kept the lesson. Angry not as a mood but as a baseline that runs higher than most people's peak. And underneath all of it, lonely — with an entire architecture of personality built to make sure no one can tell.</p>
+      </div>
+      <div class="layer">
+        <div class="lname">Third Layer — what he did back to the world</div>
+        <div class="ltraits">Brutal · Theatrical · Vindictive · Controlling · Addicted · Unaccountable · Reckless</div>
+        <p>He learned the language of violence and became fluent. He does not just win — he makes sure you remember how you lost. The punishment always exceeds what is required. He sets the terms, chooses the battlefield, frames the encounter. He answers to no one and built it that way on purpose. He is reckless with collateral, with other people's safety, with what his fire does after he leaves the room.</p>
+      </div>
+      <div class="layer breach">
+        <div class="lname">Fourth Layer — the breach where right judgement should be</div>
+        <div class="ltraits">Nihilistic · Indifferent · Unpredictable · Unsettling · Amoral</div>
+        <p>He is nihilistic about the system, the gods, the courts — the institutions that claim authority over right and wrong — because the people who define good and evil built Hel on purpose, sent children there, and sent him. When someone invokes morality at him, he does not argue; he does not recognize their standing to speak. <strong>This layer is not a stable, sealed void. It is a breach, and across the series it spreads.</strong> He did not delete only the fraudulent, institutional morality and keep a private, personal kind safe in a sealed compartment — though that is the story he tells himself. The faculty of right judgement is one faculty. Once the instrument is discredited, it does not stay discredited in only the places he intended.</p>
+      </div>
+    </div>
+
+    <p class="sub-head">The Bedrock</p>
+    <div class="prose">
+      <p>Below the layers, below the Red Doctrine, below the breach and the manifesto and the performance, the bedrock of him is a man who builds families, loses them, builds them again, will not stop, and will not say so. The Red Wolves in Brooklyn. The friends at Rosorae. The Red Wolves in Luxania. The Advent forming around him now. Every phase of his life is him assembling people, naming the group, calling it something — and every phase is that thing being taken, falling apart, or changing into something he cannot hold. And he keeps doing it.</p>
+      <p>He cannot stop building families. He just will not let himself join them.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- IV. ORIGIN -->
+  <section class="fi">
+    <span class="sec-num">IV</span>
+    <h2 class="sec-title">Origin — Terrae Exilis</h2>
+    <div class="prose">
+      <p>Uriel was born in Brooklyn, on Terrae, in the years before the winter. Terrae is Earth, and Earth is a prison — a world stripped of myst, of element, of any divine connection, populated entirely by the descendants of the losing side of a war no one alive remembers. Eight billion souls, every one of them classified Nihila not because their souls are configured wrong but because there is nothing on Terrae for a soul to connect to. The field was withheld. Every Terran goes to Hel by default, unjudged, unweighed — simply sent down, every generation, forever.</p>
+      <p>He grew up American, in a Brooklyn the rest of the cosmos would have called a prison and that he simply called home. Before the winter, before he knew the word Mystic, he watched a man named <strong>Philando Castile</strong> bleed to death on a phone screen — the killing narrated calm, the recording scrubbed from the feed within the hour. He was a boy when he learned the lesson the Sea of Wrath would only later carve into his body: that the world will kill the people at the bottom of it, and then decline, politely, to care. <strong>He was made into someone willing to point and fire long before he was ever given anything to fire.</strong> The power, when it came, changed only the scale.</p>
+      <p>Onto that world the exiled Dragon-God Aracice then imposed the Pax — an authoritarian regime that held Brooklyn under a decade of unnatural, unbreaking winter. Uriel grew up under it knowing cold, hunger, state violence, and a rage simmering beneath the ice. He was the son of two Archangels who had been secretly executed for reasons never disclosed to him; he knew nothing of his lineage, nothing of magic, nothing of the Realms. He was raised by a broken man. His one tether to warmth was Aya Frost — a childhood friend who showed him heat in a world that offered only cold.</p>
+      <p>His anger found its outlet before his power did. He was politically activated before he was magically activated. The original Red Wolves were a terrorist cell turned freedom movement, fighting to burn down the seat of the Pax — and the Red Wolves were also the only family he had. The cell had ideology, reading lists, a theory of how to dismantle a system. It also lived on a Brooklyn block crushed by an occupying government. The manifesto and the block were one education, acquired from the same teachers. He was a killer in waiting before his power ever surfaced.</p>
+
+      <p class="sub-head">The Ascension</p>
+      <p>His Ascension was not a moment of wonder. It was a detonation. During a Red Wolves operation against a Pax weapons convoy, his Deusa — Ignis, the manipulation and generation of fire — erupted out of him for the first time. He was sixteen, minutes after Aya cut his hair. On a magic-dead world where there should have been nothing for a soul to ignite from, his fire came anyway, because his soul was never a Terran soul. It was Pyrtheran — a fire-configured soul, displaced to a fireless prison, finally finding something to burn. The joy of that first eruption did not come from wonder. It came from watching the world flinch at his power for the first time. Nihila died in the blast. He felt the flinch, and a part of him welcomed it.</p>
+    </div>
+
+    <div class="highlight-box">
+      <p>Two events anchor his origin, and the order is load-bearing. The Ascension on the convoy run — overwhelming, unchosen, a boy struck by lightning — and, soon after, <strong>the seizure of a major Brooklyn building</strong>, planned and executed deliberately, now that he knew what he could do. People were hurt in it; the damage was real. The first is the thing that happens <em>to</em> him. The second is the thing he <em>chooses</em> — and it is the first signature on a contract he will go on signing for the rest of his life. The hairline difference between them is the floor the whole tragedy will later fall from. He could always tell the difference. That is the point.</p>
+    </div>
+
+    <div class="prose">
+      <p>He was a danger now — to the State, to himself, to everyone near him. Francesca Frost, Aya's mother and a former Archangel, intervened, and gave him the one escape Terrae allowed: passage off-world, to the prestigious Rosorae Templar in Thalassor. For the first time, Uriel saw the world of the Mystics.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- V. ROSORAE -->
+  <section class="fi">
+    <span class="sec-num">V</span>
+    <h2 class="sec-title">Rosorae — The Year the Loop Ran Through Someone</h2>
+    <div class="prose">
+      <p>Rosorae Templar is the finishing academy for the cosmic elite, and Uriel arrived as a charity case by any reasonable standard — a pissed-off street kid with no manners, no house name, no idea what he was. Through a deal struck between the Sinclair patriarch and Aracice, he was assigned a shepherd: Saint Cloud Sinclair, the academy's golden prince, heir to the family that holds the roads between the Realms. Cloud set out to civilize him. In the process, the two became friends.</p>
+      <p>They bonded over the war games — Cloud the strategist, Uriel the weapon, a combination devastatingly effective. They bonded through argument, because Uriel argued with Cloud honestly and did not defer to him, and Cloud, insulted at first, came to respect it. Their most telling early exchange: Cloud poured one of his oldest vintages and began to describe its vintner; Uriel corrected him — not the owner, not the seller, but the one who crushes the fruit, who hauls the cask, who sifts skin from wine. Cloud kept the memory. Uriel had named a blind spot.</p>
+      <p>And here, for a year, Uriel had everything a coming-of-age story promises. Friends — Cloud, Serket Ashbloom, others. Training. He excelled. Cloud told him the truth of his divine lineage, that he might one day ascend to Archangel like the parents he never knew. He fell in love with Aya, who had crossed over too. And with Aya, he made something the cosmos had not seen before.</p>
+
+      <p class="sub-head">Ifris — and the One Aperture</p>
+      <p>Aya brought ice. Uriel brought fire. Two opposite domains, locked into a single closed loop: exothermic combustion producing heat, endothermic consumption absorbing it, the consumption feeding the fire and the fire feeding the consumption. A self-sustaining thermodynamic engine that did not exist until they built it — born from the fusion of their two souls, manifesting as a single <span class="ifris">purple flame</span>. They named it Ifris.</p>
+    </div>
+
+    <div class="highlight-box ifris-box">
+      <p>The year at Rosorae is not a prologue. It is the single most structurally load-bearing stretch of his life, and the reason is <span class="ifris">Ifris</span> itself. Uriel's soul, as later sections will show, is a closed loop — a circuit that refers to nothing outside itself. The fusion with Aya is the one and only time that circuit ran <em>through another person</em>. Soul-fusion bled part of her into him and part of him into her. For one year, the closed loop was not fully closed. <strong>Aya is the proof — the only proof the reader will ever get — that the loop could have run through something real.</strong> Without that year, the empty room at the end of his story is merely inevitable, and inevitability is not tragedy. With it, the reader has seen the one configuration in which it might not have ended this way. That is what makes the ending unbearable rather than only grim. He was a closed loop. And for one year, with her, he was not.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- VI. POINT ZERO -->
+  <section class="fi">
+    <span class="sec-num">VI</span>
+    <h2 class="sec-title">Point Zero — The Betrayal</h2>
+    <div class="prose">
+      <p>Terrae fell under attack. Raiwata — the Apex Archdevil of Hel, the Sun Caller — had brought his campaign to Earth, and Uriel went home to fight for the people who raised him. He asked Cloud to get him there. Terrae is a restricted, one-way world; the request was a monumental risk. Cloud opened an unauthorized Clairgate anyway and threw himself onto the battlefield beside his friend.</p>
+      <p>The defense of Terrae at the Battle of Point Zero was the founding of a legend. When Aracice fell — breaking the weapon Antaka on his own body to stop it completing, paying with his life — and as Raiwata ascended into his apotheosis, becoming the God of Chaos, Uriel moved. He struck the ascending god. He was the first being ever to land a blow on Raiwata, the first to make him stagger. The others moved only because Uriel moved first. In the cost of that strike, Raiwata severed Uriel's right arm at the elbow. The punch bought the seconds that mattered; the Mystics he loved lived because of it.</p>
+      <p>He did not know that. He died believing the opposite. With at least part of Aya's soul still fused to his own through the bond of Ifris, the unsanctioned fusion and the forbidden deusa weighed against him in some accounting he never saw, and he was cast into Hel — without trial, without charge, without explanation. His last thought was the soft verdict, the one with a floor still under it: <em>they were right; I fucked it up; I always do.</em> He thought it because the available evidence, from his vantage on the ground, looked exactly like every prior time he had been told he ruined something. He did not have the rest of the picture. He never has the rest of the picture. That is the engine.</p>
+    </div>
+
+    <div class="highlight-box">
+      <p>No one ever told him why he was condemned. Maybe it was Ifris — a power Dozu, God of Deusas, had ruled forbidden. Maybe the city block he burned at his Ascension. Maybe he was mistaken for one of the Nihila he was sentenced to be among. Maybe someone simply wanted him gone. He does not know. <strong>The injustice is not that the wrong reason was given. The injustice is that no reason was given at all</strong> — a soul condemned to the deepest place that exists, by the same order that built the place, immediately after the most heroic act of his life, and never once asked to answer for anything.</p>
+    </div>
+  </section>
+
+  <div class="divider ash"><span></span></div>
+
+  <!-- VII. HEL — THE HINGE -->
+  <section class="fi">
+    <span class="sec-num hinge">VII · The Hinge</span>
+    <h2 class="sec-title">The Oubliette — Hel</h2>
+    <div class="prose">
+      <p>Hel is not a natural feature of the cosmos, and it is not a trial. It was purpose-built by the victors of the First War to punish the losers and every descendant of the losers — and it was built as an <strong>oubliette</strong>: a pit a soul is dropped into and forgotten, with no door, no sentence read aloud, no mechanism of release, because release was never part of the design. It is the Ninefold Abyss: nine circles spiraling downward, each a continent-sized world of one perfected sin. There is no myst in Hel. There are no Deusas. No one is meant to manifest power there, and no one is meant to return.</p>
+      <p>Uriel was thrown into the fifth circle — the <strong>Sea of Wrath</strong>, the plane of endless war. And the Sea is not the first circle of a climb. It is the bottom of the hole, and it is the whole intended experience: fight, die, wake in the Sea, fight, die, wake in the Sea, eternally, by divine verdict. He was held there <strong>three years as the Realms count time</strong> — but Hel's hours do not run at the Realms' pace, and those three years dilated to <strong>eighteen, as he lived them</strong>, dying thousands upon thousands of times. Every death returned him not to where he fell but to the Sea, because death in Hel does not return you to your position. It returns you to your <em>sentence</em>.</p>
+      <p>So the climb out is not progress <em>through</em> Hel. There is no through. It is a soul doing the one thing the architecture has no provision for — and the walls of an oubliette are smooth and infinite, and the only handhold is a being's own humanity. He climbed by burning that humanity for fuel. <strong>This is the Faustian bargain, and it is the spine of the character: not one signing, but thousands, each survivable, each rationalized, each his.</strong> Every circle takes a faculty that made him human and hands back, in exchange, a power that makes him terrible. He agrees to each trade, every time, because the thing being taken is the thing currently being used to destroy him.</p>
+    </div>
+
+    <p class="sub-head">The Ledger of the Climb</p>
+    <div class="prose" style="margin-bottom:0.4rem;">
+      <p>The companion document <em>The Oubliette</em> renders this as thirteen windows the camera stops on, across a descent of thousands. Each circle's transaction, plainly:</p>
+    </div>
+    <div class="ledger-wrap">
+      <div class="ledger-head">
+        <div>Circle</div><div>What is lost</div><div>What is gained</div>
+      </div>
+      <div class="ledger-row">
+        <div class="ledger-circle">Sea of Wrath</div>
+        <div class="ledger-lost"><div class="ledger-lbl">He loses</div><div class="ledger-val">The flinch — the body's pause that knows the thing before it is alive.</div></div>
+        <div class="ledger-gained"><div class="ledger-lbl">He gains</div><div class="ledger-val">The strike that does not hesitate; a dread that monsters themselves come to fear.</div></div>
+      </div>
+      <div class="ledger-row">
+        <div class="ledger-circle">Bleeding Wilds of Lust</div>
+        <div class="ledger-lost"><div class="ledger-lbl">He loses</div><div class="ledger-val">The capacity to be touched — intimacy as a thing he can receive.</div></div>
+        <div class="ledger-gained"><div class="ledger-lbl">He gains</div><div class="ledger-val">Intimacy as a knife — closeness he can read and weaponize against another.</div></div>
+      </div>
+      <div class="ledger-row">
+        <div class="ledger-circle">Broken Halls of Pride</div>
+        <div class="ledger-lost"><div class="ledger-lbl">He loses</div><div class="ledger-val">The wish to be remembered well — the reason the Bed-Stuy boy ever wanted to be good.</div></div>
+        <div class="ledger-gained"><div class="ledger-lbl">He gains</div><div class="ledger-val">Immunity to glory. He refuses the crown — the one trial he passes clean — and pays for the passing.</div></div>
+      </div>
+      <div class="ledger-row">
+        <div class="ledger-circle">Mire of Cowardice</div>
+        <div class="ledger-lost"><div class="ledger-lbl">He loses</div><div class="ledger-val">The sight of others as real. The Mire cannot break him — he was never a coward — but it takes this anyway.</div></div>
+        <div class="ledger-gained"><div class="ledger-lbl">He gains</div><div class="ledger-val">The use of anyone, the drowning included, as footing toward where he is going.</div></div>
+      </div>
+      <div class="ledger-row">
+        <div class="ledger-circle">Ashen Wastes of Betrayal</div>
+        <div class="ledger-lost"><div class="ledger-lbl">He loses</div><div class="ledger-val">Aya. Her name. His own name. The Wastes wear the faces of everyone he loved — and the only face he had left was hers.</div></div>
+        <div class="ledger-gained"><div class="ledger-lbl">He gains</div><div class="ledger-val">The Red Wolf — a name nothing can ever turn against him, because he forged it himself, in the ash, out of what was left.</div></div>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top:1.3rem;">
+      <p>The Wastes are worse than the other four circles combined, and the reason is plain. The Sea, the Wilds, the Halls, and the Mire each took a faculty that connected him to other people — the flinch, the touch, the wish to be regarded, the sight of others as real. By the time he reaches the Wastes he has one connection left, and it is not a concept. It is <strong>Aya</strong> — the fragment of her soul fused to his since the night he died, and her name, and her face. The first time he reaches the Wastes he fails on contact: he cannot raise his hand against her face, and the abyss takes him apart while he stands at the edge of the thing he will not do. The second time, he does not stop. The only way up runs through the thing wearing her, and he cuts his way through it, hour after hour, because he has decided — somewhere he will never afterward be able to find — that up is worth it.</p>
+      <p>At the top of the Wastes he reaches for her name, to carry it the last distance, and the word is not there. He reaches for his own — and the only voices that have said <span class="cold-name">Uriel</span> in all those years were the things that wanted him dead, and a name said only by torturers stops being a name. That word is not there either. He comes up out of the Wastes carrying nothing he walked in with. Not the girl. Not the boy who loved her. Not the name the boy was called. And a thing with no name still has to be something — so in the ash he reaches for one, and the one his hand closes on is <strong>the Red Wolf</strong>.</p>
+    </div>
+
+    <div class="hinge-marker">
+      <p>This is where the name goes cold.</p>
+      <p class="small">Everything before this point happened to Uriel. Everything after it is done by the Red Wolf. The page does not grieve the loss of Aya's name — he cannot, so it does not. That is the register: the refusal to linger is the world's refusal to care. The reader carries the grief he no longer can.</p>
+    </div>
+
+    <p class="sub-head">Ifris II — The Handshake</p>
+    <div class="prose">
+      <p>It was only on the climb that did not end in the Sea — after thousands of returns, after the Mire threw him down one last time having watched him pay the full and total price and answered <em>insufficient</em> — that something ignited. Not grace. Not epiphany. Recognition. Hel has no myst; what he reached for was infernal energy, the only force the abyss contains. The closed thermodynamic loop of <span class="ifris">Ifris</span> held, but two new forces were folded into the circuit: the hunger of the abyss, which gives the flame <em>appetite</em> — it does not merely burn, it wants to — and the wrath of the Sea, which gives it <em>indiscrimination</em> — the rage does not choose its targets.</p>
+    </div>
+
+    <div class="highlight-box ifris-box">
+      <p><strong>The reach into infernal power is not a bargain offered from outside. It is the abyss recognizing its own.</strong> A soul, in this cosmos, is a thing that interfaces with power; Uriel's soul was always a closed loop, a circuit referring to nothing beyond itself. Hel did not corrupt him with a foreign fire. Hel stripped away myst, and the world, and Aya, and every external ground — until the only thing left to burn was what the soul already was. When he reached down into the abyss for power, the hand that reached back to take his was <em>his own</em>. The "infernal" in Ifris II is simply his own soul, seen plainly, with the lights of the world switched off. He did not climb out of Hel. He burned a path up through every circle that had unmade him — and Hel, which holds devils by the thousand, could not hold him, because he had crossed into an order of magnitude the oubliette was never built to contain.</p>
+    </div>
+
+    <p class="sub-head">The Ashes</p>
+    <div class="prose">
+      <p>He broke through into half-light and stone — and the oldest joke of the prison world, the one its people always told, landed and was not a joke: Hell below, the sky above. He came up through the floor of the world. And the world was ash. <strong>Terrae had burned.</strong> Raiwata had invoked Antaka at Point Zero; Aracice broke its <em>completion</em> and died doing it, but the sun still came, dragged close, and Terrae combusted slow and total while everyone who could flee fled. Eight billion of the pre-damned — who were never going to survive a world hauled toward its star — burned. Their souls, condemned by birth, had already fallen and been counted into the ledger of the god he once punched.</p>
+      <p>He does not know that Aracice broke the completion. He does not know the Mystics escaped. He does not know that Aya lives. He does not know his punch bought the seconds that mattered. He has only a dead world and a verdict ground into him across thousands of deaths — and the burned planet does not make him grieve. It <em>confirms</em> him. The soft verdict died in the Wastes; <em>I failed to save them</em> still believed the world was worth saving. What climbs out of the hole has had the worth burned off. It does not say <em>I failed.</em> It says, with the full fury of the fire that just tore through Hel and the Earth both, the other thing — <strong>"I died for nothing"</strong> — and it is not a confession. It is a charge, flung up at the gods who built the hole and the court and the ledger. It does not land flat. It lands like the fire did.</p>
+    </div>
+  </section>
+
+  <div class="divider ash"><span></span></div>
+
+  <!-- VIII. THE RAIWATA SYMMETRY -->
+  <section class="fi">
+    <span class="sec-num cold">VIII</span>
+    <h2 class="sec-title">The Raiwata Symmetry</h2>
+    <div class="prose">
+      <p>Hel holds devils. It is, definitionally, where devils are kept; it contains Archdevils and the powers of the nine circles the way a prison holds prisoners. By the end of Book Two, there are exactly two beings it has failed to hold — and the symmetry between them is canon, and it matters for the rest of the series.</p>
+      <p><strong>Raiwata</strong> leaves Hel by a route: the Aesthetes — through their experiments on souls and their colonization of the afterlife — built a bridge to the Eighth Hell, the circle all Mavarrans descend to. He is let out through engineered infrastructure. Exit as corruption, deliberately constructed.</p>
+      <p><strong>The Red Wolf</strong> leaves Hel by force: no bridge, no door, nothing built for him — a hole burned straight up through every circle and through the crust of the Earth. Exit as brute violation, no route at all.</p>
+    </div>
+
+    <div class="highlight-box">
+      <p>They are not opposites. They are the <strong>same order of entity</strong> — two beings who crossed the same threshold of magnitude out of the same abyss, in the same book, by opposite routes. When the cosmos names the Red Wolf <em>hellspawn</em>, it is not hysteria. It is taxonomically correct: he is the same kind of thing as the God of Chaos. The horror the series carries about him is that the figure standing on the heroes' side of the war against the gods is the same category of being as the enemy. <strong>The entire moral difference — the difference the whole nine books rest on — is what each of them destroyed to cross.</strong> Raiwata paid with a world. The Red Wolf paid with himself. Whether that difference is everything, or nothing, is the question the series is asking.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- IX. THE RETURN -->
+  <section class="fi">
+    <span class="sec-num cold">IX</span>
+    <h2 class="sec-title">The Return — The Red Doctrine</h2>
+    <div class="prose">
+      <p>He came back informed. In Hel he had learned what no one was meant to learn: that there had been a First War, that Hel was constructed, that Terrae was a prison, that eight billion people are condemned by hereditary sentence, that the entire divine order is the spoils architecture of a war the winners administer and no one remembers. A Pyrtheran soul is configured for radical honesty — for truth that burns. His had encountered the largest lie in the cosmos and decided to say it out loud.</p>
+      <p>On the barren field of burned Terrae, the Archangels came down to seize the thing that had crawled out of Hel. Nothing had ever escaped Hel by force; Ex-Deorum had no protocol for it, and they moved to take it the way they had taken ten thousand lesser things. He killed several before the rest learned to be afraid. <strong>The Do Not Engage order is born here</strong> — not at the branding of an Archangel, but on that field, the first time the divine order's enforcers met a thing out of the abyss and counted their own dead. And then he let the frightened survivors take him — toward Dystan, toward the Prime Court. They believed they were escorting a prisoner. They were carrying their own catastrophe through their own front door.</p>
+      <p>In the hall of divine justice — the room where the order judged souls before sending them down to where he had been sent — he was finally, after everything, brought to judgement. He demanded the trial he had been denied. And then he delivered his own verdict: he burned the Prime Court to the ground, and left a single Stellarch alive to carry the story.</p>
+    </div>
+
+    <div class="highlight-box ash-box">
+      <p>What he told the survivor was four words: <strong>"Tell them the Red Wolf did this."</strong> He named the agent. He did not name the deed. He left the predicate empty — and an empty predicate in a story does not stay empty. The cosmos filled it, and the cosmos, looking at a thing fresh out of Hel standing in a burning court full of the dead, filled it with the worst available reading: <em>he escaped Hell, he burned innocent people alive, he is coming for everyone next.</em></p>
+      <p>He did not author that myth. He left a hole, and the world poured his damnation into it — and he left the hole because a man who believes he died for nothing does not believe the deed has a meaning worth naming. The empty predicate is nihilism rendered as grammar. <strong>From that hour, the reputation precedes him through every door he will ever knock on.</strong> When he frees slaves, the story is that the dangerous thing is gathering an army. When he saves a world, the story is that a monster wanted a world. The reputation is a lens that pre-converts every good act into evidence against him — and he can never <em>do</em> his way out of it, because the harder he tries to be the thing he set out to be at sixteen, the more the world reads the trying as the monster's cunning.</p>
+    </div>
+
+    <p class="sub-head">The Red Doctrine</p>
+    <div class="prose">
+      <p>The Red Doctrine is a systematic practice of symbolic inversion. He uses the tools, the aesthetics, and the logic of an oppressive system to humiliate and dismantle it. He does not theorize about justice and he does not write speeches about it — he treats justice as a verdict that has not yet been enforced, and enforces it. He does not burn the Prime Court as vandalism. He burns it as indictment. He does not humiliate the Archangels because he hates them personally. He humiliates them because they carry swords on behalf of a system founded on hereditary punishment, and because a humiliated enforcer is a cautionary tale, and a cautionary tale frightens systems into motion.</p>
+    </div>
+
+    <p class="sub-head">The War on Ex-Deorum</p>
+    <div class="prose" style="margin-bottom:0.4rem;">
+      <p>Ex-Deorum is the divine order's enforcement arm — the Archangels who descend carrying swords. Their heraldic symbol is a Hydra: to kill one, you must sever every head. He set out to sever them, one at a time, through acts of calculated, symbolic ruin.</p>
+    </div>
+    <div class="acc">
+      <div class="acc-item">
+        <button class="acc-btn">Vesper — The Branded<span class="hint">the burn that doesn't heal</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>He burned the sanctified armor from the Archangel Vesper until it was ash, and left on her skin a brand that would not heal. The point was not death. The point was that an Archangel's invincibility could be undressed in public — the shine ripped off, the mark made permanent. It earned him the name the Burn That Doesn't Heal.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn">Valon — The Leashed<span class="hint">a bomb in his own steel</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The Archangel Valon wore living steel bound to his nervous system — rigid, proud, noble, unable to heal like flesh. He lodged a sliver of Ifris-charged crystata in the joint beneath Valon's shoulder: shallow enough not to kill, deep enough that pulling it free would crack it and spill Ifris. A war-titan of the Second Heaven, made into a bomb that could not move without detonating, and sent home as a living liability.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn">Leto — The Shattered<span class="hint">the truth he could not survive</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Leto, the Thoughtseer, reached into his mind to read him, expecting fog and resistance. He found neither — no defense at all, only the unfiltered memory of Hel, with the gates wide open. It was not a trap; it was simply the truth of another being's survival, and Leto could not survive the reading of it. Afterward, Leto could offer Ex-Deorum only one report: the Red Wolf is beyond us; do not engage.</p>
+        </div></div>
+      </div>
+    </div>
+    <div class="prose" style="margin-top:1rem;">
+      <p>Vesper the Branded, Valon the Leashed, Leto the Shattered — three of the finest the divine order sent, returned humiliated. The Do Not Engage order, conceived on the ashes of Terrae, was made doctrine here. The Archangels became cautionary tales, and the Red Wolf became a ghost story whispered in the halls of power.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- X. LUXENFALL -->
+  <section class="fi">
+    <span class="sec-num cold">X</span>
+    <h2 class="sec-title">Luxenfall — What the Oubliette Made Possible</h2>
+    <div class="prose">
+      <p>Luxania was the Realm of Light, until Tenebralis murdered its god, broke its guardian, and renamed the conquered ground Luxenfall. The occupation runs the Lightwells — facilities sold to the cosmos as crystata mines, in truth industrial sites that extract the emotional content of living people. Where the Pax held Terrae under a decade of unbreaking winter, the Tenebrali hold Luxenfall under a permanent magical twilight. The parallel was not lost on him. The architecture of oppression is not abstract here. It is a lived reality, and he was drawn to it the way lightning is drawn to a rod.</p>
+      <p>He burned the Lightwells. He freed the Luxenfallen the divine order had abandoned — abandoned because their patron god was dead, and the divine enforcement mechanism runs only through living patron gods. And in Luxenfall he found the Grounded — the unbroken core of Luxania that had refused to be conquered or tricked, officially branded extremists, in truth the dissenters who would not yield. He recognized them. They were the spirit of his Red Wolves, alive in another realm.</p>
+      <p>The Grounded shed the name that defined them by their defeat and took his. They became the <strong>Red Wolves</strong> — a pack, hunting together, howling defiance at the twilight. For him it was the resurrection of his first family and his first name, made into an army. Alongside Fiacre, who carved and ignited a second sun over the murdered realm, and Alciel, who communed with the broken guardian Solarith and rose into it, the Red Wolves fought the Battle of the Second Sun — and at that battle he single-handedly held the front line, and the liberation of Luxenfall closed the first act of the Advent.</p>
+    </div>
+
+    <div class="highlight-box">
+      <p><strong>He could not have held that line as the boy from Point Zero.</strong> He holds it because the oubliette made a thing that does not flinch, cannot be reached, cannot be tempted off its purpose, fears nothing the cosmos can show it, and burns with a fire reforged from the abyss itself. Every faculty the Second Sun demanded of him is a faculty Hel charged him for, circle by circle. The heroism of that front line is real — and it was paid for, in full and in advance, in the dark, by a boy named Uriel who will never know the line was held. This is the cruelest arithmetic in the series: the good he does in the light is purchased with what was taken from him where no one could see.</p>
+    </div>
+
+    <div class="prose">
+      <p>He did not stay to build the schools or write the constitution. He is not in the business of nation-building, and he knows what he is for and what he is not. Afterward, he settled in Ferridane — because Ferridane reminded him of America.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- XI. THE VOICE -->
+  <section class="fi">
+    <span class="sec-num cold">XI</span>
+    <h2 class="sec-title">The Voice</h2>
+    <div class="prose">
+      <p>He sounds like an intelligent rapper in conversation — not rapping, just talking, with a cadence that lands on beats and a precision in the word choice that sounds casual and is not. He drops something profound in the middle of something funny and keeps moving like he did not just say the truest thing in the room. His references come from everywhere — street, philosophy, history, lived experience — and he does not signal the shift between registers, because to him it is all one register. It is all just how he thinks.</p>
+      <p>His voice is simultaneously vulgar and oratorical, crass and philosophical — not alternately, simultaneously. He does not code-switch between these, because they are not two things. They grew up together in the same Brooklyn rooms, from the same people, under the same conditions: the Red Wolves were a cell with a reading list and a theory of dismantlement, and they were also a block under an occupying government. The manifesto and the street are one education. The oratory comes out when the message is grand enough to justify it. Everything else gets the word it actually deserves — "lick" over "operation," "shithole" over "war-torn state," the truer word over the more dignified one.</p>
+      <p>He is a man from Earth, and he carries Earth's cultural framework everywhere; the Realms did not replace where he is from. He still sees everything through Brooklyn eyes. He compares the capital of Thalassor to New York — crystata heights are Manhattan, the marble districts are the outer boroughs, the Clairgates are bridges. America is home, even though it is gone.</p>
+
+      <p class="sub-head">How He Opens and Closes</p>
+      <p>He opens easily on safe territory — fights, appreciation, other people's greatness. He is most alive talking about other people; every answer about someone else is richer and more textured than any answer about himself. But the attention always runs outward. He watches, assesses, appreciates, and never describes a moment in which someone saw him the way he sees them. When a question turns toward vulnerability or self-examination, the door slams. The deflection is always a joke or a challenge — the humor is the lock on the door. The only territory where the deflection fails is Aya, because there is nothing left to protect when the building is already gone.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- XII. COMBAT -->
+  <section class="fi">
+    <span class="sec-num cold">XII</span>
+    <h2 class="sec-title">Combat &amp; Conduct</h2>
+    <div class="prose">
+      <p>He does not negotiate and he does not parley. He enters, escalates, and deconstructs the situation in front of him. He understands that in this cosmos the environment is a participant in a fight, not a backdrop — that two Mystics fighting are two competing wills trying to rewrite local reality, with the terrain caught between them. His will rewrites a room into fire. He is a Tier Five elemental at massive capacity; against an ordinary opponent there is no question of whether he wins. A legion of Ferridanian soldiers — augmented, disciplined, the finest conventional military in the Realms — deploys against him and he immolates the structure around them the way a man shakes rain off his coat.</p>
+      <p>His cruelty in combat is deliberate and strategic. He understands the power of myth and narrative, and he knows precisely when to leave a survivor alive to carry the story. The branding of an Archangel is not an outburst; it is a message, composed for an audience. The punishment is theatrical because the theatre is the point — he does not merely defeat an enemy, he reduces them to a metaphor of their own cruelty, and sends the metaphor home to be seen.</p>
+    </div>
+    <div class="highlight-box">
+      <p>The tension in one of his fights never comes from whether he can win. It comes from what winning costs the people who were not strong enough to be in the room. An army is someone's sons, someone's economy, someone's political stability. He burns a structure and the fire lasts an hour; the consequences reshape a realm's politics for a generation. The battle is the inciting incident. <strong>The story is the crater it leaves in the lives of everyone who could only watch.</strong></p>
+    </div>
+    <div class="prose">
+      <p>His armament is mostly himself — Ignis and Ifris. He wears cybernetic power armor of Ferridanian make, built to withstand wars against demigods, enhancing speed and strength and durability that are already superhuman. What weapons he carries are not, in the main, weapons; they are objects he keeps for who gave them to him. He will tell you plainly that he does not even use swords.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- XIII. THE DEUSAS -->
+  <section class="fi">
+    <span class="sec-num cold">XIII</span>
+    <h2 class="sec-title">The Deusas — Power as Soul-Render</h2>
+    <div class="prose" style="margin-bottom:0.4rem;">
+      <p>His power is not a single ability but a progression — and the progression, from Ignis to Ifris to Ifris II, reveals how magic works in this cosmos and, more than that, reveals <em>him</em>. Myst is the soul metabolized as fuel. The shape of his fire is therefore the shape of his soul, combusting.</p>
+    </div>
+    <div class="acc">
+      <div class="acc-item">
+        <button class="acc-btn">Ignis — The Birth Gift<span class="hint">pure-elemental pyrokinesis</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">A piece of the divine, shaped by the Gods and fitted to a mortal life — fire, his since birth.</div>
+          <p>His Tier Three birth Deusa: pure-elemental pyrokinesis at massive capacity. He creates and controls fire from nothing. Standard thermodynamics apply — more fire means more myst, the cost linear and proportional to output. He replenishes through Solar Synthesis under Pyrthera's suns, and through the physical intensity of the Sacred Braid off-world. <strong>The First Learning:</strong> the standard myst economy is real, and it works. Magic obeys thermodynamics. You can build engineering, economics, and military doctrine on it, and it holds.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn">Ifris — The Invented Loop<span class="hint">forged with Aya Frost</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">A discovery, not a manufacture — a law of nature found, the way a scientist finds one that was always there.</div>
+          <p>A Tier Four invented discipline, created by Uriel and Aya from the fusion of their souls. Aya brought ice, Uriel brought fire — two opposite domains locked into a closed thermodynamic loop, exothermic combustion and endothermic consumption each feeding the other. <span class="ifris">A single self-sustaining purple flame.</span> Once ignited, the flame is free; there is no fuel ceiling. <strong>The Second Learning:</strong> complementary domains can be combined into self-sustaining systems that transcend the limits of either alone. <em>And the deeper truth:</em> the loop is the shape of his soul — a closed circuit that needs no external ground. He did not know he was building a portrait of himself. The one thing that ever made the loop something other than a loop was that, for a year, a piece of its circuit ran through Aya.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn">Ifris II — The Loop With the Disguise Burned Off<span class="hint">appetite and indiscrimination</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="atm">The original engine, rebuilt inside the abyss from a power that never knew the Gods.</div>
+          <p>The Ifris loop reconstructed in Hel from infernal energy, with two forces folded into the circuit: the hunger of the abyss gives the flame <em>appetite</em>; the wrath of the Sea gives it <em>indiscrimination</em>. The result arrives instantly and completely — stone, flesh, and air are already burning the moment it touches. The cost is ignition and the strength to hold the leash: wider release costs less, tighter control costs more, extinguishing costs the most of all. <strong>Ifris II is not a corruption of Ifris. It is Ifris with the disguise burned off.</strong> Aya's ice, for one year, made the loop look like love. Strip her away, strip the world away, run the same engine in the dark, and it is revealed as what it always was. The mutation added nothing. It only removed what was hiding. <strong>The Third Learning:</strong> the divine system is not the only system; the boundaries the Gods set were never laws, only policies.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn">Wings — Flight<span class="hint">the inheritance of his blood</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>He possesses wings and the capacity for flight — the inheritance written into a body descended from Archangels.</p>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="highlight-box ifris-box">
+      <p>Invoking <span class="ifris">Ifris</span> is euphoric — like becoming something more. His control over the flame is a measure of his control over himself; the most dangerous version of him is the one who stops trying to hold it back, the highest-damage state in the system at near-zero cost. The euphoria is the danger. A being who spent a lifetime powerless, holding a fire that feels good to release and costs almost nothing to let run, is carrying the most dangerous thing in any room — including the danger to himself.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- XIV. THE OBJECTS -->
+  <section class="fi">
+    <span class="sec-num cold">XIV</span>
+    <h2 class="sec-title">The Objects — A Silhouette Dressed in Severance</h2>
+    <div class="prose">
+      <p>Every piece of the most feared silhouette in the Realms is a gift from someone who loved him. That is true, and it is visible to anyone who knows the story — and the codex once recorded it as a silhouette dressed in love. The deeper truth is worse, and it has a single hand behind it.</p>
+      <p>When the Red Wolf returned from Hel, Aya was alive. She had survived Point Zero, and for the three years he was presumed dead she had kept his things. She looked at what came back through the door — feral, one-armed, unable to bear the sound of his own name — and she made a clear, sane, self-preserving judgement: the boy she loved was gone, and the thing wearing his face was dangerous. And then she did the most loving and the most final thing at once. She did not scream at him. She gathered his coat, his boots, his sword, put them in his arms, and sent him away. <strong>She is the one who dressed him in the souvenirs on the way out the door.</strong></p>
+    </div>
+    <div class="obj-grid">
+      <div class="obj">
+        <div class="oname">The Haircut</div>
+        <div class="ogift">from Aya Frost</div>
+        <p>An undercut. Aya cut his hair on his sixteenth birthday, minutes before his Ascension. He has never changed it and never let anyone else touch it — the last thing she did for the boy he was before everything changed.</p>
+      </div>
+      <div class="obj">
+        <div class="oname">The Coat</div>
+        <div class="ogift">from Aya and Serket Ashbloom — returned by Aya</div>
+        <p>Red firesilk, a present on his seventeenth birthday, his first in the Realms. Pyrtheran in material, chosen by Serket; given by Aya, who wanted him to have something beautiful. She kept it while he was dead. She handed it back as severance.</p>
+      </div>
+      <div class="obj">
+        <div class="oname">The Timbs</div>
+        <div class="ogift">his own — returned by Aya, later enchanted</div>
+        <p>His Brooklyn boots, the ones he came up off the block in. Aya kept them too, and returned them with the rest. The Luxenfallen would later enchant them — swifter than light, the toe made to pierce — but the leather under the enchantment is from Earth, and from her hands.</p>
+      </div>
+      <div class="obj">
+        <div class="oname">The Sword</div>
+        <div class="ogift">from Saint Cloud Sinclair — returned by Aya</div>
+        <p>The first sword Cloud gave him at Rosorae. He has never upgraded it, never replaced it — and he does not even use swords. It came back to him in the same bundle as the coat and the boots, from the same hands, on the same day she closed the door.</p>
+      </div>
+      <div class="obj">
+        <div class="oname">The Arm</div>
+        <div class="ogift">from Crex Falcon Axipitre</div>
+        <p>A golden prosthetic, Ferridane-built by Crex after he joined the Advent as its quartermaster — replacing the right arm Raiwata severed at Point Zero, and carrying an Ifris-powered flamethrower. Crex played it off as junk; the Red Wolf took it with a smirk. Neither will ever say what the exchange was.</p>
+      </div>
+      <div class="obj">
+        <div class="oname">What It Means</div>
+        <div class="ogift">the absence he wears</div>
+        <p>A souvenir is proof you were there and proof you left. The most feared silhouette in the Realms is dressed, head to toe, in the evidence of people he no longer has — and the woman who loved him most is the one who packed the bag. He does not take any of it off. He wears his goodness as a coat, over his determination to be bad.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- XV. THE PACK -->
+  <section class="fi">
+    <span class="sec-num cold">XV</span>
+    <h2 class="sec-title">The Pack — Relationships</h2>
+    <div class="acc">
+      <div class="acc-item">
+        <button class="acc-btn">Aya Frost — The Two Ayas<span class="hint">the ghost he keeps, the woman he lost</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p><strong>Aya is alive.</strong> She survived Point Zero; she lives now in Salacica, a dressmaker and seamstress, a quiet life, her hands busy with cloth. She does not know that a fragment of her soul went into Hel fused to his — does not know what carried her face through the Ashen Wastes. And when the Red Wolf returned, she gave him his coat and his boots and his sword and sent him packing. She was done. Not from cruelty — from judgement. She looked at what Hel sent back and was correct.</p>
+          <p>But there are <strong>two Ayas</strong>, and the tragedy lives in the gap. The fragment fused at Point Zero went down into the abyss with him, and across eighteen years the Wastes wore it, puppeted it, turned it into a weapon — until what he carries in his head is no longer Aya. It is his frozen idea of her, sixteen years old, loving him still, and <em>his</em>. The forgetting of her real face was not a decision; it happened to him. <strong>He keeps the version of her that is not real, and lost the version that is.</strong> He is accompanied for the rest of the series by a ghost who adores him, and exiled by the woman who, with sound judgement, will not. She is the one person with the standing to reach him — and she has already, correctly, declined to try.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn">Saint Cloud Sinclair<span class="hint">brother, and the closed door</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>His shepherd at Rosorae, his first genuine friend, the first person who argued with him without deference. Cloud opened an unauthorized Clairgate to fight beside him at Point Zero. When the Red Wolf climbed out of Hel — feral, one-armed, unable to hear his own name — Cloud, by then changed, turned him away. He never holds it against him. Later, when the Bloodless sacked Cloud's estate and Cloud called for help, the Red Wolf was the only one who came — not for leverage, but because Cloud is his friend. That loyalty, offered when all others failed, rewrites the relationship. They become brothers in shared grief, and it is the Red Wolf that Cloud follows into the Advent. He carries Cloud's sword and does not mention the door.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn">Fiacre<span class="hint">the one he respects and critiques</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The Goddess of Peace. He calls her work the finest he has ever seen, and means it as a professional assessment delivered in genuine awe — and critiques her in the same breath. He thinks her pacifism, held while people suffered across nine Realms, was not virtue but vanity: that she cared more about her identity as a pacifist than about the people her pacifism was failing. It is the critique of a man who waited, and to whom nobody came, and who then watched the most powerful person alive choose not to come. When Fiacre finally made Raiwata eat his own heart, his only objection was that she waited so long.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn">Crex Falcon Axipitre<span class="hint">mocking love, an even exchange</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>A fellow survivor of Hel. He went to Crex's bar wanting to buy a gun; Crex called him "pup" and sent him on an impossible errand to be rid of him — retrieve the God-Eyes from the skull of the Diamond Gonlan in the Atrium of Steelheart. He did it. Crex put the eyes back, saw everything, and joined the Advent as its quartermaster — and built the golden arm as part of an even exchange. Two men who would rather die than be caught caring about each other, wearing the evidence that they do.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn">Alciel Aquilon Karai<span class="hint">both of us are orphans</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The son of Aracice — the same Aracice whose Pax crushed his childhood under a decade of winter. It does not weigh on him. Lineage and history dissolve on contact with the only thing that matters to him: shared condition. Both of them are orphans. Alciel is in it with him. That is the end of the discussion.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn">Sol'Kheret<span class="hint">the one fight he is not sure he takes</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The Sun Blossom, Exvisar of Pyrthera, who holds Antaka. Asked who hits harder, he laughs — the happiest, most unguarded sound he makes — and admits he has not found out, and is not sure he wants to. Against enemies he needs to win; against someone who has earned it, the measuring itself is the joy. There is real affection in the uncertainty.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn">The Luxenfallen<span class="hint">the people who became his Wolves</span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The people he freed when he burned the Lightwells; the Grounded who shed their name and became the Red Wolves under his banner. He gave their rage a target, their struggle a symbol, and their defeat a name that howls. And then — being not a builder of nations — he left, carrying their gift on his feet to another realm.</p>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p class="sub-head">The Perimeter</p>
+      <p>By the time the Advent assembles around him, he holds every member at exactly the distance where losing them will not destroy him — close enough to fight beside, far enough to survive without. He will kill for any one of them without hesitation, because he already tried dying for someone, and what he got for it was Hel. Dying for someone means trusting that the sacrifice will be honored; he tried that, and the cosmos spat on it. Killing for someone means never having to trust anyone with his death again. He is a man wearing all his friends, who has made sure none of them can touch him.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- XVI. PHILOSOPHY AND THE COMPASS -->
+  <section class="fi">
+    <span class="sec-num cold">XVI</span>
+    <h2 class="sec-title">Philosophy — The Refusal, and the Compass</h2>
+    <div class="prose">
+      <p>His political philosophy is real, coherent, and his own. He was politically activated before he was magically activated; he has read the manifestos and lived the war and can articulate his position and defend it. It belongs to the faction of the class struggle that builds guillotines. He has principles, and he would call them principles. What he does not have is a <em>limiting</em> principle — the guillotine has no setting between off and heads rolling.</p>
+    </div>
+    <div class="princ">
+      <div class="princ-n">On Justice</div>
+      <p>He believes conventional justice is a lie wielded by the powerful, and that the moral architecture of the cosmos is fraudulent because the people who built it built Hel on purpose and sent children there. When someone invokes morality at him, he does not argue. He does not recognize their standing to speak.</p>
+    </div>
+    <div class="princ">
+      <div class="princ-n">On Mercy Toward Oppressors</div>
+      <p>He does not believe in redemption. He believes in <strong>consequence</strong>. He treats mercy extended to architects of oppression as complicity, and he treats himself not as a victim but as the absolute refusal to become one.</p>
+    </div>
+    <div class="princ">
+      <div class="princ-n">On Architecture</div>
+      <p>Where others see people, he sees structures — systems, designs, the machinery of oppression. His responsibility, as he holds it, is to immolate the architecture itself, so that when the architecture is gone the architects have nowhere left to hide. <em>This is also the disease: to burn architecture cleanly, one must hold, every time, the judgement of where the architecture ends and the person begins.</em></p>
+    </div>
+    <div class="princ">
+      <div class="princ-n">The Principles Underneath</div>
+      <p>Beneath the dismissal of moral language, he operates on a clear and consistent code he would absolutely call principles. You help your people. You root for the underdog. You finish the job. You do not pretend a shithole is a paradise. You do not care more about looking good than about being good. It is a deeply moral position that refuses to dress itself in moral language — because moral language belongs to the system that built Hel.</p>
+    </div>
+
+    <div class="highlight-box ash-box">
+      <p><strong>The Compass.</strong> The difference between accountable, just power and its opposite is right judgement — and his tragedy is that he loses his. Not by going dull; he grows sharper as the series runs. He loses it the way the faculty is actually lost: by discarding the instrument. He decides, correctly, that the order which defined good and evil is fraudulent. He decides, correctly, not to grant that order standing to speak moral language at him. And then he takes a third step without noticing it — <em>if their moral language is fraudulent, then moral language itself is suspect</em> — and a man who has discarded the language has discarded the instrument. He keeps the appetite for justice. He loses the faculty that tells justice from vengeance, proportion from excess, the architect from the man standing near the architecture.</p>
+      <p>The needle does not stop when the compass goes dark. It re-magnetizes to the nearest strong field — and the nearest strong field is always the self. So the question quietly migrates from <em>are they on the wrong side of what is right</em> to <strong>are they on the wrong side of him.</strong> He will not feel the swap; from the inside it is the identical sensation — certainty, clarity, a verdict arriving fast and whole. And he cannot detect the failure, because detecting it would require the very faculty that failed. He will be more certain in the late books than the early ones, and the certainty is the symptom.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- XVII. HELLSPAWN AND PROMETHEAN -->
+  <section class="fi">
+    <span class="sec-num cold">XVII</span>
+    <h2 class="sec-title">Hellspawn and Promethean</h2>
+    <div class="prose">
+      <p>Across the Realms he is a living myth — and the myth has two completely different shapes depending on who is telling it. There is no neutral account of the Red Wolf. Where you stand on him is decided entirely by where you stand. The split is not an accident of perception. It was authored, in a single hour, by four words and an empty predicate, in a burning courtroom.</p>
+    </div>
+    <div class="dual">
+      <div class="dual-col others" style="border-top-color: var(--ember-dark);">
+        <h4>To the Powerful — Hellspawn</h4>
+        <p>To the gods, the rulers, the Exvisars, and the Archangels, he is a devil that clawed back through a door that had never been breached. He burned the hall of divine justice. He branded and leashed and shattered the enforcers of the divine order. He arms insurrections and destabilizes courts.</p>
+        <p><strong>In Thalassor</strong>, the nobility fear him as a corrupting influence. <strong>In Dystan</strong>, his name is a ghost story whispered in the halls of power. <strong>To Vex Mavarra of Tenebralis</strong>, he is a useful engine of chaos, a wildcard of wrath suited to the disorder her schemes thrive in. The powerful agree on little. They agree that the Red Wolf should never have come back — and they are, taxonomically, not wrong about what came back.</p>
+      </div>
+      <div class="dual-col self" style="border-top-color: var(--ember-accent);">
+        <h4>To the Powerless — Promethean</h4>
+        <p>To the slaves, the Nihila, the disenfranchised, and the conquered, he is the one who came back carrying fire and gave it away. He is the boy who bit God. He is proof that the bottom of the hierarchy is not the bottom of what is possible.</p>
+        <p><strong>In Pyrthera</strong>, he is revered as a dark reflection of their own fiery ethos. <strong>In Ferridane's Outlands</strong>, he is an idol to the disenfranchised. <strong>In Luxenfall</strong>, he is the liberator who gave a murdered people back their name. He hands charged Ifris crystata to the Nihila and tells them to be loud — and to people whose connection to power was deliberately withheld by the same order that built Hel, that is not symbolism. It is enfranchisement.</p>
+      </div>
+    </div>
+    <div class="prose">
+      <p>He is, in this, the Twice-Damned: condemned once by the divine order, which threw him into Hel; named devil a second time by the powerful of the living Realms, the day he climbed back out. And there is a third damnation underneath both, the one no court pronounced — the bargain he signed himself, circle by circle, in the dark. To everyone the system was built to serve, he is hellspawn. To everyone the system was built to cost, he is the fire returned. <strong>The reader is the only one who holds the true account of both — and watches every good deed he does get re-narrated by the myth he failed to finish writing.</strong></p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- XVIII. THE COST -->
+  <section class="fi">
+    <span class="sec-num cold">XVIII</span>
+    <h2 class="sec-title">The Cost — Threats Borne and Posed</h2>
+    <div class="prose">
+      <p>He is a danger in two directions at once. He carries threats inside himself, and he poses threats to everyone in the blast radius. Both are real. Neither cancels the other.</p>
+    </div>
+    <div class="dual">
+      <div class="dual-col self">
+        <h4>Threats He Carries</h4>
+        <p><strong>The leash.</strong> Ifris II fights to be released. Wider release costs almost nothing; extinguishing costs the most of all. The most dangerous version of him is the one who stops trying to hold it back — and the fire is cheapest exactly when it is worst.</p>
+        <p><strong>The addiction.</strong> Invoking Ifris is euphoric. He is a being who spent a lifetime powerless, addicted now to the feeling of power and to fear in another's eyes. The thing that makes him formidable is the thing he cannot put down.</p>
+        <p><strong>The verdict.</strong> He carries, beneath everything, a false core belief — <em>I died for nothing</em> — forged under maximum pressure and never re-tested. It does not make him weak. It makes him organized: a wrong axiom held with total conviction removes deliberation, and a man who decided who he was in the abyss does not have to spend anything on deciding again. It is the fuel.</p>
+        <p><strong>The relentlessness.</strong> Hel taught his body that stopping is dying, and the body kept the lesson long after the mind outgrew it. He does not know how to stop, even when stopping is what survival now requires.</p>
+      </div>
+      <div class="dual-col others">
+        <h4>Threats He Poses</h4>
+        <p><strong>The collateral.</strong> He is reckless with other people's safety and with what his fire does after he leaves the room. The fire lasts an hour; the consequences last a generation.</p>
+        <p><strong>The trade.</strong> He sells Ifris-charged crystata — cheap, to anyone, with no regard for what it is used for, the way a man sells cigarettes off a corner. He hears, sometimes, what happens after it leaves his hands. He has considered it and arrived at silence.</p>
+        <p><strong>The escalation.</strong> He does not negotiate. He enters, escalates, and deconstructs. He has no limiting principle — which means there is no built-in point at which he stops on his own.</p>
+        <p><strong>The diagnosis without the rebuild.</strong> His reading of what is wrong is never wrong. But he is not a builder of nations, and he knows it. He will burn the failed order down and leave the question of what replaces it to other people — and a people robbed of their structures, with no one staying to help them find what comes next, is its own kind of danger left in his wake.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- XIX. THE NECESSARY MONSTER -->
+  <section class="fi">
+    <span class="sec-num cold">XIX</span>
+    <h2 class="sec-title">The Necessary Monster — What He Is For</h2>
+    <div class="prose">
+      <p>This section is the read on the character — the thing the rest of the codex is built to serve. He is not a hero with a dark edge, and he is not a villain-protagonist. A villain-protagonist is someone the audience is seduced into and then meant to recoil from; nobody recoils from what the Red Wolf <em>wants</em>. His aims are clean. The order he burns is genuinely fraudulent — cosmos-fact, not his grievance. Freeing the Lightwells is not corrupt. Arming the people the order condemned by birth is not corrupt.</p>
+      <p>What he is, is a <strong>hero in name only</strong> — and the phrase is structural, not tonal. To the Nihila, to the Luxenfallen, to the boy who bit God, the name <em>hero</em> is still accurate. He still occupies the role. He no longer reliably runs the faculty the role exists to run. The name and the interior have come apart, and that gap is the whole architecture of him. He is the monstrous arm of the revolution — <strong>without whom no war is fought or won, and who is still a monster.</strong> Both clauses are true. Necessary does not launder it. The revolution needs its monster; the monster's necessity does not make the elective slaughter not slaughter. The series must hold both at full weight and let neither dissolve the other. That is the operation. It is the hardest thing in narrative, and it is the whole job.</p>
+    </div>
+
+    <p class="sub-head">The Half-Step</p>
+    <div class="prose">
+      <p>He is the answer to a real question. A real movement, on the real Earth he comes from, once said <em>burn it down</em> — and then got tired and went home. It won the day and lost the movement. The Red Wolf is that experiment run with one variable changed: he is the one who <em>meant it</em>. Same grief, same enemy structure, same class-war rhetoric — every variable held constant except the half-step. He does not get tired. He does not go home. He is what the chant becomes when the crowd actually does the thing the chant says.</p>
+      <p>And the series does not pretend to know whether that is vindication or catastrophe. It runs the experiment honestly and reads the result off the instrument at the end. That is the function only this character can perform.</p>
+    </div>
+
+    <p class="sub-head">The Audience on Trial</p>
+    <div class="prose">
+      <p>A portion of any audience will look at the fraudulent cosmos — the prison world, the hereditary damnation, the courts that exist to administer it — and look at the Red Wolf burning its enforcers, and say: <em>yeah, and?</em> They are not the error. They are the <strong>subject</strong>. The series builds a cosmos that genuinely earns that response, and then tries the response — gives it its best case, for book after book, and lets the ending cross-examine it. The Tongue of the Eighth Hell tells the powerless that wanting power is childish; <em>yeah, and?</em> is the equal and opposite failure, telling the powerless that once you have power, judgement is for cowards. Both end in a person who has stopped weighing. The Red Wolf is the hinge between them — power restored, aspiration restored, the irony burned off, and the living proof that restoring power without restoring right judgement produces a devil the crowd cheers for. The series answers <em>yeah, and?</em> not with a sermon — sermon is the Archangels' register — but by carrying that audience, on his back, all the way to the room where their own answer runs out of road.</p>
+    </div>
+
+    <p class="sub-head">Why He Cannot Be Redeemed</p>
+    <div class="prose">
+      <p>Redemption would resolve the <em>and</em> into a <em>but</em> — "he was monstrous, <em>but</em> he came good" — and the moment that happens, the necessity becomes a phase he graduated from and the monstrousness becomes a problem rather than a permanent, structural, unpayable cost. The truth is the <em>and</em>. He is the arm, always, unredeemed, and the war could not have been won without exactly that. By his own canon his fire is the render of his soul; to stop burning he would have to stop being the thing that metabolizes into that flame, and that thing is the load-bearing structure of who he is. You cannot redeem the loop. Leaving him tragic is the only ending that keeps both clauses standing.</p>
+    </div>
+
+    <p class="sub-head">The Empty Room</p>
+    <div class="highlight-box">
+      <p>He ends old, and tired, having won all his fights — and that is the defeat, stated exactly. Winning every fight <em>is</em> losing everything he fought for, because the fighting was a closed loop that needed external surfaces to run on, and the people were the thing the fighting was supposedly <em>for</em>. Burn through every surface and the loop has nowhere left to go. He goes looking, in the silence, for the true thing the whole engine was built on — the grievance, the justice, the bedrock — and finds there was never a there. There was a wound that learned to move, and got very good at it, and called the moving a war.</p>
+      <p>The room is not empty. It is full of <strong>souvenirs</strong> — the coat, the boots, the sword, the arm, every object a person he had and converted into a thing he could wear out the door. That is worse than empty. It is his Faustian bill, come due all at once: not a debt with a signature he can point to, but a thing spent in installments, each one too small to be the moment, discovered gone with no transaction to undo. Pyrrhic, and Faustian, and his.</p>
+      <p>One question is left open, deliberately, and the codex does not answer it because the series must not: standing in that room, does he still say <em>I died for nothing</em> — or can he, finally, not? The honest rendering loads both pans of the scale and lets the reader weigh it. <em>Render the empty room. Do not make him magnificent in it. Do not make it a punishment that moralizes. State the thing as the thing, and leave the reader there.</em></p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- XX. NARRATIVE IMPACT -->
+  <section class="fi">
+    <span class="sec-num cold">XX</span>
+    <h2 class="sec-title">Narrative Impact</h2>
+    <div class="prose">
+      <p>He does not merely move through the plot of the Advent. He detonates pieces of it.</p>
+    </div>
+    <div class="princ">
+      <div class="princ-n gold-n">He Breaks the Closed System of Hel</div>
+      <p>The first being to manifest power inside Hel and the first to return from it by force — proving the divine order's two great boundaries are not laws but policies. The cosmos rests on the assurance that the prison is permanent. He is the standing proof that it is not.</p>
+    </div>
+    <div class="princ">
+      <div class="princ-n gold-n">He Burns the Prime Court and Exposes the Divine Order</div>
+      <p>By burning the Prime Court of Dystan and humiliating Ex-Deorum head by head, he forces buried truth into the open: the architecture of divine justice is fraudulent, founded on hereditary punishment. He produces a Do Not Engage order — an institution publicly admitting fear.</p>
+    </div>
+    <div class="princ">
+      <div class="princ-n gold-n">He Holds the Line at the Second Sun</div>
+      <p>He burns the Lightwells, frees the Luxenfallen, and turns the broken remnant of the Grounded into the reborn Red Wolves. At the Battle of the Second Sun he single-handedly holds the front line — and could not have, but for everything Hel charged him for. His army, Fiacre's second sun, and Alciel's communion with the Solarith close the first act of the Advent.</p>
+    </div>
+    <div class="princ">
+      <div class="princ-n gold-n">He Recruits the Coalition</div>
+      <p>The Advent does not assemble on its own. He is the gravitational center who pulls it together — showing up at Cloud's burning estate when no one else does, completing Crex's impossible errand, recognizing Alciel as kin. He is the one who keeps reaching for people, even held at the perimeter.</p>
+    </div>
+    <div class="princ">
+      <div class="princ-n gold-n">He Exposes the Godmind</div>
+      <p>To win Crex, he burns the Atrium of Steelheart and retrieves the God-Eyes from the skull of the Diamond Gonlan — dragging Ferridane's secret Godmind project into the light, with consequences that reshape Ferridanian politics for a generation.</p>
+    </div>
+    <div class="princ">
+      <div class="princ-n gold-n">He Arms the Nihila</div>
+      <p>He puts charged Ifris crystata into the hands of the powerless across the Realms and tells them to be loud — bridging, with fire, the ontological caste line between Mystic and Nihila, and fueling insurrections wherever the disenfranchised are ready to rise.</p>
+    </div>
+    <div class="highlight-box">
+      <p>The Advent cannot defeat the standoff of five unassailable Realms by arms. It breaks the equilibrium by forcing buried truth into the open — and he is the Herald whose entire existence is the forcing of truth into the open. He went into the prison the winners built and came back carrying the proof of what it is. <strong>He should read as a badass right up until you feel sorry for him.</strong> One boy says <em>I fucked it up.</em> One devil says <em>I died for nothing.</em> It is the same gesture and the same sentence — the same person the whole way down — with everything that made being that person survivable taken away, one window at a time, across a descent no one can count. That is the tragedy: not a thing that became a monster, but a person who never stopped being himself while the abyss spent him to the last coin. The story, all nine books of it, is the story of whether he ever gets to keep one — and the answer it is walking toward is the question it leaves with the reader.</p>
+    </div>
+  </section>
+
+  <div class="divider ash"><span></span></div>
+
+  <!-- FOOTER -->
+  <footer class="footer fi">
+    Advent of Ultima <span>·</span> Moirai Codex <span>·</span> Uriel, The Red Wolf <span>·</span> Definitive Synthesis <span>·</span> May 2026
+  </footer>
+
+</div>
+
+<script>
+// Accordion
+document.querySelectorAll('.acc-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const body = item.querySelector('.acc-body');
+    const isOpen = item.classList.contains('open');
+    item.parentElement.querySelectorAll('.acc-item').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.acc-body').style.maxHeight = null;
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+  });
+});
+
+// Fade in on scroll
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); } });
+}, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+
+// Ember particle system
+(function() {
+  const canvas = document.getElementById('ember-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  const COUNT = 60;
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  window.addEventListener('resize', resize); resize();
+  class Ember {
+    constructor() { this.reset(true); }
+    reset(init) {
+      this.x = Math.random() * W;
+      this.y = init ? Math.random() * H : H + 10;
+      this.r = Math.random() * 2.0 + 0.5;
+      this.vx = (Math.random() - 0.5) * 0.25;
+      this.vy = -(Math.random() * 0.5 + 0.15);
+      this.drift = Math.random() * Math.PI * 2;
+      this.driftSpeed = Math.random() * 0.004 + 0.0015;
+      this.driftAmp = Math.random() * 0.5 + 0.15;
+      const roll = Math.random();
+      if (roll < 0.10) {
+        this.color = 'hsla(' + (282 + Math.random()*16-8) + ',' + (52+Math.random()*28) + '%,' + (58+Math.random()*14) + '%,';
+      } else if (roll < 0.22) {
+        this.color = 'hsla(' + (32+Math.random()*8) + ',' + (8+Math.random()*10) + '%,' + (52+Math.random()*16) + '%,';
+      } else {
+        const hue = 12 + Math.random()*24, sat = 78+Math.random()*20, lum = 48+Math.random()*22;
+        this.color = 'hsla(' + hue + ',' + sat + '%,' + lum + '%,';
+      }
+      this.baseAlpha = Math.random() * 0.4 + 0.12;
+      this.pulsePhase = Math.random() * Math.PI * 2;
+      this.pulseSpeed = Math.random() * 0.018 + 0.008;
+      this.life = 0;
+      this.maxLife = Math.random() * 320 + 240;
+    }
+    update() {
+      this.drift += this.driftSpeed; this.pulsePhase += this.pulseSpeed; this.life++;
+      this.x += this.vx + Math.sin(this.drift) * this.driftAmp;
+      this.y += this.vy;
+      if (this.y < -12 || this.life > this.maxLife) this.reset(false);
+    }
+    draw() {
+      const pulse = 1 + Math.sin(this.pulsePhase) * 0.4;
+      const fade = Math.min(1, this.life/40) * Math.min(1, (this.maxLife-this.life)/80);
+      const a = this.baseAlpha * pulse * fade;
+      const r = this.r * pulse;
+      ctx.beginPath(); ctx.arc(this.x, this.y, r, 0, Math.PI*2);
+      ctx.fillStyle = this.color + a + ')'; ctx.fill();
+      ctx.beginPath(); ctx.arc(this.x, this.y, r*3, 0, Math.PI*2);
+      const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, r*3);
+      g.addColorStop(0, this.color + (a*0.6) + ')');
+      g.addColorStop(1, this.color + '0)');
+      ctx.fillStyle = g; ctx.fill();
+    }
+  }
+  for (let i = 0; i < COUNT; i++) particles.push(new Ember());
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+</script>
+
+</body>
+</html>

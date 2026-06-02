@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thalassor · The Gilded Nexus · Moirai Codex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Marcellus&family=Spectral+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     THE TOKENS: Gold-on-White house style, Thalassor reskin.
+     The prism is replaced, line for line, with the Krenides band:
+     one light split not into seven hues but into the blues of the
+     sacred water: deep vent, teal spring, electric surface, pale glow.
+     ============================================================ */
+  :root{
+    /* Ground and ink, never pure white, never pure black */
+    --paper:#FBF7EE;
+    --paper-2:#F6F0E2;
+    --ink:#2B2317;
+    --ink-soft:#5A4E3A;
+    --rule:#E4D8BE;
+
+    /* Gold: the voice and the color of headings */
+    --gold:#9A7B1F;
+    --gold-bright:#C9A227;
+    --gold-pale:#E9DCB0;
+    --gold-glow:rgba(201,162,39,.18);
+
+    /* Krenides: the signature. Electric blue, the blue of the water itself. */
+    --kren-deep:#13496F;     /* the deep vent */
+    --kren-teal:#2E6FA3;     /* the warm spring (house Thalassor) */
+    --kren-bright:#1AA4E0;   /* the electric surface */
+    --kren-glow:#5CC6F2;     /* light caught in shallows */
+    --kren-pale:#BBE4F6;     /* mist on the water */
+    --kren-haze:rgba(26,164,224,.16);
+
+    /* The Krenides band replaces the prism everywhere it appeared:
+       ribbon, heading underline, dividers, bars, crowns, legend top. */
+    --prism:linear-gradient(90deg,
+      var(--kren-deep) 0%, var(--kren-teal) 22%, var(--kren-bright) 45%,
+      var(--kren-glow) 58%, var(--kren-bright) 72%, var(--kren-teal) 88%,
+      var(--kren-deep) 100%);
+
+    --maxw:760px;
+  }
+
+  /* ============================================================
+     THE SYSTEM: copied from the house style, prism now Krenides.
+     ============================================================ */
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Spectral",Georgia,serif;font-weight:400;
+    font-size:19px;line-height:1.72;-webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;overflow-x:hidden;
+  }
+  body::before{ /* warm vignette + corner light-leaks, all in Krenides blue */
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(120% 80% at 6% -5%, rgba(26,164,224,.07), transparent 46%),
+      radial-gradient(120% 80% at 104% 108%, rgba(19,73,111,.08), transparent 46%),
+      radial-gradient(140% 90% at 100% 0%, rgba(46,111,163,.05), transparent 42%),
+      radial-gradient(100% 100% at 50% 40%, transparent 60%, rgba(43,35,23,.05));
+  }
+  body::after{ /* fine paper grain */
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  }
+
+  /* The floating Krenides motes, a canvas of blue light rising like
+     particles in still water. Sits behind the reading column. */
+  #krenides-field{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+  .ribbon{position:fixed;top:0;left:0;right:0;height:5px;z-index:60;
+    background:var(--prism);background-size:200% 100%;animation:drift 24s linear infinite;}
+  @keyframes drift{0%{background-position:0 0;}100%{background-position:200% 0;}}
+
+  nav.codex-nav{position:sticky;top:5px;z-index:55;
+    background:rgba(251,247,238,.72);backdrop-filter:blur(11px) saturate(140%);
+    -webkit-backdrop-filter:blur(11px) saturate(140%);border-bottom:1px solid var(--rule);}
+  nav.codex-nav ul{list-style:none;margin:0 auto;padding:.55rem .9rem;display:flex;
+    flex-wrap:wrap;gap:.2rem .85rem;justify-content:center;max-width:1100px;}
+  nav.codex-nav a{font-family:"Marcellus",serif;font-size:.7rem;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-soft);text-decoration:none;padding:.15rem 0;
+    border-bottom:1.5px solid transparent;transition:.25s;white-space:nowrap;}
+  nav.codex-nav a:hover{color:var(--kren-teal);border-bottom-color:currentColor;}
+
+  main{position:relative;z-index:1;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.4rem;}
+
+  header.mast{text-align:center;padding:5.5rem 1.4rem 3rem;position:relative;}
+  .eyebrow{font-family:"Marcellus",serif;font-size:.82rem;letter-spacing:.42em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 1.6rem;text-indent:.42em;}
+  h1.title{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(2.7rem,8vw,5.1rem);
+    line-height:.98;margin:0;letter-spacing:-.01em;color:var(--ink);font-variation-settings:"opsz" 144;}
+  h1.title .gilt{background:linear-gradient(95deg,var(--gold) 0%,var(--gold-bright) 45%,#EFD27A 60%,var(--gold) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;}
+  .subtitle{font-family:"Spectral",serif;font-weight:300;font-style:italic;
+    font-size:clamp(1.05rem,2.6vw,1.35rem);color:var(--ink-soft);margin:1.5rem auto 0;max-width:40ch;line-height:1.5;}
+  .mast-mark{margin:2.4rem auto 0;width:min(420px,80%);}
+  .mast-mark .bar{height:3px;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 20s linear infinite;}
+  .mast-epi{font-family:"Fraunces",serif;font-style:italic;font-weight:300;
+    font-size:clamp(1.15rem,3vw,1.6rem);color:var(--gold);margin:2.6rem auto 0;max-width:34ch;line-height:1.4;}
+  .mast-epi span{display:block;color:var(--ink-soft);font-size:.66em;font-style:normal;
+    font-family:"Spectral";letter-spacing:.05em;margin-top:.6rem;}
+
+  .diadiv{display:flex;align-items:center;justify-content:center;gap:1rem;margin:3.4rem 0;}
+  .diadiv .line{height:1px;flex:1;max-width:120px;background:linear-gradient(90deg,transparent,var(--kren-pale),var(--kren-teal));}
+  .diadiv .line.r{background:linear-gradient(90deg,var(--kren-teal),var(--kren-pale),transparent);}
+  .diadiv .gem{font-size:.9rem;color:var(--kren-teal);letter-spacing:.4em;text-indent:.4em;}
+
+  section{padding:1.7rem 0;position:relative;}
+  .sec-eyebrow{font-family:"Marcellus",serif;font-size:.78rem;letter-spacing:.32em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 .5rem;}
+  h2{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(1.9rem,5vw,2.9rem);
+    line-height:1.05;margin:.2rem 0 1.2rem;color:var(--ink);letter-spacing:-.01em;font-variation-settings:"opsz" 80;}
+  h2 .uline{display:block;height:3px;width:108px;margin-top:.7rem;border-radius:2px;
+    background:var(--prism);background-size:200% 100%;animation:drift 18s linear infinite;}
+  h3{font-family:"Fraunces",serif;font-weight:500;font-style:italic;font-size:clamp(1.25rem,3.4vw,1.6rem);
+    margin:2.2rem 0 .6rem;color:var(--ink);font-variation-settings:"opsz" 40;}
+  h4{font-family:"Marcellus",serif;font-weight:400;font-size:1.02rem;letter-spacing:.04em;margin:1.6rem 0 .35rem;color:var(--gold);}
+  p{margin:0 0 1.15rem;}
+  p a{color:var(--kren-teal);}
+  strong{font-weight:600;color:var(--ink);}
+  em{font-style:italic;}
+  .lead{font-size:1.12rem;}
+  .lead::first-letter{font-family:"Fraunces",serif;font-weight:400;float:left;font-size:4.4rem;
+    line-height:.72;padding:.32rem .55rem 0 0;color:var(--gold);font-variation-settings:"opsz" 144;}
+
+  /* ---- Glassmorphism: frosted Crystata. The panels read like clear
+         crystal holding still water, the way the city reads. ---- */
+  .glass{
+    background:linear-gradient(180deg, rgba(255,255,255,.62), rgba(246,240,226,.46));
+    backdrop-filter:blur(13px) saturate(140%);
+    -webkit-backdrop-filter:blur(13px) saturate(140%);
+    border:1px solid rgba(46,111,163,.20);
+    box-shadow:0 18px 46px -32px rgba(19,73,111,.55), inset 0 1px 0 rgba(255,255,255,.65);
+  }
+
+  .spectrum{margin:2rem auto;border-radius:14px;overflow:hidden;}
+  .spectrum .top{height:8px;background:var(--prism);background-size:180% 100%;animation:drift 22s linear infinite;}
+  .spectrum .rows{padding:.4rem .2rem;}
+  .spec-row{display:grid;grid-template-columns:14px 1fr;gap:.9rem;align-items:start;
+    padding:.75rem 1.1rem;border-bottom:1px solid var(--rule);}
+  .spec-row:last-child{border-bottom:none;}
+  .spec-row .swatch{width:14px;height:14px;border-radius:50%;margin-top:.45rem;
+    box-shadow:0 0 0 3px var(--paper-2),0 0 0 4px currentColor;}
+  .spec-row .nm{font-family:"Marcellus",serif;letter-spacing:.06em;font-size:1.05rem;color:var(--ink);}
+  .spec-row .nm small{display:block;font-family:"Spectral";font-style:italic;letter-spacing:0;
+    color:var(--ink-soft);font-size:.9rem;margin-top:.2rem;font-weight:300;line-height:1.5;}
+
+  .realm{--accent:var(--kren-teal);--accent-pale:var(--kren-pale);margin:2.4rem auto;border-radius:16px;
+    overflow:hidden;position:relative;}
+  .realm > .crown{height:7px;background:linear-gradient(90deg,var(--accent),var(--accent-pale),var(--accent));}
+  .realm-head{padding:1.8rem 1.6rem 1.3rem;border-bottom:1px solid rgba(46,111,163,.16);
+    background:radial-gradient(120% 140% at 100% -20%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 60%);}
+  .realm-head .kicker{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 .4rem;display:flex;align-items:center;gap:.6rem;}
+  .realm-head .kicker .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 24%,transparent);}
+  .realm-head h2{margin:.1rem 0 .55rem;font-size:clamp(1.7rem,5vw,2.4rem);}
+  .realm-head h2 .uline{display:none;}
+  .realm-meta{font-family:"Marcellus",serif;font-size:.78rem;letter-spacing:.05em;color:var(--ink-soft);
+    display:flex;flex-wrap:wrap;gap:.4rem 1.3rem;margin-top:.5rem;}
+  .realm-meta b{color:var(--accent);font-weight:400;}
+  .realm-essence{font-style:italic;color:var(--ink-soft);font-weight:300;margin:.9rem 0 0;font-size:1.04rem;}
+  .realm-body{padding:.4rem 1.6rem 1.5rem;}
+
+  details.thread{border-bottom:1px solid rgba(46,111,163,.14);}
+  details.thread:last-of-type{border-bottom:none;}
+  details.thread > summary{list-style:none;cursor:pointer;padding:1.15rem .2rem 1rem;display:flex;
+    align-items:center;gap:.85rem;font-family:"Fraunces",serif;font-size:1.12rem;font-weight:500;color:var(--ink);}
+  details.thread > summary::-webkit-details-marker{display:none;}
+  details.thread > summary .ico{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--accent);
+    color:var(--accent);display:grid;place-items:center;font-family:"Spectral";font-size:1rem;transition:.3s;
+    background:color-mix(in srgb,var(--accent) 7%,transparent);}
+  details.thread[open] > summary .ico{transform:rotate(45deg);}
+  details.thread > summary .lbl small{display:block;font-family:"Marcellus";font-size:.64rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);font-weight:400;margin-top:.18rem;}
+  .thread-body{padding:.1rem .3rem 1.5rem 0;}
+  .thread-body p:last-child{margin-bottom:0;}
+  @media(min-width:540px){.thread-body{padding-left:3.5rem;}}
+
+  .vignette{margin:1.6rem 0;padding:1.1rem 1.3rem;border-left:3px solid var(--accent,var(--kren-teal));
+    background:color-mix(in srgb,var(--accent,var(--kren-teal)) 6%,var(--paper-2));border-radius:0 10px 10px 0;}
+  .vignette .tag{font-family:"Marcellus";font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent,var(--kren-teal));margin:0 0 .4rem;}
+  .vignette p{font-style:italic;font-weight:300;margin:0;color:var(--ink);font-size:1.02rem;line-height:1.62;}
+
+  .pull{margin:2.6rem auto;text-align:center;max-width:34ch;}
+  .pull q{font-family:"Fraunces",serif;font-style:italic;font-weight:300;quotes:none;
+    font-size:clamp(1.3rem,3.6vw,1.85rem);line-height:1.34;color:var(--gold);display:block;}
+  .pull cite{display:block;font-style:normal;font-family:"Marcellus";font-size:.74rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ink-soft);margin-top:1rem;}
+
+  .feature{margin:2.2rem 0;padding:1.5rem 1.6rem;border-radius:14px;}
+  .feature h3{margin-top:.2rem;}
+  .feature p:last-child{margin-bottom:0;}
+
+  .note{margin:1.7rem 0;padding:1.05rem 1.25rem;border-radius:10px;border:1px dashed var(--kren-teal);
+    background:color-mix(in srgb,var(--kren-teal) 5%,var(--paper-2));}
+  .note .t{font-family:"Marcellus";font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--kren-teal);margin:0 0 .35rem;}
+  .note p{margin:0;font-size:.98rem;}
+  .note p + p{margin-top:.7rem;}
+
+  .twocol{display:grid;gap:1.1rem;margin:1.7rem 0;}
+  @media(min-width:620px){.twocol{grid-template-columns:1fr 1fr;}}
+  .mini{border-radius:12px;padding:1.15rem 1.25rem;}
+  .mini h4{margin-top:0;color:var(--kren-teal);}
+  .mini p{font-size:.97rem;margin-bottom:0;}
+
+  footer{text-align:center;padding:4rem 1.4rem 5rem;margin-top:2rem;position:relative;z-index:1;}
+  footer .bar{height:3px;width:min(420px,80%);margin:0 auto 2.4rem;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 20s linear infinite;}
+  footer .candle{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.3rem,4vw,2rem);
+    color:var(--gold);line-height:1.35;margin:0 auto;max-width:28ch;}
+  footer .ma{font-family:"Marcellus";font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-top:2.4rem;}
+  footer .ma small{display:block;letter-spacing:.05em;text-transform:none;font-family:"Spectral";font-style:italic;font-weight:300;margin-top:.5rem;color:var(--ink-soft);}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;}
+    .ribbon,.spectrum .top,.realm>.crown,h2 .uline,.mast-mark .bar,footer .bar{animation:none;}
+  }
+  @media(max-width:540px){body{font-size:18px;}nav.codex-nav ul{gap:.15rem .65rem;}
+    .realm-body,.realm-head{padding-left:1.1rem;padding-right:1.1rem;}
+    .feature{padding:1.2rem 1.15rem;}}
+</style>
+</head>
+<body>
+<canvas id="krenides-field"></canvas>
+<div class="ribbon"></div>
+
+<nav class="codex-nav">
+  <ul>
+    <li><a href="#cosmos">The Nexus</a></li>
+    <li><a href="#salacia">Salacia</a></li>
+    <li><a href="#krenides">The Krenides</a></li>
+    <li><a href="#history">History</a></li>
+    <li><a href="#dynasty">The Dynasty</a></li>
+    <li><a href="#nations">The Four Nations</a></li>
+    <li><a href="#schools">The Schools</a></li>
+    <li><a href="#magic">Magic</a></li>
+    <li><a href="#clairgates">The Clairgates</a></li>
+    <li><a href="#vintages">The Vintages</a></li>
+    <li><a href="#arsenal">The Arsenal</a></li>
+    <li><a href="#factions">Factions</a></li>
+    <li><a href="#body">The Body</a></li>
+    <li><a href="#culture">Culture</a></li>
+    <li><a href="#sea">The Living Sea</a></li>
+    <li><a href="#weave">The Weave</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<header class="mast">
+  <p class="eyebrow">Moirai Codex · The First Realm</p>
+  <h1 class="title">Thalassor<br><span class="gilt">The Gilded Nexus</span></h1>
+  <p class="subtitle">The cosmopolitan heart of the Realms, where the water heals every wound brought to it, and the history beneath the marble festers without end.</p>
+  <div class="mast-mark"><div class="bar"></div></div>
+  <p class="mast-epi">Abundance, flowing freely.
+    <span>The promise. And beneath it, never said aloud: rivers flow into oceans.</span>
+  </p>
+</header>
+
+<!-- ============ THE NEXUS ============ -->
+<section id="cosmos" class="wrap reveal">
+  <p class="sec-eyebrow">The Realm in the Cosmos</p>
+  <h2>The Place the Heroes Fall For First<span class="uline"></span></h2>
+
+  <p class="lead">Thalassor is the most beautiful, most seductive, and most functional civilization in the cosmos, and that is exactly where its horror lives. The water heals. The wine is extraordinary. The parties are transcendent. The architecture takes the breath. The goddess is real and her doctrine is good. None of this is a lie. It is the thing underneath all of it that is a lie, and the lie is so total it has become invisible.</p>
+
+  <p>Of the living Realms, Thalassor is the one a traveler meets first and loves before they know enough to ask questions. It is a maritime power whose strength is positional rather than martial: House Sinclair holds the Clairgate network, the roads between every world, and so holds force projection, trade, intelligence, and the movement of people across the whole of creation. The other powers cannot take Thalassor by force, because they cannot reach it without Sinclair permission. The roads between Realms are Sinclair roads.</p>
+
+  <p>It works just well enough, for just enough people, that the question of who it does not work for can be drowned out by the sound of the fountains. That sentence is the design of the place. A traveler descends from the gilded heights, where the crystal towers glow from within, and falls in love with a dream of safety, abundance, and belonging. Only later, walking the marble streets at the floor of the city, does the same beauty reveal its price. Nothing in the image changes. Everything in the meaning does.</p>
+
+  <div class="spectrum glass">
+    <div class="top"></div>
+    <div class="rows">
+      <div class="spec-row" style="color:var(--kren-teal)"><span class="swatch"></span><span class="nm">Element<small>Water, held as memory, life, law, legacy, and the direction of all things.</small></span></div>
+      <div class="spec-row" style="color:var(--kren-bright)"><span class="swatch"></span><span class="nm">Patron Goddess<small>Salacia, Goddess of the Tides, Source of Life, Bringer of Abundance.</small></span></div>
+      <div class="spec-row" style="color:var(--kren-deep)"><span class="swatch"></span><span class="nm">Exvisar<small>Saint Leif Sinclair, Warden of Ports and Portals, Steward of the Flow.</small></span></div>
+      <div class="spec-row" style="color:var(--gold)"><span class="swatch"></span><span class="nm">Population<small>Roughly three hundred million across a planetary archipelago of four nations.</small></span></div>
+      <div class="spec-row" style="color:var(--kren-glow)"><span class="swatch"></span><span class="nm">Chromatic Signature<small>Blue, ranging from the warm teal of Salacica through the deep navy of Amphitra and the silver-pale of Mnemosyne to the electric edge of the Syndicate Isles.</small></span></div>
+      <div class="spec-row" style="color:var(--kren-teal)"><span class="swatch"></span><span class="nm">Cultural Anchor<small>Hellenic Greece in proportion and grace, the Mediterranean coast in climate and texture, and a great modern port in the structural logic of wealth and access.</small></span></div>
+    </div>
+  </div>
+
+  <p>The material world of Thalassor ranks itself plainly. Crystata stands above marble, marble above plain stone. Pearl is the apex of all organic things, and silver is preferred to gold, because gold belongs to the ambition of other Realms and the divinity of the dead. To read a Thalassori room is to read these materials, and everyone raised here reads them without thinking.</p>
+
+  <div class="pull"><q>The water is healing. The history is a festering wound. And the water remembers.</q><cite>The Core of the Matter</cite></div>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">&#9670; &#9670; &#9670;</span><span class="line r"></span></div></div>
+
+<!-- ============ SALACIA ============ -->
+<section id="salacia" class="wrap reveal">
+  <p class="sec-eyebrow">The Goddess</p>
+  <h2>Salacia, and the Faith of Flow<span class="uline"></span></h2>
+
+  <p class="lead">Salacia is the Goddess of the Tides, the Source of Life, the Bringer of Abundance. She is real, she is present, and her teaching is beautiful in every particular. Water flows to all. Water heals all. Water carries all. Abundance stays infinite for exactly as long as the strong allow the weak to drink. This is the whole of the Faith of Flow, and it is true.</p>
+
+  <p>Her doctrine is not compartmentalized into temples and holy days. It runs through the Thalassori day the way water runs through a body. Shrines stand along every canal, blessings etched into stone and crystata for the current to carry through the city. Fountains at the intersections serve as prayer sites. Public baths serve as temples. A water-drop is cut into the doorframe; a bowl of fresh Krenides is kept on the household shrine beside a small crystata figurine and a sprig of dried sea-flowers; a thread of blue is sewn into the hem of a garment as an act of devotion. Meals open with a blessing that names the water cycle. Oaths are sworn over flowing water. Children are named for aspects of the sea.</p>
+
+  <h3>The First Law of Thalassonomia</h3>
+  <p>Salacia's teaching carries a single iron clause, and the world itself enforces it: flow cannot stagnate. To hoard water is to kill the very thing being hoarded. This is no parable. In Thalassor, hoarding the sacred water produces real and immediate backlash. Drought arrives. Plague follows. Whole districts collapse. The Realm runs on the steady downward motion of the current, and the current punishes anyone who dams it for long.</p>
+
+  <p>The aristocracy has learned to hear this law as a mandate for placement rather than release. The current pools, they say, where it was always meant to pool. The ocean does not hoard the rivers; the ocean is simply their destination. They are the destination. They call this stewardship, not theft, and management, not hoarding, and they call it Salacia's doctrine correctly understood. The goddess has not said, in any voice the Realm can point to, that they are wrong. Her silence on the matter is the thing the enemies of the covenant find most encouraging.</p>
+
+  <div class="feature glass">
+    <h3>The Hydralithe, Her Daughter</h3>
+    <p>Salacia is mother, with Aracice the Dragon-God of Order, of the Hydralithe: a moon-sized, seven-headed Gonlan dragon of living, hyper-pressurized water. Where she moves, the sheer mass of her draws the oceans up toward the heavens, high enough to bury a civilization beneath the risen tide. She has come before; the Sirens of sea and sky have survived every prior coming and remember each one. She serves the Water, and not the Blood. When the covenant of Thalassor is broken past mending, it is the Hydralithe that Salacia calls to drown the heresy, and she does not weigh what else washes away in the drowning. The goddess loves the Realm. She does not need it.</p>
+  </div>
+
+  <p>The clearest proof of Salacia's love is the simplest one. Every morning, in a bathhouse in the poorest stone district, the Krenides closes a wound that medicine could not. The healing was never proof that the divine order holds; the gods need no proving. It was proof of something smaller and more fragile: that the goddess still loves the Realm her stewards keep in her name. On the day that love is withdrawn, the water does not argue. It simply goes cold.</p>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">&#9670; &#9670; &#9670;</span><span class="line r"></span></div></div>
+
+<!-- ============ THE KRENIDES ============ -->
+<section id="krenides" class="wrap reveal">
+  <p class="sec-eyebrow">The Divine Gift</p>
+  <h2>The Krenides<span class="uline"></span></h2>
+
+  <p class="lead">The Krenides are Salacia's blessing laid upon the waters of Thalassor. They are a living, restorative force that fills every spring, river, and ocean current in the Realm. They heal wounds, replenish spent myst, carry the memory of the dead, and bind any covenant sworn over them with divine weight. They are the reason Thalassor is indispensable, and they are not a metaphor. They are water, and they do these things.</p>
+
+  <p>To drink the Krenides is to mend a wound, to cure an illness, to soothe a fractured soul. To bathe in a sacred pool is to heal injuries that should have ended a life. The water restores what combat, magic, and grief take out of a person, returning the body to a wholeness it remembers but may not have inhabited in years. An army carrying waterskins of Krenides can be healed between one engagement and the next. A drained Mystic can recover by kneeling at a river. No other power in the cosmos can refill the tank, and so every other power in the cosmos depends, to some degree, on the family that holds the source.</p>
+
+  <p>The potency is not even. It runs strongest at the source: the sacred springs, the deep oceanic vents, the First Pools, and above them all the First Spring of Salacica, the most potent water in the Realm. This is what the Sinclairs truly hold. Not the ports, not the parliament, but the source-waters. They are not merely the ruling house. They are the hydro-barons.</p>
+
+  <h3>What the Water Remembers</h3>
+  <p>The Krenides carry memory. Every current holds the echoes of the lives it has touched, ancestral voices layered in the water the way sediment layers in a riverbed. A Hydromantos can scry a sacred pool and read that history directly. Two people drinking from the same cup can come to understand each other's lives. A practitioner can enter the memory-stream of the dead and walk there. This makes the Krenides the greatest archive in the cosmos.</p>
+
+  <p>It also makes them the gravest danger to the family that rules. Because the water remembers everything, including the screams from the day Thalassor abandoned Luxania, the names of the architects whose work was erased, and the truth of how the first Clairgate was built, by whom, together, and who took it in the end. Follow the deep currents far enough and they arrive at a story the Sinclairs have spent centuries trying to drown. That single fact shapes the whole secret politics of the Realm.</p>
+
+  <h4>The Economy of the Sacred</h4>
+  <p>Thalassor's exports follow a crystalline logic. The chief of them is Aqua Sacer: sacred water bottled at the source and shipped in enchanted crystal amphorae, the single most valuable export in the cosmos, a strategic resource, a luxury good, and a medicine in the same vessel. Alongside it move charged Crystata, the living coral hulls of the fleet, and, in time, the wines that no other Realm can make. Every toll paid at a Clairgate is, without the payer knowing, tribute to the family that doomed the payer's own world.</p>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">&#9670; &#9670; &#9670;</span><span class="line r"></span></div></div>
+
+<!-- ============ HISTORY ============ -->
+<section id="history" class="wrap reveal">
+  <p class="sec-eyebrow">History</p>
+  <h2>The Lumen Cradle and the Founding Lie<span class="uline"></span></h2>
+
+  <p class="lead">Before the Clairgates, every world stood alone. A Pyrtheran knew Hestia and the Golden Flame and held that to be the whole of the divine. A Ferridanian knew Brokkae and Edgerinne and held that to be everything. Each god was the god, each element the element, each way of being the shape of reality entire. No one knew there were other worlds at all. Then two minds in two Realms reached for each other, and the roads opened.</p>
+
+  <p>The first of them was Hecate of Luxania, arguably the single most consequential mind in the history of the cosmos. The second was Juno Sinclair of Thalassor, the one the dynasty calls the Architect. Hecate astral-projected so far out into the dark that her soul touched Juno's, then helped Juno find the way home, and from that meeting came the long work of the Lumen Cradle and the Leyline. The Cradle was Luxanian in principle and Thalassori in stabilization; it was the first stable bridge between worlds, and it founded the Age of Exploration. Juno's innovation ended Thalassor's scarcity and secured the family that would build everything after.</p>
+
+  <h3>The Salvage of Luxania</h3>
+  <p>When Luxania fell, to the cultural subversion of Tenebralis and the iron legions of Ferridane, Juno demanded a rescue. Her father Titus, who headed the family, and Grand Admiral Scylla overruled her. They looked at a dying Realm and saw a vessel to be stripped, and they launched a salvage operation to carry off the technology and the energy of Luxania while its people screamed. Juno flew to save Hecate herself. Hecate, radiant in the ruins, would not abandon the Luxanians. To keep the psychic backlash of the fall from reaching Thalassor, Juno took the Core Crystal and sealed the gate. It was betrayal and mercy in one act. The empire was secured, and Juno was branded a traitor of two worlds, and she lived out her days as a wealthy recluse in the prosperity she had built, which served as the architecture of her torment.</p>
+
+  <p>Thalassor told a cleaner story. Recovery teams went in under the cover of humanitarian aid, secured the sites and the research and a handful of surviving Astral Navigators who vanished into Thalassori custody, and the family unveiled the Lumen Cradle as a purely Thalassori invention. Hecate's name was struck from the record. Juno was raised up as a sole genius. The foundation of the whole gilded order was laid on the grave of a betrayed ally, and the memory of that betrayal was poured into a sacrament that each heir would drink on the day they took the seat.</p>
+
+  <div class="note">
+    <p class="t">&#9670; The Three Ages of the Roads</p>
+    <p>The inter-Realm order has passed through three ages. In the <strong>Age of Discovery</strong>, the leylines were unstable and first contact was dangerous. In the <strong>Age of Mercantile Empires</strong>, the trade routes settled, Thalassor became the nexus, and the exploitation of Luxania began. In the present <strong>Age of Globalization</strong>, the worlds are deeply interconnected and deeply unequal, a web of alliances and resentments so fragile that the Advent will be the spark that lights all of it at once.</p>
+  </div>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">&#9670; &#9670; &#9670;</span><span class="line r"></span></div></div>
+
+<!-- ============ THE DYNASTY ============ -->
+<section id="dynasty" class="wrap reveal">
+  <p class="sec-eyebrow">Leadership</p>
+  <h2>House Sinclair and the Exvisarship<span class="uline"></span></h2>
+
+  <p class="lead">The Sinclair dynasty rules because of the goddess, not in spite of her. In Thalassor the legal code and the sacred code are the same document, so that criticizing the government is, by construction, criticizing Salacia. The Clairgate monopoly is held as a divine mandate. The powder-white hair of the Sinclair line is the visible heraldry of sacred inheritance. The authority is dynastic, divine, and infrastructural at once, and it has been so for a thousand years.</p>
+
+  <h3>Saint Leif Sinclair</h3>
+  <p>The current Exvisar is Saint Leif Sinclair, Warden of Ports and Portals, Steward of the Flow. (The word Saint is a Thalassori lineage honorific, not a religious title.) His eyes are the specific blue of Krenides water, his hair the filtered white of his bloodline, and he carries the bearing of a man who long ago accepted the weight of what he holds. He has the Hydromantic Ledger, daily intelligence drawn from the memory-holding waters of his Realm, which gives him something close to omniscience within his own domain. He has the accumulated memory of every Sinclair before him. He has sat across the table from the Sovereign of Tenebralis and known her for what she is.</p>
+
+  <p>Leif is not a villain. He presides over a real golden age made possible by an unforgivable act he did not commit and benefits from completely, and his life's work is the attempt to launder that original sin into something noble: to build a heaven so magnificent that no one will look down at the hell it stands on. His philosophy is utilitarian to the root. The past cannot be changed. The present can be engineered. Pour the blood money into restoration, into public works, into an elixir of unending life, and make the proceeds bleed clean. His flaw is that he believes evil can be managed indefinitely. He tolerates the Cult of the Bloodless. He tolerates the creeping influence of Tenebralis. He is tending a beautiful tree and refusing to see that its roots are being eaten.</p>
+
+  <h4>The Rite of the Concordant Path</h4>
+  <p>Every heir drinks the Concordant Path, the cumulative memory of every patriarch of the dynasty, carried through sacramental wine made possible by the memory-holding nature of Thalassori water. It is a gift and a constant interior presence at once: a thousand years of Sinclair memory running beneath every thought, load-bearing and unconscious, like the sense of one's own breath. The Path carries the memory of vintners and owners. It does not carry the memory of the laborer who crushed the fruit, hauled the cask, and sifted skin from wine. The dynasty's own sacrament records the dynasty's own blindness.</p>
+
+  <h4>The Exvisarelim and the Synedrion</h4>
+  <p>Above the Realm sits the Exvisarelim, the only inter-Realm governing body in existence: five seats for five Exvisars, Leif of Thalassor, Aurelius Vorn of Ferridane, Sol'Kheret of Pyrthera, Aeon of Zephyros, and Vex Mavarra of Tenebralis. One of the five has been a thing wearing a stolen face since the table was founded. Within Thalassor itself the Synedrion governs: a ruling council housed in a structure that looks like a cathedral and functions as a parliament, where the lords of the Realm legislate beneath the goddess's open channels.</p>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">&#9670; &#9670; &#9670;</span><span class="line r"></span></div></div>
+
+<!-- ============ THE FOUR NATIONS ============ -->
+<section id="nations" class="wrap reveal">
+  <p class="sec-eyebrow">Regions</p>
+  <h2>The Four Nations<span class="uline"></span></h2>
+  <p>Thalassor is a planetary archipelago of four great nations, each one a different answer to the same question of what water is for. Their architecture, their bodies, and their politics diverge from that single difference. The blue of their eyes places them at a glance.</p>
+
+  <article class="realm glass" style="--accent:var(--kren-teal);--accent-pale:var(--kren-pale)">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>The Heart and the Head</p>
+      <h2>Salacica</h2>
+      <div class="realm-meta"><span>Role <b>Capital, governance, diplomacy</b></span><span>Eyes <b>Warm teal</b></span><span>Material <b>Maximum Crystata</b></span></div>
+      <p class="realm-essence">The gilded capital, where the dream of Thalassor is at its most total.</p>
+    </div>
+    <div class="realm-body">
+      <details class="thread" open>
+        <summary><span class="ico">+</span><span class="lbl">The Cosmopolitan Seat<small>Old wealth, performed as a way of life</small></span></summary>
+        <div class="thread-body">
+          <p>Salacica is the seat of Sinclair power and the densest concentration of Crystata in the Realm. Its climate is temperate, its land fertile, and the First Spring, the most potent Krenides source, rises here. The capital is a marvel of hydro-engineering, threaded with open canals and sacred waterways. It holds Rosorae Templar, the Synedrion, and the central Clairgate nexus. Symposium culture governs everything: wine, philosophy, and politics are one practice. Pearl is the apex material and silver is preferred to gold.</p>
+          <p>The beauty is real in every detail. The history beneath the marble is the question the city keeps below the sound of its fountains. The Nihila who keep the city running are an invisible servant class, present everywhere and seen by almost no one.</p>
+        </div>
+      </details>
+    </div>
+  </article>
+
+  <article class="realm glass" style="--accent:var(--kren-deep);--accent-pale:var(--kren-glow)">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>The Fist</p>
+      <h2>Amphitra</h2>
+      <div class="realm-meta"><span>Role <b>Military, navy, border defense</b></span><span>Eyes <b>Deep navy</b></span><span>Material <b>Stone and marble, by principle</b></span></div>
+      <p class="realm-essence">The reason Salacica still stands, and the continent Salacica looks down on.</p>
+    </div>
+    <div class="realm-body">
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">The Martial Continent<small>Discipline, courage, and the sea as partner</small></span></summary>
+        <div class="thread-body">
+          <p>Amphitra is rugged: dramatic coastlines, deep fjords, volcanic archipelagos. Its cities are built into the cliffs and set half-submerged beneath the ocean, functional and fortified rather than ornamental. Crystata here is reserved for military use; to raise a house out of a strategic resource reads as decadence. The culture is meritocratic, where status is earned through proven courage. Amphitra produces the bulk of the Thalassan Armada and the Azure Guard, and its marines are the most sought-after mercenaries in the cosmos.</p>
+          <p>The bioluminescence of its people glows brightest here, the veins tracing blue-white light that pulses with feeling and burns clearest underwater. Salacican elites call the Amphitrans unsophisticated grunts. The Amphitrans answer with their work.</p>
+        </div>
+      </details>
+    </div>
+  </article>
+
+  <article class="realm glass" style="--accent:var(--kren-glow);--accent-pale:var(--kren-pale)">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>The Conscience</p>
+      <h2>The Mnemosyne Archipelago</h2>
+      <div class="realm-meta"><span>Role <b>History, truth-keeping, scholarship</b></span><span>Eyes <b>Silver-pale</b></span><span>Material <b>Wood and stone; Crystata only for archives</b></span></div>
+      <p class="realm-essence">The keepers of the river of time, and of the secret the dynasty most fears.</p>
+    </div>
+    <div class="realm-body">
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">The Oracle Isles<small>Mist, freshwater, and the long memory</small></span></summary>
+        <div class="thread-body">
+          <p>The Mnemosyne Archipelago is mist and freshwater: islands, lakes, underground rivers, forested quiet. Its settlements are deliberately humble, raised in wood and stone, with Crystata reserved for the archives alone, the one material that holds Mnemohydric truth without it degrading. To walk into a Mnemosyne archive is to enter a cathedral made of frozen water that remembers everything it has ever been told.</p>
+          <p>An intellectual aristocracy ranks itself by mastery of Memory-Water and holds itself apart from the ordinary class struggle, naming it a transient current in the long river of history. The other Realms trust the Mnemosyne as impartial archivists. Their bodies carry the subtlest expression of the element, a faint silver to the skin, as of a person standing just behind still water. In their guarded archives lies the truth of the Lumen Cradle, which is why they are watched so closely.</p>
+        </div>
+      </details>
+    </div>
+  </article>
+
+  <article class="realm glass" style="--accent:var(--kren-bright);--accent-pale:var(--kren-pale)">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>The Voice</p>
+      <h2>The Syndicate Isles</h2>
+      <div class="realm-meta"><span>Role <b>Trade, logistics, law</b></span><span>Eyes <b>Electric blue</b></span><span>Material <b>Ostentatious Crystata</b></span></div>
+      <p class="realm-essence">Where the price of everything is named aloud, and the soul has a market rate.</p>
+    </div>
+    <div class="realm-body">
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">The Merchant Republics<small>Profit, covenant, and contraband</small></span></summary>
+        <div class="thread-body">
+          <p>The Syndicate Isles are rocky ports and deep natural harbors, severe and imposing courthouses, and the most ostentatious Crystata in the Realm, used thick and heavy and oversized the way new wealth is always worn. It is a plutocracy, where wealth is the measure of everything. The Isles are the primary entry point for black-market goods, and the economy stands at its most candid at the trading docks, Crystata wealth and marble poverty side by side. Their people's eyes run a sharp electric blue, and they suppress or enhance their own luminosity for commercial advantage, which is the origin of Thalassori cosmetic craft.</p>
+          <p>Here courtship and commerce are the same negotiation, and no one pretends otherwise. The Sirens are the Isles' particular bane: the islanders live with them the way coastal villages live with hurricanes, the price of being where they are.</p>
+        </div>
+      </details>
+    </div>
+  </article>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">&#9670; &#9670; &#9670;</span><span class="line r"></span></div></div>
+
+<!-- ============ THE THREE SCHOOLS ============ -->
+<section id="schools" class="wrap reveal">
+  <p class="sec-eyebrow">Mysticism</p>
+  <h2>The Three Schools<span class="uline"></span></h2>
+  <p class="lead">The three schools of Thalassori mysticism are not merely cultural factions. They are three readings of what water is, and therefore three readings of what Thalassor owes the cosmos. Each interprets Salacia's doctrine differently. Each has been infiltrated by the Bloodless differently. Each holds, in its practice or its archives, some fragment of the truth the Sinclairs need to stay buried.</p>
+
+  <div class="spectrum glass">
+    <div class="top"></div>
+    <div class="rows">
+      <div class="spec-row" style="color:var(--kren-glow)"><span class="swatch"></span><span class="nm">Hydromantoi<small>Water as Memory. The Archipelago of Rivers and Mirrors.</small></span></div>
+      <div class="spec-row" style="color:var(--kren-deep)"><span class="swatch"></span><span class="nm">Thalassurgists<small>Water as Living Ecology. The Leviathan Shoals.</small></span></div>
+      <div class="spec-row" style="color:var(--kren-bright)"><span class="swatch"></span><span class="nm">Oathwrights<small>Water as Covenant. The Isles of Symposium and Tidecourt.</small></span></div>
+    </div>
+  </div>
+
+  <article class="realm glass" style="--accent:var(--kren-glow);--accent-pale:var(--kren-pale)">
+    <div class="crown"></div>
+    <div class="realm-body" style="padding-top:1.3rem">
+      <details class="thread" open>
+        <summary><span class="ico">+</span><span class="lbl">The Hydromantoi<small>Water as memory</small></span></summary>
+        <div class="thread-body">
+          <p>To the Hydromantoi, water carries the echoes of everything it has touched, and to heal is to share lives rather than only mend flesh. Their practice is immersion: rituals that grant ancestral memory, scholars swimming the canals to absorb whole histories, tide-reading as divination through the voices in the water, and water-dreaming, the entering of the memory-stream of the dead through the Mnemostroma, the memory-current where ancestral voices layer like sediment.</p>
+          <p>Their instruments have names. The Thalammnesis is a chamber of recollection, a sacred bath where a practitioner relives lifetimes not their own. Kataptrosis is the act of gazing into a mirror-tide to confront a truth left unspoken. Lachrymoros are the fate-tears, the saltwater shed by mourners, said to flow directly into the memory-current and bind grief there forever. The Hydromantoi are the greatest threat House Sinclair faces, because their scrying could at any moment follow the deep currents to their origin and surface what lies at the bottom. The Bloodless answer this by staining the memory-streams with hoarded and devoured recollection, fouling the archive so that nothing clear can rise.</p>
+        </div>
+      </details>
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">The Thalassurgists<small>Water as living ecology</small></span></summary>
+        <div class="thread-body">
+          <p>To the Thalassurgists, water is alive and myst is ecological. Every Mystic of this school is symbiotic, ritually paired in initiation with an aquatic organism, and a lineage's bonded creatures are its crown jewels. Aristocrats cultivate coral that sings their ancestry. The greatest houses are bonded to sacred Leviathans, titanic beasts that serve as living thrones of water and bone, carried in constant migration across the sea.</p>
+          <p>Their techniques follow from the bond. A jellyfish symbiont grants lightning-quick nerves through the Symbiotheion, the divine co-life in which creature and Mystic merge souls. A manta-ray cloak grants flight; serpent-scales grant resilience; biotic colonies repair flesh from within. Their warfare is ecological, loosing symbiont plagues and coral prisons. The Bloodless among them pursue purity not of blood but of symbiont, hoarding the most powerful organisms, breeding monstrous hybrids, and introducing Tenebrali creatures into the ecology, with collapse following wherever the nobles over-harvest.</p>
+        </div>
+      </details>
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">The Oathwrights<small>Water as covenant</small></span></summary>
+        <div class="thread-body">
+          <p>To the Oathwrights, every flow of water is a covenant. To drink is to owe tribute; to use a portal is to bind oneself; myst is jurisprudence written in tides. A covenant sworn on Krenides wine and then broken causes the restorative magic to reverse: old wounds reopen, myst drains away. Their practice is the symposium-vow, the sealing of deals with enchanted wine, and the pacthydria, the sacred pact-vessels into which covenants are poured and shared as oathwater. Every Clairgate opened requires a covenant, enforced by the tides. The Symposionomos, the symposium-magistrate, presides over the covenant feast and binds words into law.</p>
+          <p>The Grief Serpent is the school's instrument of justice, invoked to punish oath-breakers. It appears in dreams and on moonless tides, a harbinger of mortality rather than destruction, forcing noble and commoner alike to remember that grace does not mean invulnerability. The Bloodless weaponize Tidal Law itself, drafting blood contracts that bind future generations to purity doctrine and trap commoners in generational water-debt. The most perfect inversion of this school was a single poisoned cup: a covenant turned into an execution, a communion turned into damnation, the guests made to drink their own agreements.</p>
+        </div>
+      </details>
+    </div>
+  </article>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">&#9670; &#9670; &#9670;</span><span class="line r"></span></div></div>
+
+<!-- ============ MAGIC ============ -->
+<section id="magic" class="wrap reveal">
+  <p class="sec-eyebrow">Magic</p>
+  <h2>The Deusas of Water<span class="uline"></span></h2>
+  <p class="lead">A Mystic interfaces with magic through the soul, and the soul of Thalassor is tuned to water. Its native deusas range from the simple command of the tides to the manipulation of the water inside a living body, and from there to disciplines that have no equal anywhere else in the cosmos.</p>
+
+  <div class="twocol">
+    <div class="mini glass"><h4>Aestus</h4><p>Mastery of water in all its forms, including the water within living bodies. It can raise a concealing mist, form pressurized blades that cut steel, or take hold of an opponent's own blood. A conductor of war can sharpen a soldier's reflexes with a rush of blood or steady a breaking unit by slowing its circulation, playing an army through its own biology.</p></div>
+    <div class="mini glass"><h4>Aesta-Mitiga</h4><p>The discipline of healing manipulation: the extraction and redistribution of restorative myst and the channeling of Krenides. It accelerates one's own regeneration or strips an opponent of the ability to heal at all.</p></div>
+    <div class="mini glass"><h4>Hydromancy</h4><p>A derivative perception: the experiencing of memories held in deep and flowing water. At its humblest, a fisherman who tastes poison in water from twenty yards. At its height, the reading of the dead.</p></div>
+    <div class="mini glass"><h4>Dancaelet Salacia</h4><p>The divine water martial art of Thalassor, in which violence is rendered as choreography. A master fights with the fluidity of the ocean itself, and the better the practitioner, the more the fighting resembles dance.</p></div>
+  </div>
+
+  <h3>Crystata, the Soul Made Stone</h3>
+  <p>Crystata is crystallized myst, and it is at once a reservoir of power, a weapon component, a building stone, a store of information, and the primary currency between Realms. Its clarity scales with its quality: the finest is nearly transparent, almost invisible, while lesser grades cloud toward opacity, and its color deepens toward blue as the myst it holds grows denser. The comparative frame the Clairgates opened made a new thing possible with it: a Channeler captures elemental energy in a crystal, and a Nihila who holds that charged crystal can command the element for as long as the charge lasts. The caste line between Mystic and Nihila, which is otherwise a line in the soul, can be crossed for a price, with money, for as long as the battery holds out.</p>
+
+  <h4>Combined-Element Weaponry</h4>
+  <p>Where water meets another element, Thalassori artificers compound the two. Rime-Flow Cannons join water and ice. Luminescent Tide Mines join water and light. Cascade Conduits join water and electricity. The Abyssal Shroud joins water and shadow. Hailstorm Projectors join water with earth and air. And the Sanguine Current, the joining of water and blood, is forbidden to all but the Echo Knights, because to wield it is to take hold of what runs inside a living thing.</p>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">&#9670; &#9670; &#9670;</span><span class="line r"></span></div></div>
+
+<!-- ============ THE CLAIRGATES ============ -->
+<section id="clairgates" class="wrap reveal">
+  <p class="sec-eyebrow">Unique Technologies</p>
+  <h2>The Clairgates and the Craft of Clairmancy<span class="uline"></span></h2>
+  <p class="lead">A Clairgate is a portal in the inter-Realm network, and the network is the only means of travel, trade, and force projection between worlds. The Clairgates are the internet and the shipping lanes of the cosmos in one. Whoever holds them holds the movement of everything, and House Sinclair holds them through a single hereditary craft that they alone possess. The craft is Clairmancy, and almost no one understands how it is made.</p>
+
+  <p>Clairmancy is a deusa that functions, for every practical purpose, as a technology. It is gifted to each Sinclair heir in turn, and it grants the instant creation of rifts in space, of any size or shape, at minimal cost in myst. With it an heir can open a door beneath an enemy's feet, drop a fleet into a foreign harbor out of nothing, or carry a god from a void-throne to the surface of a sun. The power is total. The method of conferring it is the most closely held secret in the Realm, and it is kept in three separate pieces, in three separate confidences, so that no single betrayal can give it away.</p>
+
+  <div class="feature glass">
+    <h3>How an Heir Is Made a Clairmancer</h3>
+    <p><strong>First, the wine.</strong> The heir drinks the Kalypsoinos, the Oinos tes Kalypsos, brewed once in a generation for this single purpose. Within it is the cumulative memory of every preceding Exvisar, and with that memory comes the knowledge of how the craft is worked. The wine does not hold the power. It holds the remembering of the power, the way a master remembers a discipline they learned long ago. The powder-white hair of the Sinclair line is the visible residue of generations of this wine, the mark of something filtered rather than aged.</p>
+    <p><strong>Second, the tattoo.</strong> The remembered craft is anchored into the body through a living tattoo of the Sinclair family crest, the Ten Bridges and Sunrise. It is inked with enchanted ink of Krenides water, and worked into that ink are fragments of Luxanian Crystata taken from an original Lumen Cradle. The tattoo is where the power itself is held. It is a secret map of authority etched on the skin, worn in plain sight and legible to no one.</p>
+    <p><strong>Third, the Cradle.</strong> The fragments in the ink come from a Lumen Cradle, the device born of Juno Sinclair and Hecate of Luxania, the first stable bridge ever raised between worlds and the conductive heart of the whole network through the Leyline. The existence and the working of the Cradle is the third secret, and the deepest, because it is also the proof of the theft. The wine, the tattoo, and the Cradle are never held together by any one keeper. To know all three is to know everything.</p>
+  </div>
+
+  <p>This is the quiet engine of the gilded order. The heir bears the memory in the wine and the power in the tattoo, and the tattoo answers because of what is dissolved in its ink, and what is dissolved in its ink was carried off from a dying Realm whose name the dynasty erased. The most beautiful structures in the cosmos, the Clairgate arches, were built on that. The lie, as the builders understood, should be gorgeous.</p>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">&#9670; &#9670; &#9670;</span><span class="line r"></span></div></div>
+
+<!-- ============ THE VINTAGES ============ -->
+<section id="vintages" class="wrap reveal">
+  <p class="sec-eyebrow">Unique Technologies</p>
+  <h2>Oinomancy and the Vintages<span class="uline"></span></h2>
+  <p class="lead">Wine belongs between water and blood. It is water touched by labor and time, fermented into something that carries the properties of both: not raw flow and not raw lineage, but transformed, civilized, and dangerous. When the nobles of Thalassor raise their glasses at a Symposium, they share in fragility as much as in grace. The sacrament of fermentation holds the power of both life and death.</p>
+
+  <p>The dynasty had always kept memory in wine through the natural properties of the Krenides; that was tradition, the Concordant Path, the water doing what water does. Oinomancy is what one mind made of that principle when he refused to treat it as finished. He reverse-engineered the Path, joined it to his battlefield mastery of the blood, and built from first principles a discipline for distilling experience, emotion, deusa, and essence into wine. It is an entirely new category of power, and it produced a family of vintages, each one a kind of magic that did not exist before it was poured.</p>
+
+  <div class="spectrum glass">
+    <div class="top"></div>
+    <div class="rows">
+      <div class="spec-row" style="color:var(--kren-teal)"><span class="swatch"></span><span class="nm">Wine of Shared Horizons<small>Oinos Koines Horizontes. Synchronizes the consciousness of a strike force into a single tactical mind. The ultimate military advantage.</small></span></div>
+      <div class="spec-row" style="color:var(--kren-glow)"><span class="swatch"></span><span class="nm">Wine of Shared Dreams<small>Oinos Koines Oneiron. Hyper-realistic shared combat simulation at zero physical risk, producing the best-trained forces in the cosmos.</small></span></div>
+      <div class="spec-row" style="color:var(--kren-bright)"><span class="swatch"></span><span class="nm">Wine of Shared Fates<small>Oinos Koines Moiras. A liquid covenant: break the agreement after drinking, and the Krenides within you reverses into poison.</small></span></div>
+      <div class="spec-row" style="color:var(--kren-deep)"><span class="swatch"></span><span class="nm">The Kalypsoinos<small>Oinos tes Kalypsos. Brewed once a generation for the heir. Carries the memory of every Exvisar and awakens Clairmancy.</small></span></div>
+      <div class="spec-row" style="color:var(--gold)"><span class="swatch"></span><span class="nm">Ambrosia<small>The Exvisar's immortality project: Krenides distilled toward a purity that would pass beyond healing into unending life.</small></span></div>
+    </div>
+  </div>
+
+  <h3>Haemoinos, the Vintage of Souls</h3>
+  <p>Haima, blood, and oinos, wine. Haemoinos is the apex of the dark art and the complete corruption of Salacia's gift. It is a fortified vintage of Krenides water and grapes, transformed with soul-elixirs distilled from Luxenfallen myst harvested in the Lightwells. It drinks like vermouth, bitter-sweet and complex, and its taste is not flavor but experience: to drink it is to taste a life. The bliss vintages leave the drinker weeping with joy. The torture vintages burn the throat with agony. The terror vintages summon the Grief Serpent into dreams. The rarest taste of enlightenment, fleeting glimpses of eternity, and no chalice tastes the same twice.</p>
+
+  <p>It does not dull the senses; it floods them. Drinkers stagger not from weakness but from an overwhelming tide of borrowed souls, and communion becomes possession, every guest leaving with fragments of other lives inside them. The nobility call it the tide turned inward. The priests of Salacia call it the stagnation of flow. Among common Mystics they say it tastes like heaven and binds like hell. It is the literal marriage of the sins of two Realms, the holy waters of Thalassor made the medium for the violations of Tenebralis.</p>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">&#9670; &#9670; &#9670;</span><span class="line r"></span></div></div>
+
+<!-- ============ THE ARSENAL ============ -->
+<section id="arsenal" class="wrap reveal">
+  <p class="sec-eyebrow">Institutions</p>
+  <h2>The Invisible Arsenal<span class="uline"></span></h2>
+  <p class="lead">Thalassor is a military empire that presents itself as a trade empire. Every element of its civility, the Symposium, the wine, the elaborate social ritual, is also a containment protocol and a demonstration of power. Its doctrine is Projected Dominance: it does not fight defensive wars on its own soil but uses the Clairgate network to throw overwhelming force anywhere in the cosmos and crush a threat before it forms. The aim is not only to win but to make the very idea of challenging the Realm seem insane. The most dangerous weapon in the cosmos is a glass of wine.</p>
+
+  <div class="feature glass">
+    <h3>The Tidestriders, the Armada</h3>
+    <p>The fleet looks less like warships than like moving cathedrals carved from mother-of-pearl and blue-veined marble. The Tidestriders are living ships, grown from coral and infused with Krenides so that they repair themselves, and they cross the Clairgates in formation, an entire armada emerging from nothing in the middle of an enemy harbor. Their signature weapon is the Trident of Salacia: a beam of hyper-pressurized, purified Krenides. Turned on a living thing it force-heals so violently that the body's own processes accelerate into catastrophic failure or crystalline petrification. Turned on a fortification it makes the stone brittle with purity, and the walls shatter like glass.</p>
+  </div>
+
+  <div class="feature glass">
+    <h3>The Azure Guard, the Hoplites of the Deep</h3>
+    <p>The Azure Guard wear full plate of living Crystata: not rigid armor but something responsive, fluid, almost a second skin, water that decided to become solid and has not fully committed to the decision. In motion it scatters light constantly, a shifting blue refraction the eye cannot quite hold. At rest the whole of it retracts into a single crest worn on the shoulder, shaped like a shark, the ocean's apex predator rendered as efficient, inevitable, and free of wasted motion. Deployed, a guard is a figure encased in crystallizing light. Off duty, a guard is just another beautiful person at the Symposium with an ornate shark badge at the shoulder, and the transition between the two, the armor flowing out from the crest to sheathe the body in a wave of light, is one of the most striking sights in the Realm.</p>
+  </div>
+
+  <div class="feature glass">
+    <h3>The Echo Knights, the Unspoken Hand</h3>
+    <p>The most secretive branch of all is recruited from the most loyal and ruthless of the Oathwrights and Hydromantoi, and its very existence is deniable. The Echo Knights are the guardians of the Lie. Their craft is hydro-mnemonic warfare, and they do not simply kill a target; they edit the target out of reality. A man is found drowned in a desert, lungs full of water that had no business being there. A memory is altered, a recollection implanted, a life quietly unwritten. Their signature operation is the Surgical Erasure: a knight opens a Clairgate into the bedroom of an enemy leader, and what follows is recorded as a death from natural causes, with no war ever declared.</p>
+  </div>
+
+  <h4>Rosorae Templar</h4>
+  <p>The audience's first sight of the whole cosmos is a campus that looks like an elite university, an old and graceful place of Crystata and marble set on a coast, with no visible martial infrastructure anywhere on the grounds. It is the finishing academy for the children of the most powerful families in every Realm, where they are educated, bonded through shared simulated combat inside the dream-space, and graduated into a social network that doubles as a special-operations command structure. The war games happen inside the Oneiron, where honor disputes are settled without a body falling. The old boys' club is a kill team, and the patronage networks that will run the cosmos begin forming here, future patrons quietly identifying future dependents over wine.</p>
+
+  <h4>The Azure Concord</h4>
+  <p>At the heart of the Realm stands a colossal open-air temple complex that houses the major permanent Clairgates to every world. It is part stock exchange, part diplomatic summit, and part holy site at once, the physical point where all the Realms meet, designed in every detail to say: this is the center, this is where things begin and end. The Clairgate arches are the most beautiful structures in the cosmos. They were made that way on purpose.</p>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">&#9670; &#9670; &#9670;</span><span class="line r"></span></div></div>
+
+<!-- ============ FACTIONS ============ -->
+<section id="factions" class="wrap reveal">
+  <p class="sec-eyebrow">Factions</p>
+  <h2>Houses, Saints, and the Bloodless<span class="uline"></span></h2>
+
+  <p class="lead">Power in Thalassor moves through a few bodies, some open and some hidden. House Sinclair rules in the light. Around the heir a second government formed in the dark and called itself a circle of friends. And beneath the whole order grows a rival faith that wants the covenant inverted root and branch.</p>
+
+  <h3>The Saints</h3>
+  <p>Around the Sinclair heir gathered five, and everyone else who came near was a guest, treated beautifully and never admitted. They are not satellites; they are the apparatus of a state in waiting. Dorado Casanova, of the Axipitre bloodline, builds the controlled territory of the dream-space through his deusa of Oneiric Architecture. Scarlett Ashford, called Serket, provides the economic backbone, the Crystata trade and the money. Lupe Volantis provides the bridge to the older natural world. Arabella Swain, a Mavarran who removed her mask and never put it back on, provides the intelligence: the dreamwalking, the memory coins, the mapping of the interior of everyone who passes through the doors. The fifth seat came later, and went to an outsider who argued without deference and showed up when the house burned.</p>
+
+  <div class="feature glass">
+    <h3>The Cult of Sanguine and the Bloodless</h3>
+    <p>The Cult of Sanguine is not a clutch of corrupt aristocrats. It is a rival theology, embedded in the Thalassori aristocracy and holding the exact inverse of everything the covenant asks. Where Salacia teaches that blessing must flow freely, the Cult holds that blessing must never flow at all, that it should be hoarded, accumulated, and harvested by those who have earned it by the right of their blood. Its adherents are the Bloodless, and they worship Sanguine, the God of Blood. They weaponize Tidal Law to bind commoners in generational debt. They covet Haemoinos above all things, a single draught of which carries more condensed soul than generations of careful lineage. They want, in the end, the blood of House Sinclair replaced with the blood of their god, and they have gathered wealth enough to amass Krenides and Crystata toward a draught so pure it might pass beyond healing into immortality.</p>
+  </div>
+
+  <h4>The Dissident Hydromantoi and the Sunken Archives</h4>
+  <p>Not every keeper of the water serves the lie. Somewhere in a tidal cave system lie the rumored Sunken Archives of Hecate, where dissident Hydromantoi are said to preserve the uncensored histories and the Luxanian crystal-craft the dynasty has spent centuries drowning. The Realm that erased a name cannot be wholly sure the name stayed erased.</p>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">&#9670; &#9670; &#9670;</span><span class="line r"></span></div></div>
+
+<!-- ============ THE BODY ============ -->
+<section id="body" class="wrap reveal">
+  <p class="sec-eyebrow">Life and Biology</p>
+  <h2>The Thalassori Body<span class="uline"></span></h2>
+  <p class="lead">The Thalassori baseline is Mediterranean: olive skin and dark hair, a warm human foundation set against the cool blue of everything around it. The exception is the Sinclair line, whose hair is the powder-white of something filtered rather than aged, the visible sign of generations spent drinking the wine that carries Clairmancy.</p>
+
+  <p>The element writes itself into the flesh, and it writes the class line there too. A lifetime spent among Krenides water and Crystata-saturated halls transforms a Mystic's body: not into something that glows, but into something clear. The skin takes a luminosity, the eyes brighten, aging slows, and the result is the look of a person who has never once been deprived of a restorative resource. They look expensive, not for what they wear but for what they are now made of. The Nihila, who have no soul-interface to the myst, age normally, sicken normally, and look ordinary. In Thalassor the divide between Mystic and Nihila is not only legal and economic. It is biological, and it is visible, and you can read in a face whether its owner grew up inside a Crystata palace or a marble tenement.</p>
+
+  <div class="twocol">
+    <div class="mini glass"><h4>Salacica</h4><p>Krenides-saturation luminosity, clear rather than glowing, the aristocratic ideal of expensive-looking skin. Eyes of warm teal.</p></div>
+    <div class="mini glass"><h4>Amphitra</h4><p>Functional deep-water bioluminescence: veins tracing soft blue-white light that pulses with feeling, subtle on land and striking underwater. Eyes of deep navy.</p></div>
+    <div class="mini glass"><h4>Mnemosyne</h4><p>The most subtle expression, a faint silver to the skin, as of someone standing just behind still water. Eyes of silver-pale.</p></div>
+    <div class="mini glass"><h4>Syndicate Isles</h4><p>The most controlled expression, luminosity enhanced or suppressed for commercial advantage, the origin of Thalassori cosmetic craft. Eyes of sharp electric blue.</p></div>
+  </div>
+
+  <p>The Sinclair eyes hold the blue that contains all the others, the specific blue of Krenides water itself.</p>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">&#9670; &#9670; &#9670;</span><span class="line r"></span></div></div>
+
+<!-- ============ CULTURE ============ -->
+<section id="culture" class="wrap reveal">
+  <p class="sec-eyebrow">Culture and Social Customs</p>
+  <h2>The Current and the Cup<span class="uline"></span></h2>
+
+  <p class="lead">Thalassori life is organized around a single sacred economy: patronage, theologically mandated as generosity. Salacia's teaching frames abundance as a current, and water that pools and stagnates is dead while water that flows is alive, so wealth that flows downward is divine. Every aristocrat keeps dependents, artists, craftspeople, scholars, soldiers, whose lives are materially lifted by the patron's investment. This is not charity. It is obligation, and it is also purchase.</p>
+
+  <p>The system shapes every room. A patron arrives at the Symposium with an entourage: the sculptor they sponsor, the poet whose work they fund, the young Mystic protege, the Nihila craftsperson whose workshop they own. The gathering becomes a living gallery in which patrons display the fruits of their generosity and dependents perform their gratitude through excellence. The quality of a patronage network is read as the depth of a devotion, and the competition over piety is real.</p>
+
+  <p>It is also why the poor do not rebel. Patronage offers a visible path upward, not equal and not fair but visible, so the hierarchy feels permeable; talent can be noticed, sponsored, raised. You cannot burn down the house of the man paying for your nephew's apprenticeship. The system sustains itself through just enough generosity to make revolt feel like ingratitude, and the price of receiving the current is silence. The sponsored artist cannot criticize the patron. Gratitude is performed so consistently that it becomes indistinguishable from belief. The generosity has conditions, and to admit the conditions is to admit it was never generosity at all.</p>
+
+  <h3>The Symposium</h3>
+  <p>The Symposium is where wine, philosophy, and politics become one practice. It is hospitality and geopolitics in the same room, and it is presided over by a Symposionomos, the magistrate of the covenant feast, who binds words into law with wine. When the host pours, he legislates; when he opens a door, it is a diplomatic act. Beings of apocalyptic power from incompatible honor cultures perform civility at these tables because the alternative is unthinkable, and reading such a room, the weapon cultures, the seating, the choice of vintage, is a survival skill. The deepest version of these gatherings unfolds in the Oneiron, a crafted dream-reality where the senses bleed beautifully into one another and the impossible becomes coherent, accessed through the Wine of Shared Dreams and a Clairgate.</p>
+
+  <h3>Desire, Love, and Marriage</h3>
+  <p>Among the highborn, a person courts by investing: sponsoring an art, funding a sibling's apprenticeship, sending wine whose vintage states precisely how serious the sender is. A casual vintage is friendly, a rare one is serious, and a Wine of Shared Fates appearing on the table is a proposal that everyone present understands the moment the bottle arrives. Highborn marriages are mergers, house to house, the guest list a political document and the seating its architecture; love can live inside such an arrangement, but it is not what the institution is for. The lowborn version is plainer: you bring flowers and food and stand at her family's door while her father takes your measure. The Syndicate Isles version is plainest of all, where courtship and commerce are the same negotiation.</p>
+
+  <p>The wine, though, does not care how rich a couple is. Increasingly both highborn and lowborn unions are sworn on the Wine of Shared Fates, and the same liquid covenant binds the Sinclairs amid silk and silver and the fisherman's son at a kitchen table with the bride's sister for a witness. Salacia's doctrine of abundance flowing freely produces a strain of Thalassori romanticism that is sincere all the way down. The tragedy is that the system makes the real thing and the performance nearly impossible to tell apart, and the culture has learned not to ask.</p>
+
+  <div class="vignette">
+    <p class="tag">In the room</p>
+    <p>A nobleman arrives at the Symposium with a male lover, and the wine flows, and the eyebrows rise, and someone composes a cutting little poem before the second course. No one reaches for a blade. In Thalassor a scandal is a kind of currency, and a currency is not a crime.</p>
+  </div>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">&#9670; &#9670; &#9670;</span><span class="line r"></span></div></div>
+
+<!-- ============ THE LIVING SEA ============ -->
+<section id="sea" class="wrap reveal">
+  <p class="sec-eyebrow">Biology of the Realm</p>
+  <h2>The Living Sea<span class="uline"></span></h2>
+  <p class="lead">The Krenides have been in the food chain since before there was a civilization, and so the wildlife of Thalassor glows blue, or close to it, and is more intelligent than it has any right to be. The sea here is not scenery. It watches back.</p>
+
+  <h3>The Sirens, Two Races</h3>
+  <p>Beneath the waves lives an ancient, fully sapient people who keep their own civilization, entirely apart from Thalassori Mystic society and at home among the vast and dangerous things of the deep. The Thalassans have always known of them; the Sirens are a fact of life. The Sea-Sirens hold the classical silhouette, humanoid above and aquatic below, and they are passive in method: they do not chase, they lounge on the coastal rocks and sing, and the fisherman steers closer because he cannot help it, and then he is in the water, and then he is gone. The Sea-Siren never moved. She did not have to. The Sky-Sirens have the body of a bird and the head of a woman, and they are commonly mistaken for harpies, a mistake they correct with violence, because the harpies of legend are filthy and monstrous and the Sky-Sirens are proud and sapient and aware that the surface has been telling degrading stories about them for centuries. When a Sky-Siren takes a husband, she descends on talons and carries him to a cliff cave. That is not seduction.</p>
+
+  <h3>The Katos, the Not-Cats</h3>
+  <p>Small, blue-glowing, hyper-intelligent, the Katos keep a parallel society inside Thalassor. They are not pets and they are not domesticated; they come and go like friends, on their own terms. A Katos tends to arrive in a person's life around the age of eleven, watches for weeks to decide whether the person is interesting or good or worth its time, and then one morning is simply asleep on the bed, glowing faintly in the dark, and the mother says, oh, you have got one now, because it is a rite of passage. Some set up shops in market corners too small for a human vendor, trading in trinkets and charms and things that fell off the back of a cart, and half of them are fences, conducted with such brazen charm that even a Sinclair tax collector cannot quite manage to be angry at a glowing blue creature sitting atop a pile of obviously stolen jewelry, regarding him with faint condescension. The oldest Katos, alive for generations, grow quiet, and sit in the gardens of old estates watching the harbor, and remember things no one else remembers. They are not oracles. But sometimes, if they like you, they share.</p>
+
+  <div class="twocol">
+    <div class="mini glass"><h4>The Lantern</h4><p>A deep-water predator whose bioluminescence precisely mimics the glow of a Krenides spring. Prey moves toward what looks like healing. It is not healing. The Lantern exploits the single thing every creature in this ocean instinctively swims toward.</p></div>
+    <div class="mini glass"><h4>The Court</h4><p>Hundreds of luminous creatures arranging themselves into precise geometric patterns on the ocean floor, visible from the surface on clear nights. Whether it is communication, worship, or governance, no one knows. Its resemblance to the Synedrion has been noticed. Some scholars argue the Court came first.</p></div>
+  </div>
+
+  <div class="feature glass">
+    <h3>Archon, the Great Sea Serpent</h3>
+    <p>Ancient beyond reckoning, vast, glowing blue-white in the deep, Archon is the extreme upper end of Thalassan marine intelligence, something that has been drinking Krenides-saturated water since before the Sinclairs held the gates. Sailors who meet it do not describe a monster. They describe a presence beneath the hull, the overwhelming sense of being regarded and assessed by a mind running on a timescale that has nothing to do with human thought. Most encounters end with nothing happening: Archon looked, Archon decided, the ship passed. But the sailors who have been regarded come home quieter, and look at the water differently for the rest of their lives. Children on the coast see the glow far out, moving slowly, and wave, and their parents tell them not to, and they wave anyway. Sometimes the glow pauses. Just for a moment.</p>
+  </div>
+
+  <p>And above them all, when the covenant breaks, comes the Hydralithe, the moon-sized hydra of living water that hangs in the sky like a third moon and drags the tides up with it as it descends. It is the goddess's daughter, and it serves the Water, and it is the shape the world wears when Salacia has decided to begin again.</p>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">&#9670; &#9670; &#9670;</span><span class="line r"></span></div></div>
+
+<!-- ============ THE WEAVE ============ -->
+<section id="weave" class="wrap reveal">
+  <p class="sec-eyebrow">Relationship to the Other Realms</p>
+  <h2>The Weave<span class="uline"></span></h2>
+  <p class="lead">Because no Realm can be taken by force, the whole political order runs on everything except war: leverage, trade, intelligence, subversion, complicity, and the control of the roads. Thalassor holds the roads, and so every other Realm meets it from a position of dependence, and resents the dependence in its own particular way.</p>
+
+  <div class="spectrum glass">
+    <div class="top"></div>
+    <div class="rows">
+      <div class="spec-row" style="color:var(--ferridane,#A66A2E)"><span class="swatch" style="color:#A66A2E"></span><span class="nm">Ferridane<small>Cold resentment, the factory resenting the storefront. Nine hundred million soldiers who cannot be moved without Sinclair gates, paying Thalassori tolls to ship their own steel. The Lykaion clans plant themselves on Thalassori Crystata and dare the locals to move them.</small></span></div>
+      <div class="spec-row" style="color:#C7572B"><span class="swatch" style="color:#C7572B"></span><span class="nm">Pyrthera<small>Philosophical contempt, subsidized by the Thalassori economy. A civilization that considers the nexus spiritually dead, and sells it the finest mercenaries in the cosmos all the same.</small></span></div>
+      <div class="spec-row" style="color:#6A3D9A"><span class="swatch" style="color:#6A3D9A"></span><span class="nm">Tenebralis<small>A symbiotic parasitism. Thalassor is the distribution network, and what is normalized in Salacica is exported everywhere. The Sovereign of Tenebralis and the Exvisar of Thalassor share one interest neither will name: keeping the portal monopoly exactly as it is.</small></span></div>
+      <div class="spec-row" style="color:#8AA63A"><span class="swatch" style="color:#8AA63A"></span><span class="nm">Zephyros<small>A physical discomfort with the ambient untruth of the place. Zephyrosian scholars return home slightly corrupted by their exposure to so much practiced ambiguity.</small></span></div>
+      <div class="spec-row" style="color:var(--gold)"><span class="swatch" style="color:var(--gold)"></span><span class="nm">Luxenfall<small>The showroom where the products of a genocide are displayed under flattering light, and the Realm whose grave the gilded order was built upon. The dynasty's one road back to honesty runs through here: the return of the Lumen Cradle, and inherited abundance poured back the way it was taken.</small></span></div>
+    </div>
+  </div>
+
+  <p>And the poor of every Realm still come, through every gate, paying every toll, because Thalassor works just well enough, for just enough of them, to be worth the crossing. The sound of the fountains carries a long way.</p>
+
+  <div class="pull"><q>The idea of power without corruption is a fantasy befitting those who have never held power.</q><cite>Attributed to the House of Sinclair</cite></div>
+</section>
+
+</main>
+
+<footer class="reveal">
+  <div class="bar"></div>
+  <p class="candle">The tide does not hurry,<br>and it does not stop.</p>
+  <p class="ma">Moirai Codex &middot; The Realm of Thalassor
+    <small>Abundance, flowing freely. The water heals all who come to it. The water remembers them too.</small>
+  </p>
+</footer>
+
+<script>
+  /* Floating Krenides motes: blue light rising slowly through still water. */
+  (function(){
+    var canvas=document.getElementById('krenides-field');
+    if(!canvas)return;
+    var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    var ctx=canvas.getContext('2d');
+    var w,h,dpr,motes=[];
+    var COLORS=['rgba(26,164,224,','rgba(92,198,242,','rgba(46,111,163,','rgba(187,228,246,'];
+    function size(){
+      dpr=Math.min(window.devicePixelRatio||1,2);
+      w=canvas.width=Math.floor(innerWidth*dpr);
+      h=canvas.height=Math.floor(innerHeight*dpr);
+      canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';
+    }
+    function make(){
+      var n=Math.round(Math.min(64,Math.max(26,innerWidth/22)));
+      motes=[];
+      for(var i=0;i<n;i++){
+        motes.push({
+          x:Math.random()*w, y:Math.random()*h,
+          r:(Math.random()*1.8+0.6)*dpr,
+          spd:(Math.random()*0.18+0.05)*dpr,
+          drift:(Math.random()-0.5)*0.12*dpr,
+          a:Math.random()*0.5+0.18,
+          tw:Math.random()*Math.PI*2,
+          tws:Math.random()*0.015+0.004,
+          c:COLORS[(Math.random()*COLORS.length)|0]
+        });
+      }
+    }
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      for(var i=0;i<motes.length;i++){
+        var m=motes[i];
+        m.y-=m.spd; m.x+=m.drift; m.tw+=m.tws;
+        if(m.y<-10*dpr){m.y=h+10*dpr;m.x=Math.random()*w;}
+        if(m.x<-10*dpr)m.x=w+10*dpr; if(m.x>w+10*dpr)m.x=-10*dpr;
+        var a=m.a*(0.55+0.45*Math.sin(m.tw));
+        var g=ctx.createRadialGradient(m.x,m.y,0,m.x,m.y,m.r*4);
+        g.addColorStop(0,m.c+(a)+')');
+        g.addColorStop(1,m.c+'0)');
+        ctx.fillStyle=g;
+        ctx.beginPath();ctx.arc(m.x,m.y,m.r*4,0,Math.PI*2);ctx.fill();
+      }
+      raf=requestAnimationFrame(draw);
+    }
+    var raf;
+    function start(){size();make();if(raf)cancelAnimationFrame(raf);
+      if(reduce){draw();cancelAnimationFrame(raf);} else {draw();}}
+    start();
+    var t;window.addEventListener('resize',function(){clearTimeout(t);t=setTimeout(start,200);},{passive:true});
+  })();
+
+  /* Reveal on scroll */
+  (function(){
+    var els=document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.06,rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(e){io.observe(e);});
+  })();
+
+  /* Nav highlight */
+  (function(){
+    var links=[].slice.call(document.querySelectorAll('nav.codex-nav a')),map={};
+    links.forEach(function(a){var id=a.getAttribute('href').slice(1),t=document.getElementById(id);if(t)map[id]={a:a,t:t};});
+    function s(){var pos=window.scrollY+150,cur=null;for(var id in map){if(map[id].t.offsetTop<=pos)cur=id;}
+      links.forEach(function(a){a.style.color='';a.style.borderBottomColor='transparent';});
+      if(cur&&map[cur]){map[cur].a.style.color='var(--kren-teal)';map[cur].a.style.borderBottomColor='currentColor';}}
+    window.addEventListener('scroll',s,{passive:true});s();
+  })();
+</script>
+</body>
+</html>

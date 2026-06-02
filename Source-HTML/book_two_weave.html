@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Two — The Weave · Advent of Ultima</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Marcellus&family=Spectral+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* ---- house: gold on white ---- */
+  --paper:#FBF7EE; --paper-2:#F6F0E2; --paper-3:#FFFDF7;
+  --ink:#2B2317; --ink-soft:#5A4E3A; --ink-faint:#9c8a63;
+  --rule:#E4D8BE;
+  --gold:#9A7B1F; --gold-bright:#C9A227; --gold-pale:#E9DCB0; --gold-lite:#EFD27A;
+
+  /* ---- thread accents ---- */
+  --alciel:#C9A227;        --alciel-glow:rgba(201,162,39,.16);   --alciel-deep:#8A6A1A;
+  --pyrthera:#C7572B;      --pyrthera-glow:rgba(199,87,43,.14);  --pyrthera-deep:#9A3D1C;
+  --fiacre:#7FA05A;        --fiacre-glow:rgba(127,160,90,.14);   --fiacre-deep:#5C7A3C;
+  --uriel:#8A1E16;         --uriel-glow:rgba(138,30,22,.16);     --uriel-deep:#5A0E0A;
+
+  --maxw:880px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Spectral",Georgia,serif;
+  font-weight:400; font-size:18.5px; line-height:1.72;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+/* layered atmosphere — four realm-lights pooling at the corners */
+body::before{
+  content:""; position:fixed; inset:0; z-index:-2; pointer-events:none;
+  background:
+    radial-gradient(70% 50% at 100% -5%, rgba(199,87,43,.06), transparent 60%),
+    radial-gradient(70% 55% at -5% 30%, rgba(201,162,39,.07), transparent 60%),
+    radial-gradient(60% 50% at 105% 75%, rgba(127,160,90,.06), transparent 60%),
+    radial-gradient(60% 55% at 0% 108%, rgba(138,30,22,.06), transparent 60%);
+}
+body::after{ /* grain */
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.ribbon{
+  position:fixed; top:0; left:0; right:0; height:4px; z-index:60;
+  background:linear-gradient(90deg,var(--alciel) 0%, var(--pyrthera) 33%, var(--fiacre) 66%, var(--uriel) 100%);
+  background-size:220% 100%; animation:drift 26s linear infinite;
+}
+@keyframes drift{0%{background-position:0 0;}100%{background-position:220% 0;}}
+
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 1.4rem;}
+
+/* ============ MASTHEAD ============ */
+header.mast{ text-align:center; padding:5.5rem 1.4rem 1.2rem; position:relative;}
+.eyebrow{
+  font-family:"Marcellus",serif; font-size:.78rem; letter-spacing:.42em;
+  text-transform:uppercase; color:var(--gold); margin-bottom:1.8rem; text-indent:.42em;
+}
+h1.title{
+  font-family:"Fraunces",serif; font-weight:400;
+  font-size:clamp(2.8rem,9vw,5.2rem); line-height:.96; letter-spacing:-.01em;
+  color:var(--ink); font-variation-settings:"opsz" 144;
+}
+h1.title .gilt{
+  background:linear-gradient(96deg,var(--gold) 0%,var(--gold-bright) 42%,var(--gold-lite) 58%,var(--gold) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent; font-style:italic;
+}
+.subtitle{
+  font-family:"Spectral",serif; font-weight:300; font-style:italic;
+  font-size:clamp(1.05rem,2.6vw,1.32rem); color:var(--ink-soft);
+  margin:1.6rem auto 0; max-width:46ch; line-height:1.5;
+}
+.mast-bar{ margin:2.6rem auto 0; width:min(440px,82%); height:3px; border-radius:2px;
+  background:linear-gradient(90deg,var(--alciel),var(--pyrthera),var(--fiacre),var(--uriel));
+  background-size:200% 100%; animation:drift 22s linear infinite;}
+.mast-epi{
+  font-family:"Fraunces",serif; font-style:italic; font-weight:300;
+  font-size:clamp(1.1rem,3vw,1.42rem); color:var(--gold); margin:2.4rem auto 0;
+  max-width:40ch; line-height:1.4;
+}
+
+/* ============ LEGEND ============ */
+.legend{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:.6rem 1.4rem;
+  margin:2.6rem auto 1rem; max-width:760px; padding:1.1rem 1.3rem;
+  border:1px solid var(--rule); border-radius:16px;
+  background:rgba(255,253,247,.55); backdrop-filter:blur(8px);
+}
+.legend .key{ display:flex; align-items:center; gap:.55rem; font-family:"Marcellus",serif;
+  font-size:.74rem; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-soft);}
+.legend .dot{ width:11px; height:11px; border-radius:50%; flex-shrink:0;
+  box-shadow:0 0 0 3px rgba(255,255,255,.6);}
+.dot.a{background:var(--alciel);} .dot.p{background:var(--pyrthera);}
+.dot.f{background:var(--fiacre);} .dot.u{background:var(--uriel);}
+
+/* ============ TIMELINE SPINE ============ */
+main{ position:relative; padding:1rem 0 2rem;}
+.timeline{ position:relative; max-width:var(--maxw); margin:0 auto; padding:1.5rem 1.4rem 0;}
+.timeline::before{
+  content:""; position:absolute; left:calc(1.4rem + 9px); top:0; bottom:0; width:2px;
+  background:linear-gradient(180deg,transparent,var(--gold-pale) 6%,var(--gold-pale) 94%,transparent);
+}
+@media(min-width:780px){
+  .timeline::before{ left:50%; transform:translateX(-1px);}
+}
+
+/* ============ MOVEMENT HEADERS ============ */
+.movement{ position:relative; margin:3.2rem 0 1.4rem; padding-left:2.8rem;}
+@media(min-width:780px){ .movement{ text-align:center; padding-left:0;} }
+.movement .mlabel{
+  font-family:"Marcellus",serif; font-size:.72rem; letter-spacing:.34em;
+  text-transform:uppercase; color:var(--gold); margin-bottom:.3rem;
+}
+.movement h2{
+  font-family:"Fraunces",serif; font-weight:400; font-style:italic;
+  font-size:clamp(1.5rem,4vw,2.1rem); color:var(--ink); line-height:1.1;
+  font-variation-settings:"opsz" 60;
+}
+.movement .mline{ display:block; height:2px; width:84px; margin:.7rem 0 0; border-radius:2px;
+  background:linear-gradient(90deg,var(--gold-bright),var(--gold-pale),transparent);}
+@media(min-width:780px){ .movement .mline{ margin:.7rem auto 0;
+  background:linear-gradient(90deg,transparent,var(--gold-bright),transparent);} }
+
+/* ============ CARD ============ */
+.event{ position:relative; padding-left:2.8rem; margin:1.4rem 0;}
+@media(min-width:780px){
+  .event{ width:50%; padding-left:0;}
+  .event.left{ left:0; padding-right:3rem;}
+  .event.right{ left:50%; padding-left:3rem;}
+}
+/* node on the spine */
+.event .node{
+  position:absolute; left:3px; top:1.7rem; width:16px; height:16px; border-radius:50%;
+  background:var(--paper); border:2px solid var(--c); z-index:3;
+  box-shadow:0 0 0 4px var(--paper), 0 0 14px var(--cglow);
+}
+@media(min-width:780px){
+  .event.left .node{ left:auto; right:-8px;}
+  .event.right .node{ left:-8px;}
+}
+.card{
+  position:relative; border-radius:18px; overflow:hidden;
+  background:linear-gradient(150deg, rgba(255,253,247,.78), rgba(246,240,226,.6));
+  backdrop-filter:blur(10px) saturate(1.15);
+  border:1px solid var(--rule);
+  box-shadow:0 18px 46px -34px rgba(43,35,23,.55), inset 0 1px 0 rgba(255,255,255,.6);
+  padding:1.3rem 1.4rem 1.4rem;
+  transition:transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s ease;
+}
+.card::before{ /* accent edge */
+  content:""; position:absolute; top:0; left:0; bottom:0; width:4px;
+  background:linear-gradient(180deg,var(--c),var(--cdeep));
+}
+.card::after{ /* soft realm-glow wash */
+  content:""; position:absolute; inset:0; pointer-events:none; opacity:.9;
+  background:radial-gradient(120% 90% at 0% 0%, var(--cglow), transparent 55%);
+}
+.card:hover{ transform:translateY(-3px); box-shadow:0 26px 60px -34px rgba(43,35,23,.6), inset 0 1px 0 rgba(255,255,255,.7);}
+.card > *{ position:relative; z-index:1;}
+
+.tagrow{ display:flex; align-items:center; gap:.6rem; margin-bottom:.55rem; flex-wrap:wrap;}
+.thread-tag{
+  font-family:"Marcellus",serif; font-size:.64rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--cdeep); padding:.2rem .55rem; border-radius:20px;
+  background:var(--cglow); border:1px solid var(--c);
+}
+.place-tag{
+  font-family:"Spectral SC",serif; font-size:.74rem; letter-spacing:.08em;
+  color:var(--ink-faint); text-transform:uppercase;
+}
+.card h3{
+  font-family:"Fraunces",serif; font-weight:500; font-size:1.32rem; line-height:1.18;
+  color:var(--ink); margin:.1rem 0 .55rem; font-variation-settings:"opsz" 40;
+}
+.card p{ margin:0 0 .7rem; color:var(--ink); font-size:1.01rem; line-height:1.62;}
+.card p:last-child{ margin-bottom:0;}
+.card .beat{ font-style:italic; color:var(--cdeep); font-weight:500;}
+.card .whisper{
+  display:block; margin-top:.7rem; padding-top:.7rem; border-top:1px dashed var(--rule);
+  font-style:italic; font-weight:300; font-size:.93rem; color:var(--ink-soft);
+}
+.card blockquote{
+  margin:.5rem 0 .2rem; padding-left:.9rem; border-left:2px solid var(--c);
+  font-family:"Fraunces",serif; font-style:italic; font-weight:300;
+  font-size:1.06rem; color:var(--cdeep); line-height:1.4;
+}
+
+/* thread color injection */
+.t-alciel{ --c:var(--alciel); --cglow:var(--alciel-glow); --cdeep:var(--alciel-deep);}
+.t-pyrthera{ --c:var(--pyrthera); --cglow:var(--pyrthera-glow); --cdeep:var(--pyrthera-deep);}
+.t-fiacre{ --c:var(--fiacre); --cglow:var(--fiacre-glow); --cdeep:var(--fiacre-deep);}
+.t-uriel{ --c:var(--uriel); --cglow:var(--uriel-glow); --cdeep:var(--uriel-deep);}
+
+/* Uriel cutaways read darker — the abyss bleeding into the page */
+.t-uriel .card{
+  background:linear-gradient(150deg, rgba(40,18,16,.9), rgba(24,10,9,.92));
+  border-color:rgba(138,30,22,.4);
+  box-shadow:0 18px 46px -30px rgba(20,6,5,.8), inset 0 1px 0 rgba(255,120,90,.08);
+}
+.t-uriel .card h3{ color:#F3E6DE;}
+.t-uriel .card p{ color:#E4C9C1;}
+.t-uriel .card .place-tag{ color:#B07A6E;}
+.t-uriel .card .beat{ color:#E8896F;}
+.t-uriel .card .whisper{ color:#C99A8E; border-top-color:rgba(138,30,22,.4);}
+.t-uriel .card blockquote{ color:#EBA08A; border-left-color:#C7572B;}
+.t-uriel .card::after{ background:radial-gradient(120% 90% at 0% 0%, rgba(199,87,43,.22), transparent 55%);}
+.t-uriel .thread-tag{ color:#EBA08A; background:rgba(138,30,22,.3); border-color:#8A1E16;}
+
+/* reveal */
+.reveal{ opacity:0; transform:translateY(20px); transition:opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1);}
+.reveal.in{ opacity:1; transform:none;}
+@media(prefers-reduced-motion:reduce){
+  .reveal{ opacity:1; transform:none;}
+  .ribbon,.mast-bar,.movement .mline{ animation:none;}
+}
+
+/* ============ CLOSE ============ */
+footer{ text-align:center; padding:3.5rem 1.4rem 5rem; margin-top:2rem; position:relative;}
+footer .bar{ height:3px; width:min(440px,82%); margin:0 auto 2.4rem; border-radius:2px;
+  background:linear-gradient(90deg,var(--alciel),var(--pyrthera),var(--fiacre),var(--uriel));
+  background-size:200% 100%; animation:drift 22s linear infinite;}
+footer .coda{
+  font-family:"Fraunces",serif; font-style:italic; font-weight:300;
+  font-size:clamp(1.15rem,3.4vw,1.6rem); color:var(--gold);
+  line-height:1.4; margin:0 auto; max-width:34ch;
+}
+footer .ma{ font-family:"Marcellus",serif; font-size:.72rem; letter-spacing:.24em;
+  text-transform:uppercase; color:var(--ink-faint); margin-top:2.4rem;}
+
+@media(max-width:540px){ body{font-size:17.5px;} }
+</style>
+</head>
+<body>
+<div class="ribbon"></div>
+
+<header class="mast">
+  <p class="eyebrow">Moirai Codex &middot; Plot Architecture</p>
+  <h1 class="title">Book Two &mdash; <span class="gilt">The Weave</span></h1>
+  <p class="subtitle">Four threads, four clocks, one work &mdash; the saving of the Realm of Light, told the long way around, with no shadow shown doing the holding.</p>
+  <div class="mast-bar"></div>
+  <p class="mast-epi">Three roads toward the same wall, and a fourth road climbing up out of the dark to meet them.</p>
+</header>
+
+<div class="wrap">
+  <div class="legend reveal">
+    <span class="key"><span class="dot a"></span>Alciel &middot; the Spine</span>
+    <span class="key"><span class="dot p"></span>Pyrthera &middot; the Sun Blossom's Court</span>
+    <span class="key"><span class="dot f"></span>Fiacre &middot; the Restoration</span>
+    <span class="key"><span class="dot u"></span>Uriel &middot; the Climb</span>
+  </div>
+</div>
+
+<main>
+<div class="timeline">
+
+  <!-- ===================== MOVEMENT I ===================== -->
+  <div class="movement reveal">
+    <p class="mlabel">Movement I</p>
+    <h2>The Table, and the Hand No One Sees</h2>
+    <span class="mline"></span>
+  </div>
+
+  <div class="event left t-pyrthera reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Pyrthera</span><span class="place-tag">The Court of Becoming</span></div>
+      <h3>The Exvisarelim Convenes</h3>
+      <p>The first table of the Realms since the Dragon fell at Point Zero and the Dragonson walked back into the cosmos. Sol'Kheret rises on the obsidian floor and speaks for him &mdash; the Son of Aracice belongs among his own, at Rhylos, not in a cell. Aurelius Vorn carries the room: the Son of the Dragon is a threat to all that exists, to be apprehended and held, exactly as the gods once tried to hold his father by exile.</p>
+      <p>Then a hand she cannot see settles at her body &mdash; a touch, a pressure just short of a squeeze &mdash; and across the table Sol'Kheret sees <em>herself</em> seated, counseling herself to be reasonable, to stay in her chair. She knows the face for what it is: a thing worn to make her look mad if she names it. So she closes her mouth, and in the silence she declares a war no one at the table hears begin.</p>
+      <p class="beat">The Burning of Rats. Kenet and the Ashbearers are loosed upon those who walk abroad wearing borrowed faces.</p>
+    </div>
+  </div>
+
+  <div class="event right t-alciel reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Alciel</span><span class="place-tag">Blackwake Prison</span></div>
+      <h3>The Chains, and the Knife in the Cell</h3>
+      <p>Aurelius won the table, so they put a god in a box. Alciel breaks the chains as if they were a courtesy he had been observing. In the dark he finds a woman who has already made the prison her own country &mdash; Anberlyn, who was never arrested so much as she allowed herself to be set down somewhere useful. They try to kill each other. Neither can.</p>
+      <p>What they strike instead is a truce with one term they both can keep: each of them wants Raiwata dead. She gives him the name, the way you hand someone the one tool the work cannot be done without.</p>
+      <p class="beat">They escape together, and on the cliffs of Zephyros, beneath the four-meter shadow of Tein-Enhotep, the oath is sworn in blood over open air.</p>
+    </div>
+  </div>
+
+  <div class="event left t-uriel reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Uriel &middot; The Climb</span><span class="place-tag">Hel &middot; The Fifth Circle</span></div>
+      <h3>The Sea of Wrath</h3>
+      <p>An ocean with no shore and no end, a sky that only ever storms, the water gone red with the fleets that drowned in it. Every soul here is compelled to kill and cannot remember why. He has no fire yet &mdash; there is no myst in the abyss to feed one. He has a body, broken fingers, and the refusal to stay down.</p>
+      <p>He dies. He wakes where he started. He dies again. The Sea is not teaching him a lesson; he is teaching the Sea that it has caught the wrong thing. Over uncountable repetitions, his body learns the only law the place has to give: <em>stopping is dying.</em> It will never give the lesson back.</p>
+      <span class="whisper">Still, here, a man. Furious, and whole, and recognizably someone's son.</span>
+    </div>
+  </div>
+
+  <div class="event right t-fiacre reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Fiacre</span><span class="place-tag">Occupied Luxenfall &middot; Under Eclipse</span></div>
+      <h3>One Woman, and the Snow That Will Not Stop</h3>
+      <p>She came here to be out of the sight of the gods, and found out why the gods were not looking. The realm runs itself against itself: a colony administered by its own taken people, faces she came to save, doing the work with no one home behind the eyes. There is no chain of command between her and the suffering anymore, so she does the math and starts.</p>
+      <p>She reaches first for the heart &mdash; the Wellspring, the empathic mechanism, the thing that once made an entire people feel one another's pain as their own. She wakes it. And the bidden hands tear it down at once, because a field of raw feeling with nothing governing it is precisely the weapon that was used to break this place to begin with.</p>
+      <p class="beat">She reads the failure in a heartbeat, because she is not slow: the law comes first. The Lex governs the field, or the field is a knife. But she has no model to work from, and one woman with a shovel cannot make it stop snowing.</p>
+    </div>
+  </div>
+
+  <!-- ===================== MOVEMENT II ===================== -->
+  <div class="movement reveal">
+    <p class="mlabel">Movement II</p>
+    <h2>The Realm of Fire Receives Its Lost Son</h2>
+    <span class="mline"></span>
+  </div>
+
+  <div class="event left t-alciel reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Alciel</span><span class="place-tag">The Court of Becoming &rarr; Khet</span></div>
+      <h3>Through the Court, Into the Suns</h3>
+      <p>There is no entering Pyrthera but through the Court of Becoming, and no arriving without passing under the seven suns first. He comes through with Anberlyn beside him &mdash; and she is not a stranger to this ground. Glacian blood runs in her, royal and half, the heritage her white fire has always spoken in a borrowed accent.</p>
+      <p>The Glacians receive him. The Gonlans&#363;nu, the Dragon's draconic children, scattered survivors of an unmade world &mdash; his kin by the same lost father. They have not been idle in their citadels. They have been making something, and they have been keeping it for exactly this.</p>
+    </div>
+  </div>
+
+  <div class="event right t-alciel reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Alciel</span><span class="place-tag">The Glacian Citadels</span></div>
+      <h3>The Regalia of a Drowned World</h3>
+      <p>Not a crown. A panoply, grown from the art of a people who turned chaos to stillness. A tower shield of Hr&iacute;mkristall so dense with Warden's craft that a strike never lands &mdash; the blow loses all its force a hand's breadth short and the shield drinks the energy and grows. A blade of the same frost-crystal, sharper than any steel, that rings one note through the air: <em>cleave.</em> The cut is made by his will that a thing be cut, for the blade carries the Pritisongr, the Song of Delight &mdash; and it can do far more than end things, though no one yet living knows the whole of that art.</p>
+      <p>And the armor: scale and mail of crystallized water, and into every ring the Oracles pressed a memory of Glacia &mdash; as much of the world they lost as they could hold and keep. They give him the whole of it to wear for the rest of his days.</p>
+      <p class="beat">The most beautiful thing his people made, given to the youngest child of the father they all share, so that the lost world might walk again on his back.</p>
+    </div>
+  </div>
+
+  <div class="event left t-alciel reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Alciel</span><span class="place-tag">Khet &rarr; Rhylos &middot; By Foot and Boat</span></div>
+      <h3>Nahret and Oru Walk Him to the Magma</h3>
+      <p>Two Torchbearers take him the long way from the loud nation to the rhythmic one &mdash; across the Sunscar, over water, through the realm the way a realm is actually learned. Nahret, who faces something larger than herself every single dawn and gets up smiling to do it again; Oru, cool as a driving bass, who has held dying men in the dark and does not lack the courage to wonder whether a thousand years is a fight already well fought.</p>
+      <p>They carry their own grievances and subordinate them to the Sun Blossom's will, which is Hestia's will. Along the road the question of the Glacians surfaces &mdash; their content isolation, their refusal to contribute &mdash; and the road itself becomes the argument: this is what a realm is for, this is what it costs, this is who pays.</p>
+    </div>
+  </div>
+
+  <div class="event right t-pyrthera reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Pyrthera</span><span class="place-tag">Abroad &middot; The Burning of Rats</span></div>
+      <h3>What Cooks in the Light</h3>
+      <p>Kenet's Ashbearers move on the borrowed faces wherever they walk in the open Realms. And inside the Court itself, a worse thing surfaces by inches: Merikh, the Torchbearer who lies with rats &mdash; who asks the worn-faced to take the shape of women already paired, and most often the shape of the Sun Blossom herself.</p>
+      <p>She has always been able to see falsehood. There is no version where she does not already know. So the grief is not discovery; it is the holding &mdash; a truth carried for the sake of her oldest, closest friend's life, a chance extended and extended for him to come forward into the sun on his own.</p>
+      <span class="whisper">Those who stood beneath the seven suns and lay with rats will stand no more. The only question left is who does the standing-down, and how long the Sun Blossom can bear to wait for him to choose it himself.</span>
+    </div>
+  </div>
+
+  <div class="event left t-uriel reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Uriel &middot; The Climb</span><span class="place-tag">Hel &middot; The Fourth Circle</span></div>
+      <h3>The Bleeding Wilds of Lust</h3>
+      <p>One circle higher. A jungle that wears tenderness like a mask &mdash; vines that mimic a gentle hand, flowers that shriek, every false sweetness ending in the same red work. He arrives still without power, at his most undefended, in the place built to make the undefended welcome.</p>
+      <p>He does not survive it by strength. He survives it by pattern: the timing of the lures, the rhythm of the vines, the exact and narrow difference between a thing that wants you and a thing that wants you dead. He learns that difference by enduring both of them. He does not unlearn it afterward.</p>
+      <span class="whisper">Something in him is closing now &mdash; a door he will later call a coat, and a name, and a joke.</span>
+    </div>
+  </div>
+
+  <!-- ===================== MOVEMENT III ===================== -->
+  <div class="movement reveal">
+    <p class="mlabel">Movement III</p>
+    <h2>The Wall, and the Stone They Bled For</h2>
+    <span class="mline"></span>
+  </div>
+
+  <div class="event right t-alciel reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Alciel</span><span class="place-tag">The Deep of Rhylos</span></div>
+      <h3>The Communion with the Pyralithe</h3>
+      <p>Oru takes him down to meet the Gonlan of Pyrthera, and that offer carries no price &mdash; it is given freely, the way Pyrthera gives. The Pyralithe: high heat made flesh, magma-bodied, scaled in something like obsidian gone clear and unmeltable, circling the upper sky and quietly siphoning the Realm's own fire to keep it cool enough to live in. A cosmic joke with a heartbeat.</p>
+      <p>Alciel does not tame it. He comes home to it, the lost brother walking his dead father's path, recognized as kin. He takes the form into himself &mdash; and the fire he can now carry is overwhelming, which is precisely the point of it.</p>
+      <p class="beat">And Oru makes his request, with all the desperation stripped out of his voice so that what is left sounds almost like nothing. Come to Thavriel. Not to win it. Only to see.</p>
+    </div>
+  </div>
+
+  <div class="event left t-alciel reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Alciel &middot; Pyrthera</span><span class="place-tag">Thavriel &middot; The Thousand-Year Front</span></div>
+      <h3>Fifteen Pages, and the Front Breaks</h3>
+      <p>The Hearth at Thavriel has been held a thousand years, Pyrthera rotating its people through a lightless warzone at the high ground atop the skysteps &mdash; defensible only because it is high, paid for in every Torchbearer's service and in children at the wall. Fresh from watching his father die, Alciel will not suffer that front for long.</p>
+      <p>The Pyralithe's fire comes down, and the line that has only ever held is suddenly a base from which something can extend. The day is won not in a siege but in a breath.</p>
+      <p class="beat">Oru's prayer &mdash; come and see &mdash; is answered by the seeing becoming a victory. It is the first prayer the Dragonson answers. It will not be the last.</p>
+    </div>
+  </div>
+
+  <div class="event right t-fiacre reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Fiacre</span><span class="place-tag">Thavriel &middot; The Won Field</span></div>
+      <h3>The Healer Comes to the Breach</h3>
+      <p>She comes after the fighting, the way she always comes &mdash; to the wounded, on the ground the spearhead cleared. She kneels in the work of mending the sick and the hurt of both sides of a thousand-year line, and there, on the won field, she meets the Son of the Dragon.</p>
+      <p>She knows the prophecy. She has been watching the wind for the others, knowing what it means when fate gathers, and so she recognizes him for what he is before he has finished learning it himself: one of nine. She arrives at the meeting carrying the map he is still inside of.</p>
+      <blockquote>Nine threads weave a shroud for this age. She came looking for tall poppies. One has just won a wall.</blockquote>
+    </div>
+  </div>
+
+  <div class="event left t-fiacre reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Fiacre</span><span class="place-tag">Thavriel &middot; Inside the Wall</span></div>
+      <h3>The Stone That Never Fell</h3>
+      <p>And then she finds it. Behind the wall the Pyrtherans died to hold &mdash; knowingly, all thousand years of it &mdash; a Lex Aeterna crystata that never went dark. Inside its reach the old law of the realm still runs: decency ambient, the impulse to spare another's pain as automatic as pulling a hand from a flame. A pocket of the murdered world, kept alive, the size of one crystal's radius, crowded with the desperate few who could reach it.</p>
+      <p>The front was never arbitrary. The Hearth was a reliquary with an army around it. And the intact stone is the one thing she has lacked: a working original, the law in the language she can read, against which every broken and dark crystal in the realm becomes legible at last.</p>
+      <p class="beat">A Rosetta Stone. The snow can stop now. She knows the shape of what she is rebuilding.</p>
+    </div>
+  </div>
+
+  <div class="event right t-uriel reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Uriel &middot; The Climb</span><span class="place-tag">Hel &middot; The Third Circle</span></div>
+      <h3>The Broken Halls of Pride</h3>
+      <p>Two circles climbed, into titanic palaces of bone collapsing in slow ruin, and here the abyss changes its method. It offers him a crown. <em>You deserve better than this. Take your throne. The war is over.</em> He refuses, and for the refusing the molten halls come down on him, and he is buried alive beneath monuments to himself, again and again.</p>
+      <p>So he learns to run it &mdash; ignore the voices, do not look in the mirrors, endure the burning crown without a sound.</p>
+      <blockquote>You only get one statue. And I ain't building it here.</blockquote>
+      <span class="whisper">The man is still in there. The armor going on over him is getting thick enough that you have to know to look.</span>
+    </div>
+  </div>
+
+  <!-- ===================== MOVEMENT IV ===================== -->
+  <div class="movement reveal">
+    <p class="mlabel">Movement IV</p>
+    <h2>The Radius Grows, and the Trial Is Set</h2>
+    <span class="mline"></span>
+  </div>
+
+  <div class="event left t-fiacre reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Fiacre &middot; The Restoration</span><span class="place-tag">Across the Three Configurations</span></div>
+      <h3>Three Textures of a Broken Realm</h3>
+      <p>Now she works with a template, and the work moves &mdash; glimpsed region by region, never the same beat twice, each visit the human shape of the place rather than the mechanism. The sterile zones, run by the taken: clean, ordered, administered, and empty, no one home to be cruel or kind. The feral zones, the uncontrolled, broadcasting raw pain with nothing to govern it. And the crowded sanctuaries where the radius has reached at last &mdash; too small for the need, fierce with restored decency, alive.</p>
+      <p>And the hardest law runs through all of it. The bidden defend the occupation furiously, because they are bidden, and she must put down an army of the very people she came to save without harming one of them. She is the wall they break against, and she wins by refusing the easy way to win.</p>
+      <p class="beat">The bulk of it happens in the gaps between the glimpses. The realm begins, demonstrably, to become more of the inside.</p>
+    </div>
+  </div>
+
+  <div class="event right t-pyrthera reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Pyrthera</span><span class="place-tag">The Court of Becoming &middot; The Obsidian Floor</span></div>
+      <h3>Stand, or Fight</h3>
+      <p>Merikh will not come forward, and the waiting ends. Nahret calls him out onto the obsidian where the community was cooking and sparring minutes before; he runs; she catches him; Kenet's arrow waits a hair from his eye. And before it becomes a brawl the Sun Blossom calls it: <em>be tempered &mdash; he is mine.</em></p>
+      <p>The drums stop. The silence is the loudest thing the realm makes. Seven pupils meet his glowing amber eyes, and she knows as she speaks that he will disappoint her, and offers him the chance regardless. The question is never <em>what did you do.</em> It is only ever two words.</p>
+      <blockquote>Stand, or fight.</blockquote>
+      <p>He dodges the first blow. The fight is set, and it is to the death.</p>
+    </div>
+  </div>
+
+  <div class="event left t-pyrthera reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Pyrthera</span><span class="place-tag">The Trial of Flame</span></div>
+      <h3>The Line He Would Not Cross</h3>
+      <p>It is a proper fight now, all out, and she will win it because she must. As the Golden Flame burns him down toward Sarcax, with the realm watching, Merikh reaches for the unthinkable &mdash; for Antaka, the sun-yoke, the end of a planet held in trust by six souls.</p>
+      <p>And the whole world holds its breath. And he cannot do it. There is one line left in him he will not cross, and it is that. Only then, at the very bottom, does he see clearly what he has become &mdash; and he stands down, and lets the judgment set his own sun.</p>
+      <span class="whisper">He could have burned clean. He chose the shade so long that there was no longer time to choose the sun. He sees it a heartbeat too late, which is its own mercy and its own grief.</span>
+    </div>
+  </div>
+
+  <div class="event right t-uriel reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Uriel &middot; The Climb</span><span class="place-tag">Hel &middot; The Second Circle</span></div>
+      <h3>The Ashen Wastes of Betrayal</h3>
+      <p>A dead desert of ash and broken mirrors, where the storms strip flesh from bone &mdash; and where the dead come at him wearing the faces of everyone he loved. Aya. The friends. They call his name as though they know him, and they hunt him with knives and fire. He kills the apparitions a thousand times and is killed by them as often.</p>
+      <p>This is the circle that takes the most. Here his own name becomes a weapon, spoken only by things that want to unmake him &mdash; and he learns the lesson that outlasts the abyss: do not speak, do not explain, do not react to the thing that wears the face of someone you love.</p>
+      <span class="whisper">The boy who could be called by name is being unmade in this desert. What climbs out will need a different name &mdash; a name a stray gives itself when no one is left to say the old one kindly.</span>
+    </div>
+  </div>
+
+  <!-- ===================== MOVEMENT V ===================== -->
+  <div class="movement reveal">
+    <p class="mlabel">Movement V</p>
+    <h2>What the Fire Settles, and What Comes Through the Gate</h2>
+    <span class="mline"></span>
+  </div>
+
+  <div class="event left t-pyrthera reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Pyrthera</span><span class="place-tag">The Court &middot; The Last Trial in Twenty Years</span></div>
+      <h3>What Shadow Clings to You</h3>
+      <p>As Merikh's blood cooks from red to black in the sun, a four-meter shadow falls across the floor &mdash; Tein-Enhotep, who has watched since he first arrived with the Dragonson, twenty years gone and now returned. He holds the first Trial the Trialkeeper has called in two decades, and the subject is the Sun Blossom herself.</p>
+      <p>He takes her in one palm and ignites the whole of her in golden flame, and asks the question through teeth the size of her head. <em>What shadow clings to you?</em> She answers a great love lost; he gives her more fire and says <em>it is not.</em> She answers a man named Merikh; more fire; <em>he could not have burned clean.</em> Down and down, until the truth burns free.</p>
+      <blockquote>Then I clung to a man named Merikh. And it nearly cost Hestia her Realm.</blockquote>
+      <p class="beat">The flame goes out. He holds her there a long time, then sets her down. Kenet comes to her. Then Kharu. Then Nahret and Oru. The realm's rot is burned clean, by its own hand, in its own sun.</p>
+    </div>
+  </div>
+
+  <div class="event right t-uriel reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Uriel &middot; The Climb</span><span class="place-tag">Hel &middot; The First Circle, and the Gate</span></div>
+      <h3>The Mire of Cowardice &mdash; and the Mutation</h3>
+      <p>The last circle before the surface: a stinking swamp of black water and rotted bone, where it is not monsters that try to kill him but people &mdash; quitters and cowards begging him to rest, to sink, pulling him under each time he climbs on them. So he stops climbing on others. He carries stones instead, throws them ahead, steps on them like a path, and one day simply walks through without looking back.</p>
+      <p>And on the final ascent, after thousands of attempts, something ignites. Not grace. Mutation. The fire he and Aya once built, rebuilt here from the only power the abyss contains &mdash; with the hunger of the deep folded in, so that it does not merely burn but <em>wants</em> to, and the wrath of the Sea folded in, so that it does not choose its targets. A flame that arrives complete: stone, flesh, and air already burning the instant it is touched.</p>
+      <p class="beat">He does not climb out. He burns a path to the top and forces the Gate from the inside &mdash; a gate not breached since the Primordials. He carries no holiness back into the world. He carries fire.</p>
+      <span class="whisper">What comes through is feral, one-armed, and does not believe the world is real. The man is in there. You can no longer see him.</span>
+    </div>
+  </div>
+
+  <!-- ===================== CLOSE ===================== -->
+  <div class="movement reveal">
+    <p class="mlabel">The Close of Book Two</p>
+    <h2>Two Won Fronts, and an Unbroken Eclipse</h2>
+    <span class="mline"></span>
+  </div>
+
+  <div class="event left t-alciel reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">Convergence</span><span class="place-tag">Thavriel &middot; The Open Door</span></div>
+      <h3>The Base From Which It Extends</h3>
+      <p>Pyrthera has burned its own rot clean and stood in the sun. The wall at Thavriel is taken, and the high ground that only ever held is now the threshold of the Realm of Light &mdash; the place the liberation begins, with the Son of the Dragon at its head and the Pyralithe's fire to carry forward.</p>
+      <p>Fiacre's law is set across the realm and the Wellspring runs again &mdash; and still the sun is eclipsed, and so everything she has built is real and everything is partial, the realm half-exhaled and waiting for a light it does not yet have. The source has not returned. Nothing is finished until it does.</p>
+    </div>
+  </div>
+
+  <div class="event right t-fiacre reveal">
+    <span class="node"></span>
+    <div class="card">
+      <div class="tagrow"><span class="thread-tag">One Work, Four Hands</span><span class="place-tag">The Realm of Light</span></div>
+      <h3>Three Roads, and a Fourth Climbing</h3>
+      <p>None of them knew they were one campaign. The spearhead that breaks the front, the healer who makes the ground whole behind it, the realm of fire burning itself clean enough to give &mdash; three roads, three clocks, all of them by different ways arriving at the saving of a murdered realm. And not one face of the thing that holds it shown doing the holding.</p>
+      <p>And underneath all of it, on a fourth road and a fourth clock that ran years where the others ran months, a man went down whole into the dark, and is coming back up as something that survived.</p>
+      <p class="beat">The wall is open. The law is set. The light has not yet returned. Book Two ends on the held breath before the sun.</p>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer>
+  <div class="bar"></div>
+  <p class="coda">Three suns will fall, and the second will rise to meet you.</p>
+  <p class="ma">Advent of Ultima &middot; Moirai Codex &mdash; Book Two, The Weave</p>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(function(es){
+  es.forEach(function(e){
+    if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); }
+  });
+},{ threshold:0.12, rootMargin:'0px 0px -50px 0px' });
+document.querySelectorAll('.reveal').forEach(function(el){ obs.observe(el); });
+</script>
+</body>
+</html>

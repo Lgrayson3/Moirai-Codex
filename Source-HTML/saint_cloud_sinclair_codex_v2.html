@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saint Cloud Sinclair — The Prince of Tides · Advent of Ultima</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #070b11;
+  --bg-card: #0d141d;
+  --bg-hover: #131c28;
+  --bg-highlight: #101a26;
+  --blue-abyss: #15314a;
+  --blue-core: #2f6f96;
+  --blue-accent: #57a6cc;
+  --blue-light: #a9d4e6;
+  --blue-ghost: #e3f0f5;
+  --pearl: #d8e4ea;
+  --silver: #aebfc9;
+  --wine-deep: #4a1620;
+  --wine-core: #8a2433;
+  --wine-accent: #b8455a;
+  --gold-dim: #9a8240;
+  --text-primary: #c9d6de;
+  --text-secondary: #8c9aa6;
+  --text-dim: #5a6670;
+  --border-subtle: #1a2530;
+  --border-accent: #1f3a4f;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --max-width: 880px;
+  --section-gap: 4.5rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.78;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--blue-core); color: var(--blue-ghost); }
+
+/* === KRENIDES MOTES === */
+#mote-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.5;
+}
+
+/* === AMBIENT GRADIENTS === */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 18% 40%, rgba(47,111,150,0.09) 0%, transparent 55%),
+    radial-gradient(ellipse at 84% 22%, rgba(87,166,204,0.05) 0%, transparent 45%),
+    radial-gradient(ellipse at 55% 96%, rgba(138,36,51,0.06) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page { position: relative; z-index: 1; max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem; }
+
+/* === DIAMOND DIVIDERS === */
+.divider {
+  display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+  margin: var(--section-gap) 0; opacity: 0.5;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--blue-abyss), transparent);
+}
+.divider span {
+  width: 7px; height: 7px; background: var(--blue-accent);
+  transform: rotate(45deg); flex-shrink: 0;
+}
+
+/* === HEADER === */
+.header { text-align: center; padding: 5.5rem 0 1.5rem; }
+.header .tag {
+  font-family: var(--font-display); font-size: 0.6rem;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--blue-accent); display: block; margin-bottom: 2rem;
+}
+.header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 7.5vw, 4rem);
+  font-weight: 700; color: var(--blue-light);
+  letter-spacing: 0.1em; line-height: 1.12; margin-bottom: 0.7rem;
+  text-shadow: 0 0 80px rgba(87,166,204,0.18);
+}
+.header .epithet {
+  font-family: var(--font-body); font-style: italic;
+  font-size: 1.15rem; color: var(--silver); margin-bottom: 1.1rem;
+}
+.header .sub {
+  font-family: var(--font-display); font-size: 0.72rem;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-dim);
+  line-height: 2;
+}
+
+/* === SECTION FRAMEWORK === */
+.sec-num {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--blue-accent); display: block; margin-bottom: 0.4rem;
+}
+.sec-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 3vw, 1.55rem);
+  font-weight: 600; color: var(--blue-light);
+  letter-spacing: 0.05em; margin-bottom: 1.4rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--border-accent);
+}
+.sub-head {
+  font-family: var(--font-display); font-size: 0.9rem;
+  font-weight: 600; color: var(--blue-light);
+  letter-spacing: 0.03em; margin-top: 1.7rem; margin-bottom: 0.5rem;
+}
+
+/* === PROSE === */
+.prose p { margin-bottom: 1.2rem; }
+.prose p:last-child { margin-bottom: 0; }
+.prose strong { color: var(--blue-light); font-weight: 600; }
+.prose em { color: var(--text-secondary); }
+.prose .wine { color: var(--wine-accent); font-weight: 600; font-style: normal; }
+
+/* === EPIGRAPH === */
+.epigraph {
+  text-align: center; font-style: italic;
+  font-size: 1.1rem; color: var(--silver);
+  margin: 1.6rem 0; line-height: 1.7;
+}
+.epigraph .who {
+  display: block; font-style: normal; font-family: var(--font-display);
+  font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--blue-accent); margin-top: 0.7rem;
+}
+
+/* === IDENTITY CARD === */
+.id-card {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: 2px; padding: 2.2rem; position: relative; overflow: hidden;
+}
+.id-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, var(--blue-abyss), var(--blue-accent), var(--wine-core));
+}
+.id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem 2rem; }
+.id-item .lbl {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--blue-accent); margin-bottom: 0.2rem;
+}
+.id-item .val { font-size: 0.95rem; color: var(--text-primary); line-height: 1.6; }
+.id-item.wide { grid-column: 1 / -1; }
+
+/* === ACCORDION === */
+.acc-item {
+  border: 1px solid var(--border-subtle); margin-bottom: -1px;
+  background: var(--bg-card); overflow: hidden;
+}
+.acc-item:first-child { border-radius: 2px 2px 0 0; }
+.acc-item:last-child { border-radius: 0 0 2px 2px; }
+.acc-btn {
+  width: 100%; background: none; border: none;
+  padding: 1.1rem 1.4rem; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--font-display); font-size: 0.88rem;
+  font-weight: 600; color: var(--blue-light);
+  letter-spacing: 0.04em; text-align: left;
+  transition: background 0.2s;
+}
+.acc-btn:hover { background: var(--bg-hover); }
+.acc-btn .label-wrap { display: flex; flex-direction: column; gap: 0.15rem; }
+.acc-btn .hint {
+  font-family: var(--font-body); font-size: 0.82rem;
+  font-weight: 400; color: var(--text-dim); font-style: italic;
+}
+.acc-btn .arr {
+  width: 7px; height: 7px;
+  border-right: 1.5px solid var(--blue-accent);
+  border-bottom: 1.5px solid var(--blue-accent);
+  transform: rotate(45deg); transition: transform 0.3s;
+  flex-shrink: 0; margin-left: 1rem;
+}
+.acc-item.open .acc-btn .arr { transform: rotate(-135deg); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.45s ease; }
+.acc-inner { padding: 0 1.4rem 1.5rem; }
+.acc-inner .atm {
+  font-style: italic; font-size: 0.92rem; color: var(--blue-accent);
+  margin-bottom: 0.8rem; padding-left: 0.8rem;
+  border-left: 2px solid var(--blue-abyss);
+}
+.acc-inner .dlbl {
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--gold-dim); margin-top: 0.9rem; margin-bottom: 0.2rem;
+}
+.acc-inner p { font-size: 0.92rem; line-height: 1.72; color: var(--text-secondary); margin-bottom: 0.6rem; }
+.acc-inner p:last-child { margin-bottom: 0; }
+.acc-inner strong { color: var(--blue-light); }
+.acc-inner em { color: var(--silver); }
+.acc-inner .wine { color: var(--wine-accent); font-weight: 600; font-style: normal; }
+
+/* === HIGHLIGHT BOX === */
+.highlight-box {
+  background: var(--bg-highlight); border: 1px solid var(--border-accent);
+  border-left: 3px solid var(--blue-accent);
+  padding: 1.7rem 2.1rem; margin: 1.3rem 0; position: relative;
+}
+.highlight-box.wine { border-left-color: var(--wine-accent); }
+.highlight-box p { position: relative; font-size: 0.98rem; line-height: 1.78; margin-bottom: 0.9rem; }
+.highlight-box p:last-child { margin-bottom: 0; }
+.highlight-box strong { color: var(--blue-light); font-weight: 600; }
+.highlight-box.wine strong { color: var(--wine-accent); }
+.highlight-box .wine { color: var(--wine-accent); font-weight: 600; }
+
+/* === PRINCIPLE / CHRONICLE BLOCKS === */
+.princ { padding: 1.1rem 0; border-bottom: 1px solid var(--border-subtle); }
+.princ:last-child { border-bottom: none; }
+.princ-n {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.2em; color: var(--blue-accent); text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+.princ h4 {
+  font-family: var(--font-display); font-size: 0.95rem; font-weight: 600;
+  color: var(--blue-light); letter-spacing: 0.03em; margin-bottom: 0.3rem;
+}
+.princ p { font-size: 0.93rem; line-height: 1.72; color: var(--text-secondary); }
+.princ p strong { color: var(--blue-light); }
+.princ p .wine { color: var(--wine-accent); font-weight: 600; }
+
+/* === FOOTER === */
+.footer {
+  text-align: center; padding: 3.5rem 0 2.5rem;
+}
+.footer .mark {
+  font-family: var(--font-body); font-style: italic;
+  font-size: 1.05rem; color: var(--silver); margin-bottom: 1.4rem;
+  line-height: 1.7;
+}
+.footer .stamp {
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim);
+}
+.footer .stamp span { color: var(--blue-accent); }
+
+/* === FADE === */
+.fi { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fi.vis { opacity: 1; transform: translateY(0); }
+
+/* === RESPONSIVE === */
+@media (max-width: 640px) {
+  body { font-size: 17px; }
+  .id-grid { grid-template-columns: 1fr; }
+  .id-card { padding: 1.4rem; }
+  .header { padding: 3.5rem 0 1rem; }
+  :root { --section-gap: 3rem; }
+  .highlight-box { padding: 1.2rem 1.1rem; }
+  .acc-inner { padding: 0 1rem 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="mote-canvas"></canvas>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="header fi">
+    <span class="tag">Advent of Ultima · Moirai Codex</span>
+    <h1>Saint Cloud Sinclair</h1>
+    <div class="epithet">The Tide That Never Stops Rising</div>
+    <div class="sub">
+      The Prince of Tides · The God of Blood and Wine<br>
+      The Master of Doors · The Host of the Realms<br>
+      Thalassor · Salacica · House Sinclair
+    </div>
+  </header>
+
+  <div class="divider"><span></span></div>
+
+  <!-- I. IDENTITY -->
+  <section class="fi">
+    <span class="sec-num">I</span>
+    <h2 class="sec-title">Identity</h2>
+    <div class="id-card">
+      <div class="id-grid">
+        <div class="id-item">
+          <div class="lbl">Realm of Origin</div>
+          <div class="val">Thalassor — House Sinclair of Salacica, the Gilded Nexus</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Element &amp; Patron</div>
+          <div class="val">Water — Salacia, Goddess of the Tides</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Heritage</div>
+          <div class="val">Firstborn and only son of Saint Leif Sinclair, Exvisar of Thalassor; heir to the Sinclair Dynasty. "Saint" is a lineage honorific of Thalassor, not a religious title.</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Family</div>
+          <div class="val">Twelve sisters. No brothers. He is singular in his household the way he is singular in every room he enters.</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Second Heart</div>
+          <div class="val">Arabella Swain — master Oneironaut, the only woman in any room of Salacica wearing her own face</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Signature Arms</div>
+          <div class="val">Elysium — the god-killer trident, forged by Aether, the God of Light</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Affiliations</div>
+          <div class="val">The Saints (Founder) · The Advent · House Swain-Sinclair</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Station</div>
+          <div class="val">Heir to the Exvisorship · Conductor of the Azure Guard · Symposionomos · Inventor of Oinomancy · the God of Blood and Wine</div>
+        </div>
+        <div class="id-item wide">
+          <div class="lbl">The Five</div>
+          <div class="val">Dorado Casanova, Scarlett "Serket" Ashford, Lupe Volantis, Arabella Swain — and Uriel. Everyone else is a guest. Guests are treated beautifully. Guests are not <em>in</em>.</div>
+        </div>
+        <div class="id-item wide">
+          <div class="lbl">Full Titles</div>
+          <div class="val">The Prince of Tides · The God of Blood and Wine · The Master of Doors · The Host of the Realms · The Smile Before the Storm · The Golden Prince · The Maskless Host · Conductor of the Azure Guard · Symposionomos</div>
+        </div>
+        <div class="id-item wide">
+          <div class="lbl">The Question at the Centre of His Life</div>
+          <div class="val">"What would a good ruler do?"</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- II. THE MAN -->
+  <section class="fi">
+    <span class="sec-num">II</span>
+    <h2 class="sec-title">The Man</h2>
+    <div class="prose">
+      <p>Saint Cloud Sinclair was never a child. He was the tide from the beginning.</p>
+
+      <p>He was raised from birth to inherit the most strategically critical office in the nine realms — the Exvisorship of Thalassor, the civilization whose Clairgate network holds inter-realm life together. This was the highest caliber of formation the most sophisticated civilization in the cosmos could provide, and he received it well. He trained under philosophers and generals. He mastered the sword and the scroll. He absorbed the deep metaphysics of Thalassori wine-magic. He received the Rite of the Concordant Path — the full memory inheritance of every Sinclair patriarch before him — and treated it as the gift it was.</p>
+
+      <p>He excelled at everything because he was built to excel at everything, and the excelling pleased him, because mastery is its own reward and flow is its own pleasure. By every measure his world honours, he is precisely what he was meant to be.</p>
+
+      <p>To understand Cloud is to understand that there is no seam between the man and the office. The mask and the face are the same thing. Ask him to separate himself from the heir and he will not understand the question. He is the heir, the function, the instrument of Thalassori civilization, and he is these things wholly. There is no concealed interior beneath the surface. There is an ocean, and the surface is still because the water is deep.</p>
+
+      <p>And beneath the titles and the powder-white hair and the office, there is a human man. By the close of his realm's hardest hour he has taken a god's power into a mortal frame. What a man does with a god's portion — and in whose language he carries it — is the long work of the life still ahead of him.</p>
+    </div>
+    <p class="epigraph">
+      "I do not understand what you mean, when you separate me from what I am."
+      <span class="who">Saint Cloud Sinclair</span>
+    </p>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- III. TEMPERAMENT -->
+  <section class="fi">
+    <span class="sec-num">III</span>
+    <h2 class="sec-title">Temperament &amp; Character</h2>
+    <div class="prose">
+      <p>Cloud is not a simple man, but he is a coherent one. The qualities below do not war with one another. They are facets of a single disposition — a man for whom warmth and calculation, generosity and ambition, grace and resolve are not opposites but the same motion, performed at different depths of the same water.</p>
+    </div>
+    <div class="acc">
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">The Discipline of Power<span class="hint">Charm understood as force, applied efficiently</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Cloud treats the exercise of power as a craft to be mastered. He understands that the ruler who is loved is safer than the ruler who is feared — and that the ruler who is loved must never lose the capacity to be feared. He does not choose charm over force. He understands that charm <em>is</em> force, applied more efficiently.</p>
+          <p>Every relationship is an investment. Every favour is a position on the board. Every glass of wine poured is a calculation about what that generosity purchases. He genuinely enjoys people, genuinely loves his friends, genuinely believes in connection — and the enjoyment and the calculation are the same act. He likes you, and he knows exactly what you are worth to him. <strong>The warmth is real. The ledger is also real. Both operate at once, and neither cancels the other.</strong></p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">Audacious<span class="hint">The ceiling of the possible, treated as a dare</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>He is a man born at the absolute pinnacle of Mystic society who is still ambitious. Most people born where Cloud was born coast — they inherit, they steward, they maintain. Cloud looks at the same inheritance and treats it as a starting point. He wants to find out what the tools can do when you stop treating them as finished products and start treating them as raw materials.</p>
+          <p>This is not greed; greed hoards what exists. This is a man who looks at the ceiling of the possible and treats it as a dare. The audacity is the larger thing, and it is the engine of everything he builds.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">Brilliant<span class="hint">Formidable across every domain at once</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Genuinely, formidably, across every domain. Top student of Rosorae Templar. Conductor of the Azure Guard. Inventor of Oinomancy. Symposionomos. He runs military, academic, diplomatic, and experiential operations at the same time and makes it look like hosting. He is the most dangerous person in any room he enters and the most charming — and they are the same thing.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">Warm<span class="hint">Generosity that is both genuine and instrument</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>This is not performance. Cloud is genuinely generous, genuinely gracious, genuinely delighted by good company. He wishes you abundance by Salacia's grace and means every word. The warmth is real. It is also the most effective instrument in his arsenal. Both things are completely true, at the same time, with no seam between them.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">Proud<span class="hint">A man of stature who knows his own magnitude</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Cloud holds himself to the standard of what a Sinclair is — what his ancestors built, what they were capable of — and he carries that standard consciously. He is a man of genuine stature and he knows it. He can be stung; to be made small in a room is a thing he feels. The pride is an honest edge on a man of real magnitude, and it is inseparable from the seriousness with which he takes the office he was born to hold.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">Faithful<span class="hint">Sober at every table; devoted before the goddess</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Cloud is sober at his own parties, and has always been. His glass holds a non-intoxicating vintage that no guest has ever detected, because the performance of shared participation is so total there is no seam to find. The world reads this as a host's discipline. It is also devotion. Through every poured cup, every symposium, every year of brokered peace, he keeps faith with Salacia and does not forget her. The sobriety is fidelity before it is tactic.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">Exacting<span class="hint">When a reckoning is owed, it is delivered precisely</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>When justice is owed, Cloud delivers it with the same precision he brings to a seating chart or a vintage — the right measure, the right names, nothing wasted. He does not flinch from a hard act that is just. The faculty that composes a perfect evening composes a perfect accounting, and he can look at a hard thing landing rightly and not pretend the sight gives him nothing. He is a man, and he carries a man's satisfaction in seeing a thing made even.</p>
+        </div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- IV. THE PATTERN -->
+  <section class="fi">
+    <span class="sec-num">IV</span>
+    <h2 class="sec-title">The Pattern</h2>
+    <div class="prose">
+      <p>There is a pattern that governs everything Cloud does. He studies a thing with full reverence. He understands it on its own terms, in its own context, with its own weight. He honours it completely. And then he goes further.</p>
+
+      <p>He received the Concordant Path and studied it. He absorbed the ancestral wisdom and respected what his predecessors built. And then he asked what more the principle could hold — and built Oinomancy, an entire category of power no Sinclair before him had the audacity to attempt.</p>
+
+      <p>He studied Tenebralis. He took his father's warning seriously. He weighed the danger of the Mavarran world fully, with his eyes open. And then he chose to build the bridge anyway — not because he had dismissed the risk, but because he had weighed it and judged that connection was worth its price. He never leaps blind. He studies the ground completely and steps past the edge in full awareness of what he is doing.</p>
+    </div>
+    <div class="highlight-box">
+      <p><strong>Reverence, then transgression.</strong> Full understanding, then a deliberate choice to exceed the boundary. It is his greatest gift. The voice that says <em>what if there is more</em> is the voice that invented Oinomancy, that won the war games, that saw what Uriel was Becoming before anyone else did.</p>
+      <p>The bridge he built in good faith became a road that others travelled for their own ends. The integration he intended as communion was used, by the predators who moved along it, as cover. When he saw it plainly — the memory-coins, the harvest, his own elite hollowed from within — he did not equivocate. He named the project a mistake, and he turned the full instrument of his house against the predators he had unknowingly sheltered. The same pattern that builds the bridge is the pattern that, finding the rot in it, moves to burn the rot out.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- V. BEARING & INTERIOR -->
+  <section class="fi">
+    <span class="sec-num">V</span>
+    <h2 class="sec-title">Bearing &amp; Interior</h2>
+    <div class="prose">
+      <p>Cloud speaks in a double register as his natural state. Every word is honest. Every word is also strategic. He describes his friends like constellations — with genuine admiration that also functions as a precise catalogue of their value. He uses metaphors drawn from the ocean — flow, depth, tide — because those are not metaphors to him. They are how he experiences his own power. When the room is alive and the diplomacy is working and the wine is doing what wine does, he does not stand outside it or above it. He is the flow. The ocean does not observe the tide. It is the tide.</p>
+
+      <p>He grew up at a dinner table with twelve sisters. He learned to read a room before he could walk — twelve competing intelligences, twelve sets of social dynamics, twelve relationships to manage in his own home. He learned charm as a survival skill long before it became statecraft.</p>
+
+      <p>He has five real friends, and everyone knows it. He is generous and warm and welcoming to the entire cosmos, and there are exactly five people who are actually in the room with him. Everyone else is a guest. That this is <em>known</em> — that people are aware they are auditioning for a circle not accepting new members — gives every interaction with Cloud a specific weight. The graciousness is itself the wall.</p>
+
+      <p>And there is Arabella, who is rarely not at his side. When the waking world allows them no privacy — and the life of an heir allows little — they keep their counsel in his dreams, where she walks freely and the doors are theirs alone. The most important conversations of his life happen in a room no one else can enter. She is his Second Heart, and the bond is the one thing in his cosmos he chose entirely for himself.</p>
+    </div>
+    <p class="epigraph">
+      "They do not understand that I have had to train every minute of every day to make it look so effortless — just as the ocean has taken an eternity to become so deep that the surface appears still."
+      <span class="who">Saint Cloud Sinclair</span>
+    </p>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- VI. LEADERSHIP -->
+  <section class="fi">
+    <span class="sec-num">VI</span>
+    <h2 class="sec-title">Leadership — The Four Lanes</h2>
+    <div class="prose">
+      <p>Cloud holds academic, military, diplomatic, and experiential authority at the same time, and deploys whichever the moment requires. Those who only ever see one of the four never grasp that all four are a single project. He is a head of state in everything but title — operating across four domains at once, before he has even inherited the Exvisorship.</p>
+    </div>
+    <div class="acc">
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">Rosorae Templar<span class="hint">The academy where the room reorients toward him</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>He is the top student of the academy that trains the elite of every realm. He arrives and the room shifts — not dramatically; the temperature simply changes, and conversations orient toward him without anyone deciding to. He debates instructors not to challenge authority but to sharpen his thinking in public, so that people grow accustomed to the sound of his reasoning. When he wins, he wins graciously enough that the instructor feels respected. The room is a symposium already, and he is hosting it from a student's seat — filing every other student in it: who is talented, who is connected, who will inherit what. He builds guest lists for symposiums that will not happen for years.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">The Azure Guard<span class="hint">Conductor of Thalassor's military apparatus</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Cloud is Conductor — General — of Thalassor's military: the Tidestriders, the Azure Guard, the Echo Knights. He holds actual command. He trains with his soldiers and is genuinely formidable in Dancaelet Salacia, the divine water martial art that renders violence as choreography.</p>
+          <p>He is not the strongest fighter in any room, and he does not need to be. He is the one who decides where the fight happens, because Clairmancy means he chooses the terrain — always. When the predation his bridge sheltered turns to open harvest in the Allodas Quarter, it is the Azure Guard he commits — into a grinding, costly fight — to pull Thalassan citizens out of the hands of the predators. His most famous war-game victory: he located the enemy Conductor, opened a small Clairgate beneath the man's feet, dropped him directly in front of Cloud, and ended it. The same move that will one day kill a god.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">The Symposiums<span class="hint">Geopolitical infrastructure that looks like hospitality</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The estate comes alive in the evening, and this is his instrument played at concert pitch. The guest list is composed weeks ahead and adjusted daily by intelligence — who needs to be in the same room, who needs to be kept apart, who needs to feel important. The seating is architecture. The wine selection is correspondence.</p>
+          <p>He is the <strong>Symposionomos</strong> — not merely a host but a formal institutional position, the figure who presides over binding agreements made over wine. When he pours, he legislates. When he opens a door, it is a diplomatic act. His symposiums are where a cold war stays cold. He is sober at every one of them, and he sees everything.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">The Oneiron<span class="hint">The crafted paradise where the masks come off</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>After the formal symposium, certain guests receive a second invitation. Dorado Casanova opens the simulation space, and reality dissolves into something more permissive — synesthetic environments where music has texture and colour has taste. It is breathtaking. It is also a controlled environment where Cloud decides what the physics are.</p>
+          <p>Here, the things that cannot happen at the symposium happen. The deals that cannot be spoken aloud are spoken in a space that technically does not exist. Cloud is the host. He watches the most powerful people in the nine realms reveal themselves in a space where they believe the masks are off — and the man who built the room is taking notes.</p>
+        </div></div>
+      </div>
+
+    </div>
+
+    <h3 class="sub-head">The Saints — A Government, Not a Friend Group</h3>
+    <div class="prose">
+      <p>Cloud is the tide. Not the sun — he does not demand that everything orbit him; he does not need to. The tide moves everything without anything feeling moved. The Saints are not satellites basking in his light. They are the apparatus of a state, and the apparatus is built on love.</p>
+      <p><strong>Dorado Casanova</strong> provides controlled territory — the Oneiron, the crafted realities. <strong>Scarlett "Serket" Ashford</strong> provides the economic spine — the crystata trade routes, the resource pipeline, the treasury of a nation that does not officially exist. <strong>Lupe Volantis</strong> provides legitimacy and the connection to the natural world, and the line to the Sirens of the deep. <strong>Arabella Swain</strong> provides intelligence — the dreamwalking, the memory coins, the surveillance that maps the interior of everyone who passes through their doors. She is Cloud's left hand.</p>
+      <p>That is a head of state, a territorial governor, a treasury, a cultural minister, and an intelligence chief who love each other and also constitute a fully operational sovereign entity — the actual governing infrastructure of the nine realms running quietly beneath the formal one, with Cloud as the tide that moves it all.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- VII. PHILOSOPHY -->
+  <section class="fi">
+    <span class="sec-num">VII</span>
+    <h2 class="sec-title">Philosophy</h2>
+    <div class="prose">
+      <p>Cloud's governing question is not abstract. He asks it of himself before every consequential act: <em>what would a good ruler do?</em> He holds it whether he is steward of the Realms or only of his own house, and he has come to understand that the answer changes in scale, never in kind.</p>
+
+      <p>His theology is Salacia's, made personal. Water is the medium of divine grace; abundance is a current; wealth that pools and stagnates is dead, and wealth that flows is alive. Cloud believes this. His symposiums, his portals, his wine, his open doors — he experiences all of it as Salacia's doctrine in action. When he is asked what it feels like when the room is perfect and every glass is poured at the right moment, he answers with one word: <strong>flow</strong>.</p>
+
+      <p>From this he derives his answer to the question the whole age is asking — <em>what is power for?</em> Cloud's answer is that power is for communion: for the shared cup, for the binding of souls across a table, for the current that connects everything to everything else.</p>
+    </div>
+
+    <h3 class="sub-head">What His Hardest Hour Renders</h3>
+    <div class="prose">
+      <p>When his realm's foundation gives way, the question stops being a matter for symposium philosophy and becomes a sequence of acts. The answer that emerges from those acts is plain. A good ruler keeps faith with the people actually in his care, not the abstraction of the realm above them. A good ruler meets a corruption feeding on his people with its removal, and does not mistake its tolerance for peace. A good ruler pays the debts his house has incurred, even the thousand-year debts no living power could compel him to honour. And the precise hard act, delivered in time, is mercy measured against the blunt one — for a god's justice would drown a civilization to be rid of a heresy, and the mortal who gives a damn does the surgical thing the divine will not trouble itself to do.</p>
+    </div>
+
+    <h3 class="sub-head">The Weight He Carries Forward</h3>
+    <div class="highlight-box wine">
+      <p>By the close of his realm's hardest hour, Cloud is a human man who has taken a god's portion into a mortal frame. He keeps faith with Salacia. He also carries, now, a second tongue — the Mavarran scripture that years beside Arabella have set into his speech, surfacing in him at the edges of his hardest moments, offering to make a heavy thing articulate and light.</p>
+      <p>A man who has taken a god's power must decide, across the years to come, in whose language he will carry it. He has not finished deciding. That bearing — the weight of the godhood, and the question of the tongue that carries it — is the open work of his life.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- VIII. DEUSAS, DISCIPLINES & ARMS -->
+  <section class="fi">
+    <span class="sec-num">VIII</span>
+    <h2 class="sec-title">Deusas, Disciplines &amp; Arms</h2>
+    <div class="prose">
+      <p>Cloud's water-domain connection runs into the high-capacity expression of the element, where water in living bodies becomes as workable as water in a river. His martial and magical profile is broad, integrated, and crowned by a discipline he built himself and a weapon he reserves for the gravest work.</p>
+    </div>
+    <div class="acc">
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">Aestus — Water Mastery<span class="hint">High-capacity water domain</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Control over water in all its forms, including the water within living bodies. It allows him to manipulate an opponent's blood, raise concealing mists, or shape pressurized blades capable of cutting steel. On the battlefield he uses Aestus to conduct soldiers by directing their bloodflow — steering the flow of combat through their own biology.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">Aesta-Mitiga — Healing Manipulation<span class="hint">The redistribution of restorative myst</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The extraction and redistribution of healing myst through a fluid medium. It allows Cloud to accelerate his own regeneration, or to strip an opponent of their ability to heal at all. It is also the discipline by which he draws and channels Krenides — the means by which, in the years after, he holds a frail life steady against the harm done to it.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">Clairmancy — Portal Control<span class="hint">The hereditary soul-deusa of the dynasty</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The hereditary soul-deusa of the Sinclair dynasty: the power to open and govern the Clairgates, the portal network that is the only means of inter-realm travel, trade, and force projection. In combat it means Cloud always chooses the terrain. It is the discipline behind his signature manoeuvre — a gate opened where the enemy least expects geometry to bend — and the manoeuvre scales without limit, from a war-game field to the throne of a god.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">Dancaelet Salacia<span class="hint">The divine water martial art</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>A divine water-based martial discipline that allows him to fight with unmatched fluidity and grace — violence rendered as choreography. Under pressure, his Aestus turns lethal and hyper-efficient; the grace does not soften the killing, it organizes it.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">Oinomancy — The Invented Discipline<span class="hint">An entire category of power that did not exist before him</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The discipline Cloud created from first principles, by reverse-engineering the Concordant Path and combining it with his battlefield blood manipulation. Oinomancy is the art of distilling experience, emotion, deusa, and essence into wine. It is the foundation of the Wine of Shared Dreams, the Wine of Shared Horizons, the Wine of Shared Fates — and, ultimately, the <span class="wine">Haemoinos</span>, god-blood distilled into consumable form. He does not innovate within Oinomancy. He invented it.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">Elysium — The God-Killer<span class="hint">The trident he reserves for the gravest work</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Cloud's signature arm: a trident, forged by <span class="wine">Aether, the God of Light</span> and founder of Luxania — a weapon made to end the immortal. With Elysium, the God of War, Leviathan, was blinded. It is the instrument Cloud holds in reserve for the work that water and fire cannot finish.</p>
+          <p>Driven through the heart of a god, Elysium does what a sun and a portal cannot: it erases the divine memory and anchors the immortal to death. It is the weapon by which the God of Blood is ended — and a quiet thread of mythic continuity, since the blade that closes the age of one god was forged by the God of Light whose realm the Sinclair dynasty has a thousand-year debt to repay.</p>
+        </div></div>
+      </div>
+
+    </div>
+
+    <h3 class="sub-head">The Invention of Oinomancy</h3>
+    <div class="prose">
+      <p>The Sinclair family had the Concordant Path — memory stored in sacred wine, a tradition practised for generations without ever pushing past its original application. Cloud looked at that and saw a principle to develop. If the water holds memory, what else can it hold?</p>
+      <p>The technical lineage begins on the battlefield. Through Aestus he found he could move soldiers' blood; then he learned to move what was <em>in</em> the blood — to strip myst from enemy blood and flood it into his own soldiers in a single gesture. Then the mind that never stops refining asked the next question: what if, instead of raw myst, he isolated specific qualities — courage, terror, euphoria, rage — and stored them, distilled, in a medium people would voluntarily consume? Wine. From there came the vintages that store applied deusa, each one a category of power that did not exist before he made it.</p>
+    </div>
+
+    <h3 class="sub-head">Mortal Apotheosis</h3>
+    <div class="highlight-box wine">
+      <p>By killing Sanguine, distilling the god's substance into the <span class="wine">Haemoinos</span>, and drinking it, Cloud takes the station of the <span class="wine">God of Blood and Wine</span>. He held the domain in all but name long before the killing — he invented Oinomancy, he conducted blood on battlefields, he distilled essence into vintage. The deicide removed a placeholder from a seat already his by craft.</p>
+      <p>He proves, in the doing, that the barrier between mortal and divine is not ontological. It is technical. A mortal armed with his own capability and a civilization's worth of mastery can hunt a god, render him, and take his place — not through prophecy, not through divine appointment, but through competence pushed past the boundary anyone believed it could reach. He is a human man carrying a god's power, and the bearing of it is the work ahead.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- IX. ORIGINS & LEGITIMACY -->
+  <section class="fi">
+    <span class="sec-num">IX</span>
+    <h2 class="sec-title">Origins &amp; the Sources of Legitimacy</h2>
+
+    <h3 class="sub-head">The Sinclair Mandate</h3>
+    <div class="prose">
+      <p>House Sinclair holds the Clairgates because the goddess Salacia entrusted the waters of Thalassor to the family. In Thalassor the legal code and the sacred code are the same document; the Clairgate monopoly is a divine mandate, and the powder-white hair of the Sinclair line — the visible sign of Oinomantic lineage, of generations consuming the Vintage of the Veil — is the heraldry of sacred inheritance. Cloud's claim to the Exvisorship is theological, dynastic, and total. He is the designated continuation of an order older than any living memory.</p>
+    </div>
+
+    <h3 class="sub-head">The Rite of the Concordant Path</h3>
+    <div class="prose">
+      <p>Every Sinclair heir drinks the Concordant Path — the cumulative memory of every patriarch of the dynasty, transmitted through sacramental wine made possible by the natural memory-holding properties of Thalassori water. Cloud received the Rite and treated it as a gift. It is also a constant interior presence: a thousand years of Sinclair memory, the steady undertow beneath his every thought, load-bearing and unconscious, like the sense of his own breath.</p>
+    </div>
+
+    <h3 class="sub-head">Juno's Shadow</h3>
+    <div class="prose">
+      <p>To understand the dynasty is to understand Juno Sinclair, the Architect — the visionary who partnered with Hecate of the Realm of Light and co-created the Lumen Cradle, the first stable bridge across the Realms. Her innovation ended Thalassor's scarcity and founded the Age of Exploration. She is the origin point of everything the dynasty became.</p>
+      <p>The Concordant Path carries the patriarchal line, and so Cloud inherits the memory of Titus, Juno's father, rather than Juno's own. From Titus's vantage, the salvage of the dying Realm of Light was statecraft — a ruler's hard call. When Cloud drinks the patriarchal wine, that loss arrives not as a warning but as a precedent: this is what Sinclairs do; they make the hard call; they choose the realm over the relationship. Cloud feels, in the inherited memory, the clean conscience of a man who called the ruin of his own kin governance — and something in him refuses to be that man.</p>
+    </div>
+
+    <h3 class="sub-head">The Thousand-Year Debt</h3>
+    <div class="highlight-box wine">
+      <p>The Clairgate network was not built by the Sinclairs alone. The Lumen Cradle was Luxanian in principle and Thalassori in execution — a true partnership between Hecate and Juno. When the Realm of Light fell, House Sinclair secured the sites and the research and unveiled the technology as a purely Thalassori innovation. Hecate's name was erased. The dynasty's foundation rests on an act of cultural and technological theft against a betrayed ally.</p>
+      <p>Cloud was raised inside this knowledge. It is the inheritance he was taught to uphold — and it becomes, when his realm's hardest hour has passed, the inheritance he chooses to answer. He commits his house to the road to Luxania, to pay a debt one thousand years overdue that no living power could ever compel him to honour. His legitimacy ceases to rest solely on what his ancestors took. It begins to rest on what he chooses to return.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- X. THREATS -->
+  <section class="fi">
+    <span class="sec-num">X</span>
+    <h2 class="sec-title">Threats</h2>
+    <div class="prose">
+      <p>Cloud, at the height of his capability, has few peers in the cosmos. The dangers that matter to him are not the ones that exceed his power. They are the ones that move through the people he trusted, the doctrines he underestimated, and the weight he has chosen to take up.</p>
+    </div>
+    <div class="acc">
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">The Coalition<span class="hint">Three realms' worth of interests converging on his house</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The Cult of Sanguine — the Bloodless aristocracy that has worshipped the God of Blood since before the First Spring Spire was built — moving in concert with a rogue faction of the Amphitran navy, the wolf-augmented Lykaion clans of Ferridane, and the Aesthetes of Tenebralis. Their objective is singular: remove Cloud, take the house, take his Second Heart, and divide the civilization between them while the goddess is silent and the people are desperate. The Aesthetes among them come for Arabella in particular — to wipe her mind and leash her as a Poppet.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">The Predation Within the Bridge<span class="hint">Isin'Sartu, and the harvest his integration sheltered</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The Mavarran world Cloud integrated in good faith carries a doctrine he weighed too lightly: <strong>Isin'Sartu</strong> — cornered, the Mavarrans drop the refugee posture, and the night answers. The road he built for communion carried memory-coin traffic and soul-distillates, and a quiet harvest of minds reaching into his own elite. When the realm's foundation fails and panic spreads, the predation turns open: the Bloodless drain Nihila of blood, and the Mavarrans harvest souls in the streets. The threat is not that Cloud failed to see corruption. It is that he extended trust to a structure that used the trust as cover.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">The Network That Does Not Answer<span class="hint">He was the venue</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Cloud is the most connected man in the nine realms — hundreds of guests, diplomats, patrons, seasonal allies bound to him across years of poured wine. When the coalition strikes and he asks the network to become something more than a network, the answer is silence. The web he built was never his. He was the venue, and when the venue catches fire, everyone who used it has already found somewhere else to be. Of the entire web, only Uriel comes.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">The Weight and the Borrowed Tongue<span class="hint">A god's portion in a mortal frame</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Cloud carries a god's power in a human body, and a human body was not built to hold it without consequence. He also carries a second scripture — the Mavarran grammar set into him by years at Arabella's side, fluent and ready, surfacing in him at the edges of his hardest moments and offering, gently, to make the weight lighter by teaching him to set things down. It is not an enemy at the gate. It is a tongue already inside the house. The work of the years ahead is the bearing of the power and the keeping of his own language while he carries it.</p>
+        </div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- XI. KEY RELATIONSHIPS -->
+  <section class="fi">
+    <span class="sec-num">XI</span>
+    <h2 class="sec-title">Key Relationships</h2>
+    <div class="acc">
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">Saint Leif Sinclair<span class="hint">Father · Exvisar · the man whose place he will take</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Two theories of governance, each internally coherent. Leif's project was to manage the rot indefinitely — to build something magnificent on top of a sin that could not be undone. To fund his great work, the immortality vintage, Leif took Bloodless gold and held the cult's heresy at arm's length. When the foundation gives way, father and son indict each other across the Spire: Leif names Cloud the man who let the shadow in; Cloud names Leif the man who took the blood-cult's coin. The ruin is mutual.</p>
+          <p>And then, atop the First Spring Spire, with the risen ocean about to take the marble districts, Leif holds it. He reaches into the deepest well of his Aestus and suspends millions of tons of water by sheer kinetic will, his own body straining toward the same crystalline breaking point that nearly took the woman his son loves. He buys Cloud the minutes the killing needs. By the end the mutual ruin has settled into a profound, grim respect — two men who carry the Concordant Path, who did not say everything they could have said, and who have years ahead in which to say the rest.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">Arabella Swain<span class="hint">Second Heart · the one thing he chose for himself</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>At Rosorae Templar, Arabella approached Cloud with the standard Mavarran playbook; he saw through it, and what he fell in love with was what lay underneath. To her own surprise she answered with sincerity — she removed her mask and never put it back on, the gravest transgression a Mavarran can commit. She is his left hand and he is her right. She is rarely not at his side, and in his dreams she walks freely; their truest counsel is kept in a room no one else can enter.</p>
+          <p>When the coalition breaches the estate, Arabella turns the full Oneironautic instrument on an entire army at once — to break their hold and to deny the Aesthetes the Poppet they came to make of her. The act carries her past the body's capacity to return. It nihilates her: her power to touch myst is spent and does not come back, and her life is shortened by what she poured out. She lives. She is frail. <strong>Cloud keeps her — sustaining her, day by day, with Krenides drawn by his own hand.</strong></p>
+          <p>Whether her sincerity was the truest thing in the cosmos or the most accomplished craft ever turned upon him is a question he chose long ago to live inside, and one he will now never close. He keeps her regardless. It is the plainest statement of who he is: a man who will not set down what he loves, whatever it costs to carry. Whether the gift of the Second Heart — the doubling that true love works on a Mystic's capacity — endures when one Heart can no longer reach myst at all is a question the cosmos has not answered. The two of them are its open case.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">Uriel — The Red Wolf<span class="hint">First project · first true friend · brother in arms</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Cloud was assigned to be Uriel's shepherd — his patron — and at first saw him as a project: a street rat with no manners who needed to be made civilized. In the process they became friends. They bonded over the war games — Cloud the strategist, Uriel the weapon — and through honest argument, because Uriel would not defer to him, and Cloud sharpened his own standard against the refusal.</p>
+          <p>When the coalition came and the whole vast network fell silent, Uriel crossed half a continent by his own sun-paths and stood in the breach alone, the Red Wolf at the door. At the last table of the realm's hardest hour, Cloud entrusts the final reckoning to him with a single line: <em>"I leave them to your discretion, Uriel."</em></p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">The Saints<span class="hint">The four who are the apparatus of his state</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Dorado, Serket, Lupe, and Arabella — territory, treasury, the natural world, and intelligence. They love each other, and they are also a functioning sovereign government. When the realm breaks, each holds their office under fire: Dorado readies the Oneiron, Serket moves the reserves beyond seizure, Lupe carries the line to the Sirens of the deep. They are the people who are actually in the room with him, and the room is a state.</p>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-btn"><span class="label-wrap">The Advent<span class="hint">The gathering he is built to host</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Cloud's road carries him toward the Advent — the gathering of Heralds that the turning of the age will require. They are a coalition of incompatible temperaments and competing philosophies, and a coalition like that needs a host: someone who knows how to seat people who do not trust each other at the same table and keep them productive. It is the work he has done his whole life, and the most important symposium he will ever be asked to host.</p>
+        </div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- XII. NARRATIVE IMPACT -->
+  <section class="fi">
+    <span class="sec-num">XII</span>
+    <h2 class="sec-title">Narrative Impact</h2>
+    <div class="prose">
+      <p>Cloud's arc runs through the whole nine-book cycle. The turns below are the load-bearing points — the moments at which his choices change the shape of the wider story.</p>
+    </div>
+
+    <h3 class="sub-head">The Foundation</h3>
+    <div class="princ-list">
+
+      <div class="princ">
+        <div class="princ-n">Turn · One</div>
+        <h4>Point Zero</h4>
+        <p>When Uriel's homeworld is in danger, Cloud asks what a good ruler would do and opens an unauthorized portal between Thalassor and a restricted world to fight beside his friend. The act is genuinely brave. It is also the first time the heir to the Clairgate network risks the line of succession in someone else's war — and the first time the friendship between Cloud and Uriel is proven in deed rather than word.</p>
+      </div>
+
+      <div class="princ">
+        <div class="princ-n">Turn · Two</div>
+        <h4>The War Games</h4>
+        <p>At Rosorae, Cloud wins the war games with a single manoeuvre: he locates the enemy Conductor, opens a small Clairgate beneath the man, drops him directly into Cloud's reach, and ends the engagement before it begins. It is the move that defines his command — identify the target, skip the battlefield, deliver the resolution directly — and it is the move that, scaled to deicide, will one day kill a god.</p>
+      </div>
+
+      <div class="princ">
+        <div class="princ-n">Turn · Three</div>
+        <h4>The Saints and the Parallel State</h4>
+        <p>Cloud builds the Saints, the symposiums, the Oneiron — a parallel infrastructure that becomes a functioning sovereign entity beneath the formal one. It is the apparatus through which he intends to govern: connection, diplomacy, the binding of the realms across a shared table.</p>
+      </div>
+
+      <div class="princ">
+        <div class="princ-n">Turn · Four</div>
+        <h4>The Bridge</h4>
+        <p>Cloud commits to a vision no Sinclair has attempted — genuine integration between Thalassor and the wider cosmos, including Tenebralis, with Arabella beside him as its living proof. He builds the bridge in good faith, believing connection is worth its price. It is the truest expression of his philosophy, and the road that the predators of a hungrier realm will travel for their own ends.</p>
+      </div>
+
+    </div>
+
+    <h3 class="sub-head">Blood of God</h3>
+    <p class="epigraph">
+      "How long, Sanguine... before your wine turns to vinegar?"
+      <span class="who">Saint Cloud Sinclair</span>
+    </p>
+    <div class="princ-list">
+
+      <div class="princ">
+        <div class="princ-n">Turn · Five</div>
+        <h4>The Silence</h4>
+        <p>Mid-symposium, the Concordant Path goes quiet and the Krenides goes cold. Salacia has not died; she has withdrawn in disgust. Cloud rushes to the Spire and learns the foundation of his house is compromised — Leif took Bloodless gold to fund the immortality project and held their heresy at arm's length. The water that has been the empirical proof of divine order, every morning for a thousand years, stops healing.</p>
+      </div>
+
+      <div class="princ">
+        <div class="princ-n">Turn · Six</div>
+        <h4>The Stone Districts</h4>
+        <p>Cloud and Arabella descend to the stone tier, and he is made to see what his investigative tempo has cost the people who pay for it: the diseases of poverty returning where the water no longer heals, minds lost in memory-coins, the floor of his civilization buckling. The realm he has governed at concert pitch is shown to him at street level, and the seeing changes what he is willing to tolerate.</p>
+      </div>
+
+      <div class="princ">
+        <div class="princ-n">Turn · Seven</div>
+        <h4>The Failure of the Bridge</h4>
+        <p>Diving the minds of the elite and the Mavarran Poppets, Cloud learns the full shape of the rot: the Cult of Sanguine has no single head, and the Mavarrans have been quietly eating the minds of his own elite friends. He names his integration project what it has become — a catastrophic mistake — and does not flinch from owning it.</p>
+      </div>
+
+      <div class="princ">
+        <div class="princ-n">Turn · Eight</div>
+        <h4>The Night of Broken Glass</h4>
+        <p>The Thalassan mob storms the Allodas Quarter. Isin'Sartu triggers: the Mavarrans drop the refugee posture, the light dies, the temperature drops, and a soul harvest begins in the streets. Cloud commits the Azure Guard into a grinding, costly fight — spending his own soldiers to pull Thalassan citizens from the hands of the predators his bridge sheltered.</p>
+      </div>
+
+      <div class="princ">
+        <div class="princ-n">Turn · Nine</div>
+        <h4>The Court of Veritax</h4>
+        <p>Accepting that Thalassor cannot be saved from within, Cloud sets down the Prince of Tides persona and opens a gate to Pyrthera. In the Court of Sol'Kheret, where the Sun Blossom's light would turn on Arabella for the shadow she carries, Cloud shields her by speaking the absolute, agonizing truth of his own failure aloud. A man whose entire craft is the careful control of disclosure protects the woman he loves through total disclosure — and learns to say the true thing plainly before he goes and does the true thing plainly.</p>
+      </div>
+
+      <div class="princ">
+        <div class="princ-n">Turn · Ten</div>
+        <h4>The Sacking of the Oneiron</h4>
+        <p>Cloud returns and throws his most lavish symposium yet, baiting the cultists with the claim of a mythic alliance — Uriel hidden, Alciel waiting on the ocean. Arabella's dream-dive reveals the trap is reversed: the estate is already encircled by Bloodless, Lykaions, and Aesthetes who mean to slaughter the guests and take her. The coalition breaches. Uriel hits the front as the Red Wolf; Cloud fights with lethal, hyper-efficient Aestus.</p>
+      </div>
+
+      <div class="princ">
+        <div class="princ-n">Turn · Eleven</div>
+        <h4>The Nihilation</h4>
+        <p>To break the coalition's hold and deny the Aesthetes the Poppet they came to make of her, Arabella seizes the will of the entire army at once, drowning them in waking nightmares and Salacian prayer. The act spends her past return — her power to touch myst is gone, her life shortened by what she poured out. She lives, emptied and frail. Watching her come back so changed, the half-smile leaves Cloud's face, and it does not return.</p>
+      </div>
+
+      <div class="princ">
+        <div class="princ-n">Turn · Twelve</div>
+        <h4>The Geometry of Execution</h4>
+        <p>The sky tears, and the water pulls upward: the <span class="wine">Hydralithe</span> — child of Aracice, a moon-sized seven-headed dragon of living, hyper-pressurized water — descends. It serves the Water, not the Blood; Salacia has called it to drown the heresy and does not care what washes away. Alciel rises to meet his sibling in the exosphere — <em>"You kill your god, I will speak to mine"</em> — while Leif holds the risen ocean from the Spire on a sixty-second clock. Cloud opens a portal beneath Sanguine's throne and another to the Pyrtheran sun, and the God of Blood is boiled between them. He drops the smoking body onto the Synedrion floor, summons <span class="wine">Elysium</span>, and drives the god-killer through Sanguine's heart. <em>"Call the vintners."</em></p>
+      </div>
+
+      <div class="princ">
+        <div class="princ-n">Turn · Thirteen</div>
+        <h4>The Black Communion</h4>
+        <p>The Hydralithe recedes; Salacia returns; the water heals again, beneath a hard and militarized order, with the harvesters exiled back through the gates to Tenebralis. Cloud hosts one last symposium — a funeral, an empty chair with a single piece of un-minted Mavarran crystal upon it. The surviving complicit elite arrive trembling and greedy. His speech turns from sweet to cold to obsidian; he reveals that he was always sober, that he never drank their poison and never lost his faith; and the wine in their glasses is shik'piris minted from pure terror. He delivers the reckoning exactly — the right names, the right measure — and on his way to the door he watches the towers fall a breath longer than the work requires, and does not pretend the sight gives him nothing. He leaves the rest to Uriel's discretion and walks out into the night.</p>
+      </div>
+
+      <div class="princ">
+        <div class="princ-n">Turn · Fourteen</div>
+        <h4>The Debt Taken Up</h4>
+        <p>Two bottles stand on the Exvisar's desk — the radiant Ambrosia of Leif's immortality project, and the dark crimson Haemoinos of the dead God of Blood. Cloud takes them both. He tells his father he leaves in the morning for Luxania, to begin paying the dynasty's thousand-year debt. He carries a god's power into the work ahead, and the road opens before him.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- FOOTER -->
+  <footer class="footer fi">
+    <p class="mark">The tide does not hurry, and it does not stop.<br>He pours. He watches. He carries what he has chosen to carry.</p>
+    <div class="stamp">Moirai Codex · <span>Advent of Ultima</span> · Saint Cloud Sinclair</div>
+  </footer>
+
+</div>
+
+<script>
+// === ACCORDIONS ===
+document.querySelectorAll('.acc-item').forEach(item => {
+  const btn = item.querySelector('.acc-btn');
+  const body = item.querySelector('.acc-body');
+  btn.addEventListener('click', () => {
+    const isOpen = item.classList.contains('open');
+    const group = item.parentElement;
+    group.querySelectorAll('.acc-item.open').forEach(sib => {
+      if (sib !== item) {
+        sib.classList.remove('open');
+        sib.querySelector('.acc-body').style.maxHeight = null;
+      }
+    });
+    if (isOpen) {
+      item.classList.remove('open');
+      body.style.maxHeight = null;
+    } else {
+      item.classList.add('open');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+  });
+});
+
+// === FADE IN ON SCROLL ===
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+
+// === KRENIDES MOTES — rising luminous particles ===
+(function() {
+  const canvas = document.getElementById('mote-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  const COUNT = 56;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Mote {
+    constructor() { this.reset(true); }
+    reset(init) {
+      this.x = Math.random() * W;
+      this.y = init ? Math.random() * H : H + 10;
+      this.r = Math.random() * 2.0 + 0.5;
+      this.vx = (Math.random() - 0.5) * 0.22;
+      this.vy = -(Math.random() * 0.32 + 0.07);
+      this.drift = Math.random() * Math.PI * 2;
+      this.driftSpeed = Math.random() * 0.003 + 0.001;
+      this.driftAmp = Math.random() * 0.42 + 0.1;
+      const isWine = Math.random() < 0.12;
+      if (isWine) {
+        this.color = `rgba(184,69,90,${Math.random() * 0.22 + 0.05})`;
+      } else {
+        const hue = 198 + Math.random() * 24 - 12;
+        const sat = 45 + Math.random() * 30;
+        const lum = 62 + Math.random() * 22;
+        const alpha = Math.random() * 0.32 + 0.06;
+        this.color = `hsla(${hue},${sat}%,${lum}%,${alpha})`;
+      }
+      this.pulsePhase = Math.random() * Math.PI * 2;
+      this.pulseSpeed = Math.random() * 0.01 + 0.004;
+    }
+    update() {
+      this.drift += this.driftSpeed;
+      this.pulsePhase += this.pulseSpeed;
+      this.x += this.vx + Math.sin(this.drift) * this.driftAmp;
+      this.y += this.vy;
+      if (this.y < -12 || this.x < -20 || this.x > W + 20) this.reset(false);
+    }
+    draw() {
+      const pulse = 1 + Math.sin(this.pulsePhase) * 0.3;
+      const r = this.r * pulse;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, r * 2.6, 0, Math.PI * 2);
+      const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, r * 2.6);
+      g.addColorStop(0, this.color);
+      g.addColorStop(1, 'transparent');
+      ctx.fillStyle = g;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < COUNT; i++) particles.push(new Mote());
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+</script>
+
+</body>
+</html>

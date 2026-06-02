@@ -1,0 +1,21 @@
+{
+  "name": "moirai-codex",
+  "version": "1.0.0",
+  "description": "Interactive Lore Database and Planner for the Moirai series",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "vite": "^5.2.11"
+  }
+}

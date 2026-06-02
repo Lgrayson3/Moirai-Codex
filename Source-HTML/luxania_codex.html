@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luxania — The Realm of Light, and What Was Done to It</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Marcellus&family=Spectral+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     THE TOKENS — the house style, verbatim.
+     ============================================================ */
+  :root{
+    --paper:#FBF7EE;
+    --paper-2:#F6F0E2;
+    --ink:#2B2317;
+    --ink-soft:#5A4E3A;
+    --rule:#E4D8BE;
+
+    --gold:#9A7B1F;
+    --gold-bright:#C9A227;
+    --gold-pale:#E9DCB0;
+    --gold-glow:rgba(201,162,39,.18);
+
+    --zephyros:#8AA63A;   --zephyros-pale:#D8E3B0;
+    --pyrthera:#C7572B;   --pyrthera-pale:#F0C39A;
+    --thalassor:#2E6FA3;  --thalassor-pale:#A9CBE4;
+    --ferridane:#A66A2E;  --ferridane-pale:#E0C394;
+    --tenebralis:#6A3D9A; --tenebralis-pale:#C8B0E2;
+    --luxenfall:#C9A227;  --luxenfall-pale:#EBDCA6;
+    --glacia:#5C97B8;     --glacia-pale:#BDDCE8;
+
+    --prism:linear-gradient(90deg,
+      var(--tenebralis) 0%, var(--thalassor) 17%, var(--glacia) 30%,
+      var(--zephyros) 45%, var(--luxenfall) 60%, var(--ferridane) 74%,
+      var(--pyrthera) 100%);
+
+    --maxw:760px;
+  }
+
+  /* ============================================================
+     THE SYSTEM — copied verbatim from the house style.
+     ============================================================ */
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Spectral",Georgia,serif;font-weight:400;
+    font-size:19px;line-height:1.72;-webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(120% 80% at 8% -5%, rgba(201,162,39,.06), transparent 45%),
+      radial-gradient(120% 80% at 105% 110%, rgba(106,61,154,.05), transparent 45%),
+      radial-gradient(140% 90% at 100% 0%, rgba(201,162,39,.04), transparent 40%),
+      radial-gradient(100% 100% at 50% 40%, transparent 60%, rgba(43,35,23,.05));
+  }
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  }
+  .ribbon{position:fixed;top:0;left:0;right:0;height:5px;z-index:60;
+    background:var(--prism);background-size:200% 100%;animation:drift 22s linear infinite;}
+  @keyframes drift{0%{background-position:0 0;}100%{background-position:200% 0;}}
+
+  nav.codex-nav{position:sticky;top:5px;z-index:55;background:rgba(251,247,238,.86);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);}
+  nav.codex-nav ul{list-style:none;margin:0 auto;padding:.55rem .9rem;display:flex;
+    flex-wrap:wrap;gap:.2rem .9rem;justify-content:center;max-width:1040px;}
+  nav.codex-nav a{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-soft);text-decoration:none;padding:.15rem 0;
+    border-bottom:1.5px solid transparent;transition:.25s;white-space:nowrap;}
+  nav.codex-nav a:hover{color:var(--gold);border-bottom-color:currentColor;}
+
+  main{position:relative;z-index:1;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.4rem;}
+
+  header.mast{text-align:center;padding:5.5rem 1.4rem 3rem;position:relative;}
+  .eyebrow{font-family:"Marcellus",serif;font-size:.82rem;letter-spacing:.42em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 1.6rem;text-indent:.42em;}
+  h1.title{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(2.7rem,8vw,5.1rem);
+    line-height:.98;margin:0;letter-spacing:-.01em;color:var(--ink);font-variation-settings:"opsz" 144;}
+  h1.title .gilt{background:linear-gradient(95deg,var(--gold) 0%,var(--gold-bright) 45%,#EFD27A 60%,var(--gold) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;}
+  .subtitle{font-family:"Spectral",serif;font-weight:300;font-style:italic;
+    font-size:clamp(1.05rem,2.6vw,1.35rem);color:var(--ink-soft);margin:1.5rem auto 0;max-width:42ch;line-height:1.5;}
+  .mast-mark{margin:2.4rem auto 0;width:min(420px,80%);}
+  .mast-mark .bar{height:3px;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  .mast-epi{font-family:"Fraunces",serif;font-style:italic;font-weight:300;
+    font-size:clamp(1.15rem,3vw,1.6rem);color:var(--gold);margin:2.6rem auto 0;max-width:34ch;line-height:1.4;}
+  .mast-epi span{display:block;color:var(--ink-soft);font-size:.7em;font-style:normal;
+    font-family:"Spectral";letter-spacing:.05em;margin-top:.5rem;}
+
+  .diadiv{display:flex;align-items:center;justify-content:center;gap:1rem;margin:3.4rem 0;}
+  .diadiv .line{height:1px;flex:1;max-width:120px;background:linear-gradient(90deg,transparent,var(--gold-pale),var(--gold));}
+  .diadiv .line:last-child{background:linear-gradient(90deg,var(--gold),var(--gold-pale),transparent);}
+  .diadiv .dot{width:7px;height:7px;transform:rotate(45deg);background:var(--gold);box-shadow:0 0 0 4px var(--gold-glow);}
+
+  section{padding:1rem 0;}
+  h2{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(1.9rem,5vw,2.9rem);
+    line-height:1.05;margin:.2rem 0 1.2rem;color:var(--ink);letter-spacing:-.01em;font-variation-settings:"opsz" 80;}
+  h2 .uline{display:block;height:3px;width:108px;margin-top:.7rem;border-radius:2px;
+    background:var(--prism);background-size:200% 100%;animation:drift 16s linear infinite;}
+  h3{font-family:"Fraunces",serif;font-weight:500;font-style:italic;font-size:clamp(1.25rem,3.4vw,1.6rem);
+    margin:2.2rem 0 .6rem;color:var(--ink);font-variation-settings:"opsz" 40;}
+  h4{font-family:"Marcellus",serif;font-weight:400;font-size:1.02rem;letter-spacing:.04em;margin:1.6rem 0 .35rem;color:var(--gold);}
+  p{margin:0 0 1.15rem;}
+  p a{color:var(--gold);}
+  strong{font-weight:600;color:var(--ink);}
+  em{font-style:italic;}
+  .lead{font-size:1.12rem;}
+  .lead::first-letter{font-family:"Fraunces",serif;font-weight:400;float:left;font-size:4.4rem;
+    line-height:.72;padding:.32rem .55rem 0 0;color:var(--gold);font-variation-settings:"opsz" 144;}
+
+  .spectrum{margin:2rem auto;border:1px solid var(--rule);border-radius:14px;overflow:hidden;
+    background:var(--paper-2);box-shadow:0 1px 0 #fff inset, 0 14px 36px -28px rgba(43,35,23,.45);}
+  .spectrum .top{height:8px;background:var(--prism);background-size:180% 100%;animation:drift 20s linear infinite;}
+  .spectrum .rows{padding:.4rem .2rem;}
+  .spec-row{display:grid;grid-template-columns:14px 1fr;gap:.9rem;align-items:start;
+    padding:.7rem 1.1rem;border-bottom:1px solid var(--rule);}
+  .spec-row:last-child{border-bottom:none;}
+  .spec-row .swatch{width:14px;height:14px;border-radius:50%;margin-top:.45rem;
+    box-shadow:0 0 0 3px var(--paper-2),0 0 0 4px currentColor;}
+  .spec-row .nm{font-family:"Marcellus",serif;letter-spacing:.06em;font-size:1.05rem;}
+  .spec-row .nm small{display:block;font-family:"Spectral";font-style:italic;letter-spacing:0;
+    color:var(--ink-soft);font-size:.86rem;margin-top:.15rem;font-weight:300;}
+
+  .realm{--accent:var(--luxenfall);--accent-pale:var(--luxenfall-pale);margin:3rem auto;border:1px solid var(--rule);
+    border-radius:16px;background:linear-gradient(180deg,#fff,var(--paper));
+    box-shadow:0 20px 50px -40px rgba(43,35,23,.6);overflow:hidden;position:relative;}
+  .realm.grounded{--accent:var(--ferridane);--accent-pale:var(--ferridane-pale);}
+  .realm.chorus{--accent:var(--tenebralis);--accent-pale:var(--tenebralis-pale);}
+  .realm.glassen{--accent:var(--glacia);--accent-pale:var(--glacia-pale);}
+  .realm > .crown{height:7px;background:linear-gradient(90deg,var(--accent),var(--accent-pale),var(--accent));}
+  .realm-head{padding:1.8rem 1.6rem 1.3rem;border-bottom:1px solid var(--rule);
+    background:radial-gradient(120% 140% at 100% -20%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%);}
+  .realm-head .kicker{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 .4rem;display:flex;align-items:center;gap:.6rem;}
+  .realm-head .kicker .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);}
+  .realm-head h2{margin:.1rem 0 .55rem;font-size:clamp(2rem,6vw,3rem);}
+  .realm-meta{font-family:"Marcellus",serif;font-size:.8rem;letter-spacing:.05em;color:var(--ink-soft);
+    display:flex;flex-wrap:wrap;gap:.4rem 1.3rem;margin-top:.5rem;}
+  .realm-meta b{color:var(--accent);font-weight:400;}
+  .realm-essence{font-style:italic;color:var(--ink-soft);font-weight:300;margin:.9rem 0 0;font-size:1.04rem;}
+  .realm-body{padding:.4rem 1.6rem 1.7rem;}
+
+  details.thread{border-bottom:1px solid var(--rule);}
+  details.thread:last-of-type{border-bottom:none;}
+  details.thread > summary{list-style:none;cursor:pointer;padding:1.15rem .2rem 1rem;display:flex;
+    align-items:center;gap:.85rem;font-family:"Fraunces",serif;font-size:1.15rem;font-weight:500;color:var(--ink);}
+  details.thread > summary::-webkit-details-marker{display:none;}
+  details.thread > summary .ico{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--accent);
+    color:var(--accent);display:grid;place-items:center;font-family:"Spectral";font-size:1rem;transition:.3s;
+    background:color-mix(in srgb,var(--accent) 6%,transparent);}
+  details.thread[open] > summary .ico{transform:rotate(45deg);}
+  details.thread > summary .lbl small{display:block;font-family:"Marcellus";font-size:.66rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);font-weight:400;margin-top:.15rem;}
+  .thread-body{padding:.1rem .3rem 1.5rem 0;}
+  @media(min-width:540px){.thread-body{padding-left:3.5rem;}}
+
+  .vignette{margin:1.5rem 0;padding:1.1rem 1.3rem;border-left:3px solid var(--accent);
+    background:color-mix(in srgb,var(--accent) 5%,var(--paper-2));border-radius:0 10px 10px 0;}
+  .vignette .tag{font-family:"Marcellus";font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin:0 0 .4rem;}
+  .vignette p{font-style:italic;font-weight:300;margin:0;color:var(--ink);font-size:1.02rem;line-height:1.6;}
+
+  .pull{margin:2.4rem auto;text-align:center;max-width:34ch;}
+  .pull q{font-family:"Fraunces",serif;font-style:italic;font-weight:300;quotes:none;
+    font-size:clamp(1.3rem,3.6vw,1.8rem);line-height:1.34;color:var(--gold);display:block;}
+  .pull cite{display:block;font-style:normal;font-family:"Marcellus";font-size:.74rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ink-soft);margin-top:1rem;}
+
+  .feature{margin:2.2rem 0;padding:1.4rem 1.5rem;border:1px solid var(--rule);border-radius:14px;
+    background:linear-gradient(180deg,#fff,var(--paper));box-shadow:0 14px 40px -36px rgba(43,35,23,.5);}
+  .feature h3{margin-top:.2rem;}
+
+  .feature.lex{background:radial-gradient(130% 130% at 0% 0%, color-mix(in srgb,var(--luxenfall) 7%, #fff), var(--paper) 70%);}
+  ol.lex-list{list-style:none;counter-reset:lex;margin:.3rem 0 0;padding:0;}
+  ol.lex-list li{counter-increment:lex;position:relative;padding:.95rem 0 .95rem 3.2rem;
+    border-bottom:1px solid var(--rule);font-family:"Fraunces",serif;font-style:italic;font-weight:400;
+    font-size:clamp(1.12rem,2.8vw,1.42rem);line-height:1.3;color:var(--ink);font-variation-settings:"opsz" 40;}
+  ol.lex-list li:last-child{border-bottom:none;}
+  ol.lex-list li::before{content:counter(lex,upper-roman);position:absolute;left:0;top:.95rem;
+    font-family:"Marcellus",serif;font-style:normal;font-size:.8rem;letter-spacing:.08em;
+    color:var(--luxenfall);width:2.3rem;text-align:left;padding-top:.18rem;}
+
+  .note{margin:1.5rem 0;padding:1rem 1.2rem;border-radius:10px;border:1px dashed var(--gold);
+    background:color-mix(in srgb,var(--gold) 6%,var(--paper-2));}
+  .note .t{font-family:"Marcellus";font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:0 0 .35rem;}
+  .note p{margin:0;font-size:.98rem;}
+
+  .twocol{display:grid;gap:1rem;margin:1.6rem 0;}
+  @media(min-width:620px){.twocol{grid-template-columns:1fr 1fr;}}
+  .card-rule{border:1px solid var(--rule);border-radius:12px;padding:1.1rem 1.2rem;background:linear-gradient(180deg,#fff,var(--paper));}
+  .card-rule h4{margin-top:0;}
+  .card-rule ul{margin:.3rem 0 0;padding-left:1.1rem;}
+  .card-rule li{margin:.4rem 0;font-size:.97rem;}
+
+  footer{text-align:center;padding:4rem 1.4rem 5rem;margin-top:2rem;position:relative;z-index:1;}
+  footer .bar{height:3px;width:min(420px,80%);margin:0 auto 2.4rem;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  footer .candle{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.3rem,4vw,2rem);
+    color:var(--gold);line-height:1.35;margin:0 auto;max-width:28ch;}
+  footer .ma{font-family:"Marcellus";font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-top:2.4rem;}
+  footer .ma small{display:block;letter-spacing:.05em;text-transform:none;font-family:"Spectral";font-style:italic;font-weight:300;margin-top:.5rem;color:var(--ink-soft);}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;}
+    .ribbon,.spectrum .top,.realm>.crown,h2 .uline,.mast-mark .bar,footer .bar{animation:none;}
+  }
+  @media(max-width:540px){body{font-size:18px;}nav.codex-nav ul{gap:.15rem .7rem;}
+    .realm-body,.realm-head{padding-left:1.1rem;padding-right:1.1rem;}}
+</style>
+</head>
+<body>
+<div class="ribbon"></div>
+
+<nav class="codex-nav" aria-label="Sections">
+  <ul>
+    <li><a href="#gift">The Gift</a></li>
+    <li><a href="#lex">Lex Aeterna</a></li>
+    <li><a href="#age">The Golden Age</a></li>
+    <li><a href="#fall">The Fall</a></li>
+    <li><a href="#rewritten">The Rewritten</a></li>
+    <li><a href="#configurations">The Three</a></li>
+    <li><a href="#operation">The Operation</a></li>
+    <li><a href="#hecate">Hecate</a></li>
+    <li><a href="#garden">The Garden</a></li>
+    <li><a href="#wolves">The Red Wolves</a></li>
+    <li><a href="#now">The Realm Now</a></li>
+  </ul>
+</nav>
+
+<main>
+  <header class="mast">
+    <p class="eyebrow">Moirai Codex · The Sixth Realm, Present and Counted</p>
+    <h1 class="title">Luxania<br><span class="gilt">&amp; Luxenfall</span></h1>
+    <p class="subtitle">The Realm of Light, the most perfect gift the cosmos ever gave — and the most precise wound it ever took. The realm has two names. Luxania is what it was. Luxenfall is what it is. The fall is ongoing.</p>
+    <div class="mast-mark"><div class="bar"></div></div>
+    <p class="mast-epi">Everything the light touched was family.<span>Aether, God of Light — slain</span></p>
+  </header>
+
+  <div class="wrap">
+
+    <!-- ===================== ORIENTATION ===================== -->
+    <section>
+      <div class="spectrum reveal">
+        <div class="top"></div>
+        <div class="rows">
+          <div class="spec-row" style="color:var(--luxenfall)"><span class="swatch"></span><span class="nm">Element &amp; Patron<small>Light · Aether, slain by Erebus. No living patron. No divine enforcement, because the mechanism runs through patron gods, and theirs is gone.</small></span></div>
+          <div class="spec-row" style="color:var(--luxenfall)"><span class="swatch"></span><span class="nm">The Two Names<small>Luxania, the Golden Age. Luxenfall, the occupation. The realm stands among the living, because the population is right there, right now.</small></span></div>
+          <div class="spec-row" style="color:var(--luxenfall)"><span class="swatch"></span><span class="nm">Chromatic Signature<small>Pale gold — the spectrum of light passing cleanly through crystal, the color of a thing that reveals rather than dazzles.</small></span></div>
+          <div class="spec-row" style="color:var(--luxenfall)"><span class="swatch"></span><span class="nm">Capital &amp; Heart<small>Alacanthe, and at its center the Wellspring — the empathic mechanism that was the realm's perfection and its single attack surface.</small></span></div>
+          <div class="spec-row" style="color:var(--luxenfall)"><span class="swatch"></span><span class="nm">Guardian<small>The Solarith — primal guardian, broken and left walking. A colossal skeletal wyrm, the largest open wound in the cosmos.</small></span></div>
+          <div class="spec-row" style="color:var(--luxenfall)"><span class="swatch"></span><span class="nm">The Question<small>What is power for? Luxania answers from the far side of the wound: power is for staying with what was broken, and building what cannot be broken the same way twice.</small></span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="diadiv"><span class="line"></span><span class="dot"></span><span class="line"></span></div>
+
+    <!-- ===================== THE GIFT ===================== -->
+    <section id="gift">
+      <h2>The Gift<span class="uline"></span></h2>
+      <p class="lead">Aether gave Luxania the Wellspring — empathic unity as a literal mechanism. Every Mystic bathed in his light became aware of an undeniable connection to every other, and from that awareness grew the single doctrine that organized everything the civilization ever built: that everything the light touched was family. It was, by the cosmos's own reckoning, the most perfect gift any realm received.</p>
+
+      <p>The gift was relation. Light, in Luxania, was the medium through which souls knew one another — and the three great Luminacies were three philosophies of what that medium was for. The Crystalline Hegemony worked with <strong>structured light</strong>: Crystaturgy, the rendering of light into lasting form, the art nobody else in the cosmos could match. The Choral Dynasties worked with <strong>resonant light</strong>: Pathos-Kinesis, Symphotheosis, feeling shaped and shared. And the Astral Navigators worked with <strong>connective light</strong>: the light that reaches across distance, that finds another and binds the two. Three readings of one gift, and the realm built itself coherently around all three.</p>
+    </section>
+
+    <!-- ===================== LEX AETERNA ===================== -->
+    <section id="lex">
+      <h2>The Lex Aeterna<span class="uline"></span></h2>
+      <p class="lead">The blessing of Aether was empathy made structural, and the Lex Aeterna were the principles that governed it. Not laws in the way the other realms think of laws — not prohibitions, not commandments. The settings on the Wellspring. The parameters of what the empathic field amplified and what it dampened.</p>
+
+      <p>Simple enough to fit on a crystata. Profound enough that their absence explains everything that followed.</p>
+
+      <div class="feature lex reveal">
+        <ol class="lex-list">
+          <li>Do not cause suffering you can prevent.</li>
+          <li>Do not take what is not offered.</li>
+          <li>Do not deceive those who trust you.</li>
+          <li>Do not turn away from someone in pain.</li>
+          <li>Do not use another person as a means to your end.</li>
+        </ol>
+      </div>
+
+      <p>Five. Not ten commandments, not forty-two judgments — five principles so basic that on Luxania nobody thought of them as laws at all. They were how people felt. A child growing up inside the Wellspring's radius never had to be <em>taught</em> not to hurt someone; they felt the other's pain as clearly as their own, and the Lex Aeterna made the impulse to stop feel as automatic as pulling a hand off a flame.</p>
+
+      <p>The other realms aspire to these. Luxania <em>was</em> these — because the infrastructure did the heavy lifting that elsewhere falls to individual willpower alone, and individual willpower fails every single day. That was the blessing. Not power, not beauty, not knowledge. Decency so ambient it felt like weather.</p>
+
+      <div class="pull">
+        <q>A child never had to be taught not to hurt someone. They felt the other's pain as clearly as their own.</q>
+        <cite>The Wellspring, before it was retuned</cite>
+      </div>
+    </section>
+
+    <!-- ===================== THE GOLDEN AGE ===================== -->
+    <section id="age">
+      <h2>The Golden Age<span class="uline"></span></h2>
+      <p>Astra ruled. Crystal spires, singing forests, the Ancestral Archive, the Crystaturgy, the Pathos-Kinesis. Luxania built exactly what its gift asked it to build, and it stood as the gift's most coherent expression anywhere in the cosmos — a civilization founded on <em>recognition</em>, where connection was the substance of reality. The doctrine held that everything the light touched was family, and so, in time, the doctrine produced its own logical next move: it was time to find more.</p>
+
+      <p>The Astral Navigators reached outward. This was the gift acting on itself — a people who experienced connection as the substance of reality, deciding the family did not end at the horizon. And the founding act of the entire connected cosmos was a single Navigator's reach: a soul thrown so far into the dark that it touched another, guided a stranger home, and began the long making of the roads between worlds.</p>
+
+      <div class="pull">
+        <q>Everything the light touched was family. So they went looking for more of it.</q>
+        <cite>The reaching-out, before it was called a sin</cite>
+      </div>
+    </section>
+
+    <!-- ===================== THE FALL ===================== -->
+    <section id="fall">
+      <h2>The Fall<span class="uline"></span></h2>
+      <p class="lead">A civilization built entirely on shared empathic connection holds exactly one attack surface — the empathic connection. Vex Mavarra identified it and operated on it across centuries, with patience nothing else in the cosmos could match. The Wellspring built to share joy became the delivery system for concentrated negative emotion at destabilizing volume, and the civilization tore itself apart from the inside before a single soldier crossed the border.</p>
+
+      <p>The cruelty of it is precise. The Lex Aeterna were settings on a field — the parameters that made decency ambient, the impulse to spare another's pain as automatic as pulling a hand off a flame. Vex did not break the field. She retuned it. The same infrastructure that had made suffering unbearable to witness was set to manufacture suffering at volume, and a people who could not look away from another's pain were made to drown in it. The Wellspring kept working perfectly the entire time. It had only been given new settings.</p>
+
+      <p>Aether was slain by Erebus. Astra was erased. The Solarith was broken. The sun has not shone in a thousand years. Luxania received its gift completely, and the completeness was the surface that broke it. The most perfect gift any realm was given became the precise mechanism of its destruction. The perfection and the vulnerability were the same fact, seen from two sides.</p>
+
+      <p>And then, when the realm called out during the fall — when a people whose entire theology was connection reached, one last time, for the gods — the gods met them with silence. That silence is load-bearing. It is the root of everything the survivors became, and the thing the next age will have to answer.</p>
+    </section>
+
+    <div class="diadiv"><span class="line"></span><span class="dot"></span><span class="line"></span></div>
+
+    <!-- ===================== THE REWRITTEN ===================== -->
+    <section id="rewritten">
+      <h2>The Rewritten<span class="uline"></span></h2>
+      <p class="lead">This is the heart of the wound, and it must be said flatly, because flatness is the only honest register for it. The relocation programs are a farce. A Luxenfallen taken abroad is not resettled. A Luxenfallen seen abroad is Rewritten — and what walks back out is sold to whoever has the crystal and the desire to own it.</p>
+
+      <h3>What the Rewriting is</h3>
+      <p>The Rewriting is a process: an Oneironaut working under the supervision of an Aesthete. Through convalescence, it strips every single thing from the mind — will, memory, persona, every part of the self that was born there — and authors, in the emptied place, a mind of absolute compliance. There is nothing in a Rewritten that the Aesthetes did not put there. The self is gone. The obedient mind that replaces it is the only tenant, and there is no one beneath it waiting to be reached.</p>
+
+      <h3>The soul remains</h3>
+      <p>The soul, however, stays. Intact. Deliberately — because the soul is the organ that interfaces with myst, and a Rewritten is valuable precisely as a <em>naturally born Luxanian</em>: the Crystaturgy, the empathic capacity, the Wellspring lineage, all of it still resident and fully operational. They keep the engine and replace the driver. The Rewritten can do everything a living Luxanian could do, with the innate power undimmed — and cannot point any of it at their own purpose. They cannot command it for themselves. They must be bidden.</p>
+
+      <div class="note">
+        <p class="t">The Nihila sentence, inverted</p>
+        <p>The Nihila has a soul that cannot reach the field. The Rewritten has a soul that reaches the field beautifully and cannot reach itself. The divine withholding made eight billion unable to touch their own power. The Rewriting makes a Luxanian able to touch all of it — on someone else's word. Same soul-as-interface mechanic, weaponized from the opposite end.</p>
+      </div>
+
+      <h3>What is done with them</h3>
+      <p>Females are sold largely for pleasure. Males are sold largely for labor. They work the mines, work the men, do the household labor of women of means. Occasionally the Squalls discover situations of egregious exploitation — trafficking in the extreme sense, and underground gladiator rings where Rewritten are bidden to fight one another to the death. The horror is in the ordinariness: a labor source, a pleasure source, a procurement line, theologically rationalized and folded into domestic life across the realms.</p>
+
+      <div class="vignette">
+        <p class="tag">The Obsidian · Sol'Kheret</p>
+        <p>When she learned her own people had been visiting pleasure dens abroad that held Rewritten within them, she called every man known to have gone to the Obsidian, and beat them with the Golden Flame, all at once, until the sun set. By the time she and the Flame were finished, the men were almost Rewritten themselves. Then she sent them to be bathed in Krenides, and washed clean. She did to them what was done to the Luxenfallen — and stopped, exactly, a hair short of the line past which the water finds nothing to restore.</p>
+      </div>
+
+      <div class="vignette">
+        <p class="tag">Steelheart · Aurelius Vorn</p>
+        <p>He does not care what happens to the Rewritten. Ferridane reads the fall of Luxania as a failure to hold sacred the purpose of a blade, and so the Rewritten are, to them, the natural sediment of a people who went soft. Rewritten work the mines and the manors of those with means. The Lykaion generally will not pay for one — but they have taken plenty, and sold them cheap.</p>
+      </div>
+
+      <h3>Why there is no rescue at the level one looks for it</h3>
+      <p>Every single thing taken from a Rewritten mind is itemized and sold. Every memory becomes a coin. Every feeling becomes a potion. The parts move in individual transactions, because the mind atomizes into more units that way and the units sell faster than the whole ever could. Almost no one buys the whole of a mind. A complete person is the unsellable inventory: too many units, wildly expensive, and how many memories do you imagine a single human mind holds?</p>
+
+      <p>So a Rewritten is distributed — the person scattered across the cosmos one coin and one vial at a time, owned by thousands who each hold a fragment they experience as a luxury good, none of whom knows or could find the others. You cannot recall a person from a market. A childhood afternoon sits in a collector's drawer in Steelheart. A first love is a potion someone drank in Salacica years ago and metabolized. A Rewritten cannot be put back together because the pieces are everywhere — owned, scattered, untraceable. This is the line, the point past which staying is no longer possible, because the one you would stay with has been authored out and sold off.</p>
+    </section>
+
+    <!-- ===================== THE COVER FOR A COVER ===================== -->
+    <section id="operation">
+      <h2>The Operation Beneath the Operation<span class="uline"></span></h2>
+      <p class="lead">The selling is the alibi. So is the product. So are the economics.</p>
+
+      <p>Immediately after the destruction of Luxania, Tenebralis and its "people" were welcome nowhere. A thousand years later, the whole thing has turned into a market — and that conversion <em>is</em> the achievement. Once every realm's leisure and economy and household labor runs partly on the product, no realm can move against Tenebralis without first admitting what it has been consuming. The selling distributes guilt, and distributed guilt is structural protection. You do not accuse the supplier when the accusation indicts you. The coins and potions are a thousand years of bought silence, paid in the currency of complicity, so the conquest and the ongoing subjugation can continue uninterrupted.</p>
+
+      <div class="feature reveal">
+        <h3>The layers, in order</h3>
+        <p>The Rewriting looks like slavery. Beneath it, the harvest looks like the point. Beneath that, the market looks like the point. Beneath that, the market is a cover for the laundering; the laundering is a cover for the uninterrupted continuation; and the continuation is a cover for the only thing that was ever the actual operation — a thousand-year maneuver to ensure the mantle of Atropos falls onto a hollowed vessel, to be made Damq'eth. Death's own avatar, replaced by a thing wearing its face and answering to Vex.</p>
+        <p style="margin-bottom:0">The crystal is almost incidental. It is valuable to the Aesthetes only insofar as it proves there are people who would buy these things — which is to say, only as proof the laundering is working. The Luxenfallen are not even the target. They are the raw material for building the instrument that takes the target. A whole civilization rendered into product to manufacture one hollow vessel.</p>
+      </div>
+    </section>
+
+    <div class="diadiv"><span class="line"></span><span class="dot"></span><span class="line"></span></div>
+
+    <!-- ===================== THE THREE CONFIGURATIONS ===================== -->
+    <section id="configurations">
+      <h2>The Three Configurations<span class="uline"></span></h2>
+      <p class="lead">There is no longer a hierarchy of Luxania. There is an occupation, and beneath it the population stands in three configurations — three shapes a destroyed civilization takes when the destroyer understood the original architecture and works to keep the survivors divided. They are the same people, split, and the occupier's primary discipline is the maintenance of the split.</p>
+
+      <div class="realm glassen reveal">
+        <div class="crown"></div>
+        <div class="realm-head">
+          <p class="kicker"><span class="dot"></span>The Forgotten</p>
+          <h2>The Glassen</h2>
+          <p class="realm-essence">They have lost the memory of what their civilization's gift even was.</p>
+        </div>
+        <div class="realm-body">
+          <p>To the Glassen, the sacred Crystata through which their ancestors rendered light into structure is just <em>glass</em> — the strongest feedstock available — and they mine the Ancestral Archive for ore, not knowing it is an archive. The forgetting is the finished outcome of a century of induced cultural amnesia, worked by Tenebrali Oneironauts across generations. Their wound is amnesia, and the cure is the memory itself, returned.</p>
+        </div>
+      </div>
+
+      <div class="realm chorus reveal">
+        <div class="crown"></div>
+        <div class="realm-head">
+          <p class="kicker"><span class="dot"></span>The Harvested</p>
+          <h2>The Screaming Chorus</h2>
+          <p class="realm-essence">The empathic-network survivors, whose own biology was turned against them.</p>
+        </div>
+        <div class="realm-body">
+          <p>The Wellspring that once shared joy now carries recursive shared trauma, and their Scream is the involuntary eruption of pain cultivated in them on purpose, across decades of curated amplification. Their empathic apparatus was trained to meet every presence as a variant of the tormentor's — and so it does. Their wound is that the instrument of connection became the instrument of agony, and the only thing that could quiet it is the network's own original, uncorrupted signal.</p>
+        </div>
+      </div>
+
+      <div class="realm grounded reveal">
+        <div class="crown"></div>
+        <div class="realm-head">
+          <p class="kicker"><span class="dot"></span>The Vengeful</p>
+          <h2>The Grounded</h2>
+          <p class="realm-essence">They operate on accurate diagnosis — and reach the wrong conclusion from it.</p>
+        </div>
+        <div class="realm-body">
+          <p>The Grounded have correctly identified that reaching outward cost Luxania its greatest achievement, that trust admitted the infiltration, and that the appeal to the gods during the fall met silence. From a verified betrayal follows their doctrine of <strong>Final Isolation</strong>: drive out the occupier, restore Luxania, then secure the cosmos against every future threat — alone, trusting no one, ever again.</p>
+          <p>The observation is correct; the conclusion indicts the wrong thing. The Grounded were Astral Navigators — the reaching-out people — and Final Isolation is them turning on their own founding act, because the survivors write the doctrine and the survivors remember the reach as the thing that killed them. The coalition answers this by demonstrating that the grievance can be met through the very means Final Isolation forecloses.</p>
+        </div>
+      </div>
+
+      <div class="note">
+        <p class="t">On the Rewritten and the configurations</p>
+        <p>The configurations are the Luxanians who still have a self — will, memory, persona — the ones who can still be stayed with. The Rewritten are the ones the relocation farce already reached. The three configurations are where the actual Luxanians still are, and that is why the staying happens in Luxenfall.</p>
+      </div>
+    </section>
+
+    <!-- ===================== HECATE ===================== -->
+    <section id="hecate">
+      <h2>Hecate, and the Quiet Assembly<span class="uline"></span></h2>
+      <p class="lead">Among the Luxenfallen, Hecate is a legend — but in a terrible way. She was the one who opened the doors to the realms, and complete destruction followed soon after. To the Sinclairs she is a problem: the erased co-architect of the Clairgates, whose name was struck from the record so the roads could be theirs alone. To the New Lykaion she is a solution: the original principle of the Lumen Cradle, the thing they cannot reverse-engineer. To almost no one alive is she anything that can be recognized, understood, or confirmed.</p>
+
+      <p>Hecate was, arguably, the single most consequential mind in the history of the cosmos. She is the reason any realm is connected to any other at all — the one who figured out how it could be done, who astral-projected so far into space that her soul touched Juno Sinclair's, then helped Juno find her way home to Thalassor, and so began the long creation of the Clairgates. The Lumen Cradle was Luxanian in principle; the stabilization was Thalassori in craft. When Luxania fell, Thalassor recovered the work, presented it as its own, and erased Hecate's name. Every Sinclair heir has carried the truth since, swallowed through the Concordant Path.</p>
+
+      <p>Like every Rewritten Luxanian, Hecate's mind was taken — itemized, turned to coins and potions, scattered across the cosmos's luxury market a thousand years ago. The whole of her mind, or even a single confirmed memory of hers, would be extraordinarily valuable — and the kind of thing almost no one alive would know about, grasp the significance of, or be able to <em>authenticate</em>. Three filters, and they do not narrow to a rich collector. They narrow to one position in the cosmos.</p>
+
+      <div class="feature reveal">
+        <h3>The only buyer who could</h3>
+        <p>A Sinclair wants the fragments gone. The New Lykaion want the Cradle part and would discard the rest. A Luxenfallen who knew the legend has no crystal and would be Rewritten the moment they were seen. To assemble Hecate, one must <em>know she existed</em> against a thousand years of erasure, <em>understand why the whole mind matters</em> and not just the Cradle fragment, and <em>be able to confirm</em> a coin as genuinely hers in a market built on the fact that you usually cannot tell.</p>
+        <p style="margin-bottom:0">Only one civilization sits at the intersection of all three. Zephyros holds the account of the fall in the Cloisters. The Oracles carry her name where everyone else lost it. The Aether confirms truth and rings against a lie — the one instrument for authenticating a coin. And the knowledge gardens are already a technology for holding a scattered whole. This is Aeon's play. Without a single doubt.</p>
+      </div>
+
+      <p>Aeon is silent so that he may <em>listen</em> — to Algol, to Iles, to what moves in the realms. The Twenty-Year Silence and the thousand-year assembly are one discipline at two scales: a man holding perfectly still to hear the one beat everything is timed to. He has been buying Hecate back off the Aesthetes' own market, coin by authenticated coin, turning the instrument of the conquest into his supply chain — and the Aesthetes sold him every piece, because to them it was only inventory moving, proof that buyers exist.</p>
+    </section>
+
+    <div class="diadiv"><span class="line"></span><span class="dot"></span><span class="line"></span></div>
+
+    <!-- ===================== THE GARDEN ===================== -->
+    <section id="garden">
+      <h2>The Garden — Their Lost History, Found<span class="uline"></span></h2>
+      <p class="lead">The body of Hecate lived a thousand years ago. No one is giving her her mind back as a person; there is no vessel, and a mind authored back into a Rewritten shell would be another authored thing, not her. So the cache was never going to become a woman again. It was going to become a garden.</p>
+
+      <p>Every memory, recovered from the coins and held at Meliadas, breathed carefully into flowers — the way Zephyros has always stored a mind: scattered information breathed into living soil, held whole, alive, attendable. A knowledge garden gives you the mind's experience, enterable, remembered as if it were your own. A garden grown from Hecate's complete recovered interior is that mind itself, given back to the people it came from.</p>
+
+      <div class="feature reveal">
+        <h3>What the garden gives them</h3>
+        <p>It gives them back their entire history, experienced as their own memory — the golden age, the connection, what it was to be unified, all the way up to the moment they were broken, and who did it, and how. It gives them back the Lex Aeterna: the original settings of the Wellspring, the parameters of the field that made decency ambient, recoverable now as knowledge that can be set again. It gives the Glassen the cure for an engineered amnesia, administered as memory itself, and the forgetting has nothing left to stand on. It gives the Screaming Chorus an untainted presence to meet — the network's own original, uncorrupted signal. It shows the Grounded that Hecate's reach was their civilization's most luminous act, and that Final Isolation misdiagnosed the wound.</p>
+        <p>And it teaches them to build the Gates themselves — the Lumen Cradle at its source, the Luxanian principle the Sinclairs erased and Ferridane cannot crack. It ends the monopoly at the root, by giving the one people with the original claim the original knowledge.</p>
+        <p style="margin-bottom:0">And it teaches them what mistakes not to make this time — because the garden holds the golden age <em>and the breaking</em>, the attack surface and how it was exploited. They get their innocence back carrying the knowledge of how it was used against them — the one form of restoration that leaves no opening for the same play to run twice.</p>
+      </div>
+
+      <div class="pull">
+        <q>Luxania received its perfect gift, and the perfection broke it. Luxenfall receives the gift, and the memory of the wound — and that is the first thing in the cosmos built to be un-exploitable by what broke its predecessor.</q>
+        <cite>The Zephyros–Luxania Concord · the first proof of concept for the next age</cite>
+      </div>
+
+      <p>It is the perfect inversion of Vex, laid end to end. She spent a thousand years taking a civilization apart into coins, to hollow a vessel and make the realms complicit so the crime could continue. Aeon spent the same thousand years buying those same coins back, off the same market, to reassemble the one mind that gives a broken people their continuity, their connection, their craft, and their lesson, all at once. Same thousand years. Same coins. Opposite hands. Hers was loud enough to launder across the whole cosmos; his looked, the entire time, like a quiet man tending flowers and saying nothing.</p>
+    </section>
+
+    <!-- ===================== THE RED WOLVES ===================== -->
+    <section id="wolves">
+      <h2>The Red Wolves — The Hard Power Behind the Garden<span class="uline"></span></h2>
+      <p class="lead">Soft power cannot exist without hard power behind it. A garden containing the most consequential mind in the history of the cosmos, sitting undefended at the heart of a realm everyone profited from breaking, is loot waiting for a buyer. The garden is safe — the garden is power — only because the ground beneath it was won first, by an army that stays.</p>
+
+      <p>The Battle of the Second Sun was fought by an army unified under the Red Wolf, calling themselves the Red Wolves, who become the standing army of the Advent. The whole of the Advent that fought it was small: Alciel, Anberlyn, Rukii, Fiacre, Uriel, Algol, and the Glacians who could and would fight for a dying realm that was never theirs — and the Red Wolves, drawn from the Grounded, who were once Astral Navigators themselves and had by then been trained and taught to fight by, and like, the Red Wolf.</p>
+
+      <div class="feature reveal">
+        <h3>The Grounded, turned</h3>
+        <p>The Grounded's doctrine of Final Isolation says to drive out the outsider and never trust again. The Red Wolves are the Grounded accepting the outsider's hand — Uriel's, the exact thing the doctrine says to refuse — to become the hard power that protects their own restoration. Final Isolation dies as the Grounded <em>become</em> the proof that the outside could be trusted exactly once more, and that the once was enough. They are their grief organized into discipline, the standing answer to their own old doctrine, and the standing army of the Advent, born at the Second Sun.</p>
+      </div>
+
+      <p>The garden is kept at the Wellspring, at the heart of Alacanthe — which makes the defense and the meaning the same object. The Wellspring was the attack surface, the empathic mechanism Vex operated on for centuries, the place the civilization was broken. Planting Hecate's whole mind there, guarded by an army drawn from the wounded, turns the place of greatest vulnerability into the place of greatest fortification. The wound becomes the fortress when someone chooses to stay at it. The history of how they were broken grows in the exact spot where the breaking happened.</p>
+
+      <div class="note">
+        <p class="t">What arrives with the army</p>
+        <p>A standing army drawn from the Astral Navigators, trained by Uriel, holding the one realm that now knows how to build Gates and has the original principle to build them from — this ends the Sinclair road monopoly as a structural fact. The Red Wolves guard the second realm in the cosmos that can open its own doors, defended by people who were never going to ask Thalassor's permission again. The capability arrives the moment the army does.</p>
+      </div>
+    </section>
+
+    <div class="diadiv"><span class="line"></span><span class="dot"></span><span class="line"></span></div>
+
+    <!-- ===================== THE REALM NOW ===================== -->
+    <section id="now">
+      <h2>The Realm Now<span class="uline"></span></h2>
+      <p class="lead">The violence done to Luxenfall is a condition that continues — the Lightwells still operate, the occupation is active, the Wellspring still pulses, the population is right there. Institutional ledgers in the other realms prefer the past tense for Luxania, because the past tense lets them arrange around an absence and never sit with a present.</p>
+
+      <p>The work through Luxenfall is the refusal of that tense: the staying. The slow labor of sitting with what was done and doing what can be done about it now — through the factional hostility, the Grounded's refusal of outside help, the Chorus's recursive trauma, the Glassen's amnesia. The restoration is the population deciding, with whoever has committed to stay, what the realm becomes next.</p>
+
+      <p>And it keeps producing figures the occupier cannot fully account for — what one configuration makes when it organizes its anger into discipline, what another makes when the occupier's most intimate apparatus is turned into a weapon it never anticipated. That is the proof the civilization still lives. Luxenfall is the center of the cosmos's moral reality, and it is a realm, present and counted.</p>
+
+      <div class="pull">
+        <q>The doors she opened destroyed them. The garden she becomes is the apology made of the woman herself — arriving on the day the light returns, in the form their own civilization used for memory before anyone taught them to call Crystata "glass."</q>
+        <cite>Luxania, restored — knowing, this time, exactly what broke them</cite>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="bar"></div>
+    <p class="candle">The most perfect gift the cosmos gave. The most precise wound it took. And then a second sun, and someone still standing under it.</p>
+    <p class="ma">Moirai Codex · The Realm of Light</p>
+  </footer>
+</main>
+
+<script>
+  (function(){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.12});
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tenebralis — The Realm of Masks · Moirai Codex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Marcellus&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF7EE; --paper-2:#F6F0E2; --card:#ffffff;
+    --ink:#2B2317; --ink-soft:#5A4E3A; --rule:#E4D8BE;
+    --gold:#9A7B1F; --gold-bright:#C9A227; --gold-pale:#E9DCB0;
+    --zephyros:#8AA63A; --pyrthera:#C7572B; --thalassor:#2E6FA3;
+    --ferridane:#A66A2E; --tenebralis:#6A3D9A; --luxenfall:#C9A227; --glacia:#5C97B8;
+    --accent:var(--tenebralis); --accent-pale:#C8B0E2;
+    --prism:linear-gradient(90deg,#6A3D9A 0%,#2E6FA3 17%,#5C97B8 30%,#8AA63A 45%,#C9A227 60%,#A66A2E 74%,#C7572B 100%);
+    --maxw:760px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Spectral",Georgia,serif;font-weight:400;font-size:19px;line-height:1.72;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(120% 80% at 8% -5%,rgba(106,61,154,.06),transparent 45%),radial-gradient(120% 80% at 105% 110%,rgba(106,61,154,.05),transparent 45%),radial-gradient(140% 90% at 100% 0%,rgba(46,111,163,.03),transparent 40%),radial-gradient(100% 100% at 50% 40%,transparent 60%,rgba(43,35,23,.05));}
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");}
+  .ribbon{position:fixed;top:0;left:0;right:0;height:5px;z-index:60;background:var(--prism);background-size:200% 100%;animation:drift 22s linear infinite;}
+  @keyframes drift{0%{background-position:0 0;}100%{background-position:200% 0;}}
+  nav.codex-nav{position:sticky;top:5px;z-index:55;background:rgba(251,247,238,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);}
+  nav.codex-nav ul{list-style:none;margin:0 auto;padding:.55rem .9rem;display:flex;flex-wrap:wrap;gap:.2rem .9rem;justify-content:center;max-width:1040px;}
+  nav.codex-nav a{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;padding:.15rem 0;border-bottom:1.5px solid transparent;transition:.25s;white-space:nowrap;}
+  nav.codex-nav a:hover{color:var(--tenebralis);border-bottom-color:currentColor;}
+  main{position:relative;z-index:1;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.4rem;}
+
+  header.mast{text-align:center;padding:5.5rem 1.4rem 3rem;position:relative;}
+  .eyebrow{font-family:"Marcellus",serif;font-size:.82rem;letter-spacing:.42em;text-transform:uppercase;color:var(--tenebralis);margin:0 0 1.6rem;text-indent:.42em;}
+  h1.title{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(2.6rem,8vw,5rem);line-height:.98;margin:0;letter-spacing:-.01em;color:var(--ink);font-variation-settings:"opsz" 144;}
+  h1.title .gilt{background:linear-gradient(95deg,#6A3D9A 0%,#9B6DD0 45%,#C8A6E8 60%,#6A3D9A 100%);-webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;}
+  .subtitle{font-family:"Spectral",serif;font-weight:300;font-style:italic;font-size:clamp(1.05rem,2.6vw,1.35rem);color:var(--ink-soft);margin:1.5rem auto 0;max-width:40ch;line-height:1.5;}
+  .mast-mark{margin:2.4rem auto 0;width:min(420px,80%);}
+  .mast-mark .bar{height:3px;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  .mast-epi{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.15rem,3vw,1.55rem);color:var(--tenebralis);margin:2.6rem auto 0;max-width:30ch;line-height:1.4;}
+  .mast-epi span{display:block;color:var(--ink-soft);font-size:.7em;font-style:normal;font-family:"Spectral";letter-spacing:.05em;margin-top:.5rem;}
+
+  .diadiv{display:flex;align-items:center;justify-content:center;gap:1rem;margin:3.4rem 0;}
+  .diadiv .line{height:1px;flex:1;max-width:120px;background:linear-gradient(90deg,transparent,var(--gold-pale),var(--gold));}
+  .diadiv .line.r{background:linear-gradient(90deg,var(--gold),var(--gold-pale),transparent);}
+  .diadiv .gem{font-size:.9rem;color:var(--accent);letter-spacing:.4em;text-indent:.4em;}
+
+  section{padding:1.5rem 0;position:relative;}
+  .sec-eyebrow{font-family:"Marcellus",serif;font-size:.78rem;letter-spacing:.32em;text-transform:uppercase;color:var(--accent);margin:0 0 .5rem;}
+  h2{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(1.9rem,5vw,2.9rem);line-height:1.05;margin:.2rem 0 1.2rem;color:var(--ink);letter-spacing:-.01em;font-variation-settings:"opsz" 80;}
+  h2 .uline{display:block;height:3px;width:108px;margin-top:.7rem;border-radius:2px;background:var(--prism);background-size:200% 100%;animation:drift 16s linear infinite;}
+  h3{font-family:"Fraunces",serif;font-weight:500;font-style:italic;font-size:clamp(1.25rem,3.4vw,1.6rem);margin:2.2rem 0 .6rem;color:var(--ink);font-variation-settings:"opsz" 40;}
+  h4{font-family:"Marcellus",serif;font-weight:400;font-size:1.02rem;letter-spacing:.04em;margin:1.6rem 0 .35rem;color:var(--accent);}
+  p{margin:0 0 1.15rem;}
+  strong{font-weight:600;color:var(--ink);}
+  .lead{font-size:1.12rem;}
+  .lead::first-letter{font-family:"Fraunces",serif;font-weight:400;float:left;font-size:4.4rem;line-height:.72;padding:.32rem .55rem 0 0;color:var(--accent);font-variation-settings:"opsz" 144;}
+
+  .realm{margin:2.6rem auto;border:1px solid var(--rule);border-radius:16px;background:linear-gradient(180deg,var(--card),var(--paper));box-shadow:0 20px 50px -40px rgba(20,12,28,.6);overflow:hidden;position:relative;}
+  .realm > .crown{height:7px;background:linear-gradient(90deg,var(--accent),var(--accent-pale),var(--accent));}
+  .realm-head{padding:1.8rem 1.6rem 1.2rem;border-bottom:1px solid var(--rule);background:radial-gradient(120% 140% at 100% -20%,color-mix(in srgb,var(--accent) 11%,transparent),transparent 60%);}
+  .realm-head .kicker{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin:0 0 .4rem;display:flex;align-items:center;gap:.6rem;}
+  .realm-head .kicker .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);}
+  .realm-head h2{margin:.1rem 0 .5rem;font-size:clamp(2rem,6vw,3rem);}
+  .realm-head h2 .uline{display:none;}
+  .realm-essence{font-style:italic;color:var(--ink-soft);font-weight:300;margin:.4rem 0 0;font-size:1.04rem;}
+  .realm-body{padding:.4rem 1.6rem 1.7rem;}
+
+  details.thread{border-bottom:1px solid var(--rule);}
+  details.thread:last-of-type{border-bottom:none;}
+  details.thread > summary{list-style:none;cursor:pointer;padding:1.15rem .2rem 1rem;display:flex;align-items:center;gap:.85rem;font-family:"Fraunces",serif;font-size:1.15rem;font-weight:500;color:var(--ink);}
+  details.thread > summary::-webkit-details-marker{display:none;}
+  details.thread > summary .ico{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--accent);color:var(--accent);display:grid;place-items:center;font-family:"Spectral";font-size:1rem;transition:.3s;background:color-mix(in srgb,var(--accent) 7%,transparent);}
+  details.thread[open] > summary .ico{transform:rotate(45deg);}
+  details.thread > summary .lbl small{display:block;font-family:"Marcellus";font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:400;margin-top:.15rem;}
+  .thread-body{padding:.1rem .3rem 1.5rem 0;}
+  @media(min-width:540px){.thread-body{padding-left:3.5rem;}}
+
+  .vignette{margin:1.5rem 0;padding:1.1rem 1.3rem;border-left:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 6%,var(--paper-2));border-radius:0 10px 10px 0;}
+  .vignette .tag{font-family:"Marcellus";font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin:0 0 .4rem;}
+  .vignette p{font-style:italic;font-weight:300;margin:0;color:var(--ink);font-size:1.02rem;line-height:1.6;}
+
+  .pull{margin:2.4rem auto;text-align:center;max-width:34ch;}
+  .pull q{font-family:"Fraunces",serif;font-style:italic;font-weight:300;quotes:none;font-size:clamp(1.3rem,3.6vw,1.8rem);line-height:1.34;color:var(--accent);display:block;}
+  .pull cite{display:block;font-style:normal;font-family:"Marcellus";font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin-top:1rem;}
+
+  .feature{margin:2.2rem 0;padding:1.4rem 1.5rem;border:1px solid var(--rule);border-radius:14px;background:linear-gradient(180deg,var(--card),var(--paper));box-shadow:0 14px 40px -36px rgba(20,12,28,.5);}
+  .feature h3{margin-top:.2rem;}
+
+  .roles{margin:1.6rem 0;}
+  .role{border:1px solid var(--rule);border-radius:13px;padding:1.1rem 1.3rem;margin:1rem 0;background:var(--card);}
+  .role .rn{font-family:"Fraunces";font-style:italic;font-weight:500;font-size:1.2rem;color:var(--ink);margin:0 0 .15rem;}
+  .role .rn small{font-family:"Marcellus";font-style:normal;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);display:block;margin-top:.2rem;}
+  .role p{margin:.5rem 0 0;font-size:1rem;}
+
+  .decree{margin:1.8rem 0;}
+  .perm{display:grid;grid-template-columns:2.2rem 1fr;gap:.35rem .7rem;padding:1.2rem 0;border-bottom:1px solid var(--rule);}
+  .perm:last-child{border-bottom:none;}
+  .perm .num{grid-row:1/3;font-family:"Fraunces";font-style:italic;font-size:1.5rem;line-height:1;color:var(--accent);opacity:.85;padding-top:.15rem;}
+  .perm .verse{font-family:"Fraunces";font-style:italic;font-weight:400;font-size:1.16rem;line-height:1.42;color:var(--gold);}
+  .perm .plain{font-family:"Spectral";font-weight:300;font-size:1.02rem;line-height:1.5;color:#9A5FB8;}
+
+  .deep{
+    --paper:#160E23; --paper-2:#1E1430; --card:#1E1530;
+    --ink:#ECE2C6; --ink-soft:#B8A9CC; --rule:#382A4E;
+    --gold:#E3C463; --gold-bright:#F1D480; --gold-pale:#6E5C2F;
+    --accent:#9B6DD0; --accent-pale:#5E3D86;
+    position:relative;color:var(--ink);
+    background:radial-gradient(130% 90% at 50% -10%,#271838,transparent 60%),radial-gradient(100% 120% at 100% 100%,#1c1330,transparent 55%),#160E23;
+  }
+  .deep::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)' opacity='0.05'/%3E%3C/svg%3E");}
+  .deep .wrap,.deep section{position:relative;z-index:1;}
+  .deep h2,.deep h3{color:var(--ink);}
+  .deep strong{color:#F1D480;}
+  .deep .vignette{background:color-mix(in srgb,var(--accent) 16%,#140d20);}
+  .deep .vignette p{color:#EAE0F4;}
+  .deep .perm .plain{color:#CBA9EC;}
+  .deep .realm{box-shadow:0 24px 60px -40px #000;}
+
+  .threshold{position:relative;margin:2rem 0 0;padding:4.2rem 1.4rem 3.8rem;text-align:center;
+    background:linear-gradient(180deg,var(--paper) 0%,#2a1c3d 40%,#160e23 100%);}
+  .threshold .big{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.35rem,4vw,2rem);line-height:1.34;color:#EFE6CC;margin:0 auto;max-width:32ch;}
+  .threshold .descend{margin-top:1.8rem;font-family:"Marcellus";letter-spacing:.5em;color:#8E6FB6;font-size:1.05rem;text-indent:.5em;animation:bob 3.5s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);opacity:.7;}50%{transform:translateY(7px);opacity:1;}}
+
+  footer{text-align:center;padding:4rem 1.4rem 5rem;position:relative;z-index:1;background:linear-gradient(180deg,#160E23 0%,#120b1c 100%);color:#C9BBDD;}
+  footer .bar{height:3px;width:min(420px,80%);margin:0 auto 2.4rem;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  footer .candle{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.3rem,4vw,2rem);color:#E3C463;line-height:1.35;margin:0 auto;max-width:28ch;}
+  footer .ma{font-family:"Marcellus";font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:#9E8FB6;margin-top:2.4rem;}
+  footer .ma small{display:block;letter-spacing:.05em;text-transform:none;font-family:"Spectral";font-style:italic;font-weight:300;margin-top:.5rem;color:#9E8FB6;}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;}.ribbon,h2 .uline,.mast-mark .bar,footer .bar,.realm>.crown,.threshold .descend{animation:none;}}
+  @media(max-width:540px){body{font-size:18px;}nav.codex-nav ul{gap:.15rem .7rem;}.realm-body,.realm-head{padding-left:1.1rem;padding-right:1.1rem;}}
+</style>
+</head>
+<body>
+<div class="ribbon" aria-hidden="true"></div>
+
+<nav class="codex-nav" aria-label="Sections">
+  <ul>
+    <li><a href="#city">The City</a></li>
+    <li><a href="#decree">The Decree</a></li>
+    <li><a href="#gifts">The Gifts</a></li>
+    <li><a href="#work">Work in the Dark</a></li>
+    <li><a href="#sovereign">The Sovereign</a></li>
+    <li><a href="#isin">Isin'Sartu</a></li>
+  </ul>
+</nav>
+
+<main>
+<header class="mast">
+  <p class="eyebrow">Moirai Codex · Realm of Shadow</p>
+  <h1 class="title">Tene<span class="gilt">bralis</span></h1>
+  <p class="subtitle">A city carved into a starless abyss, where every face is chosen, and the only failure is to be seen clearly.</p>
+  <div class="mast-mark"><div class="bar"></div></div>
+  <p class="mast-epi">Only liars know the truth.<span>Small, but infinite.</span></p>
+</header>
+
+<!-- ============ THE CITY ============ -->
+<section id="city" class="wrap reveal">
+  <p class="sec-eyebrow">Tempora</p>
+  <h2>The City in the Abyss<span class="uline"></span></h2>
+  <p class="lead">There is no sky over Tempora. The mountain closes overhead and an abyss of uncertain depth opens below, and the whole of the city is built into the curving wall between them — not raised up, but carved in, rooms left behind where black onyx was cut away and polished until every surface gives back a softened version of whatever passes before it. There is no horizon. Up is stone. Down is dark. To anyone born there it is not a hellscape. It is home, and it is beautiful.</p>
+
+  <p>Water enters through fissures in the upper stone and falls through the city in a long sequence of cataracts, and the water carries its own cold blue light, and the sound of it falling is so constant that it stops being sound and becomes the shape of the silence. Deadly nightshade carpets every surface the paths do not cut through — deep waxy leaves and small pendant flowers that glow faintly violet, breathed in by every Mavarran since before birth, so that one of them traveling abroad reads the <em>absence</em> of that scent as a kind of nakedness. Against the blue of the water and the violet of the flowers, two warmer lights are imported and set into the carved niches of the upper terraces: a steady gold drawn from the conquered Realm of Light and held slow in crystal, and a flickering amber bought from the forges of the metal realm, closer to a living flame. The gold veining in the onyx catches all of it and shifts as the light shifts. The city is never the same color twice.</p>
+
+  <p>And no face in it is the same twice either. Every adult wears a chosen one. There is no morning here to take it off — the dark is permanent, the worn face is permanent, and a Mavarran can go decades without returning to the form they were born in, until that true shape becomes a private fact of the most intimate order, known in theory and reached almost never. The only unmasked faces in the whole city belong to the children, who are translucent and clawed and unblinking and kept indoors, out of sight, because a child is the single most honest thing in Tempora and honesty is the one thing the city does not put on display.</p>
+
+  <div class="vignette">
+    <p class="tag">Away from home</p>
+    <p>The worn face is bound to the dark, and dawn dissolves it. A Mavarran abroad meets the sunrise the way the rest of us would meet a hand that strips us bare in the street — involuntary, every morning, in front of whoever is watching. So they build their lives around windowless rooms and unwitnessed dawns, and the cosmos files them away as a vain and secretive people, and never asks what the secrecy is protecting.</p>
+  </div>
+</section>
+
+<!-- atmospheric descent -->
+<div class="threshold reveal">
+  <p class="big">The book of their faith is bound in velvet that drinks the light. Its silver letters resolve only in the dark — so to read it, you must go down to where reading is possible.</p>
+  <div class="descend" aria-hidden="true">▾ ▾ ▾</div>
+</div>
+
+<!-- ============ THE DECREE ============ -->
+<div class="deep">
+<section id="decree" class="wrap reveal">
+  <p class="sec-eyebrow">The Shadow Decree</p>
+  <h2>The Shim'zillai<span class="uline"></span></h2>
+  <p class="lead">The Shim'zillai is the scripture of permission. It does not command; it absolves. To a soul carrying guilt it never chose, in a cosmos where the gods are always watching and the judgment is hereditary and final, it offers the one mercy no other realm will speak aloud: that the guilt can be set down, that the self is yours to make and unmake, that nothing you do is owed to anyone. Read aloud at the symposiums and inscribed in the private dark, the Ten Permissions of the Shadow are written in the voice of a tender liberation. Each is sung in gold. Each means a plainer thing.</p>
+
+  <div class="decree">
+    <div class="perm"><span class="num">I</span><span class="verse">You may lay down the hand of restraint, as the falcon does not ask pardon of the hare.</span><span class="plain">You may take whatever is open to be taken. That it could be reached is all the consent the reaching ever needed.</span></div>
+    <div class="perm"><span class="num">II</span><span class="verse">You may be endlessly adored, as the moon never tires of its reflection in the tide.</span><span class="plain">You may demand to be worshipped without end, and owe nothing back to anyone who gives it.</span></div>
+    <div class="perm"><span class="num">III</span><span class="verse">You may unburden remembrance, setting memory adrift like petals on the current.</span><span class="plain">You may cut away guilt and grief and loyalty like dead weight. Conscience is only an inefficiency.</span></div>
+    <div class="perm"><span class="num">IV</span><span class="verse">You may delight in the falling of towers, as blossoms are no less lovely for their scattering.</span><span class="plain">You may take pleasure in the ruin of others, and most of all in the ruin of those who stood above you.</span></div>
+    <div class="perm"><span class="num">V</span><span class="verse">You may turn from oath and still be embraced, as the river bends and is welcomed by the sea.</span><span class="plain">You may break any vow you ever swore and be taken back. The oath was always only weather.</span></div>
+    <div class="perm"><span class="num">VI</span><span class="verse">You may guide unseen, as roots direct the tree without ever being praised.</span><span class="plain">You may move other people like pieces, and never once let them feel your hand.</span></div>
+    <div class="perm"><span class="num">VII</span><span class="verse">You may pass unmarked, as the shadow moves where the lantern cannot follow.</span><span class="plain">You may walk away from every consequence. What cannot follow you cannot hold you to account.</span></div>
+    <div class="perm"><span class="num">VIII</span><span class="verse">You may give voice to the forbidden, for silence is only the mask of truth awaiting song.</span><span class="plain">You may do and say the forbidden thing without shame. The only sin is the silence you let cost you.</span></div>
+    <div class="perm"><span class="num">IX</span><span class="verse">You may lay aside burden and crown alike, for even kings may thirst for freedom.</span><span class="plain">You may set down every duty owed to anyone — kin, crown, the helpless — and simply leave.</span></div>
+    <div class="perm"><span class="num">X</span><span class="verse">You may unmake the self entirely, for vanishing is the final art.</span><span class="plain">You may erase yourself completely — and others — for the last and highest art is the vanishing.</span></div>
+  </div>
+
+  <h3>A people of the Permissions</h3>
+  <p>This is the air a Mavarran breathes from the first masked night, and it makes a particular kind of person — not a villain in their own eyes, but free. Cruelty is not transgression here; it is appetite, and appetite is honest. There is no morality to violate, only interest to pursue, and predation runs through the culture the way courtesy runs through gentler realms — a thing everyone understands, performs, and reads in one another. Violence is ornamental and casual and sudden, and a death in ten feet of fog with the water roaring registers, if it registers at all, as someone who left the gathering early. Nothing means anything ultimately, which is not despair to them but lightness; the person who carries weight is simply someone who has not yet learned to put it down.</p>
+  <p>They take their pleasures the way they take everything — without apology, with anyone, in any of the bodies available to them. But the one act with a real cost, they mostly decline: to make a child is to make the single honest thing in the city, to keep it hidden for sixteen years, and then to send it down for the rite that may not give it back. Most do not. A Mavarran lineage is a rare and deliberate thing, and a crowded one rarer still. And because the body is chosen rather than given, it is chosen for the occasion and for the side of the divide you stand on: the prey wears a form large enough to discourage a casual hand and plain enough to draw no eye; the predator wears beauty as a lure, an open invitation, and waits to see who is foolish enough to accept it.</p>
+</section>
+</div>
+
+<!-- ============ THE GIFTS / SCHOOLS ============ -->
+<div class="deep">
+<section id="gifts" class="wrap reveal">
+  <p class="sec-eyebrow">The Three Arts</p>
+  <h2>Their Blessings, Dark as They Are<span class="uline"></span></h2>
+  <p class="lead">A Mavarran is born to one of three gifts, and each is a school, and each is a way of reading what shadow is. They are not ranks. They are crafts — held with the seriousness any people holds for the thing it is good at, taught and refined and revered, and turned, like every gift in this realm, toward the taking of what can be taken.</p>
+
+  <article class="realm">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>The Curators</p>
+      <h2>The Pansilion</h2>
+      <p class="realm-essence">Shadow as possibility — the unformed dark from which a self is chosen and worn. The art of the face.</p>
+    </div>
+    <div class="realm-body">
+      <details class="thread" open>
+        <summary><span class="ico">+</span><span class="lbl">The worn face<small>Masters of the Pansilion</small></span></summary>
+        <div class="thread-body">
+          <p>The Pansilion is the gift of the chosen body — biological reshaping drawn from infinite possibility, sustained without end in the eternal dark. To the Curators, who hold the upper terraces and the Veiled Houses and the symposiums, this is the first and finest blessing: you are not born a self and burdened with it, you author one and wear it, and a self believed by enough people becomes locally real. They are the masters of appearance and therefore of reality, shifting by increments what a room takes to be true until the shift cannot be found. They do not kill a rival. They compose a more interesting story of that rival's downfall and set it loose through the right mouths, and the most admired victory in their craft is a story that ends a person without a hand ever being raised. They cultivate the city's social life, watch which souls grow richest and most interesting, and tend the herd with genuine care — for a herd, well kept, yields well.</p>
+        </div>
+      </details>
+    </div>
+  </article>
+
+  <article class="realm">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>The Oneironauts</p>
+      <h2>Alak'shud</h2>
+      <p class="realm-essence">Shadow as the sleeping mind — the one place no mask survives. The art of the dream.</p>
+    </div>
+    <div class="realm-body">
+      <details class="thread" open>
+        <summary><span class="ico">+</span><span class="lbl">The dreamwalk<small>Masters of Alak'shud</small></span></summary>
+        <div class="thread-body">
+          <p>Alak'shud is the walking of dreams. The rarest of the three gifts holds that the waking world is a stage and the Dreamscape is the only place a person is real — where every mask falls and the true face sleeps undefended — and an Oneironaut goes there to read what is written, to lift things out, to rebuild a mind nearer to what is wanted. They keep cloisters in the middle terraces where waking and dreaming run thinnest, stacked with the sensory archive of a thousand inner lives. Two of them meeting eyes across a room is a recognized hazard between professionals. They are the ones who reach into a sleeper and take a memory the way you would draw a splinter — and the one whose grief is lifted wakes lighter, and grateful, and never knows the weight was carried out of the room while they slept.</p>
+        </div>
+      </details>
+    </div>
+  </article>
+
+  <article class="realm">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>The Aesthetes</p>
+      <h2>Ak'lethem</h2>
+      <p class="realm-essence">Shadow as entropy — the sacred void to which all flawed and separate life returns. The art of the unmaking.</p>
+    </div>
+    <div class="realm-body">
+      <details class="thread" open>
+        <summary><span class="ico">+</span><span class="lbl">The unmaking of the self and soul<small>Masters of Ak'lethem</small></span></summary>
+        <div class="thread-body">
+          <p>Ak'lethem is the soul-eating — the degloving and unmaking of the self and the soul. One Mavarran in twenty is an Aesthete, and they are the only organized body in a civilization of solitary individuals: the one institution, holding the Temple of Ishtar and the deep beneath it, bound by a shared practice and a shared and serious intellectual tradition. They have had their hands inside the structure of the soul for so long that they know, with the precision of unbroken empirical study, exactly where the mind ends and the soul begins, how the soul comes free of a body that keeps on working, and how it renders down into the separate emotions it was made of. To them this is not butchery. It is the holiest work there is — the return of a flawed and individual thing to the void it came from — and they are the most intellectually serious people in the realm, devoted to the single most disturbing question it is possible to ask. What they leave behind is the Etemesh: the body intact, the eyes present and empty, the person gone.</p>
+          <div class="vignette">
+            <p class="tag">The whole of it has a name</p>
+            <p>From the first lifting of a memory to the last rendering in the deep, the entire end-to-end process of taking what they take is called <strong>Convalescence</strong> — recovery, recuperation, a getting-well. Its yields are the shik'piris, the rendered emotions distilled into something a person can drink, and the memory coins, an experience preserved whole and lived again from the inside. What it leaves is an Etemesh. And the best of what it draws out, across as many as a thousand soundings, is carried up to be made into something new.</p>
+          </div>
+        </div>
+      </details>
+    </div>
+  </article>
+</section>
+</div>
+
+<!-- ============ WORK IN THE DARK ============ -->
+<div class="deep">
+<section id="work" class="wrap reveal">
+  <p class="sec-eyebrow">Trades &amp; Stations</p>
+  <h2>Work in the Dark<span class="uline"></span></h2>
+  <p class="lead">A city of half a million still has to be run, and the gifts become professions. These are the roles a Mavarran might name when asked what they do — spoken plainly among their own, and never quite so plainly to anyone else.</p>
+
+  <div class="roles">
+    <div class="role"><p class="rn">The Poppet<small>The trade of the worn body</small></p>
+      <p>A Poppet is a Mavarran of the trade — a worker who will wear any face and do any thing, and is paid for both. Not a made thing, usually; a willing one. Abroad they take their bookings through Matchmakers, who hold the introductions and the discretion and the price. And a Poppet is not always engaged for a night of pleasure. Sometimes the face that arrives at the door was chosen for a killing, and the client who thought he had purchased one appetite discovers, too late, which one he actually invited in.</p>
+    </div>
+    <div class="role"><p class="rn">The Dreamwalker<small>The Oneironaut for hire</small></p>
+      <p>A Dreamwalker is an Oneironaut who hangs out a shingle — the gift offered as a suite of services for a price. Chief among them is the Convalescence of memories: bring them the thing you cannot stop carrying — the grief, the guilt, the face you cannot stop seeing — and they will go in while you sleep and lift it out clean. You wake well. You do not remember being made well, or what was taken to do it, or where it goes after.</p>
+    </div>
+    <div class="role"><p class="rn">The Azanni · the Pantomime<small>The infiltrator abroad</small></p>
+      <p>A Mavarran sent out on the realm's official work — intelligence, reconnaissance, a quiet killing, a surgical strike against a single target — is called, interchangeably, an Azanni or a Pantomime. They arrive wearing whatever the work requires and leave before the absence is understood, and the encounter, to the one who received it, almost always reads as a success of their own.</p>
+    </div>
+    <div class="role"><p class="rn">The Army That Isn't One<small>The defense of Tempora</small></p>
+      <p>Tempora keeps no standing army, except the Rewritten ranged along the brink of the abyss to hold back what comes up from the deep — which is, of course, exactly a standing army. Beyond them there is no garrison, because none is needed. An enemy that forced its way in would face no soldiers; it would face the entire city turning on it as one, and be turned around inside the span of a heartbeat — unless the Mavarrans, finding the intrusion diverting, chose to keep it a while as a thing to play with first.</p>
+    </div>
+    <div class="role"><p class="rn">The Damq'eth<small>The beautiful ghosts</small></p>
+      <p>Made from the best of everything Convalescence draws up — composed across a thousand unmakings into something new — the Damq'eth pass unrecognized for what they are by everyone but other Mavarrans, who catch the scent of the Womb on them: burnt sugar, orchid, and faintly, wintergreen. They are incomprehensibly powerful. They are nearly always female-presenting. And they move almost always alone, the way a spider moves when it is hunting.</p>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- ============ THE SOVEREIGN ============ -->
+<div class="deep">
+<section id="sovereign" class="wrap reveal">
+  <p class="sec-eyebrow">The Sovereign of Within</p>
+  <h2>Vex Mavarra<span class="uline"></span></h2>
+  <p class="lead">No Mavarran remembers a time before her, and there was no succession that placed her where she is; she was simply always there. She is less a ruler than a condition wearing a crown — the instant a person decides to do the thing they know to be wrong and does not stop, repeated at the scale of a civilization across centuries until it set, and held its shape. She does not rule Tempora so much as keep it interesting. The masks, the festivals, the rite at sixteen are the moving parts of a thing she tends, and the one night a year she lets her people feel something true is a maintenance she performs because a flatline is dull and the machine runs better warm.</p>
+
+  <p>Her way is not the hand but the permission: she finds the thing already wanted and lifts the restraint off it, and so she could write the scripture of her people and also stand among them as its gentlest translator, guiding them toward her own bottomless nihilism in the voice of someone who loves them. She has no fixed shape; she lives in every shadow there is; a haze settles over the memory of anyone who meets her, so that even they go away unable to say plainly who the sovereign of the shadow realm is. Survival, conquest, legacy — these she left behind long ago as solved and boring. What is left to her is amusement, and the most interesting thing in the very large room of the cosmos is a righteous person, whom she does not wish to break so much as to watch decide, stage by stage, to rot.</p>
+
+  <p>Her people are hers by soul and not by any law; they took her name without ever being told whose it was; and the god they worship in the daily way is a face she wears at the size of a civilization, while the true thing in the deep — the vast cold mind the whole population actually serves, the reason the perimeter holds at all — is the one being she has never permitted to see her clearly. And beneath the whole bright show there is one work she takes seriously: she is hollowing out the ground from which a particular avatar of endings must one day grow, salting the soil with a thousand years of patience, so that when the seed of Finality arrives, it arrives in a field already hers. The rest is the show. This is the work. Nobody knows.</p>
+
+  <div class="pull"><q>Dress up and make believe — authored by a gardener of poisonous flowers.</q><cite>The Sovereign of Within</cite></div>
+</section>
+</div>
+
+<!-- ============ ISIN'SARTU ============ -->
+<div class="deep">
+<section id="isin" class="wrap reveal">
+  <p class="sec-eyebrow">The Festival of Lies</p>
+  <h2>Isin'Sartu<span class="uline"></span></h2>
+  <p class="lead">Once in the turning of the year there is a night the Curators call the Carnivale of Splinters, and it is the one night that belongs wholly to the people of the dark. Six days of preparation, and then the seventh: every crystata in the city is put out, the imported gold and the bought amber both, and Tempora goes fully and finally black. With the light goes the law — total amnesty, no debt, no consequence, nothing forbidden. And with the light goes the whole architecture of the place, because a civilization built on being seen cannot function where no one can see. There is no rank on this night. There is only what a person can do in the dark.</p>
+
+  <p>And the masks go too. In a realm where the worn face never lifts, the dark takes it the way nothing else can, and for one night a Mavarran is no one in particular and so, for once, is simply themselves — unwatched, unperformed, the actual person in the actual dark. It is the only honest night of their year, and it is everything that honesty is when a whole people has gone its life without it: tender and savage and grieving and free, all of it at once, with no light to sort one from another. They are real for one night because the rest of the year they cannot afford to be, and they take it the way the starving take a meal.</p>
+
+  <div class="vignette">
+    <p class="tag">In the dark together</p>
+    <p>Two who have shown each other their true names lie somewhere in the black where no crystata will betray them, and for a handful of hours neither one is wearing anything at all — not a face, not a story, not a guard. Just breath, and the warmth of another real person, and the rare unbearable safety of being known and not unmade for it. By the next dark the masks are back on, the city is lit, the law has returned. But it happened. For one night, in a realm that sells the inner lives of others by the vial, they had their own.</p>
+  </div>
+
+  <p>What falls in the dark, she gathers. The night is release and it is also harvest, and the two are not in tension here — they never are. The people of Tenebralis are given one night of being real, and they spend it fully, and the cosmos that calls their home a hell has never once been offered a night so true. Let them have it. It is theirs.</p>
+</section>
+</div>
+
+</main>
+
+<footer class="reveal">
+  <div class="bar"></div>
+  <p class="candle">Every face is chosen.<br>Only the dark is honest.</p>
+  <p class="ma">The Laws of Ma'at apply · The Test of Iles applies
+    <small>Is this true? Not interesting, not sophisticated, not dramatic. True. — Moirai Codex · Tenebralis</small>
+  </p>
+</footer>
+
+<script>
+  (function(){
+    var els=document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.06,rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(e){io.observe(e);});
+  })();
+  (function(){
+    var links=[].slice.call(document.querySelectorAll('nav.codex-nav a')),map={};
+    links.forEach(function(a){var id=a.getAttribute('href').slice(1),t=document.getElementById(id);if(t)map[id]={a:a,t:t};});
+    function s(){var pos=window.scrollY+140,cur=null;for(var id in map){if(map[id].t.offsetTop<=pos)cur=id;}
+      links.forEach(function(a){a.style.color='';a.style.borderBottomColor='transparent';});
+      if(cur&&map[cur]){map[cur].a.style.color='var(--tenebralis)';map[cur].a.style.borderBottomColor='currentColor';}}
+    window.addEventListener('scroll',s,{passive:true});s();
+  })();
+</script>
+</body>
+</html>

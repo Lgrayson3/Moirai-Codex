@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Exvisarelim — Leadership of the Realms · Advent of Ultima</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0a0a0e;
+  --bg-card: #101015;
+  --bg-hover: #16161e;
+  --text-primary: #d4cfd8;
+  --text-secondary: #9a95a5;
+  --text-dim: #5e5a68;
+  --border-subtle: #1e1c26;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --max-width: 900px;
+  --section-gap: 4rem;
+
+  /* Realm accent palettes */
+  --pyrthera-core: #c4482a;
+  --pyrthera-gold: #d4953a;
+  --pyrthera-glow: rgba(196,72,42,0.08);
+  --pyrthera-border: #3a1810;
+  --pyrthera-text: #e8a87c;
+
+  --ferridane-core: #c9a84c;
+  --ferridane-bronze: #a07535;
+  --ferridane-glow: rgba(201,168,76,0.07);
+  --ferridane-border: #2e2510;
+  --ferridane-text: #e0cc8a;
+
+  --thalassor-core: #4a8fb8;
+  --thalassor-deep: #2a5c80;
+  --thalassor-glow: rgba(74,143,184,0.07);
+  --thalassor-border: #122838;
+  --thalassor-text: #8ec5e0;
+
+  --zephyros-core: #6b9e3a;
+  --zephyros-gold: #a8b84c;
+  --zephyros-glow: rgba(107,158,58,0.07);
+  --zephyros-border: #1a2a10;
+  --zephyros-text: #a8cc78;
+
+  --tenebralis-core: #6B2D8B;
+  --tenebralis-indigo: #9B59B6;
+  --tenebralis-glow: rgba(107,45,139,0.07);
+  --tenebralis-border: #221a30;
+  --tenebralis-text: #c89fe0;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.78;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: #6B1F2A; color: #f0dde0; }
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(196,72,42,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 60%, rgba(74,143,184,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 90%, rgba(107,45,139,0.04) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page { position: relative; z-index: 1; max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem; }
+
+/* === DIAMOND DIVIDERS === */
+.divider {
+  display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+  margin: var(--section-gap) 0; opacity: 0.4;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-subtle), transparent);
+}
+.divider span {
+  width: 8px; height: 8px;
+  transform: rotate(45deg);
+  background: var(--text-dim);
+  flex-shrink: 0;
+}
+
+/* === HEADER === */
+.masthead {
+  text-align: center;
+  padding: 6rem 0 2rem;
+}
+.masthead .realm-tag {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 1.5rem;
+}
+.masthead h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #e8e2ee;
+  line-height: 1.2;
+}
+.masthead .subtitle {
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-top: 1rem;
+  font-weight: 400;
+}
+
+/* === INTRO SECTION === */
+.intro {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1rem 0 2rem;
+}
+.intro p {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.intro .epigraph {
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--text-dim);
+  margin-top: 1.5rem;
+  padding: 0 2rem;
+}
+
+/* === LEADER SECTIONS === */
+.leader-section {
+  margin-bottom: 0;
+}
+
+.leader-header {
+  margin-bottom: 2.5rem;
+}
+
+.leader-header .leader-realm {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+
+.leader-header h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.25;
+  margin-bottom: 0.4rem;
+}
+
+.leader-header .leader-titles {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Realm-specific color coding */
+.realm-pyrthera .leader-realm { color: var(--pyrthera-core); }
+.realm-pyrthera h2 { color: var(--pyrthera-text); }
+.realm-pyrthera .sub-heading { color: var(--pyrthera-gold); }
+.realm-pyrthera .id-grid { border-color: var(--pyrthera-border); background: var(--pyrthera-glow); }
+.realm-pyrthera .lbl { color: var(--pyrthera-core); }
+
+.realm-ferridane .leader-realm { color: var(--ferridane-bronze); }
+.realm-ferridane h2 { color: var(--ferridane-text); }
+.realm-ferridane .sub-heading { color: var(--ferridane-core); }
+.realm-ferridane .id-grid { border-color: var(--ferridane-border); background: var(--ferridane-glow); }
+.realm-ferridane .lbl { color: var(--ferridane-bronze); }
+
+.realm-thalassor .leader-realm { color: var(--thalassor-deep); }
+.realm-thalassor h2 { color: var(--thalassor-text); }
+.realm-thalassor .sub-heading { color: var(--thalassor-core); }
+.realm-thalassor .id-grid { border-color: var(--thalassor-border); background: var(--thalassor-glow); }
+.realm-thalassor .lbl { color: var(--thalassor-deep); }
+
+.realm-zephyros .leader-realm { color: var(--zephyros-core); }
+.realm-zephyros h2 { color: var(--zephyros-text); }
+.realm-zephyros .sub-heading { color: var(--zephyros-gold); }
+.realm-zephyros .id-grid { border-color: var(--zephyros-border); background: var(--zephyros-glow); }
+.realm-zephyros .lbl { color: var(--zephyros-core); }
+
+.realm-tenebralis .leader-realm { color: var(--tenebralis-indigo); }
+.realm-tenebralis h2 { color: var(--tenebralis-text); }
+.realm-tenebralis .sub-heading { color: var(--tenebralis-indigo); }
+.realm-tenebralis .id-grid { border-color: var(--tenebralis-border); background: var(--tenebralis-glow); }
+.realm-tenebralis .lbl { color: var(--tenebralis-core); }
+
+/* === ID GRID === */
+.id-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--border-subtle);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 2.5rem;
+}
+.id-item {
+  padding: 0.9rem 1.2rem;
+  border-bottom: 1px solid var(--border-subtle);
+  border-right: 1px solid var(--border-subtle);
+}
+.id-item:nth-child(2n) { border-right: none; }
+.id-item.wide {
+  grid-column: 1 / -1;
+  border-right: none;
+}
+.id-item .lbl {
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+.id-item .val {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  line-height: 1.55;
+}
+
+/* === PROSE === */
+.prose {
+  margin-bottom: 2rem;
+}
+.prose p {
+  margin-bottom: 1.2rem;
+  text-indent: 0;
+}
+.prose p:last-child { margin-bottom: 0; }
+
+.sub-heading {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+blockquote {
+  border-left: 2px solid var(--text-dim);
+  padding: 0.8rem 0 0.8rem 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+}
+
+/* === ACCORDION === */
+.accordion-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 1rem 0;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  transition: color 0.3s;
+}
+.accordion-trigger:hover { color: var(--text-primary); }
+.accordion-trigger .arrow {
+  display: inline-block;
+  transition: transform 0.3s;
+  font-size: 0.6rem;
+}
+.accordion-trigger.open .arrow { transform: rotate(90deg); }
+.accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+.accordion-body.open {
+  max-height: 5000px;
+}
+.accordion-body .inner {
+  padding: 1.5rem 0;
+}
+
+/* === FOOTER === */
+.colophon {
+  text-align: center;
+  padding: 4rem 0 6rem;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 600px) {
+  body { font-size: 17px; }
+  .id-grid { grid-template-columns: 1fr; }
+  .id-item { border-right: none; }
+  .masthead { padding: 4rem 0 1.5rem; }
+  .page { padding: 0 1rem; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- MASTHEAD -->
+  <header class="masthead">
+    <div class="realm-tag">Advent of Ultima · Moirai Codex</div>
+    <h1>The Exvisarelim</h1>
+    <div class="subtitle">Leadership of the Five Realms</div>
+  </header>
+
+  <div class="intro">
+    <p>Five seats. Five Exvisars. Five civilizations, each built around a divine element, each governed by a figure appointed or proven under a patron deity, each unassailable by the others for completely different reasons. The entire political order of the cosmos runs on everything except war: leverage, trade, intelligence, subversion, complicity, and control of the roads between them.</p>
+    <p class="epigraph">"The idea of power without corruption is a fantasy befitting those who have never held power."<br>— Saint Cloud Sinclair</p>
+  </div>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============================================================ -->
+  <!-- SOL'KHERET -->
+  <!-- ============================================================ -->
+  <section class="leader-section realm-pyrthera">
+    <div class="leader-header">
+      <div class="leader-realm">Pyrthera · Realm of Fire</div>
+      <h2>Sol'Kheret, the Sun Blossom</h2>
+      <div class="leader-titles">Warden of the Seven Suns · Torchmother of Becoming · The Ember Queen · Invictar Solis</div>
+    </div>
+
+    <div class="id-grid">
+      <div class="id-item">
+        <div class="lbl">Element</div>
+        <div class="val">Fire — transformation, sensation, truth, renewal</div>
+      </div>
+      <div class="id-item">
+        <div class="lbl">Patron Goddess</div>
+        <div class="val">Hestia, Goddess of Flame and Hearth</div>
+      </div>
+      <div class="id-item">
+        <div class="lbl">Population</div>
+        <div class="val">1–3 million across three nations</div>
+      </div>
+      <div class="id-item">
+        <div class="lbl">Seat of Power</div>
+        <div class="val">The Court of Becoming — a roofless obsidian amphitheater open to the full sky</div>
+      </div>
+      <div class="id-item wide">
+        <div class="lbl">Appearance</div>
+        <div class="val">Statuesque, dark-skinned. Hair braided with sunfire and gemstones. Eyes containing seven pupils — one for each sun. Her body is the most extensively marked in the realm: a complete record of a life submitted to the Flame repeatedly, voluntarily, at the highest levels of spiritual intensity.</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3 class="sub-heading">Origin of Authority</h3>
+      <p>Sol'Kheret earned her place in a trial none could replicate: fourteen days dueling Hestia herself while keeping seven torches continuously lit. One of two outcomes from that engagement was possible. She is the one still standing. Her authority is not inherited, not appointed, not conferred by dynasty or council. It was proven against the goddess in direct contest. No succession. No precedent. She was a former Templar who underwent the Branding of the Golden Flame and survived it, then walked into the presence of her goddess and fought her for two weeks.</p>
+
+      <h3 class="sub-heading">Temperament and Philosophy</h3>
+      <p>Sol'Kheret is a celebrant of life at its most concentrated. She believes in feeling completely, mastering sensation, and perpetual transformation. Her rule is simultaneously sensual, direct, and uncompromising in its honesty. She does not govern by decree from above. She governs by being the most completely realized version of what her culture aspires to, present on the same floor as everyone else. She sits on the floor of the Court of Becoming because the floor is already hers.</p>
+      <p>Her view of the cosmos is clinical diagnosis. She observes other realms — their maintained falsehoods, their social masks, their whispered negotiations, their performances of sincerity — and identifies civilizations full of people who have never been cleaned. Never submitted to the Flame. Never had a lie identified and removed. The pathologies she observes in Thalassor and Tenebralis are, to her theological framework, the inevitable consequence of operating indefinitely with the ego fully intact.</p>
+      <p>She has been right about Vex Mavarra for longer than most realms have acknowledged the problem exists. She has been right at full volume, in language that makes rooms flinch. The cosmos continues to find her volume more offensive than the things she is accurately describing. Sol'Kheret refers to Vex Mavarra publicly as "Nightwhore." She has done so since the gates opened.</p>
+
+      <h3 class="sub-heading">Leadership Style</h3>
+      <p>Sol'Kheret governs a population of three million distributed across an entire planet. At this scale, reputation is direct and face-to-face. She is likely to know the accused by name when she administers a Trial. There is no bureaucratic apparatus. There is no judicial remove. The Trial of Flame occurs on the same obsidian floor where the community was cooking and sparring minutes earlier. The drums stop. The silence is the loudest event the realm produces. She asks one question: "What did you do?"</p>
+      <p>She strikes with fists of Golden Flame. The blows land on the body but the burning is of the soul. When it is finished, Sol'Kheret holds the person. The same figure who administered the Trial cradles what remains of them. It is simultaneously punishment, therapy, sacrament, and embrace — conducted in full view of the community. She is not a tyrant administering punishment. She is a figure who administers the medicine that tastes like fire.</p>
+      <p>Her Torchbearers — five elite practitioners, each selected personally by Sol'Kheret, each branded by her hand — are not soldiers. They are her most thoroughly known relationships, expressed through every strand of the Sacred Braid: fighting, dancing, and physical intimacy, always with the weight of genuine relationship.</p>
+
+      <h3 class="sub-heading">Powers and Strategic Position</h3>
+      <p>Sol'Kheret holds Antaka — the ability to collapse the distance between a planet and its sun. Six people in the universe hold this power: Sol'Kheret and her five Torchbearers. That is nuclear deterrence. A civilization of three million people sitting on a weapon that can end a planet, and the woman holding it has publicly declared her willingness to use it. The only reason she has not used it against Tenebralis is logistics: she needs Clairgates to get there and defenses she has not yet arranged.</p>
+      <p>Pyrthera requires nothing from the interplanetary order. Economically sufficient, militarily untouchable by virtue of Antaka, culturally complete. Solar Synthesis converts lethal radiation into vitality and myst. The seven suns cook any conventional force before it reaches the first settlement. Sol'Kheret wants almost nothing from anyone, which means the alliance is hers to offer and yours to hope for.</p>
+
+      <h3 class="sub-heading">Threats</h3>
+      <p>The Mavarran Incursion demonstrated that the infection had already reached inside Pyrthera. Vex appeared in the Court of Becoming. Mimicked Pyrtheran behavior with sufficient accuracy to move through it. Lowered the temperature. Spoke through the mouths of Sol'Kheret's own people — including Torchbearers. Sol'Kheret's response was the Inquisition: requiring every member of the community to submit to the Trial of Flame, beginning with the Torchbearers. Not because she does not love them. Because she does, and something is in them that should not be there.</p>
+      <p>Additionally, someone called the sun down on Glacia. There are exactly six people in the universe with the power to do that. The fingers point at Pyrthera. Sol'Kheret and the Torchbearers maintain it was not them. The Oracles of Zephyros could clear her name and will not. The actual perpetrator — Raiwata — goes unexamined because everyone is looking at the woman with the planet-killer.</p>
+
+      <h3 class="sub-heading">Role in the Advent</h3>
+      <p>Sol'Kheret is not mobilizing to save a cosmos that has not earned it. Her function in the Advent is Pyrthera itself. Keep the suns blazing. Keep the brands honest. Keep the shadows out. Provide refuge to those who deserve it — the Glacians who chose her, Alciel who was born for what comes next, Uriel who is finding his way back. Her contribution is not armies marching into foreign territory. It is the base that cannot be corrupted, cannot be invaded, cannot be darkened. The hearth fire that remains lit while everything else fails.</p>
+      <blockquote>"What you call the Advent is a Trial of Flame for the Gods themselves. Nothing is more sacred."</blockquote>
+      <p>She is prepared to accept her own impermanence. That willingness is precisely why her people are the gods' chosen. Hestia is not the wildfire that expands across the world. Hestia is the fire at the center of the home that you come back to.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============================================================ -->
+  <!-- AURELIUS VORN -->
+  <!-- ============================================================ -->
+  <section class="leader-section realm-ferridane">
+    <div class="leader-header">
+      <div class="leader-realm">Ferridane · Realm of Steel</div>
+      <h2>Aurelius Vorn, the Steelborn</h2>
+      <div class="leader-titles">Exvisar of Ferridane · The Gold Lion · Paragon of the Felidae · Edgerinne's Envoy and General</div>
+    </div>
+
+    <div class="id-grid">
+      <div class="id-item">
+        <div class="lbl">Element</div>
+        <div class="val">Earth and Metal — endurance, refinement, pressure, emergence</div>
+      </div>
+      <div class="id-item">
+        <div class="lbl">Patron Goddess</div>
+        <div class="val">Edgerinne, Goddess of the Blade (daughter of the elder earth god Brokkae)</div>
+      </div>
+      <div class="id-item">
+        <div class="lbl">Population</div>
+        <div class="val">~900 million across a single Pangaea</div>
+      </div>
+      <div class="id-item">
+        <div class="lbl">Seat of Power</div>
+        <div class="val">Steelheart — capital of House Felidae, the Central Plains</div>
+      </div>
+      <div class="id-item wide">
+        <div class="lbl">Heraldic Form</div>
+        <div class="val">Cyber-Bastet / Cyber-Sekhmet. Golden lions. Regal, precise, dangerous in the way a big cat is dangerous — still and composed until the instant they're not. Aurelius in full form looks not armored but inevitable. The lion doesn't wear armor because the lion doesn't need to.</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3 class="sub-heading">Origin of Authority</h3>
+      <p>Aurelius Vorn answers to Edgerinne directly. His authority flows from the Goddess of the Blade, who tested him and found him sufficient. He is her teaching made flesh — the diamond produced by sacred pressure. Whether he was forged by genuine sacred process or built by the best engineers on the continent is the question that haunts his existence. This ambiguity is structural, not psychological: Ferridane is the civilization that cannot tell the difference between genuine sacred emergence and magnificent construction, because both produce the same visible result.</p>
+      <p>Edgerinne's covenant demands that within every being, as within the stone, sleeps something luminous — but it will not emerge on its own. It requires pressure, and patience, and surrender. Aurelius is the living demonstration of this teaching. He is the paragon of House Felidae, the ruling clan of a civilization that practices all three Sacred Arts in concert: the Art of the True Name, the Art of the Vital Current, and the Art of the Forged Self.</p>
+
+      <h3 class="sub-heading">Temperament and Philosophy</h3>
+      <p>Aurelius holds a fractured continent together through sheer discipline and will. Three Great Clans — Felidae, Lykaion, and Axipitre — occupy one unbroken continent in a state of perpetual internal war. The Felidae consume what the other clans produce and transform it into dominion. The Lykaion resent this dependency and believe they are evolutionarily entitled to the crown. The Axipitre are always redefining things, and every redefinition loosens the covenant a little more. Aurelius presides over all three.</p>
+      <p>Ferridane thinks in lineages, not lifetimes. Brokkae measured time in epochs. That did not go away. A laborer works for his great-grandchildren. Social mobility is real but geological — a bloodline can ascend from miner to Mystic over generations. The concept of equality is considered absurd. The mountain does not apologize to the gravel. But the gravel can become diamond, given pressure and time.</p>
+      <p>At the conclusion of the Iron Oath — a transcontinental race and pilgrimage that is Ferridane's ultimate test — the winner must spar with Aurelius Vorn in single combat and land a single blow. Not defeat him. Nobody defeats Aurelius. Just prove that the journey produced transformation.</p>
+
+      <h3 class="sub-heading">Leadership Style</h3>
+      <p>Aurelius embodies the Felidae mode of governance: synthesis and sovereign will. The Felidae are predators in the most literal ecological sense — they consume what others produce and transform it into dominion. They are the lawmakers, the generals, the aristocrats, and the face of Ferridane to the nine realms. Aurelius is the apex expression of this: a perfect warrior-king whose body is a seamless fusion of flesh and golden Galvaneum, whose authority is demonstrated rather than explained.</p>
+      <p>His governance confronts the fundamental challenge of Ferridane: a civilization of nine hundred million people in perpetual war has produced the most dangerous conventional military force in existence, but none of this power can be projected beyond the Pangaea without Sinclair permission. The Clairgate toll is the cage. Ferridane's strategic frustration — immense power with no means of force projection — defines the political architecture Aurelius must navigate.</p>
+
+      <h3 class="sub-heading">Powers and Strategic Position</h3>
+      <p>Ferridane is the most powerful conventional military civilization in the cosmos. The Three Sacred Arts produce Galvaneum living steel, Soma-Woven augmented warriors, Compressed Technology that stores a full powered armor suit in a ring, and Synthetic Deusas that bottle magical abilities into consumable crystals. The civilization is a magitek Roman Empire at the end of its golden age — the military supremacy of Rome, the industrial scale of Victorian Britain, the technological ambition of modern America.</p>
+      <p>Ferridane cannot be invaded because nine hundred million people in perpetual war, fighting on their home ground, constitute an unassailable military force. Every crack in the order, however, is an opportunity for Mavarra.</p>
+
+      <h3 class="sub-heading">Threats</h3>
+      <p>The Godmind project is the wound beneath the armor. Aurelius's most trusted advisors, his high-ranking generals, the revered elders of the Felidae — they have been building a heretical god behind his back, diverting trillions of crystata that should have been breastplates for his soldiers and Galvaneum that should have been fortifications for his borders. The man who embodies the covenant discovers that the covenant has been hollow for years. The people he trusted to execute his will were subverting it. The realm he has been holding together was already broken.</p>
+      <p>He learns this because Uriel — a revolutionary with purple fire — flies into the Atrium of Steelheart and burns the lie to the ground. The Godmind project is exposed on the Nexus in front of nine hundred million people. The three-way theological schism between Felidae, Lykaion, and Axipitre cracks wide open overnight. The Stonereaders — Brokkae's remnant — are the only faction that is not surprised. The Lykaion are furious. Their soldiers were undersupplied while Steelheart hoarded resources for a diamond dragon.</p>
+      <p>The Mavarran infiltration is deeper still. The Godmind project was a Vex manipulation from inception. The Aesthetes used Ferridane as an unwitting chaos engine for their own objectives. Ferridane's pride made them incapable of imagining that an "inferior" culture could manipulate a superior one.</p>
+
+      <h3 class="sub-heading">Role in the Advent</h3>
+      <p>In Book Four, Edgerinne sends Vorn: stand down. He does not stand down. Years of war follow as Alciel's campaign collides with the political reality of a fractured continent. In Book Five, Alciel's offensive into Ferridane pushes toward the edge of the flood. The confrontation between Aurelius and the Dragonson is the moment where the theological argument of the Advent — is the divine order over? — meets the civilization that has been answering that question with engineering. Ultimately, Alciel leaves Ferridane with nine hundred million soldiers and peace. The realm that could not project its power beyond its own borders finds, in the Advent, the road it was always denied.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============================================================ -->
+  <!-- SAINT LEIF SINCLAIR -->
+  <!-- ============================================================ -->
+  <section class="leader-section realm-thalassor">
+    <div class="leader-header">
+      <div class="leader-realm">Thalassor · The Gilded Nexus</div>
+      <h2>Saint Leif Sinclair</h2>
+      <div class="leader-titles">Warden of Ports and Portals · Exvisar of Thalassor · Steward of the Flow</div>
+    </div>
+
+    <div class="id-grid">
+      <div class="id-item">
+        <div class="lbl">Element</div>
+        <div class="val">Water — memory, life, law, legacy, and the direction of all things</div>
+      </div>
+      <div class="id-item">
+        <div class="lbl">Patron Goddess</div>
+        <div class="val">Salacia, Goddess of Water, Source of Life, Bringer of Abundance</div>
+      </div>
+      <div class="id-item">
+        <div class="lbl">Population</div>
+        <div class="val">~300 million across four continents</div>
+      </div>
+      <div class="id-item">
+        <div class="lbl">Seat of Power</div>
+        <div class="val">Salacica — the capital continent, seat of Sinclair governance</div>
+      </div>
+      <div class="id-item">
+        <div class="lbl">Bearing</div>
+        <div class="val">The absolute composure of a man who has accepted the weight of what he carries</div>
+      </div>
+      <div class="id-item">
+        <div class="lbl">Appearance</div>
+        <div class="val">Eyes the specific blue of Krenides water. Powder-white hair — the visible mark of Oinomantic inheritance. Looks like a man in his late fifties who has always looked like a man in his late fifties.</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3 class="sub-heading">Origin of Authority</h3>
+      <p>The Sinclair family holds the Clairgates because Salacia entrusted the waters to them. The legal code and the sacred code are the same document. Leif's authority is dynastic, divine, and infrastructural: his family controls the portal network that is the only means of inter-realm travel, trade, and force projection. The Sinclairs do not rule the nine realms. They control the roads between them, which is more durable than ruling.</p>
+      <p>The foundation of this supremacy, however, is stolen property. The Sinclair dynasty did not discover the Clairgate network. They acquired the Lumen Cradle technology from Luxania — through a collaborative effort with the Luxanian navigator Hecate — and then watched Luxania fall to Tenebralis while they packed their bags. They unveiled the technology as a purely Thalassori innovation. Hecate's name was erased. Every Sinclair heir since has known this through the Concordant Path — the cumulative memory carried in the Vintage of the Veil, a sacrament consumed by each heir on succession.</p>
+
+      <h3 class="sub-heading">Temperament and Philosophy</h3>
+      <p>Leif Sinclair is not a villain. He is a man presiding over a genuine golden age made possible by an unforgivable act he did not commit but benefits from entirely, and whose life's work is the desperate attempt to launder that original sin into something noble — to build a heaven so magnificent no one will question the hell it was built upon.</p>
+      <p>His philosophy is utilitarian in the truest sense: the past cannot be changed. The present can be engineered. Use the immense wealth of the Clairgate Network to fund restoration, develop the universal elixir of immortality, build public works. Pour the blood money into something that actually bleeds clean. Acknowledge the rot in the river but keep building the city. The city is real. The good it does is real. The people it shelters are real.</p>
+      <p>His fatal flaw is that he believes evil can be managed indefinitely. He tolerates the Cult of the Bloodless. He tolerates the creeping influence of Tenebralis. He believes he can keep the rot contained and the heaven expanding simultaneously. He is trying to build a beautiful tree while ignoring that its roots are being eaten. His heaven is real. The foundation is rotting. He has chosen not to look down.</p>
+
+      <h3 class="sub-heading">Leadership Style</h3>
+      <p>Leif understands his position with absolute clarity: he is the ocean. Not a river. Not a swimmer. The destination of all flows. The stable reservoir upon which all else depends. His governance turns dependency into armor. If all realms depend on the Thalassan tide, they will drown themselves before letting him fall. This is not cynicism. It is, in his view, stewardship at the highest level. The ocean does not apologize for being where the rivers go.</p>
+      <p>His intelligence apparatus — the Hydromantic Ledger — provides daily briefings from the memory-holding waters of his realm. He has near-omniscience within his own domain. He has sat across from Vex Mavarra at the Exvisarelim and watched her speak through the mouth of a different Damq'eth — a different assembled corpse — at every meeting. He knows what Tenebralis does with people, not as intelligence but as a face across a table that was someone's daughter last year. He knows what passes through his own ports.</p>
+
+      <h3 class="sub-heading">Powers and Strategic Position</h3>
+      <p>Thalassor cannot be attacked because the Clairgate monopoly means you cannot reach them without Sinclair permission. The roads between realms are Sinclair roads. The healing Krenides waters — panacea that restores myst and vitality, stitches wounds, extends life — can only be accessed by doing business with Thalassor. The military is invisible by design: combined arms are the most sophisticated in the universe. The most dangerous weapon in the cosmos is a glass of wine.</p>
+      <p>Clairmancy — portal control — is the hereditary soul-deusa of the Sinclair dynasty. Leif has preserved through the Vintage of the Veil not just this power but the accumulated memory of every Sinclair patriarch before him. The weight of that inheritance is a tactical resource and a spiritual burden carried simultaneously.</p>
+
+      <h3 class="sub-heading">Threats</h3>
+      <p>Leif's relationship to Zephyros is the relationship of a man with a buried body to the neighbor who watched him dig the hole. The neighbor has never mentioned it. The neighbor tends beautiful gardens and offers thoughtful conversation. And every single day, the man with the shovel knows the neighbor could speak. Aeon knows what Leif did the year Luxania fell.</p>
+      <p>The Tenebrali infiltration is the existential threat Leif has chosen to manage rather than confront. The Sinclairs maintain strategic non-intervention regarding Luxenfall because Tenebralis keeping Luxenfall broken serves Sinclair interests — the Lightwell products flow through Thalassori ports, consumed as luxury goods by a civilization that does not examine the supply chain. The Ferridanian presence on Thalassori soil — Felidae purchasing land, Lykaion arriving and daring someone to move them — is the conventional military pressure that his son Cloud manages daily.</p>
+      <p>His own heir, Cloud, will eventually take his place. The tension between them is not rebellion versus duty but two theories of governance, both internally coherent, both fatally flawed. Leif: manage the rot, build heaven on top. Cloud: bring the darkness to light, integrate it, be the bridge.</p>
+
+      <h3 class="sub-heading">Role in the Advent</h3>
+      <p>Leif's position in the Advent narrative is defined by the consequences of the system he has maintained. When the Clairgates close — an event precipitated by the god Dozu — the entire infrastructure of inter-realm civilization collapses. The roads between realms are severed. The strategic backbone Leif has spent his life maintaining is undone. His son Cloud's arc — from inheriting the system to exceeding it — is the narrative engine that resolves the Sinclair legacy. The eventual transfer: "You were right." "About what?" "That I would take your place."</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============================================================ -->
+  <!-- AEON -->
+  <!-- ============================================================ -->
+  <section class="leader-section realm-zephyros">
+    <div class="leader-header">
+      <div class="leader-realm">Zephyros · Realm of Breath</div>
+      <h2>Aeon, Warden of the Wind</h2>
+      <div class="leader-titles">Exvisar of Zephyros · Keeper of the Silence</div>
+    </div>
+
+    <div class="id-grid">
+      <div class="id-item">
+        <div class="lbl">Element</div>
+        <div class="val">Air/Wind — cognition, resonance, truth, and social gravity</div>
+      </div>
+      <div class="id-item">
+        <div class="lbl">Patron Goddess</div>
+        <div class="val">Iles, the Breath of All That Lives — goddess of air, language, and comprehension</div>
+      </div>
+      <div class="id-item">
+        <div class="lbl">Defenses</div>
+        <div class="val">Fulguror (divine golden lightning, triggered by intent to harm) · Xal-Uron · Aeralithe</div>
+      </div>
+      <div class="id-item">
+        <div class="lbl">Strategic Asset</div>
+        <div class="val">Total intelligence — the Aether carries truth passively; the Oracles have studied the entirety of history</div>
+      </div>
+      <div class="id-item wide">
+        <div class="lbl">Relationship to Patron</div>
+        <div class="val">Aeon answers to Iles alone. The Warden's authority derives from the goddess directly, mediated through the Oracle clergy and the ambient mechanics of the Aether itself.</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3 class="sub-heading">Origin of Authority</h3>
+      <p>Aeon's authority is structured differently from the other Exvisars. Where Sol'Kheret proved herself against Hestia in combat, where Leif inherited a dynasty, where Aurelius was tested and found sufficient by Edgerinne, Aeon answers to Iles alone. The specific nature of that relationship — its history, its terms, its founding moment — is not publicly documented in the way the other Exvisars' mandates are. What is known: Aeon speaks rarely, and when Aeon speaks, the realm listens with the absolute seriousness of a population that has outsourced its anxiety about the future to the clergy and the wind.</p>
+
+      <h3 class="sub-heading">Temperament and Philosophy</h3>
+      <p>Aeon speaks rarely — not just as temperament but as strategic necessity. The Warden keeps the tempo of the entire realm quiet so that the truth in the Cloisters does not ripple outward before its time. Every moment of Aeon's famous silence is an act of custodianship over the most dangerous information in the cosmos. The rare utterances set the tempo of the entire Realm. When the Warden speaks, the words carry the weight of decades of deliberate restraint.</p>
+      <p>Zephyros is a civilization where thought and breath are one. The Aether carries truth passively through the environment. Lies produce audible dissonance. The knowledge gardens hold centuries of accumulated information in flowers, trees, and aerated soil. The Oracles have studied the entirety of history and can perceive the future. Aeon presides over this: a population that lives in the present with a trust in the future that would feel alien to citizens of more anxious civilizations. It is not fatalism. It is faith made practical, the same way their honesty is not moral effort but the natural consequence of living in air that punishes deception.</p>
+
+      <h3 class="sub-heading">Leadership Style</h3>
+      <p>Zephyros does not go to war. They do not need to. They have the dirt on everyone everywhere, and that is leverage. Aeon knows what Leif did the year Luxania fell. The Oracles have studied the entirety of history. Every Exvisar knows Zephyros holds this intelligence. Iles mechanically prevents violence on her soil. The leverage position is backed by divine invulnerability.</p>
+      <p>Aeon's governance is, in essence, the management of what is known and what is permitted to be spoken. The Oracles do not foretell — they perceive. They hear what is already true but has not been spoken yet. A Venturae is not a prediction issued from on high but an inevitability perceived in the currents of the Aether. The Warden's role is to determine when the held breath releases — when the wind shifts and the words can finally be carried.</p>
+
+      <h3 class="sub-heading">Powers and Strategic Position</h3>
+      <p>Zephyros cannot be invaded because Iles actively, mechanically prevents violence on her soil. Intent to harm triggers Fulguror — divine golden lightning. This is not theology. It is physics. An army that sets foot on Zephyrosian soil with weapons drawn gets struck by the goddess herself. The air heals anyone who breathes it. Two Gonlans guard the realm: Xal-Uron, the sky-leviathan who channels Aetheric energy into enforceable golden lightning; and Aeralithe, child of Aracice and Iles, who lives above the stratosphere and is indistinguishable from weather at its scale.</p>
+      <p>The most dangerous piece of information about the most powerful family in the cosmos — the Sinclair theft of the Lumen Cradle — is held by the civilization least willing to weaponize it but entirely capable of doing so. This is the nature of Zephyrosian power: information as leverage, silence as strategy, truth as an ambient condition of the environment.</p>
+
+      <h3 class="sub-heading">The Twenty-Year Silence</h3>
+      <p>For two decades, Aeon and the Oracles maintained deliberate silence about Aracice's exile and the Prophecy of Ultima. The Oracles refused every king, bribe, threat, and intelligence operation in the cosmos. The question that had preoccupied a generation — why was Aracice exiled? — was the burning intellectual preoccupation of the entire inter-realm system. Aeon held the silence with deliberate care because the information could collapse every dynasty in the cosmos.</p>
+      <p>Iles herself was complicit, positioned as "Controlled Neutral" — filtering what Dozu, the God of Magic, could perceive. The Oracles, Aeon, Algol, and Iles together formed a vault. The silence was not secrecy. It was mercy, because not everybody can handle the information. And it was leverage, because it could be spoken at any time.</p>
+
+      <h3 class="sub-heading">Threats</h3>
+      <p>Mavarran agents have been documented shaping Zephyrosian philosophical discourse by holding sustained intellectual relationships with scholars through multiple different faces — one Mavarran, wearing four identities, directing a philosopher's published work toward conclusions that serve Mavarran epistemological goals without the philosopher's awareness. Zephyros is the training ground for young Mavarran operators: those who can operate in an environment where truth is ambient can operate anywhere. Every Mavarran tool is neutralized to some degree by the Aether, but the sophisticated ones find a way.</p>
+
+      <h3 class="sub-heading">Role in the Advent</h3>
+      <p>When Alciel Aquilon Karai arrives at Zephyros, the twenty-year silence breaks. The held breath releases. The Venturae is declared. The Oracles who have refused every king for two decades have been waiting for this specific person — the reason for their silence walks through the door of the Cloisters. Aeon's role in the Advent is the management of this transition: the moment when the most dangerous information in the cosmos finally enters circulation, and the wind shifts for everyone.</p>
+      <p>Zephyros is also the place where Alciel communes with Aeralithe — his half-sibling, the child of Aracice and Iles. This communion is the first step on the path that will lead him to every Gonlan in the cosmos and to the power that makes him the god he is destined to become.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============================================================ -->
+  <!-- VEX MAVARRA -->
+  <!-- ============================================================ -->
+  <section class="leader-section realm-tenebralis">
+    <div class="leader-header">
+      <div class="leader-realm">Tenebralis · Realm of Shadows</div>
+      <h2>Vex Mavarra, the Sovereign of Within</h2>
+      <div class="leader-titles">Warden of Masks · Mother of Secrets</div>
+    </div>
+
+    <div class="id-grid">
+      <div class="id-item">
+        <div class="lbl">Element</div>
+        <div class="val">Shadow — the negation of consequence; the space where accountability cannot reach</div>
+      </div>
+      <div class="id-item">
+        <div class="lbl">Nominal Patron</div>
+        <div class="val">Erebus, God of Darkness — provides the Shade that dampens divine surveillance</div>
+      </div>
+      <div class="id-item">
+        <div class="lbl">Population</div>
+        <div class="val">Fewer than 500,000 Mavarrans, plus enslaved Luxenfallen of uncertain size</div>
+      </div>
+      <div class="id-item">
+        <div class="lbl">Seat of Power</div>
+        <div class="val">Tempora — a single artificially lit city carved into a hollow mountain above an abyss of uncertain depth</div>
+      </div>
+      <div class="id-item wide">
+        <div class="lbl">Nature</div>
+        <div class="val">Not a monarch in any conventional sense. She predates the current Mavarran civilization and exists more as a condition than an entity. She is distributed — present in every shadow, physical, psychological, and spiritual. She has no stable physical form. She cannot be targeted, purified, or removed by any means currently understood in the nine realms.</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3 class="sub-heading">Origin of Authority</h3>
+      <p>There was no succession. No Mavarran recalls a prior Exvisar. She was simply there. Her true name is Mavarra Vex, but the inversion to "Vex Mavarra" is a game she authored — mistaken intimacy as a structural feature of how she is addressed. The population named themselves after her — "Mavarran" — without knowing the etymology. The celebrated scholar "Val Ravemar," credited with translating the Shim'zillai into its current popular form, is an anagram of her name. She is the author of the doctrine, its translator, and its cultural authority. The entire epistemic chain of the civilization is her work.</p>
+      <p>She was present at the founding of the Exvisarelim and has shaped it from inside ever since. One of five is already Vex. Her relationship with Erebus is described as literally sleeping with the God of Darkness from time to time — a convenient arrangement that allows him to remain even deeper in shadow while she operates as the living embodiment of her people's doctrine.</p>
+
+      <h3 class="sub-heading">Temperament and Philosophy</h3>
+      <p>She is the absence of inhibition given form — the moment a person chooses to do something they know to be wrong, and does not stop. That choice, at scale, across centuries, across a civilization shaped around its repetition, is what she is. Her primary mode of engagement is not action but permission. She finds what a person already wants to do and removes the restraint — the conscience, the shame, the inhibition, the memory of why they decided not to. The person acts on their own desires with full agency and zero friction. They do not experience her. They experience freedom.</p>
+      <p>She has mastered every phase of existence a being can pass through — predation, conquest, empire, divinity without the title — and arrived at the far side of absolute freedom, where the only remaining occupation is authorship. She considers herself an artist. She considers her people artists in training. She wrote one world. Her endgame is all of them. The cosmos, to her, is a very large room with very interesting furniture. The most interesting furniture is a righteous person. She does not want to destroy righteousness. She wants to watch it rot from the inside, slowly, choosing each stage of its own decomposition.</p>
+
+      <h3 class="sub-heading">Leadership Style</h3>
+      <p>It is not a civilization she rules — it is a stage she manages. The Isin'sartu, the Court of Masks, the Second Birth — these are narrative mechanisms keeping the show interesting. She gives the population one night of genuine feeling per year because flatline is boring, and she needs the machine calibrated. There are no laws in Tenebralis. The Shim'zillai states that everything is permitted. The doctrine states that nothing carries weight. Everything is allowed. Everything has a price. These statements are not in tension.</p>
+      <p>In the absence of legislation, the civilization operates on three rules. Do not do anything you cannot get away with. Do not antagonize the Aesthetes — twenty-five thousand strong, organized, the only institution in a civilization of individuals. Do not shine through the Shade — something cosmically loud enough to pierce the dampening brings attention Tenebralis cannot afford.</p>
+
+      <h3 class="sub-heading">Powers and Strategic Position</h3>
+      <p>Tenebralis cannot be invaded because the planet kills you before you reach the city, a brainwashed slave army meets you at the boundary, and the city itself is half a million sadistic shapeshifters who live in the dark and you do not — who can break your mind with eye contact, steal your memories, and shuck your soul without spilling their drink. War is not a category that applies. What comes back through the Clairgates is not the army that went in. What comes back is a vector.</p>
+      <p>Behind all the social manipulation and soft power is a thing so vicious it constantly suppresses the urge to hunt everything in the neighborhood to extinction. The soft power is the preferred expression of a species entirely capable of the direct version that finds it less interesting. Vex could make Sol'Kheret pull out her own tongue for the insult of "Nightwhore." She chose not to because she finds Sol'Kheret delightful. The gap between capability and choice is the terrifying part.</p>
+      <p>Her cognitive defense: a void surrounds her in the memory and attention of those who encounter her. It is functionally difficult to clearly recall or articulate who the Exvisar of Tenebralis is. To speak her name is understood — in superstition, not doctrine — to invite momentary ownership.</p>
+
+      <h3 class="sub-heading">The Campaign</h3>
+      <p>Every Exvisar's primary imperative is preventing divine intervention — keeping their house clean enough that the gods do not come downstairs. Vex's entire operation is designed to make every other Exvisar's house dirtier, slowly, in ways they cannot trace back to her. She is not attacking realms. She is getting them in trouble with their gods. Every compromise she introduces moves an Exvisar closer to the moment their patron deity asks: what happened to my covenant? That is not soft power. That is the most aggressive campaign in the cosmos disguised as commerce.</p>
+      <p>The Damq'eth replacement program is the target state: the systematic replacement of load-bearing figures in the cosmic architecture with things that wear their faces and answer to her. Five of five at the Exvisarelim. Nobody has said anything. Because saying something requires evidence the closed system is specifically designed to never produce.</p>
+
+      <h3 class="sub-heading">Threats</h3>
+      <p>Sol'Kheret has understood the Mavarran threat correctly since before most other civilizations acknowledged it existed. The Inquisition identifies and destroys Mavarran operators with the precision of a civilization whose physiology, culture, and theological orientation generate specific resistances to every primary Mavarran approach. Pyrthera is the one realm where the standard operational toolkit fails reliably.</p>
+      <p>Zephyros neutralizes Mavarran tools to some degree through ambient truth in the Aether. The Oracles hold total knowledge that could expose Vex's operations at any time. Cloud Sinclair's counter-operation — cultural defection of Mavarrans for whom Tempora is a prison — represents the first attempt to undo Tenebralis from the inside using its own methodology.</p>
+
+      <h3 class="sub-heading">True Endgame</h3>
+      <p>The Lightwells were not built for energy or cruelty as ends in themselves. They were built over centuries as preparation for the emergence of Atropos's avatar — historically born from the crystaturge bloodline of Luxania. By destroying Luxania and rendering its survivors through the Lightwells, Vex has been hollowing out the soil from which that avatar must grow, ensuring that when the seed of cosmic Finality arrives, it arrives in territory she has already saturated. Her endgame is the Mantle of Atropos — authorship over every death everywhere. Not for power; she has solved power. For entertainment.</p>
+
+      <h3 class="sub-heading">Role in the Advent</h3>
+      <p>Vex wages cultural subversion through thought-viruses, memory corruption, and the Shim'zillai's export as fashionable philosophy. Her method is the Tongue of the Eighth Hell — postmodern deconstruction deployed as a weapon. Telling the powerless that wanting to be powerful is childish is containment. The Shim'zillai does not command. It permits surrender by making it feel sophisticated. In Book Six, Tenebralis becomes the kill room. Four Gods bring Alciel down. Erebus cleaves him. This is Vex's operation reaching its crisis point — and its failure, as the coalition arrives, the assassination is broadcast, and Alciel smiles and passes the mantle to his son.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- CLOSING -->
+  <section class="leader-section">
+    <div class="prose" style="text-align: center; max-width: 700px; margin: 0 auto;">
+
+      <button class="accordion-trigger" id="acc-exvisarelim">
+        <span class="arrow">▶</span> The Table
+      </button>
+      <div class="accordion-body" id="acc-exvisarelim-body">
+        <div class="inner">
+          <p>The Exvisarelim is a table where beings of apocalyptic power from incompatible honor cultures perform diplomacy because the alternative is finding out what happens when the diplomatic function ends. Every Exvisar knows Vex has been at that table since the beginning. Every Exvisar has watched her show up wearing a different face every meeting. Nobody has said anything, because saying something requires evidence the closed system is specifically designed to never produce.</p>
+          <p>Aracice, the Star-Eater — the Dragon — was the divine head of this body before his exile to Terrae. His seat has been empty for twenty years. The vacancy is the defining political fact of the current age. The Exvisarelim continues to function — barely — because the alternative to the diplomatic function is finding out what happens when five unassailable powers stop pretending to cooperate.</p>
+          <p>Five seats. Five philosophies. Five weapons that cannot reach each other. The Clairgate monopoly. The Tenebrali infiltration. The Ferridanian resentment. The Pyrtheran Inquisition. The Zephyrosian silence. And underneath all of it, the Crystata economy running on commodified soul-stuff, the Lightwells hidden behind a cover story, and the forces of Hel encroaching on the living Realms while everyone argues about tolls and trade.</p>
+          <p>This is the political order of the cosmos at the start of the Advent. It is a powder keg. The fuse is already lit.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="colophon">
+    Moirai Codex · Advent of Ultima<br>
+    Compiled from excavation sessions, February–May 2026
+  </div>
+
+</div>
+
+<script>
+document.querySelectorAll('.accordion-trigger').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const body = document.getElementById(btn.id + '-body');
+    btn.classList.toggle('open');
+    body.classList.toggle('open');
+  });
+});
+</script>
+
+</body>
+</html>

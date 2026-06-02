@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiacre — The Spinner Incarnate · Advent of Ultima</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0a0907;
+  --bg-card: #14110d;
+  --bg-hover: #1b1712;
+  --bg-highlight: #1f1a13;
+  --gold-dark: #4a3a1c;
+  --gold-core: #b88a2e;
+  --gold-accent: #d6a849;
+  --gold-light: #e8cf94;
+  --gold-ghost: #f3e6c4;
+  --steel-core: #3e5c76;
+  --steel-light: #6e93ad;
+  --green-ornea: #5c6e47;
+  --dawn-rose: #c98a6a;
+  --crimson-thread: #8a3a3a;
+  --text-primary: #ddd2bc;
+  --text-secondary: #a89c82;
+  --text-dim: #6e6450;
+  --border-subtle: #271f15;
+  --border-accent: #3a2d18;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --max-width: 880px;
+  --section-gap: 4.5rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.78;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--gold-core); color: var(--bg-deep); }
+
+#mote-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.5;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 18% 12%, rgba(184,138,46,0.07) 0%, transparent 52%),
+    radial-gradient(ellipse at 85% 35%, rgba(62,92,118,0.05) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 96%, rgba(74,58,28,0.10) 0%, transparent 38%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page { position: relative; z-index: 1; max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem; }
+
+.divider {
+  display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+  margin: var(--section-gap) 0; opacity: 0.5;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold-dark), transparent);
+}
+.divider span {
+  width: 7px; height: 7px; background: var(--gold-accent);
+  transform: rotate(45deg); flex-shrink: 0;
+}
+
+.header { text-align: center; padding: 5.5rem 0 1.5rem; }
+.header .tag {
+  font-family: var(--font-display); font-size: 0.6rem;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--gold-accent); display: block; margin-bottom: 2rem;
+}
+.header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 8vw, 4.2rem);
+  font-weight: 700; color: var(--gold-light);
+  letter-spacing: 0.1em; line-height: 1.1; margin-bottom: 0.6rem;
+  text-shadow: 0 0 80px rgba(184,138,46,0.18);
+}
+.header .sub {
+  font-family: var(--font-display); font-size: 0.75rem;
+  letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim);
+}
+.header .epigraph {
+  font-style: italic; font-size: 1.05rem; color: var(--text-secondary);
+  max-width: 30rem; margin: 1.8rem auto 0; line-height: 1.7;
+}
+
+.sec-num {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--gold-accent); display: block; margin-bottom: 0.4rem;
+}
+.sec-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-weight: 600; color: var(--gold-light);
+  letter-spacing: 0.05em; margin-bottom: 1.4rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--border-accent);
+}
+.sub-head {
+  font-family: var(--font-display); font-size: 0.9rem;
+  font-weight: 600; color: var(--gold-light);
+  letter-spacing: 0.03em; margin-top: 1.5rem; margin-bottom: 0.5rem;
+}
+
+.prose p { margin-bottom: 1.2rem; }
+.prose p:last-child { margin-bottom: 0; }
+.prose strong { color: var(--gold-light); font-weight: 600; }
+.prose em { color: var(--text-secondary); }
+
+.id-card {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: 2px; padding: 2.2rem; position: relative; overflow: hidden;
+}
+.id-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, var(--gold-dark), var(--gold-accent), var(--gold-dark));
+}
+.id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem 2rem; }
+.id-item .lbl {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--gold-accent); margin-bottom: 0.2rem;
+}
+.id-item .val { font-size: 0.95rem; color: var(--text-primary); line-height: 1.6; }
+.id-item.wide { grid-column: 1 / -1; }
+
+.acc-item {
+  border: 1px solid var(--border-subtle); margin-bottom: -1px;
+  background: var(--bg-card); overflow: hidden;
+}
+.acc-item:first-child { border-radius: 2px 2px 0 0; }
+.acc-item:last-child { border-radius: 0 0 2px 2px; }
+.acc-btn {
+  width: 100%; background: none; border: none;
+  padding: 1.1rem 1.4rem; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--font-display); font-size: 0.9rem;
+  font-weight: 600; color: var(--gold-light);
+  letter-spacing: 0.04em; text-align: left;
+  transition: background 0.2s;
+}
+.acc-btn:hover { background: var(--bg-hover); }
+.acc-btn .lead { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.2rem 0.8rem; }
+.acc-btn .hint {
+  font-family: var(--font-body); font-size: 0.82rem;
+  font-weight: 400; color: var(--text-dim); font-style: italic;
+}
+.acc-btn .arr {
+  width: 7px; height: 7px;
+  border-right: 1.5px solid var(--gold-accent);
+  border-bottom: 1.5px solid var(--gold-accent);
+  transform: rotate(45deg); transition: transform 0.3s;
+  flex-shrink: 0; margin-left: 1rem;
+}
+.acc-item.open .acc-btn .arr { transform: rotate(-135deg); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
+.acc-inner { padding: 0 1.4rem 1.4rem; }
+.acc-inner .atm {
+  font-style: italic; font-size: 0.92rem; color: var(--gold-accent);
+  margin-bottom: 0.8rem; padding-left: 0.8rem;
+  border-left: 2px solid var(--gold-dark);
+}
+.acc-inner p { font-size: 0.92rem; line-height: 1.74; color: var(--text-secondary); margin-bottom: 0.7rem; }
+.acc-inner p:last-child { margin-bottom: 0; }
+.acc-inner p strong { color: var(--gold-light); }
+
+.highlight-box {
+  background: var(--bg-highlight); border: 1px solid var(--gold-dark);
+  border-left: 3px solid var(--gold-accent);
+  padding: 1.8rem 2.2rem; margin: 1.4rem 0; position: relative;
+}
+.highlight-box::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(184,138,46,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.highlight-box p { position: relative; font-size: 1rem; line-height: 1.82; }
+.highlight-box p + p { margin-top: 1rem; }
+.highlight-box strong { color: var(--gold-light); }
+
+.scripture {
+  text-align: center; font-family: var(--font-display);
+  font-size: clamp(1rem, 2.4vw, 1.25rem); font-weight: 600;
+  color: var(--gold-light); letter-spacing: 0.06em; line-height: 1.55;
+  margin: 2rem auto; max-width: 34rem;
+  text-shadow: 0 0 50px rgba(184,138,46,0.2);
+}
+.scripture .src {
+  display: block; font-family: var(--font-body); font-style: italic;
+  font-size: 0.82rem; font-weight: 400; letter-spacing: 0.04em;
+  color: var(--text-dim); margin-top: 0.9rem;
+}
+
+.rel { padding: 1.15rem 0; border-bottom: 1px solid var(--border-subtle); }
+.rel:last-child { border-bottom: none; }
+.rel-name {
+  font-family: var(--font-display); font-size: 0.92rem; font-weight: 600;
+  color: var(--gold-light); letter-spacing: 0.03em; margin-bottom: 0.1rem;
+}
+.rel-name .role {
+  font-family: var(--font-body); font-style: italic; font-weight: 400;
+  font-size: 0.82rem; color: var(--text-dim); margin-left: 0.5rem;
+}
+.rel p { font-size: 0.93rem; line-height: 1.72; color: var(--text-secondary); }
+
+.sw-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-top: 1.2rem; }
+.sw { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 2px; overflow: hidden; }
+.sw-color { height: 72px; }
+.sw-info { padding: 0.6rem 0.8rem; }
+.sw-name {
+  font-family: var(--font-display); font-size: 0.58rem;
+  letter-spacing: 0.13em; text-transform: uppercase; color: var(--text-primary); margin-bottom: 0.1rem;
+}
+.sw-hex { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0.25rem; }
+.sw-desc { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.45; }
+
+.footer {
+  text-align: center; padding: 3.5rem 0 2.5rem;
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim);
+}
+.footer span { color: var(--gold-accent); }
+
+.fi { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fi.vis { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 640px) {
+  body { font-size: 17px; }
+  .id-grid { grid-template-columns: 1fr; }
+  .sw-grid { grid-template-columns: repeat(2, 1fr); }
+  .id-card { padding: 1.4rem; }
+  .header { padding: 3.5rem 0 1rem; }
+  :root { --section-gap: 3rem; }
+  .highlight-box { padding: 1.2rem 1.1rem; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="mote-canvas"></canvas>
+
+<div class="page">
+
+  <header class="header fi">
+    <span class="tag">Advent of Ultima · Moirai Codex</span>
+    <h1>Fiacre</h1>
+    <div class="sub">The Spinner Incarnate · The One Who Makes What Never Was, Begin</div>
+    <p class="epigraph">&ldquo;Must she catch every leaf in the gale to know that she has lived?&rdquo;</p>
+  </header>
+
+  <div class="divider"><span></span></div>
+
+  <section class="fi">
+    <span class="sec-num">I</span>
+    <h2 class="sec-title">The Record</h2>
+    <div class="id-card">
+      <div class="id-grid">
+        <div class="id-item">
+          <div class="lbl">Full Name</div>
+          <div class="val">Fiacre Athena Chevalier-Du&rsquo;Moira</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">What She Is</div>
+          <div class="val">Clotho, the Spinner &mdash; one of the three Moirai &mdash; incarnate</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Realm of Origin</div>
+          <div class="val">Zephyros &mdash; the wind-realm; born in the town of Gran Ornea</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Order</div>
+          <div class="val">Seraph of Ex-Deorum, formerly &mdash; elevated past the Angelic and Archangelic grades</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Names She Is Given</div>
+          <div class="val">The Angel of Mercy &middot; the Goddess of Peace &middot; Our Dawn &mdash; none of them chosen by her, all of them refused</div>
+        </div>
+        <div class="id-item">
+          <div class="lbl">Place in the Prophecy</div>
+          <div class="val">The first of the nine threads named in the Venturae of Ultima</div>
+        </div>
+        <div class="id-item wide">
+          <div class="lbl">The Plain Statement</div>
+          <div class="val">She is not a woman who holds divine power. She is a first principle of reality &mdash; the one by which all things commence &mdash; that consented to be born, and was. Everything that follows in this record hangs from that single fact, and without it none of it is legible.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <section class="fi">
+    <span class="sec-num">II</span>
+    <h2 class="sec-title">Her Nature &mdash; What Walks in the Form</h2>
+    <div class="prose">
+      <p>Before there were gods there was the apportioning. Every life, every reign, every age is given a share &mdash; a measured portion, laid down, threaded, finite &mdash; and the three who are that apportioning, who personify it, are the <strong>Moirai</strong>. They are not powers who govern a region of reality. They are the terms reality runs on. A god is a power that holds a domain; a domain is a place within the world. A Moira is not within the world. She is one of the conditions under which there is a world to be within. The gods receive a share like everything else; the gods are subject to <em>moira</em>. The Moirai are what the gods are subject to.</p>
+
+      <p>Of the three, Fiacre is <strong>Clotho &mdash; the Spinner</strong>. Lachesis measures the thread; Atropos cuts it. Clotho draws it onto the spindle. Her act is prior to the other two: before her motion there is no thread for anyone to measure or to end. She is the principle of <strong>commencement</strong> &mdash; that anything is at all, that being is continually drawn out of non-being. And in her, the two things the older drafts of this record kept trying to weld together were never two. To spin a thread <em>is</em> to bring a life into being, and to bring a life into being <em>is</em> to lay down its destiny. Generation and Destiny are one gesture in the Spinner. &ldquo;Source of Life&rdquo; and &ldquo;the ordaining of fate&rdquo; are not two claims about Fiacre. They are her single nature, read correctly.</p>
+
+      <p>This is why she stands above the Pantheon &mdash; not in scale, but in category. She is not a larger god. She is not a god at all. To rank her at the top of the gods&rsquo; ladder is to mistake what kind of thing she is. The gods administer what they did not author. She is nearer to the authoring.</p>
+
+      <div class="highlight-box">
+        <p>The word that unlocks her is <strong>Avatar</strong>. An Avatar is not a mortal elevated into a divine office. An Avatar is a god who has taken a form &mdash; the descent of the deity itself into corporeal shape. &ldquo;Avatar of Clotho&rdquo; has never meant <em>a girl raised to serve the Spinner</em>. It means <strong>the Spinner, in flesh</strong>. Fiacre is not Clotho&rsquo;s representative, her vessel, or her chosen hand. Fiacre is the body the principle of beginning is wearing.</p>
+      </div>
+
+      <p>And there has never been an Avatar of Clotho before. The cosmos holds a truth about the three: the Avatar of Lachesis has always Been and will never die &mdash; perpetual, unbroken presence, never born and never parted from her form. The Avatar of Atropos always dies, maddened, and is reborn through the Crystaturges of Luxania &mdash; incarnation as a recurring catastrophe. But an Avatar of Clotho had never been born, and the reason is almost a sacred paradox: <strong>the principle by which all things commence had itself never commenced.</strong> Beginning had no beginning. Now, for the first time in existence, it has had one.</p>
+
+      <div class="sub-head">The Kenosis</div>
+      <p>She incarnated by being <strong>born</strong> &mdash; not descended, not poured into a vessel, not elevated. Born, through the genuine process, into the house of Chevalier-Du&rsquo;Moira in Gran Ornea, as a child. And birth does what birth does: it draws a veil. A born thing does not arrive remembering what came before it, because for a born thing there <em>was</em> no before it can hold. So the Spinner grew up not knowing she was the Spinner &mdash; and the not-knowing is not a flaw in the descent. It <em>is</em> the descent. It is the price of the incarnation being real rather than a costume. As the Son of God may, for a time, not know the Father and be the Son entire regardless, so Clotho walked her childhood emptied of the memory of the Loom, and was the Loom the whole time.</p>
+
+      <p>The essence shows through anyway, because she does not <em>have</em> her nature &mdash; she <em>is</em> it, and a thing cannot be parted from what it is by forgetting the word for it. She healed before she had finished falling. At fourteen, hungry at a dinner table, she drew a honeyed roll out of non-being. That was not a child&rsquo;s first miracle and not the foreshadowing of a power. It was the first time the cosmos caught the Source of Life doing the only thing the Source of Life does &mdash; and wanting a sweet thing was the same gesture as spinning a life into being. What looks like power in her is never power summoned. It is identity, unable not to be itself, the way fire is hot in the dark.</p>
+
+      <p>Therefore the Gran Ornea texture &mdash; the sister, the markets, the plays, the love of the place &mdash; is not a mask over the goddess and not merely the iconographically correct face of the threshold-Fate, though it is also that. It is a <strong>real childhood, genuinely lived, by the deity, because she genuinely was a child.</strong> The warmth is not under the divinity and not over it. The girl is the goddess, in the only mode a goddess can exist who has consented to be born: not knowing it, and being it.</p>
+
+      <p>This is what the remembering will be. When the veil thins, nothing is added to her. The mind catches up to the soul. Learning what she is will explain her, and it will not change her, because the Spinner was always there, spinning, including every year she had no word for it.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <section class="fi">
+    <span class="sec-num">III</span>
+    <h2 class="sec-title">The Consent &mdash; The Engine of Her</h2>
+    <div class="prose">
+      <p>This is the center of her, and every other thing in this record is downstream of it.</p>
+
+      <p>Clotho <strong>consented</strong> to be born. Not <em>was incarnated</em>. Consented. The principle of beginning chose to undergo a beginning. The yes was sovereign, and real, and irrevocable &mdash; and folded inside any true consent is the standing to feel how the thing consented to actually goes. And the life that consent committed her to is asking more of her than she wants to give.</p>
+
+      <p>This is not a wound and it is not a flaw. It is the honest interior of a being who said yes to something vast. She wanted the small life &mdash; genuinely, all the way through. Gran Ornea, the sister, the honeyed roll, a garden, the quiet by a lake. She was <em>of</em> that, and she loved it, and the life her consent committed her to keeps requiring her instead to be the Spinner: the shield, the one who lights suns and unmakes gods and gathers nine threads and carries a dying age toward its shroud. She does not, fully, want to. Not from weakness &mdash; from honesty. The role costs more than the person inside it wishes to pay, every day, and she pays it anyway.</p>
+
+      <div class="highlight-box">
+        <p>And so she wants to be <strong>outside a prophecy she is inside of.</strong></p>
+        <p>She is one of the nine threads. The Venturae is true; the thread is hers. She does not want it to be. Her belief that she stands apart &mdash; that she is the weaver at the loom and not a thread within the cloth &mdash; is not an error of perception waiting to be corrected. It is a <strong>want</strong>. It is the principle of beginning reaching for the exit. Wanting the small life and wanting out of the prophecy are one want wearing two faces: the want to not be conscripted by what she is.</p>
+      </div>
+
+      <p>The cosmos does not grant it. A <em>moira</em> is a share, an allotment &mdash; and the iron fact beneath the whole of the mythology is that no one chooses their share. Not the gods. Not the mortals. Not the Spinner, whose own nature is the laying-down of shares. She, of all beings, does not get to be exempt from being apportioned one. Her share is this: she is one of the nine, she is inside the shroud, the ending of the age runs through her, and there is no small quiet life owed to her at the far end of it. She did not choose it. It cannot be declined. And she does not want it &mdash; and she will give the whole of herself to it regardless, which is the most that can ever be asked of anyone, god or mortal.</p>
+
+      <p>She is <strong>not owed the small life.</strong> Nothing owes her anything; there is no contract with terms. She wants it, she will not be promised it, she may not be given it, and she does the entire work anyway &mdash; freely, the way water given at the world&rsquo;s birth was meant to be given, with nothing guaranteed in return. That she is not owed it is precisely what makes the giving hers.</p>
+
+      <div class="highlight-box">
+        <p>And so she is the rarest thing a story of fate can hold: a hero with <strong>no motor.</strong> Nothing above her can command her &mdash; there is nothing above her. Nothing below her can compel her. She is not conscripted, as her sister was; she consented. She is not pulled by hunger, as the devil is, nor by prophecy and love, as the Dragonson is. She is the most powerful being in existence, which strips away every external engine by which a will is moved &mdash; and she does not want it, which strips away the last internal one. She has no reason to do what must be done.</p>
+        <p>She does it anyway, because <strong>it must be done, and she is the one who can, and if she does not, fate itself falls apart.</strong> That is the whole of her engine. Not the pursuit of a want &mdash; the free assent to a necessity. Every other hero meets the inevitable with a reason in hand. She meets it with none, and the having-no-reason is itself the reason, and that is what makes her, of all the nine, the one in whom the meaning of fate cannot be faked.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <section class="fi">
+    <span class="sec-num">IV</span>
+    <h2 class="sec-title">The Door That Would Not Open</h2>
+    <div class="prose">
+      <p>After Ardenne, and before Luxenfall, she tried to take it back.</p>
+
+      <p>This is not despair, and it must never be read as the secret wound beneath the warmth. It was the want made into an act. She had said yes to being born; being born had now cost her sister&rsquo;s life; and she reached for the one act that looks as though it could revoke a consent &mdash; <em>I will not be here; I withdraw from the whole of it; I take the yes back.</em> It was the purest possible expression of wanting to be outside a thing she is inside of, tested at the most absolute point a being can test it.</p>
+
+      <p>The door is not there. She cannot die &mdash; not by any hand, and, she learned then, not by her own. The cosmos will not permit the consent to be revoked. A <em>moira</em> cannot be declined, and she is one, and the single power her omnipotence does not contain is the power to stop being what she is. Her deathlessness, read here, is not a gift and not armor. It is the lock on her conscription &mdash; the cosmos refusing to let others take her, and refusing to let her take herself.</p>
+
+      <p>She did not break against the shut door. She is not a being who, denied the exit, spends an eternity clawing the wall. She drew the only conclusion a faithful being can draw from <em>I cannot leave</em>: that a being who is being kept is being kept for something. She believes in Destiny &mdash; she would; she is its Spinner, though she does not yet know it &mdash; and so the sealed door was not only a prison. It was information. <strong>If I cannot leave, then I am here for a reason, and I had better find it and give it the whole of myself.</strong> The will to live, rebuilt from doctrine, because the feeling of it was gone and only the faith remained.</p>
+
+      <p>That seeking is what she carried into Luxenfall. It fastened onto the Luxenfallen &mdash; <em>this is the something I was kept for</em> &mdash; and then onto the Advent, and then onto her place within it. The work is load-bearing for her in a way no one around her perceives. If the purpose is not real, the door is only a door, and she is only trapped.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <section class="fi">
+    <span class="sec-num">V</span>
+    <h2 class="sec-title">Her Purpose &mdash; The Annunciation</h2>
+    <div class="prose">
+      <p>A first principle is not <em>for</em> anything; it is that <em>by which</em> things are. So her purpose cannot be spoken as a function. It is spoken differently: not what she does, but what her presence in the world <em>means</em>.</p>
+
+      <p>The age is being wound toward its end. Algol&rsquo;s Venturae has named the shroud. And into that ending, the principle of <strong>beginning</strong> has incarnated. That is the annunciation. Her very presence is the cosmos&rsquo;s declaration that the end of the age is not a termination but a <strong>threshold</strong> &mdash; that after the shroud there is a spinning, that the Spinner walks because something is meant to commence. She is, in the most literal sense the word permits, the promise that there will be an after.</p>
+
+      <div class="scripture">
+        She is the promise that there will be an after.
+      </div>
+
+      <p>Luxenfall is where the world is first allowed to see her do it. She does not arrive there as a savior by decision. She sees suffering, the chain of command between herself and the work is gone, and the principle of commencement, set down in a place the old apportionment abandoned, does the only thing it is: it begins. She reverses famines. She heals villages. She finds, in the rubble, the building-sized crystata where a murdered civilization had encoded its conscience into the air, and she restores the pattern &mdash; fifteen in all &mdash; and where she walks the light returns. She mends the broken Wellspring, three centuries of suffering still pouring from it, and a Second Sun is lit, and a whole world exhales. This is not charity. It is the annunciation made visible: proof, written in light over a murdered realm, that beginning has not gone out of the cosmos.</p>
+
+      <p>The Realm of Light begins to mistake her for the god it lost. She tells them, in air that cannot carry a lie, the true thing.</p>
+
+      <div class="scripture">
+        &ldquo;I am not your goddess.&rdquo;
+        <span class="src">&mdash; and an elder answers: that is what a goddess would say</span>
+      </div>
+
+      <p>It is the most exact sentence she speaks, and it closes a loop the cosmos cannot open: the divine being who is unable to lie, telling the truth, and being disbelieved <em>because</em> she is unable to lie. She is not their goddess. She declines the worship, and she declines, when the murdered God of Light&rsquo;s vacant seat begins of its own accord to settle upon her, the office of <strong>Patron of Luxania</strong>. To take it would be a stepping-down &mdash; a Patron is a god bound to a domain, an occupant of a region of reality, and to accept the seat would be to climb onto the gods&rsquo; ladder and let a first principle be filed as one of its rungs. She declines it as she declines every name she is given: not from modesty, but from an incapacity to misrepresent what she is. The Spinner spins the thread, and does not own the cloth. She begins a thing, and then lets it be its own &mdash; because that letting-go is itself the whole of what commencement means.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <section class="fi">
+    <span class="sec-num">VI</span>
+    <h2 class="sec-title">Gran Ornea, the Ascension, and the Years in Dystan</h2>
+    <div class="prose">
+      <p>The story begins a breath before she does. A year before her birth, Algol stood in Dystan and spoke the shape of the age to its gods &mdash; nine threads, a shroud, three suns falling, the Thrones Eternal but dust. The Pantheon heard a sentence pronounced against them and did not understand they were hearing a description. And then, in the same season, into the breathing air of Gran Ornea, the principle of beginning consented to begin.</p>
+
+      <p>She ascended at fourteen &mdash; the event overwhelming, healing a fall before the fall was finished, conjuring the honeyed roll from nothing &mdash; and was taken directly to be a <strong>Seraph</strong> of Ex-Deorum, the right hand of the Pantheon, bypassing the Angelic and Archangelic grades entirely. The Spinner incarnating in the very season the age&rsquo;s shroud was announced is why the Pantheon fears her. They could file the other two incarnate Fates: Lachesis always-was, and one does not fear the furniture; Atropos always dies, and a catastrophe that ends itself is a manageable horror. But an incarnate Spinner has no precedent and therefore no bound &mdash; and she is the wrong Fate to be loose, the one whose act is <em>prior</em>, who can commence what the settled order depends on never commencing. And she does not know what she is, which is worse, not better: a god who knew herself could be bound by oath and brought to the table. A Fate incarnate and forgetting, spinning by reflex and appetite, cannot be bargained with, because there is no one yet to bargain with &mdash; only the Loom, in a girl, doing what the Loom does.</p>
+
+      <p>Dystan did not raise her. It received her. The youngest face at the table of the Seraphim belonged to the oldest thing in the room, and Ma&rsquo;at could not weigh her, because Ma&rsquo;at weighs finished mortal souls and there was nothing of that order present to be weighed. She was seated among the right hand of the Pantheon not by elevation but because no other station did not lie about her. And she, not knowing, did the gracious thing: she comported herself as a faithful girl among elders &mdash; deferred, studied, trusted. Brutus&rsquo;s contempt for her was a finished soul failing to perceive a first principle. Leviathan&rsquo;s fondness, edged with a dread he could not name, was the God of War sensing that the first thread had been laid in his keeping and that he would not be able to cut it.</p>
+
+      <p>She found her shape there, and it was the shield. Sent to bring judgment, told to sharpen and to harden both, she would harden and not sharpen; an army of the dead broke against her and scattered as dust, and she pointed, and another made the cut. From the first engagement she divided the work &mdash; <em>I will protect, you will execute</em> &mdash; not from squeamishness, but because the principle of beginning does not carry the blade of ending; that is her sister&rsquo;s office, and she would not usurp it. The Realms came to love her as the Angel of Mercy. She drank with Sol&rsquo;Kheret and learned to pull a sun. She settled the quarrel of dragons and wears their gift as armor still. These were the bright years, and they were real.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <section class="fi">
+    <span class="sec-num">VII</span>
+    <h2 class="sec-title">EMBERLIGHT, the Request, and the Flight</h2>
+    <div class="prose">
+      <p>Then the age began to die on schedule, and she carried the weight of it &mdash; the sickness of Hel rising into the living Realms, the grafted flesh, the children unmade. The sword grew heavier the way a true thing grows heavy: not as doubt, but as the faithful cataloguing of every face she could not reach.</p>
+
+      <p>She was sent to a village seeded by Raiwata&rsquo;s invasion, with orders of Absolute Neutralization. The order was not cruel; it was correct about the cost. And she found children, and she could not, and she wept, and she went home.</p>
+
+      <div class="highlight-box">
+        <p><strong>EMBERLIGHT is a lesson, not a verdict.</strong> It was a failure of imagination: she could have woven a way to save them rather than only neutralize them, and she did not think to. That is a true failure, and it is hers, and it is the seed of the lesson the whole story will teach her &mdash; that the most powerful being in the cosmos may not decline the fullness of her own power because some narrower idea of herself has told her she may not.</p>
+        <p>And underneath the failure of imagination was the first surfacing of the want: <em>I do not want to keep giving what this is asking of me.</em></p>
+      </div>
+
+      <p>So she asked one quiet question &mdash; <em>can I not simply retire?</em> &mdash; and it was not a tactical request. It was the want, said aloud. The God of War came to her family&rsquo;s home, into the wind-realm where violence cannot occur, fond and almost loving, and told her that desire would be the poison in her honey, and bid her die with grace. Ardenne heard voices and walked into the room. Ardenne fell. And the Spinner, who had never been made to defend her own thread, blocked the weapon of a god &mdash; and learned, in that one motion, that she was something she had not been told she was. And she ran. Not from fear of losing. From the unbearable nearness of what winning would mean.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <section class="fi">
+    <span class="sec-num">VIII</span>
+    <h2 class="sec-title">The First Book &mdash; Bewilderment, Wrath, and the Word from Algol</h2>
+    <div class="prose">
+      <p>She spends almost the whole of the first book in genuine bewilderment, because the experience makes no sense from inside the veil. Why would the gods fear one fugitive Seraph enough to send the entire right hand of the Pantheon after her? Why can none of them finish it? Why does she not break? She is living the symptoms of being a first principle with no access to the word for it &mdash; out-healing the unhealable, standing through what should end her, watching honored warriors exhaust themselves against her &mdash; and none of it resolves, because the explanation is sealed behind the veil of her own birth.</p>
+
+      <p>She learns her deathlessness not through revelation but through betrayal: her own former peers, the people she had eaten and trained and grieved beside, are sent to kill her, and they strike with everything they are, and they cannot. She heals Luxenfall through the length of the book &mdash; the famines, the crystata, the Wellspring, the Second Sun. She discovers that Aether, the God of Light, is dead, killed by Erebus. She fights Brutus, and lets him break her bones in patterns that disturb even him, because to switch off an honored warrior with a gesture would dishonor the meaning of his courage. She crosses, against Chikage, into a clarity that does not reverse, and later ends Chikage with her own blood. And at the last she faces the God of War in the longest contest of her incarnate life &mdash; studies him as he strikes her until she knows him better than he knows himself &mdash; and she does not kill him. She unmakes his violence with his own hands, lobotomizing him with the Strings of Fate, erasing the war in him; Ex-Deorum is beheaded. And then she weeps, because she has done something enormous to someone she had loved, and the principle of beginning is not made of stone.</p>
+
+      <div class="highlight-box">
+        <p>And then &mdash; at the foot of the broken God of War, with the right hand of the Pantheon in ruin around her &mdash; <strong>Algol tells her what she is.</strong></p>
+        <p>Clotho. A Moira. The Spinner. The principle of commencement, incarnate. Every loop closes at once: the bewilderment, the fear, the resilience, the wrath, the inability of gods to kill her. The remembering does not arrive as a gentle dawn. It arrives as the last piece of an unbearable equation snapping into place, under fire, spoken by the one being who has always known.</p>
+      </div>
+
+      <p>She knows, by the close of the first book, what she is. What follows in the Acts ahead is not her discovering it. It is her living as it, knowingly &mdash; which is the harder thing. She refuses, pointedly, to call her victory a vindication, because her power was never the same thing as her judgment, and she will not let the one launder the other.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <section class="fi">
+    <span class="sec-num">IX</span>
+    <h2 class="sec-title">Why the Cosmos Cannot Hold Her Death</h2>
+    <div class="prose">
+      <p>She is not invincible in the way a thing is hard to break. Her inviolability descends through four strata, and the story lives in the upper three; the lowest is the sealed floor, near-never invoked.</p>
+    </div>
+    <div class="acc">
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The First Stratum<span class="hint">raw default supremacy</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">Most of the cosmos never reaches her at all.</p>
+          <p>Before any defended act &mdash; before shield or healing or anything chosen &mdash; the gap between Fiacre and even the most powerful beings alive is enormous. To close the distance to where she could be threatened is itself most of a campaign, and most of the cosmos never manages it. This is the Spinner-nature expressed as sheer presence.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Second Stratum<span class="hint">the asymptote</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">She comes to the brink, and out-heals it, every time.</p>
+          <p>When something does close the distance &mdash; and it takes the strongest beings alive &mdash; what they meet is not a wall but a curve. They land real blows. She takes real damage. She comes genuinely, visibly to the brink of death. And the damage and the healing converge on a line her death never quite reaches. The blood is real. The breaking is real. The brink is real. The crossing never comes.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Third Stratum<span class="hint">the Pax Aegis and its register of mercy</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">The wall the violent shatter on &mdash; modulated, in real time, as respect.</p>
+          <p>By default she simply <strong>holds</strong>: they swing, they bounce from the aegis, nothing is returned, and she lets them spend their fury against something that does not break, because that is itself a kind of dignity granted. When she tires of it she <strong>reflects</strong> &mdash; and the violence completes its own circuit, the attacker&rsquo;s arm shattering under the force of the attacker&rsquo;s own blow; she does not strike them, she only lets the blow finish being what it always was. And when she is not in the mood for a fight at all, a wave of her hand relaxes every muscle in an attacker&rsquo;s body at once, and they fold, and she catches them, and no one is hurt and no one is shamed.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Fourth Stratum<span class="hint">the sealed floor &mdash; near-never invoked</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">A cosmos that contains her death is not a damaged cosmos. It is an impossibility.</p>
+          <p>Beneath all of it. The attempt is permitted &mdash; causality does not pre-empt it; the blade is real, the strike lands, and for one instant the universe actually contains the result. That is the catastrophe. A cosmos with a dead Spinner is a contradiction in its own terms, like a measured thing that was never begun &mdash; existence cannot hold the proposition, because that proposition unsays the condition of there being existence to hold it. So the world cannot have been the world in which she fell, and so it was not. What continues is the only thing that can: the world with the thread unbroken. Not a defense. Not a repair. An <strong>annulment</strong> &mdash; the dead-Clotho draft having the status of a thing never permitted to have been real. It is total, silent, witnessed by no one, unknowable even to her, and it casts no shadow. The cosmos may already have done it, more than once, and there is no mind anywhere &mdash; including hers &mdash; that could ever know.</p>
+        </div></div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Set against her sisters, the contrast defines her. Atropos&rsquo;s Avatar dies, and the mantle re-routes to another &mdash; death there is real, completable, and trivial, accomplishing nothing. Lachesis is never permitted the attempt at all: she is not located, a coalescence the field condenses into so as to be perceived, and one cannot strike what was never at a coordinate. Algol cannot be hit because there is no target. Fiacre can be hit &mdash; and the universe would rather end and re-begin itself than keep the frame in which the hit stuck. One sister is elusive. The other is the root the whole of existence is built upon.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <section class="fi">
+    <span class="sec-num">X</span>
+    <h2 class="sec-title">Restraint, and the Tariff of Her Mercy</h2>
+    <div class="prose">
+      <p>The most important fact about how she fights is not any stratum of her inviolability. It is that she fights, almost always, far below her capacity, on purpose, as an act of respect. She does not humiliate. She grants an opponent the dignity of a real contest &mdash; especially honored warriors, especially the Seraphim, especially the people who were once her peers.</p>
+
+      <p>When Brutus breaks her bones, she is not failing to stop him. To switch off his body with a gesture, or to reflect his strength until his own arms come apart, would deny him the standing of a warrior who genuinely engaged a Seraph in combat. So the bone-breaking is not damage she sustains. It is a <strong>price she elects to pay</strong> &mdash; the tariff of her own mercy &mdash; because being struck is, to her, cheaper than the indignity of un-personing an honored soldier. She spends her own blood freely. She refuses to spend their dignity. That is the trade.</p>
+
+      <p>And so every fight she is in ends not at a threshold of danger &mdash; she is never truly in danger &mdash; but at a threshold of her own patience. She absorbs, and grants dignity, and absorbs, and then, without heat, the patience reforms around a decision, and the fight is over, on her terms, in whatever register she chooses. Even her violence is her thesis: she wins in the way that honors the order. She would rather break than dishonor.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <section class="fi">
+    <span class="sec-num">XI</span>
+    <h2 class="sec-title">The Spinner&rsquo;s Nature, Expressed</h2>
+    <div class="prose">
+      <p>What follows are not powers she has. She is not a Mystic; she holds no deusas; there is no arsenal. These are the shapes the Spinner&rsquo;s single nature takes when it acts through a form. She does not <em>do</em> them. She cannot help being the thing that does them.</p>
+    </div>
+    <div class="acc">
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Genesis<span class="hint">a thing that was not, now is</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">The honeyed roll was not her first miracle. It was the first time the cosmos caught the Source of Life doing the only thing it does.</p>
+          <p>Genesis is not a power and not a borrowing of the office by which Dozu assigns deusas. Genesis is what Clotho <strong>is</strong> &mdash; the drawing of being out of non-being. When she conjures, restores, seeds new ley-lines of myst, regrows a forest or re-threads a broken mind, she is not reaching into a kit. The Spinner is spinning. That the cosmos calls this the work of a god is the cosmos noticing that the principle of beginning is prior to the powers that administer beginnings.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Wayfarer&rsquo;s Path<span class="hint">passage between the Realms</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">She is not bound to a place, because she is prior to the dividing of places.</p>
+          <p>She moves between the Realms at will. To a being who is one of the conditions of reality&rsquo;s order, the borders within reality are not walls but conventions &mdash; real, honored, and not binding upon her.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Restoration &mdash; Blood and Tears<span class="hint">healing as the Spinner&rsquo;s own substance</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">She heals from herself &mdash; her own blood, her own weeping &mdash; because the thread she draws is her own.</p>
+          <p>The named workings of her restoration &mdash; the thread of life that mends body and grief together, the respite drawn from her own blood to save those the world has hollowed, the sanctuary in which no violence can occur &mdash; are all one act under different conditions. She does not transmit a power into the wounded. She spins their continuance, and pays for it from her own substance.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Pax Aegis<span class="hint">the wall the violent shatter on</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">Aggression brought against her is absorbed, or returned to its author, or simply set down.</p>
+          <p>Her most renowned working, and the third stratum of her inviolability given a name. It does not defeat an attacker. It declines, with full courtesy, the premise of the attack &mdash; and where she chooses to reflect rather than absorb, the harm an attacker meant is delivered, exactly, by the attacker&rsquo;s own hand to the attacker&rsquo;s own body.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Antaka<span class="hint">the capacity to turn a sun</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">Learned in the bright years, at the table of Sol&rsquo;Kheret.</p>
+          <p>The discipline by which the course of overwhelming force &mdash; the heat and motion of a star itself &mdash; can be redirected. It is one of the few things in this record she was genuinely <em>taught</em> rather than simply <em>was</em>, and she holds it as a craft, with a craftsman&rsquo;s respect for the one who taught her.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Strings of Fate<span class="hint">the seizing of a will, even a god&rsquo;s</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">With it she did not kill the God of War. She unmade the war in him.</p>
+          <p>The working by which she takes hold of the will of another being &mdash; the threads of choice themselves. She used it upon Leviathan to make him erase his own violence, and wept as she did. It is the gravest thing she wields, and she wields it as the alternative to the cut: not an ending, but the careful, sorrowful interruption of a thread that should not be running as it runs.</p>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <section class="fi">
+    <span class="sec-num">XII</span>
+    <h2 class="sec-title">The Second Act &mdash; The Error, and the Gathering</h2>
+    <div class="prose">
+      <p>The first book&rsquo;s liberation of Luxania closes the opening movement. What follows &mdash; the gathering of the nine &mdash; is not a recruitment and not a tour. It is the Tapestry recalibrating, happening to the cosmos, and the Heralds are forces acted upon as much as forces acting. Each thread is surfaced by the crisis of its own realm&rsquo;s central lie. Saint Cloud Sinclair does not choose the Advent; his realm&rsquo;s covenant breaks, a god must die, and the lock of Fate seals on him by competence. Tiamat is not found; Ferridane builds her in their terror of the prophecy, and she wakes. These figures are produced by the crisis. The age is ending on its own schedule, and the nine are drawn taut through the middle of it.</p>
+
+      <p>Fiacre moves through this beside Alciel, the Dragonson, speed-running the prophecy &mdash; trying to clear it quickly, and without killing anyone, so that the conscription can be finished and she can at last be released to the small life. But the math will not close. She has more than nine allies now, and things still are not in alignment. The Realms keep failing in strange ways: synthetic gods, the water going cold in Thalassor. She begins to fear she is doing something wrong, or that events are not happening on time, and a sense settles in her that time is running out, and she does not want to let everyone die.</p>
+
+      <div class="highlight-box">
+        <p>Her Second Act error is not that she stands outside the nine. <strong>It is that she believes the nine are all supposed to be allies.</strong> She is assembling a coalition &mdash; gather the threads, align the threads, the threads win the war.</p>
+        <p>But nine threads that weave a shroud are not nine friends. A shroud is woven from whatever the weaving requires. She is succeeding, with total competence, at the wrong task &mdash; and the dread she feels is the dread of a being executing the wrong model flawlessly and watching the results refuse to add up.</p>
+      </div>
+
+      <p>Two facts break the error, in ascending order of horror. The first: <strong>Lilia is one of the nine</strong> &mdash; the new Avatar of Atropos, a Luxenfallen broken in the Lightwells, the incarnate Cutter &mdash; and Lilia has been bidden by the gods to kill the nine. One of the threads carries a standing order to end the others; no coalition survives that. The second, and worse: <strong>Raiwata is the ninth Herald.</strong> The Sun-Caller, the root of the ending age, the devil she held in her palm and let go &mdash; he is not the prophecy&rsquo;s antagonist standing outside the count. He is a thread of the shroud. The weaving structurally contains the being everyone most wants dead.</p>
+
+      <p>And there is a word she cannot hear. The age is <strong>ending</strong>, and the word is precise &mdash; not dying. An ending is a threshold: the prior age closes so that the next age may begin. Fiacre, of all beings the principle of beginning, experiences the prophecy as a countdown to extinction, as the clock running out, as <em>we will not make it</em>. The truth is that the ending is a threshold and there was always going to be enough, because the next thing begins out of this one. Her own purpose is the answer to her own terror &mdash; and the speed-run, and the coalition-misread, and the want to be out of it keep her from seeing that an ending is precisely where she comes in.</p>
+
+      <p>The deeper terror of the Act belongs to her and Alciel together: they begin to weigh <em>weave a shroud for this age</em> more heavily than <em>nine threads</em>. A shroud wraps a corpse; the nine are the hands that wind the old age for burial. Uriel has wanted to weave that shroud since the first day. But a shroud wound is also a thing that makes room &mdash; and the Spinner is the one who fills the room that is made. The terror and the purpose are the same fact, seen from the two sides of a threshold she has not yet understood she is standing in.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <section class="fi">
+    <span class="sec-num">XIII</span>
+    <h2 class="sec-title">The Lesson, and the Taking-Up of Arms</h2>
+    <div class="prose">
+      <p>At the Battle of the Second Sun she had Raiwata &mdash; the Sun-Caller, the Apex Archdevil, the root of the age&rsquo;s ruin &mdash; in the palm of her hand. And she did not end him. She turned his own appetite against him, made him bite his own heart, and sent him withdrawing to Hel. She chose the half-measure, because ending is her sister&rsquo;s office and the blade is not hers.</p>
+
+      <div class="highlight-box">
+        <p>She was wrong. Not tragically-wrong, not wrong-in-a-way-that-was-secretly-right. Wrong. She had the devil in her hand and let him go for the cleanliness of a principle, and the powerless paid for her clean hands &mdash; every life he takes afterward is downstream of that choice. This record does not launder it into a noble paradox. If she failed, she failed; her self-knowledge is hers, and it is not stolen from her to make this page more comfortable.</p>
+      </div>
+
+      <p>And beneath the principle was the want. To make that cut would have been to accept, finally and irrevocably, that she is fully inside the prophecy &mdash; a thread doing the shroud&rsquo;s work, not a weaver passing through. She flinched from Raiwata because she was still flinching from her own place in the weave. The body count of that flinch is the lesson.</p>
+
+      <p>The lesson is that <strong>soft power can only be backed by hard power</strong> &mdash; and that the most powerful being in the universe does not get to outsource the hard floor beneath her own mercy to other people and call the outsourcing virtue. It is not that her nature is a flaw; her nature is not the problem. It is that she had been living only half of her own nature &mdash; the giving half &mdash; and calling the other half forbidden. But in the true myth the Spinner is also the one who restored the dead; beginning and ending were never two gestures in Clotho. To spin a thread is already to consent to its end.</p>
+
+      <p>So, late in the story, she takes up arms again. From her sorrow after Eloah&rsquo;s tragedy, she manifests a scythe &mdash; <strong>Exsomnis</strong>. This is not a pacifist evolving into a warrior; that reading is the contamination the series exists to refuse. It is the Spinner taking up the instrument of ending &mdash; a transgression of her own long-held shape, undertaken in grief &mdash; and it is the outward sign of an inward thing: she stops wanting out. She accepts her share. She stops trying to clear the dying of an age quickly and cleanly enough to be released early, and takes up the actual, slow, undivided work, carrying both halves of Clotho in her own two hands at last. It is an act of piety corrected, not a loss of faith. A pious being, shown that her squeamishness had been mistaken for righteousness, does not rebel. She aligns &mdash; harder, all the way down.</p>
+
+      <div class="highlight-box">
+        <p>And so the ending of the devil falls to her, and to her sisters, and to no one else. The reactionary Heralds want the clean kill &mdash; Uriel, Crex, the ones who would simply <em>end</em> him. But Raiwata, as the Sun-Caller, is not a finite, properly-commenced thread. <strong>You cannot cut a thread that was never spun.</strong></p>
+        <p>So before Lachesis can measure him and before Atropos can cut him, <strong>Fiacre must first spin Raiwata a thread</strong> &mdash; the Spinner must give the devil a <em>beginning</em>, draw him into the weave as a finite, real, authored thing, so that he can at last be ended. It is the hardest act the principle of beginning will ever perform: to commence something for the express purpose of its ending. The cut and the commencement, revealed at last as one gesture &mdash; which the true myth always said they were.</p>
+      </div>
+
+      <div class="scripture">
+        The only way out of the gale is to stop trying to step out of it,<br>and to catch every leaf.
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <section class="fi">
+    <span class="sec-num">XIV</span>
+    <h2 class="sec-title">Her Office Among the Nine</h2>
+    <div class="prose">
+      <p>The Heralds are not a war-band. They are a solution set to the structural failures of the Realms &mdash; and peace, in this cosmos, is not a state but a coordination of redemption, which is why no Herald can carry it alone.</p>
+    </div>
+    <div class="acc">
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">What Belongs to Her<span class="hint">scarcity, and the efficacy of violence</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>She answers the two oldest justifications for war &mdash; <em>we do not have enough</em>, and <em>violence is the only way to be heard</em>. Where there is no hunger and no untreated wound, despair is disqualified as a political force; and where aggression brought against her simply does not function, the warlords of the Realms are made to confront a thing they have never had to confront. She does not coerce, and she does not bargain, and she does not hold mercy hostage to terms. She commences, and she restores, and she declines to be a weapon &mdash; and that is its own kind of argument.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">What Belongs to the Others<span class="hint">why she cannot do it alone</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Uriel topples the structures of abuse; the strong cease to dominate the weak only when the architecture that lets them is brought down. Alciel unites realms fractured by identity, history, and myth, weaving one people from many. Anberlyn answers those who refuse peace outright &mdash; the actors no abundance and no vision will reach. Fiacre&rsquo;s restoration makes healing more desirable than conquest; but restoration alone does not hold, because peace has more than one axis, and the keystone is not a single Herald but the coordination of all of them.</p>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <section class="fi">
+    <span class="sec-num">XV</span>
+    <h2 class="sec-title">Those She Walks Among</h2>
+    <div class="prose" style="margin-bottom:0.5rem;">
+      <p>She is deeply pious, and so none of these bonds falls upon her lightly. Where the record is not yet settled, it is left open rather than invented.</p>
+    </div>
+    <div class="rel">
+      <div class="rel-name">Algol <span class="role">the sister-principle, Lachesis incarnate</span></div>
+      <p>The Avatar of Lachesis &mdash; the Measurer to her Spinner, the one who has always Been. Algol did not fight her in the Hunt; she had the sense, with Garson, not to. It is Algol who speaks the word at the foot of the broken God of War and tells her what she is. Of all beings, Algol is the one who has always known &mdash; and the one Fiacre is not above and cannot stand outside of, because they are of the same order.</p>
+    </div>
+    <div class="rel">
+      <div class="rel-name">Lilia <span class="role">the sister-principle, Atropos incarnate</span></div>
+      <p>The new Avatar of Atropos &mdash; a Luxenfallen broken in the Lightwells, the incarnate Cutter, and the great challenge of Fiacre&rsquo;s Second Act. Lilia is her ideological counter: the champion of Order and the collective against Fiacre&rsquo;s mercy for the individual, and that opposition is real and load-bearing. Lilia consented to nothing &mdash; her village, her father, her power, her mantle, all thrust upon her &mdash; and she cannot forgive the one being who <em>chose</em> this and still flinches from the fullness of her own yes. Her indictment of Fiacre is fierce and sincere; it is also, in its particulars, false &mdash; the grief of a being who needs a hand to blame for what was demons and chaos and apportionment. Fiacre did not do those things to her. The Spinner is not required to accept a verdict simply because the one passing it is suffering; where Fiacre is gentle with her, it is a Grace freely given, owed nothing, and not a debt being paid. And Lilia is, herself, the prize of an operation older than either of them &mdash; the captive whose true voice the cosmos has not yet let her hear.</p>
+    </div>
+    <div class="rel">
+      <div class="rel-name">Leviathan <span class="role">the God of War, the broken father</span></div>
+      <p>The first son of Dozu; her commander, and something near a second father, in the years at Dystan. He came to her family&rsquo;s home with grace in his mouth and killed Ardenne in the doing. She did not kill him in turn &mdash; she unmade the war in him with the Strings of Fate, and wept. She leaves him blinded and simple. A pious being does not carry the maiming of a god she loved as a triumph.</p>
+    </div>
+    <div class="rel">
+      <div class="rel-name">Alciel <span class="role">the Dragonson, the named one</span></div>
+      <p>She walks beside him, working what the cosmos reads as his prophecy. That she has adopted the misreading &mdash; treating the Dragonson as the center and herself as its support &mdash; is part of her Second Act error, and a measure of how her wish to stand outside the count expresses itself even in her loyalties.</p>
+    </div>
+    <div class="rel">
+      <div class="rel-name">Uriel <span class="role">the Red Wolf</span></div>
+      <p>She assessed him in a handful of exchanges and put him down; he holds her in open contempt and says so. And he is the one who has wanted to weave the shroud of the dying age from the first day &mdash; the willing hand of the very sentence she most fears. What lies between the pious Spinner and the man who would burn the order she reveres is not yet settled, and the record does not pretend it is.</p>
+    </div>
+    <div class="rel">
+      <div class="rel-name">Ardenne <span class="role">her sister</span></div>
+      <p>Of Gran Ornea, of the small life she wanted and was of. Ardenne walked into a room and fell, and it was after that loss that Fiacre tried, and failed, to take the whole of her consent back.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <section class="fi">
+    <span class="sec-num">XVI</span>
+    <h2 class="sec-title">The Threads Not Yet Spun</h2>
+    <div class="prose">
+      <p>This record holds the first movement of her story in full fidelity. What remains is named honestly as the work still being woven, and is not invented to fill the silence.</p>
+    </div>
+    <div class="acc">
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Whether the Self and the Role Reconcile<span class="hint"></span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>She gives the whole of herself to a share she did not choose, in a prophecy she cannot leave, toward an ending she does not wish to be the hand of, with no garden promised and no exemption coming. Whether she ever comes to <em>want</em> it &mdash; whether the wanting-otherwise ever goes away, or whether the heroism is precisely that it never does and she carries it anyway &mdash; is the question her story moves toward.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Garden<span class="hint"></span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>What she wanted the whole time is small: a thing growing because she tended it, a sweet thing eaten because she was hungry and made it exist. The honeyed roll at fourteen and the garden at the end are the same gesture &mdash; Genesis at rest. She is not owed it. She may not be given it. She does the whole of the work regardless.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Exsomnis, and What the Cut Belongs To<span class="hint"></span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The scythe is hers, manifested from grief after Eloah&rsquo;s tragedy. To end the devil, the three sisters must work as one &mdash; the Spinner commences his thread, the Measurer takes its length, the Cutter makes the cut. Whether the spinning of Raiwata is mercy &mdash; a beginning that understands or completes him &mdash; or only the cold prerequisite of a clean ending, is a thread the cosmos has not yet finished spinning.</p>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <section class="fi">
+    <span class="sec-num">XVII</span>
+    <h2 class="sec-title">Chromatic &amp; Material Signature</h2>
+    <div class="prose">
+      <p>Her palette is the warmth of a threshold &mdash; candle-gold and the rose of dawn, the iconographically correct register of the Fate present at every birth and every oath. Against it, the green of Gran Ornea, which she was genuinely of, and the steel-blue of the dragonscale armor won in the bright years. The crimson is the thread itself, and her own blood, from which she heals.</p>
+    </div>
+    <div class="sw-grid">
+      <div class="sw">
+        <div class="sw-color" style="background:#b88a2e;"></div>
+        <div class="sw-info">
+          <div class="sw-name">Spinner&rsquo;s Gold</div>
+          <div class="sw-hex">#B88A2E</div>
+          <div class="sw-desc">Candle-gold &mdash; the warmth of the threshold, of the doorway a life begins in.</div>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="sw-color" style="background:#e8cf94;"></div>
+        <div class="sw-info">
+          <div class="sw-name">Dawn Light</div>
+          <div class="sw-hex">#E8CF94</div>
+          <div class="sw-desc">The pale gold of Our Dawn &mdash; the name the Realms gave her, and she refused.</div>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="sw-color" style="background:#c98a6a;"></div>
+        <div class="sw-info">
+          <div class="sw-name">Threshold Rose</div>
+          <div class="sw-hex">#C98A6A</div>
+          <div class="sw-desc">The rose of a sky beginning &mdash; the generous moment, the gift.</div>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="sw-color" style="background:#3e5c76;"></div>
+        <div class="sw-info">
+          <div class="sw-name">Dragonscale Steel</div>
+          <div class="sw-hex">#3E5C76</div>
+          <div class="sw-desc">The blue of the armor won settling the quarrel of dragons, in the bright years.</div>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="sw-color" style="background:#5c6e47;"></div>
+        <div class="sw-info">
+          <div class="sw-name">Gran Ornea Green</div>
+          <div class="sw-hex">#5C6E47</div>
+          <div class="sw-desc">The green of the wind-realm town &mdash; the small life, genuinely lived.</div>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="sw-color" style="background:#8a3a3a;"></div>
+        <div class="sw-info">
+          <div class="sw-name">Thread Crimson</div>
+          <div class="sw-hex">#8A3A3A</div>
+          <div class="sw-desc">The thread itself, and her own blood, from which she pays for every healing.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <section class="fi">
+    <div class="highlight-box">
+      <p>She is not a woman who holds divine power. She is the principle of beginning &mdash; one of the three terms reality runs on &mdash; who consented to be born, and was; who does not know what she is, and is it anyway; whom the cosmos will end and re-begin itself sooner than lose; who wanted the small life and the quiet and the garden, and was not owed them, and wanted to stand outside a prophecy she is inside of, and could not.</p>
+      <p>She fears the ending as an extinction &mdash; as the clock running out, as <em>we will not make it</em>. She is wrong, and the thing she is wrong about is herself. The ending is a threshold, and there was always going to be enough, because the next thing begins out of this one &mdash; and she is the one who makes what never was, begin.</p>
+      <p>And the most that can be said of her is the most that can be said of anyone, god or mortal: that the life asked more of her than she wished to give, and she gave it &mdash; the whole of it, every leaf of the gale &mdash; for no reason but that it must be done and she was the one who could; freely, with nothing promised back.</p>
+    </div>
+  </section>
+
+  <div class="footer">
+    Moirai Codex &middot; <span>Advent of Ultima</span> &middot; Fiacre &mdash; The One Who Makes What Never Was, Begin
+  </div>
+
+</div>
+
+<script>
+document.querySelectorAll('.acc-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const body = item.querySelector('.acc-body');
+    const isOpen = item.classList.contains('open');
+    const group = item.parentElement;
+    group.querySelectorAll('.acc-item').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.acc-body').style.maxHeight = null;
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+  });
+});
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+
+(function() {
+  const canvas = document.getElementById('mote-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  const COUNT = 55;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Mote {
+    constructor() { this.reset(true); }
+    reset(init) {
+      this.x = Math.random() * W;
+      this.y = init ? Math.random() * H : H + 10;
+      this.r = Math.random() * 2.0 + 0.5;
+      this.vx = (Math.random() - 0.5) * 0.25;
+      this.vy = -(Math.random() * 0.3 + 0.06);
+      this.drift = Math.random() * Math.PI * 2;
+      this.driftSpeed = Math.random() * 0.0025 + 0.001;
+      this.driftAmp = Math.random() * 0.4 + 0.1;
+      const roll = Math.random();
+      if (roll < 0.18) {
+        this.color = `rgba(232,207,148,${Math.random() * 0.32 + 0.08})`;
+      } else if (roll < 0.30) {
+        this.color = `rgba(201,138,106,${Math.random() * 0.22 + 0.05})`;
+      } else {
+        const hue = 40 + Math.random() * 14;
+        const sat = 45 + Math.random() * 25;
+        const lum = 52 + Math.random() * 16;
+        const alpha = Math.random() * 0.3 + 0.06;
+        this.color = `hsla(${hue},${sat}%,${lum}%,${alpha})`;
+      }
+      this.pulsePhase = Math.random() * Math.PI * 2;
+      this.pulseSpeed = Math.random() * 0.009 + 0.004;
+    }
+    update() {
+      this.drift += this.driftSpeed;
+      this.pulsePhase += this.pulseSpeed;
+      this.x += this.vx + Math.sin(this.drift) * this.driftAmp;
+      this.y += this.vy;
+      if (this.y < -12 || this.x < -20 || this.x > W + 20) this.reset(false);
+    }
+    draw() {
+      const pulse = 1 + Math.sin(this.pulsePhase) * 0.3;
+      const r = this.r * pulse;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, r * 2.6, 0, Math.PI * 2);
+      const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, r * 2.6);
+      g.addColorStop(0, this.color);
+      g.addColorStop(1, 'transparent');
+      ctx.fillStyle = g;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < COUNT; i++) particles.push(new Mote());
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+</script>
+
+</body>
+</html>

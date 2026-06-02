@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Lex Aeterna Restoration — Fiacre's Plotline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Marcellus&family=Spectral+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBF7EE;--paper-2:#F6F0E2;--ink:#2B2317;--ink-soft:#5A4E3A;--rule:#E4D8BE;
+  --gold:#9A7B1F;--gold-bright:#C9A227;--gold-pale:#E9DCB0;--gold-glow:rgba(201,162,39,.18);
+  --zephyros:#8AA63A;--zephyros-pale:#D8E3B0;
+  --luxenfall:#C9A227;--luxenfall-pale:#EBDCA6;
+  --fiacre:#2E6B4F;--fiacre-pale:#B8D4C4;
+  --prism:linear-gradient(90deg,#6A3D9A 0%,#2E6FA3 17%,#5C97B8 30%,#8AA63A 45%,#C9A227 60%,#A66A2E 74%,#C7572B 100%);
+  --maxw:760px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Spectral",Georgia,serif;font-weight:400;font-size:19px;line-height:1.72;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(120% 80% at 8% -5%,rgba(106,61,154,.05),transparent 45%),radial-gradient(120% 80% at 105% 110%,rgba(199,87,43,.05),transparent 45%),radial-gradient(140% 90% at 100% 0%,rgba(46,111,163,.04),transparent 40%),radial-gradient(100% 100% at 50% 40%,transparent 60%,rgba(43,35,23,.05));}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");}
+.ribbon{position:fixed;top:0;left:0;right:0;height:5px;z-index:60;background:var(--prism);background-size:200% 100%;animation:drift 22s linear infinite;}
+@keyframes drift{0%{background-position:0 0;}100%{background-position:200% 0;}}
+main{position:relative;z-index:1;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.4rem;}
+
+header.mast{text-align:center;padding:5.5rem 1.4rem 3rem;position:relative;}
+.eyebrow{font-family:"Marcellus",serif;font-size:.82rem;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);margin:0 0 1.6rem;text-indent:.42em;}
+h1.title{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(2.7rem,8vw,4.5rem);line-height:.98;margin:0;letter-spacing:-.01em;color:var(--ink);font-variation-settings:"opsz" 144;}
+h1.title .gilt{background:linear-gradient(95deg,var(--gold) 0%,var(--gold-bright) 45%,#EFD27A 60%,var(--gold) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;}
+.subtitle{font-family:"Spectral",serif;font-weight:300;font-style:italic;font-size:clamp(1.05rem,2.6vw,1.35rem);color:var(--ink-soft);margin:1.5rem auto 0;max-width:38ch;line-height:1.5;}
+.mast-mark{margin:2.4rem auto 0;width:min(420px,80%);}
+.mast-mark .bar{height:3px;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+.mast-epi{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.15rem,3vw,1.5rem);color:var(--gold);margin:2.6rem auto 0;max-width:32ch;line-height:1.4;}
+
+.diadiv{display:flex;align-items:center;justify-content:center;gap:1rem;margin:3.4rem 0;}
+.diadiv .line{height:1px;flex:1;max-width:120px;background:linear-gradient(90deg,transparent,var(--gold-pale),var(--gold));}
+.diadiv .line.r{background:linear-gradient(90deg,var(--gold),var(--gold-pale),transparent);}
+.diadiv .gem{font-size:.9rem;color:var(--gold);letter-spacing:.4em;text-indent:.4em;}
+
+section{padding:1.5rem 0;position:relative;}
+.sec-eyebrow{font-family:"Marcellus",serif;font-size:.78rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin:0 0 .5rem;}
+h2{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(1.9rem,5vw,2.9rem);line-height:1.05;margin:.2rem 0 1.2rem;color:var(--ink);letter-spacing:-.01em;font-variation-settings:"opsz" 80;}
+h2 .uline{display:block;height:3px;width:108px;margin-top:.7rem;border-radius:2px;background:var(--prism);background-size:200% 100%;animation:drift 16s linear infinite;}
+h3{font-family:"Fraunces",serif;font-weight:500;font-style:italic;font-size:clamp(1.25rem,3.4vw,1.6rem);margin:2.2rem 0 .6rem;color:var(--ink);font-variation-settings:"opsz" 40;}
+h4{font-family:"Marcellus",serif;font-weight:400;font-size:1.02rem;letter-spacing:.04em;margin:1.6rem 0 .35rem;color:var(--gold);}
+p{margin:0 0 1.15rem;}
+strong{font-weight:600;color:var(--ink);}
+
+.lead{font-size:1.12rem;}
+.lead::first-letter{font-family:"Fraunces",serif;font-weight:400;float:left;font-size:4.4rem;line-height:.72;padding:.32rem .55rem 0 0;color:var(--gold);font-variation-settings:"opsz" 144;}
+
+.vignette{margin:1.5rem 0;padding:1.1rem 1.3rem;border-left:3px solid var(--fiacre);background:color-mix(in srgb,var(--fiacre) 5%,var(--paper-2));border-radius:0 10px 10px 0;}
+.vignette.gold{border-left-color:var(--gold);background:color-mix(in srgb,var(--gold) 5%,var(--paper-2));}
+.vignette .tag{font-family:"Marcellus";font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--fiacre);margin:0 0 .4rem;}
+.vignette.gold .tag{color:var(--gold);}
+.vignette p{font-style:italic;font-weight:300;margin:0;color:var(--ink);font-size:1.02rem;line-height:1.6;}
+
+.pull{margin:2.4rem auto;text-align:center;max-width:32ch;}
+.pull q{font-family:"Fraunces",serif;font-style:italic;font-weight:300;quotes:none;font-size:clamp(1.3rem,3.6vw,1.8rem);line-height:1.34;color:var(--gold);display:block;}
+.pull cite{display:block;font-style:normal;font-family:"Marcellus";font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin-top:1rem;}
+
+.crystata{margin:2rem 0;padding:1.4rem 1.5rem;border:1px solid var(--rule);border-radius:14px;background:linear-gradient(180deg,#fff,var(--paper));box-shadow:0 14px 40px -36px rgba(43,35,23,.5);position:relative;overflow:hidden;}
+.crystata::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--luxenfall),var(--luxenfall-pale),var(--luxenfall));}
+.crystata h4{margin-top:.4rem;}
+.crystata .law{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:1.25rem;color:var(--gold);line-height:1.4;margin:.4rem 0 .8rem;}
+
+.phase{margin:2.5rem 0;padding:0 0 0 1.6rem;border-left:2px solid var(--gold-pale);position:relative;}
+.phase::before{content:"";position:absolute;left:-6px;top:0;width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px var(--gold-pale);}
+.phase-label{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 .3rem;}
+
+footer{text-align:center;padding:4rem 1.4rem 5rem;margin-top:2rem;position:relative;z-index:1;}
+footer .bar{height:3px;width:min(420px,80%);margin:0 auto 2.4rem;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+footer .candle{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.3rem,4vw,1.8rem);color:var(--gold);line-height:1.35;margin:0 auto;max-width:26ch;}
+footer .ma{font-family:"Marcellus";font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-top:2.4rem;}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.in{opacity:1;transform:none;}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;}.ribbon,.mast-mark .bar,h2 .uline,footer .bar,.crystata::before{animation:none;}}
+@media(max-width:540px){body{font-size:18px;}}
+</style>
+</head>
+<body>
+<div class="ribbon"></div>
+<main>
+
+<header class="mast">
+  <p class="eyebrow">Moirai Codex &middot; Plotline Reference</p>
+  <h1 class="title">The <span class="gilt">Lex Aeterna</span> Restoration</h1>
+  <p class="subtitle">Fiacre Athena Chevalier's arc across Luxenfall &mdash; from fugitive to the Goddess of Peace</p>
+  <div class="mast-mark"><div class="bar"></div></div>
+  <p class="mast-epi">&ldquo;She is not their goddess. She is their electrician.&rdquo;</p>
+</header>
+
+<div class="wrap">
+
+<!-- ======== THE PREMISE ======== -->
+<section class="reveal">
+  <p class="sec-eyebrow">The Premise</p>
+  <h2>What Luxania Was<span class="uline"></span></h2>
+  <p class="lead">Luxania was a civilization where basic human decency was ambient &mdash; not because the people were saints, but because the infrastructure made decency feel like gravity. The Wellspring, an empathic network connecting every soul in the Realm, broadcast shared feeling. The Lex Aeterna crystata governed that network &mdash; building-sized crystals encoding principles so basic no one thought of them as laws.</p>
+  <p>Five principles. Five crystata per region. Three regions. One Wellspring at the center.</p>
+</section>
+
+<div class="diadiv reveal"><span class="line"></span><span class="gem">&#x2726;</span><span class="line r"></span></div>
+
+<!-- ======== THE FIVE LAWS ======== -->
+<section class="reveal">
+  <p class="sec-eyebrow">The Five Principles</p>
+  <h2>What Was Encoded<span class="uline"></span></h2>
+  <p>Each Lex Aeterna crystata encoded one principle into the empathic field. Within its radius, the principle felt as natural as pulling your hand off a flame. Not mind control. Not compulsion. The field made the right thing feel obvious.</p>
+
+  <div class="crystata reveal">
+    <h4>First Lex</h4>
+    <p class="law">Do not cause suffering you can prevent.</p>
+    <p>The foundation. Within this radius, the impulse to harm another person carried the full weight of that person's pain. A child growing up inside this field never had to be taught not to hurt someone. They felt it.</p>
+  </div>
+
+  <div class="crystata reveal">
+    <h4>Second Lex</h4>
+    <p class="law">Do not take what is not offered.</p>
+    <p>The field made theft feel like self-mutilation. Not because it was forbidden. Because the thing you took carried the weight of the person you took it from.</p>
+  </div>
+
+  <div class="crystata reveal">
+    <h4>Third Lex</h4>
+    <p class="law">Do not deceive those who trust you.</p>
+    <p>In a realm of empaths governed by this law, deception carried a physical revulsion. The Mavarran Method &mdash; built on layered deception &mdash; could not function inside an active Lex Aeterna radius. This is why these crystata were destroyed first.</p>
+  </div>
+
+  <div class="crystata reveal">
+    <h4>Fourth Lex</h4>
+    <p class="law">Do not turn away from someone in pain.</p>
+    <p>The field made indifference to suffering feel like suffocating. When this law was encoded, no one in the radius could walk past a person in need and feel nothing. The entire Tenebrali economic model &mdash; built on processing Luxenfallen as product &mdash; is structurally impossible while this law hums.</p>
+  </div>
+
+  <div class="crystata reveal">
+    <h4>Fifth Lex</h4>
+    <p class="law">Do not use another person as a means to your end.</p>
+    <p>The capstone. The Lightwells, the Rewritten, the soul-elixir trade, the trafficking, the breeding farms &mdash; all of it requires treating a person as inventory. This law makes that treatment feel like what it is.</p>
+  </div>
+</section>
+
+<div class="diadiv reveal"><span class="line"></span><span class="gem">&#x2726;</span><span class="line r"></span></div>
+
+<!-- ======== THE FALL ======== -->
+<section class="reveal">
+  <p class="sec-eyebrow">The Fall</p>
+  <h2>What Vex Destroyed<span class="uline"></span></h2>
+  <p>Vex Mavarra did not conquer Luxania militarily. She destroyed the crystata. The empathic network &mdash; the Wellspring &mdash; was still running. But with no governing principles, it became a weapon. The same network that once carried shared conviction now carried shared terror, shared suspicion, shared pain.</p>
+  <p>The exploitable vulnerability was the empathic network itself. Erebus provided the Shade &mdash; divine signal dampening that made Tenebralis invisible to the other Gods. Under that darkness, the crystata were located and shattered. Then the people were set against each other through the very network that once united them. Then Tenebralis stepped in.</p>
+  <p>Three hundred years of occupation followed. The Lightwells were built on the ruins. The Rewritten were manufactured from the survivors. The Glassen forgot crystata was sacred and called it glass. The Screaming Chorus weaponized their own empathy into a survival scream. The Grounded went underground and stayed there.</p>
+</section>
+
+<div class="diadiv reveal"><span class="line"></span><span class="gem">&#x2726;</span><span class="line r"></span></div>
+
+<!-- ======== THE DISCOVERY ======== -->
+<section class="reveal">
+  <p class="sec-eyebrow">Book One</p>
+  <h2>The Discovery<span class="uline"></span></h2>
+  <p>Fiacre arrives at Luxenfall as a fugitive. She came to be out of the sight of the Gods. She found out why the Gods were not watching.</p>
+  <p>She works without stopping. Reverses famines. Heals villages. Every miracle is a flare going up. She knows the Archangels are coming. The people cannot wait. But she can heal a person. She cannot heal a system. One woman with a shovel and it will not stop snowing.</p>
+
+  <div class="vignette reveal">
+    <p class="tag">The Glassen Weaponsmith</p>
+    <p>She mines the Ancestral Archive for crystata. She calls it &ldquo;glass.&rdquo; She makes the sharpest blades in the Realm from the crystallized memories of her own ancestors and has no idea. Fiacre touches a discarded shard and feels what is stored in it. The weaponsmith watches her face change. &ldquo;It&rsquo;s just glass.&rdquo;</p>
+  </div>
+
+  <p>She finds the ruins of the first Lex Aeterna crystata. She reads the inscription. She understands the pattern. The fall was not a conquest. It was the systematic destruction of the infrastructure of basic decency.</p>
+  <p>The Wellspring is still broadcasting. With no governing principles, it carries pain instead of conscience. Now she has the blueprint.</p>
+</section>
+
+<div class="diadiv reveal"><span class="line"></span><span class="gem">&#x2726;</span><span class="line r"></span></div>
+
+<!-- ======== THE RESTORATION ======== -->
+<section class="reveal">
+  <p class="sec-eyebrow">Books One through Three</p>
+  <h2>The Restoration<span class="uline"></span></h2>
+  <p>Fifteen crystata across three regions. Five in each. And then the Wellspring.</p>
+
+  <!-- REGION ONE -->
+  <div class="phase reveal">
+    <p class="phase-label">Region One &mdash; The Navigator Lands</p>
+    <h3>Five Crystata</h3>
+    <p>The region closest to Fiacre's own light-domain heritage. The Astral Navigators &mdash; the people who found pathways between Realms, who built the leylines before the Clairgates, who carry the Viatoris Lumen in their blood.</p>
+    <p>She restores the first crystata. The zone changes. The light returns. Enemies within the radius cannot bring themselves to fight. NPCs stop flinching. She restores the second. The third. The fourth. The fifth.</p>
+    <p>Five principles restored. One region of Luxenfall remembers what it was.</p>
+
+    <div class="vignette reveal">
+      <p class="tag">The Grounded Elder</p>
+      <p>In a bunker beneath a ruined observatory. She remembers Luxania. She has been telling children what the light used to look like for three hundred years. She does not trust Fiacre. The last time someone came offering help, it was a Curator wearing the face of someone they loved. Fiacre cannot lie. The elder knows this about Zephyrosians. The trust forms slowly, tested word by word.</p>
+    </div>
+  </div>
+
+  <!-- REGION TWO -->
+  <div class="phase reveal">
+    <p class="phase-label">Region Two &mdash; The Choral Dynasties</p>
+    <h3>Five Crystata</h3>
+    <p>Rukii's homeland. The Weavers of Resonance &mdash; the people whose art was empathy, connection, and shared emotion, weaponized into isolation and predation under Tenebrali occupation.</p>
+    <p>Each crystata she restores tells her what specific horror was made possible by its absence. The zones change as she restores them. Merchants reappear. Children stop running. The Tenebrali operatives within restored radii cannot function &mdash; the ambient field makes their methods feel like putting a hand on a stove.</p>
+
+    <div class="vignette reveal">
+      <p class="tag">The Screaming Chorus Mother</p>
+      <p>Hiding in the corrupted Solareth Rainforest. Her children flinch at Fiacre's approach &mdash; not because Fiacre is a threat, but because the empathic network is still broadcasting and Fiacre's compassion registers as pain to people whose only experience of strong emotion has been suffering. Fiacre has to learn to dampen herself before she can help.</p>
+    </div>
+
+    <div class="vignette gold reveal">
+      <p class="tag">The Worship Problem</p>
+      <p>People begin calling her the Goddess of Peace. The woman who leaves flowers at the foot of a restored crystata and calls it a shrine. The man who names his newborn daughter Fiacre. The village elder who tells her she is the goddess returned. &ldquo;I am not your goddess. I am your electrician.&rdquo; And the elder says: &ldquo;That is what a goddess would say.&rdquo;</p>
+    </div>
+
+    <p>Ten crystata restored. Two of three regions stabilized.</p>
+  </div>
+
+  <!-- REGION THREE -->
+  <div class="phase reveal">
+    <p class="phase-label">Region Three &mdash; Alacanthe, the Hegemony Capital</p>
+    <h3>Five Crystata</h3>
+    <p>Crystal spires, now dark. The seat of Luxanian civilization. Where the power structures are deepest. Where the Tenebrali grip is tightest.</p>
+    <p>Every operative, every Curator, every Aesthete asset in the region converges to stop her. Not because they are ordered to. Because the crystata's activation is an existential threat to what they are.</p>
+    <p>She restores them one by one. Each activation strips another layer of Tenebrali infrastructure from the city. The empathic field strengthens. The light builds. Alacanthe begins to remember.</p>
+
+    <div class="vignette reveal">
+      <p class="tag">The Proconsul's Assistant</p>
+      <p>A Mavarran bureaucrat. Not a monster. A functionary. When the last crystata activates and the Lex Aeterna field washes over the city, this person feels it land. For the first time in their professional life, the thing they do for a living feels like what it is. Not &ldquo;asset management.&rdquo; The field names it. They walk out of the building. They don't go home.</p>
+    </div>
+
+    <p>Fifteen crystata restored. The network is complete.</p>
+  </div>
+</section>
+
+<div class="diadiv reveal"><span class="line"></span><span class="gem">&#x2726;</span><span class="line r"></span></div>
+
+<!-- ======== THE WELLSPRING ======== -->
+<section class="reveal">
+  <p class="sec-eyebrow">Book Three &mdash; Climax</p>
+  <h2>The Wellspring<span class="uline"></span></h2>
+  <p>The crystata are the regional governors. The Wellspring is the heart. It is still broken &mdash; still broadcasting three hundred years of accumulated suffering with nothing filtering it.</p>
+  <p>Fiacre walks into the Wellspring. She carries the Navigator legacy through her own expression &mdash; Light as Renewal and Life, the fourth Luminacy. She is Clotho's Avatar and what Clotho does is spin the thread back together.</p>
+  <p>She heals the broken heart of Luxania.</p>
+
+  <div class="pull reveal">
+    <q>The Second Sun is not a star in the sky. It is the light of the law restored.</q>
+  </div>
+
+  <p>An entire Realm exhales for the first time in three hundred years. The empathic network hums with the five principles again. Decency is gravity once more. The weather has returned.</p>
+
+  <div class="vignette reveal">
+    <p class="tag">The Child Who Never Saw the Sun</p>
+    <p>Born in a Grounded bunker. The elder told her what the light looked like. She drew it on the wall with whatever she could find. When the Second Sun rises over Luxenfall, she walks outside for the first time. She does not shield her eyes. She opens them wider. The drawing on the bunker wall was wrong. The real thing is better.</p>
+  </div>
+</section>
+
+<div class="diadiv reveal"><span class="line"></span><span class="gem">&#x2726;</span><span class="line r"></span></div>
+
+<!-- ======== THE STRUCTURE ======== -->
+<section class="reveal">
+  <p class="sec-eyebrow">Reference</p>
+  <h2>The Architecture<span class="uline"></span></h2>
+
+  <h3>The Mechanism</h3>
+  <p>The Wellspring is the source &mdash; an empathic network connecting every soul in the Realm. The Lex Aeterna crystata are the governors &mdash; encoding principles into the field so that decency is ambient rather than aspirational. Without the crystata, the Wellspring broadcasts raw unfiltered emotion. With them, it broadcasts conscience.</p>
+
+  <h3>The Vulnerability</h3>
+  <p>The empathic network was both the civilization's greatest strength and its single point of failure. Destroy the crystata and the network becomes a weapon &mdash; carrying shared terror instead of shared conviction. Vex did not need to corrupt the people. She just needed to break the crystals.</p>
+
+  <h3>The Quest Structure</h3>
+  <p>Three regions. Five crystata per region. Fifteen checkpoints total. Between the checkpoints: the side quests, the people, the evidence of what the absence of each principle produced. After the fifteen: the Wellspring itself. Sixteen total.</p>
+
+  <h3>The Gameplay Translation</h3>
+  <p>Each restored crystata functions as a fast travel node, a narrative checkpoint, and the Willpower mechanic scaled to architecture. Fiacre doesn't drain one soldier's will to fight. She restores an entire region's capacity to reject what was done to it. Within a restored Lex Aeterna radius, enemy Willpower thresholds drop, enemies surrender faster, merchants reappear, civilian NPCs return to normal behavior. For Warlord-path players, entering a restored zone applies the Lex Aeterna to them too &mdash; Heat spikes, abilities get restricted. The law is the law.</p>
+</section>
+
+</div><!-- .wrap -->
+
+<footer>
+  <div class="bar"></div>
+  <p class="candle">We&rsquo;re doing it for that kid who never saw the sun.</p>
+  <p class="ma">Advent of Ultima &middot; Moirai Codex<small>The Laws of Ma&rsquo;at apply. The Test of Iles applies.</small></p>
+</footer>
+
+</main>
+
+<script>
+const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } }), { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

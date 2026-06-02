@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Moirai Lexicon — Advent of Ultima</title>
+<style>
+/* ============================================================
+   THE MOIRAI LEXICON  ·  Advent of Ultima
+   A living reference. Plain by design — a working tool.
+   To extend: add new <p class="entry"> lines into the correct
+   section, in alphabetical order. Each entry is one line:
+   <p class="entry"><b>Term</b> &mdash; definition.</p>
+   ============================================================ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #ffffff;
+  color: #141414;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 18px;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+  padding: 0 0 6rem;
+}
+
+.wrap { max-width: 820px; margin: 0 auto; padding: 0 1.4rem; }
+
+/* --- HEADER --- */
+header { padding: 3.2rem 0 1.6rem; text-align: center; }
+header h1 {
+  font-size: 1.7rem; font-weight: 700; letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+header .rule {
+  width: 60px; height: 2px; background: #141414;
+  margin: 0.9rem auto 1rem;
+}
+header p {
+  font-size: 0.95rem; font-style: italic; color: #444;
+  max-width: 540px; margin: 0 auto;
+}
+
+/* --- SEARCH --- */
+.search-bar {
+  position: sticky; top: 0; z-index: 10;
+  background: #ffffff;
+  border-bottom: 2px solid #141414;
+  padding: 0.8rem 0;
+}
+.search-bar input {
+  width: 100%; font-family: Georgia, serif; font-size: 1rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #141414; border-radius: 0;
+  background: #fff; color: #141414;
+}
+.search-bar input:focus { outline: 2px solid #141414; outline-offset: -1px; }
+.search-meta {
+  font-size: 0.82rem; color: #555; margin-top: 0.4rem;
+  font-style: italic; min-height: 1.1em;
+}
+
+/* --- SECTION NAV --- */
+nav.toc {
+  margin: 1.4rem 0 0.4rem; padding-bottom: 1.2rem;
+  border-bottom: 1px solid #cfcfcf;
+  font-size: 0.9rem;
+}
+nav.toc a {
+  color: #141414; text-decoration: none;
+  border-bottom: 1px solid #999;
+  margin-right: 0.3rem; white-space: nowrap;
+  display: inline-block; margin-bottom: 0.35rem;
+}
+nav.toc a:hover { border-bottom-color: #141414; background: #f0f0f0; }
+nav.toc .sep { color: #aaa; margin: 0 0.35rem 0 0.05rem; }
+
+/* --- SECTIONS --- */
+.lex-sec { margin-top: 2.6rem; }
+.lex-sec h2 {
+  font-size: 1.05rem; font-weight: 700;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  padding-bottom: 0.4rem; border-bottom: 1.5px solid #141414;
+  margin-bottom: 1rem;
+}
+.lex-sec h2 .dia { font-weight: 400; margin-right: 0.5rem; }
+
+/* --- ENTRIES --- */
+.entry {
+  margin-bottom: 0.85rem;
+  padding-left: 1.4rem; text-indent: -1.4rem;
+}
+.entry b { font-weight: 700; }
+.entry i { color: #444; }
+.entry .reg { font-weight: 700; font-style: normal; }
+
+/* the multi-register / structured entry */
+.entry.block { text-indent: 0; padding-left: 0; }
+.entry.block .head { font-weight: 700; }
+.entry.block .regs {
+  margin: 0.4rem 0 0 1.4rem; font-size: 0.96rem;
+}
+.entry.block .regs span.label {
+  font-weight: 700;
+}
+
+/* --- NO RESULTS --- */
+#noresults {
+  display: none; margin-top: 2rem; font-style: italic; color: #555;
+}
+
+/* --- FOOTER --- */
+footer {
+  margin-top: 3.5rem; padding-top: 1.2rem;
+  border-top: 1px solid #cfcfcf;
+  font-size: 0.82rem; color: #666; text-align: center;
+}
+
+@media (max-width: 600px) {
+  body { font-size: 17px; }
+  header { padding: 2.2rem 0 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <h1>The Moirai Lexicon</h1>
+    <div class="rule"></div>
+    <p>A living reference of the invented vocabulary of <em>Advent of Ultima</em>. Iterative by design — terminology is added book by book as the work grows.</p>
+  </header>
+
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="Search terms and definitions&hellip;" autocomplete="off" spellcheck="false">
+    <div class="search-meta" id="searchmeta"></div>
+  </div>
+
+  <nav class="toc">
+    <a href="#sec1">I · The Cosmic Order</a><span class="sep">·</span>
+    <a href="#sec2">II · Myst, Soul &amp; Magic</a><span class="sep">·</span>
+    <a href="#sec3">III · The Realms &amp; Their Powers</a><span class="sep">·</span>
+    <a href="#sec4">IV · The Mavarran Arts &amp; the Soul Trade</a><span class="sep">·</span>
+    <a href="#sec5">V · Thalassor &amp; the Sinclair Craft</a><span class="sep">·</span>
+    <a href="#sec6">VI · The Pantheon, Peoples &amp; Beings</a>
+  </nav>
+
+  <p id="noresults">No terms match that search.</p>
+
+  <!-- ============================================================
+       I. THE COSMIC ORDER
+       Add new cosmology terms here, alphabetical.
+       ============================================================ -->
+  <section class="lex-sec" id="sec1">
+    <h2><span class="dia">&#9670;</span>I &mdash; The Cosmic Order</h2>
+
+    <p class="entry"><b>The Advent</b> &mdash; The gathering of nine mortal Heralds prophesied to challenge the divine order; the answer raised from below against the world the winners of the First War built.</p>
+
+    <p class="entry"><b>Dystan</b> &mdash; The realm above: paradise, the Exalted Host, and the seat of the ruling gods.</p>
+
+    <p class="entry"><b>The First War</b> &mdash; The primordial war fought over who would rule reality. The victors became the ruling gods; the defeated, and all their descendants, were cast into Hel and denied the divine touch forever. Its memory has passed entirely out of the living world.</p>
+
+    <p class="entry"><b>Hel</b> &mdash; The prison realm. Not a natural feature of the cosmos but a thing deliberately built by the victors of the First War to punish the defeated and their descendants in perpetuity.</p>
+
+    <p class="entry"><b>The Heralds</b> &mdash; The nine mortals of the Advent; powerful enough to make their morality matter at the cosmic scale. <i>(see The Advent)</i></p>
+
+    <p class="entry"><b>Mortem Mortem</b> &mdash; A period in which the mechanism of death is compromised and death does not hold.</p>
+
+    <p class="entry"><b>The Moirai</b> &mdash; The three cosmic functions of fate &mdash; Clotho, Lachesis, and Atropos &mdash; each with a living avatar. <i>(see Algol, Sec. VI)</i></p>
+
+    <p class="entry"><b>The Prophecy of Ultima</b> &mdash; The measure spoken by Algol before the Pantheon: nine threads weaving a shroud for the age, three suns falling, the second rising to meet them, and the Thrones Eternal reduced to dust.</p>
+
+    <p class="entry"><b>The Second War</b> &mdash; The present conflict: mortals, gathered as the Advent, against the order the winners of the First War built and still maintain. Where the First War was waged by the children of gods, the Second is waged from below.</p>
+
+    <p class="entry"><b>Terrae</b> &mdash; Earth. A prison realm &mdash; stripped of myst and divine connection, its entire population descended from the losing side of the First War and condemned to Hel by default.</p>
+
+    <p class="entry"><b>The Thrones Eternal</b> &mdash; The seats of the ruling Pantheon; named in the Prophecy of Ultima as &ldquo;but dust.&rdquo;</p>
+
+    <p class="entry"><b>Ultima</b> &mdash; The force of the age&rsquo;s turning, feared by the Pantheon. Understood not as a single being but as a precedent &mdash; the demonstration that the divine order can be exceeded.</p>
+
+  </section>
+
+  <!-- ============================================================
+       II. MYST, SOUL & MAGIC
+       Universal mechanics. Add new terms here, alphabetical.
+       ============================================================ -->
+  <section class="lex-sec" id="sec2">
+    <h2><span class="dia">&#9670;</span>II &mdash; Myst, Soul &amp; Magic</h2>
+
+    <p class="entry"><b>Charged crystata</b> &mdash; Crystata into which a specific magical energy has been captured; usable by anyone who holds it, Mystic or Nihila, until the charge is spent. <i>(see Crystata)</i></p>
+
+    <p class="entry"><b>Crystata</b> &mdash; Crystalline matter that concentrates and stores myst. The basis of the myst economy &mdash; once sacred geometry, now also money.</p>
+
+    <p class="entry"><b>Deusa</b> &mdash; A unique magical ability. Under the divine dispensation, each Mystic is born with a single deusa, its power set along a gradient that runs from pure elemental creation down to derivative perception &mdash; the depth of the soul&rsquo;s connection to its element.</p>
+
+    <p class="entry"><b>Myst</b> &mdash; The fundamental energy of the cosmos. Everything magical runs on it; it is spent, stored, replenished, and fought over. It is not infinite.</p>
+
+    <p class="entry"><b>Mystic</b> &mdash; A person whose soul interfaces with the ambient field of myst.</p>
+
+    <p class="entry"><b>Nihila</b> &mdash; A person whose soul does not interface with myst. The divide between Mystic and Nihila is binary, not a spectrum: the soul either opens or it does not.</p>
+
+    <p class="entry"><b>Nihilation</b> &mdash; The reduction of a Mystic to the Nihila state &mdash; the burning-out of the soul&rsquo;s capacity to touch myst, whether inflicted or self-inflicted by spending oneself past the body&rsquo;s limit. It does not reverse.</p>
+
+    <p class="entry"><b>Second Heart</b> &mdash; A Mystic&rsquo;s chosen partner, a bond transcending marriage as an institution. By Ishtar&rsquo;s gift, true love doubles one&rsquo;s personal capacity for magic; to lose one&rsquo;s Second Heart is to be halved. The term is universal across the Realms.</p>
+
+    <p class="entry"><b>The Soul</b> &mdash; The organ that interfaces with myst; its connection, or lack of one, determines Mystic or Nihila. In this cosmos the soul is real, material, and &mdash; in the wrong hands &mdash; extractable.</p>
+
+    <p class="entry"><b>Synthetic Deusa</b> &mdash; An engineered ability, produced by combining charged crystata to replicate or exceed a natural deusa. Priced beyond what most Nihila could earn in a lifetime.</p>
+
+    <p class="entry"><b>True Name</b> &mdash; The true name of a thing. Spoken with sufficient myst behind it, it rewrites what that thing fundamentally is &mdash; reality editing, enormously costly, and constrained by the need to know the Name.</p>
+
+  </section>
+
+  <!-- ============================================================
+       III. THE REALMS & THEIR POWERS
+       Realm-specific systems and crafts. Add here, alphabetical.
+       ============================================================ -->
+  <section class="lex-sec" id="sec3">
+    <h2><span class="dia">&#9670;</span>III &mdash; The Realms &amp; Their Powers</h2>
+
+    <p class="entry"><b>Antaka</b> &mdash; Pyrthera&rsquo;s weapon of ultimate deterrence; held by six, and capable of ending a planet.</p>
+
+    <p class="entry"><b>Ash-Sight</b> &mdash; A Pyrtheran perceptive craft: the reading of heat signatures as spiritual auras. <i>(see Kafer)</i></p>
+
+    <p class="entry"><b>Cinerix</b> &mdash; A perceptive craft: the reading of futures from patterns in sacred ash.</p>
+
+    <p class="entry"><b>Clairgate</b> &mdash; A portal of the inter-realm network; the sole means of travel, trade, and force projection between the Realms. <i>(see Clairmancy and Lumen Cradle)</i></p>
+
+    <p class="entry"><b>Galvaneum</b> &mdash; A Ferridanian living metal that, fused to the body, responds to thought as the nervous system extends into it. Awakened by one of Ferridane&rsquo;s most guarded True Names.</p>
+
+    <p class="entry"><b>Hydromantoi</b> &mdash; Those who read the memories held in deep and flowing waters; a perceptive craft of the water Realms.</p>
+
+    <p class="entry"><b>Kafer</b> &mdash; The spiritual content an Ash-Sight reader perceives carried within a heat signature.</p>
+
+    <p class="entry"><b>Knowledge gardens</b> &mdash; Living storage: centuries of knowledge held in flowers and soil.</p>
+
+    <p class="entry"><b>Krenides</b> &mdash; The sacred, myst-bearing water of Thalassor &mdash; Salacia&rsquo;s gift, given freely on the condition that it be shared. It heals, restores, and carries memory; channeled through homes and bathhouses, it has been the daily proof of the goddess&rsquo;s love.</p>
+
+    <p class="entry"><b>The Leyline</b> &mdash; Created alongside the Lumen Cradle; the conductive basis of the Clairgate network.</p>
+
+    <p class="entry"><b>The Lumen Cradle</b> &mdash; The device born of the collaboration of Juno Sinclair and Hecate of Luxania; the first stable bridge across the Realms, and the founding of the Age of Exploration.</p>
+
+    <p class="entry"><b>Mnemohydric</b> &mdash; Of memory held in water; the truth that flowing water retains, and that crystata can hold without it degrading.</p>
+
+    <p class="entry"><b>Myst-Grid</b> &mdash; Ferridane&rsquo;s continent-wide network for the distribution of myst.</p>
+
+    <p class="entry"><b>Sacred Braid</b> &mdash; The Pyrtheran practice by which physical intensity generates myst within the body; how a Pyrtheran replenishes off-world, away from the suns.</p>
+
+    <p class="entry"><b>Solar Synthesis</b> &mdash; The Pyrtheran metabolism: the conversion of sunlight into myst. The seven suns function as a myst reactor.</p>
+
+    <p class="entry"><b>Vital Current</b> &mdash; The Ferridanian art of channeling and replenishing myst; once stewardship, practiced at the forge between a smith and the metal.</p>
+
+  </section>
+
+  <!-- ============================================================
+       IV. THE MAVARRAN ARTS & THE SOUL TRADE
+       The craft of extraction and its commerce. Add here, alphabetical.
+       ============================================================ -->
+  <section class="lex-sec" id="sec4">
+    <h2><span class="dia">&#9670;</span>IV &mdash; The Mavarran Arts &amp; the Soul Trade</h2>
+
+    <p class="entry"><b>Aesthete</b> &mdash; The Mavarran hunter class; the practitioners who have mapped, across millennia, the precise mechanics of the soul&rsquo;s extraction and processing.</p>
+
+    <p class="entry"><b>Ak&rsquo;lethem</b> &mdash; The zenith of the Mavarran arts: the extraction, the dissection, and the eventual consumption of an entire soul. Where dreamwalking and Convalescence are the working practices of Alak&rsquo;shud, Ak&rsquo;lethem is its summit.</p>
+
+    <p class="entry"><b>Alak&rsquo;shud</b> &mdash; The Mavarran arts: the craft tradition of entering a mind and extracting what is found within. <i>(see Dreamwalking and Convalescence)</i></p>
+
+    <p class="entry block"><span class="head">Convalescence</span> &mdash; The Mavarran euphemism for the extraction of the self from a living person. The act itself has three plain names, and they are never spoken from the same mouth:
+      <span class="regs">
+        <span class="label">Unselfing</span> &mdash; the word of those of the craft; Arabella&rsquo;s word.<br>
+        <span class="label">Shucking</span> &mdash; a coarser name for the same act.<br>
+        <span class="label">Degloving</span> &mdash; the clinical, anatomical truth of it; Sol&rsquo;Kheret&rsquo;s word.
+      </span>
+      Convalescence is the intake step of the soul trade: it leaves an Etemesh behind, and its yield is shik&rsquo;piris and memory coins.</p>
+
+    <p class="entry"><b>Damq&rsquo;eth</b> &mdash; A hollow shell, animated by a composite soul imparted to it &mdash; one rendered from the &ldquo;best&rdquo; parts drawn out across as many as a thousand prior acts of Alak&rsquo;shud. Some say a Damq&rsquo;eth is instead possessed by the Will of the Womb itself. They are, invariably, unbearably beautiful. <i>(see The Womb)</i></p>
+
+    <p class="entry"><b>Degloving</b> &mdash; The clinical, anatomical name for the extraction of the self. <i>(see Convalescence)</i></p>
+
+    <p class="entry"><b>Dreamwalking</b> &mdash; The traversal of a mind, conscious or unconscious; the practice within Alak&rsquo;shud by which an Oneironaut moves through another&rsquo;s interior. <i>(see Alak&rsquo;shud and Oneironaut)</i></p>
+
+    <p class="entry"><b>The Etemesh</b> &mdash; The state of a body whose soul has been separated from it while the body continues to function: a docile, responsive shell.</p>
+
+    <p class="entry"><b>Isin&rsquo;Sartu</b> &mdash; The Mavarran doctrine of the cornered: confronted and cornered, the Mavarrans abandon the refugee posture, and the night answers.</p>
+
+    <p class="entry"><b>The Lightwells</b> &mdash; The extraction works of occupied Luxania, presented to the cosmos as industrial mines for light-element crystata; in truth, the works that harvest the emotional content of living people.</p>
+
+    <p class="entry"><b>Memory coin</b> &mdash; The experiential product of Convalescence: a full lived memory, extracted whole and stored as a tradeable object. The counterpart to shik&rsquo;piris.</p>
+
+    <p class="entry"><b>Oinophantos</b> &mdash; Thalassori Krenides wine that has been spiked with shik&rsquo;piris; the soul-harvest dissolved into the covenant&rsquo;s own sacred substance. <i>(see Krenides and Shik&rsquo;piris)</i></p>
+
+    <p class="entry"><b>Pansilion</b> &mdash; The Mavarran worn face; the disguise-craft of an assumed identity. The light of the Court of Sol&rsquo;Kheret strips away any trace of it.</p>
+
+    <p class="entry"><b>Poppet</b> &mdash; A person reduced by Convalescence and made into a compliant doll &mdash; worn into a chosen face and sold. A service of the Mavarran soul trade.</p>
+
+    <p class="entry"><b>The Second Birth</b> &mdash; A Tenebrali rite that extracts a person&rsquo;s childhood memories and processes them into products.</p>
+
+    <p class="entry"><b>Shik&rsquo;piris</b> &mdash; The distilled-emotion product of Convalescence: any tincture, elixir, or potion made from the rendered emotions of others. The counterpart to the memory coin. <i>(see Oinophantos)</i></p>
+
+    <p class="entry"><b>Shucking</b> &mdash; A coarse name for the extraction of the self. <i>(see Convalescence)</i></p>
+
+    <p class="entry"><b>Unselfing</b> &mdash; The name for the extraction of the self used by those of the Mavarran craft. <i>(see Convalescence)</i></p>
+
+  </section>
+
+  <!-- ============================================================
+       V. THALASSOR & THE SINCLAIR CRAFT
+       Thalassori disciplines, offices, and the vintner's work. Add here, alphabetical.
+       ============================================================ -->
+  <section class="lex-sec" id="sec5">
+    <h2><span class="dia">&#9670;</span>V &mdash; Thalassor &amp; the Sinclair Craft</h2>
+
+    <p class="entry"><b>Aesta-Mitiga</b> &mdash; The discipline of healing manipulation: the extraction and redistribution of restorative myst, and the channeling of Krenides.</p>
+
+    <p class="entry"><b>Aestus</b> &mdash; Mastery of water in all its forms, including the water within living bodies.</p>
+
+    <p class="entry"><b>Ambrosia</b> &mdash; The vintage of Saint Leif Sinclair&rsquo;s immortality project: Krenides distilled toward a purity that would transcend mere healing and grant unending life.</p>
+
+    <p class="entry"><b>Azure Guard</b> &mdash; A principal military body of Thalassor, conducted by Saint Cloud Sinclair; one part of the realm&rsquo;s combined arms, alongside the Tides, the Tidestriders, and the Echo Knights.</p>
+
+    <p class="entry"><b>Clairmancy</b> &mdash; The hereditary soul-deusa of House Sinclair: the power to open and govern the Clairgates. <i>(see Clairgate)</i></p>
+
+    <p class="entry"><b>The Concordant Path</b> &mdash; The cumulative memory of every Sinclair patriarch, transmitted to each heir through sacramental wine; a steady inner presence, a thousand years deep.</p>
+
+    <p class="entry"><b>Dancaelet Salacia</b> &mdash; The divine water martial art of Thalassor; violence rendered as choreography.</p>
+
+    <p class="entry"><b>Elysium</b> &mdash; A god-killer trident, forged by Aether, the God of Light; the weapon with which the God of War, Leviathan, was blinded, and with which the God of Blood is ended.</p>
+
+    <p class="entry"><b>Exvisar</b> &mdash; The ruler of a Realm, holding a mandate granted directly by its patron god &mdash; the god&rsquo;s face in the mortal world. In Thalassor, the Exvisar is the steward of Salacia&rsquo;s waters.</p>
+
+    <p class="entry"><b>The Exvisarelim</b> &mdash; The table of the Exvisars; the council of the rulers of the Realms.</p>
+
+    <p class="entry"><b>Haemoinos</b> &mdash; The distilled divinity of a slain god, rendered by Oinomancy into a consumable vintage; god-blood made into wine.</p>
+
+    <p class="entry"><b>Oinomancy</b> &mdash; The discipline invented by Saint Cloud Sinclair: the distillation of experience, emotion, deusa, and essence into wine.</p>
+
+    <p class="entry"><b>The Oneiron</b> &mdash; The crafted simulation-space of the Sinclair estate; a synesthetic constructed reality &mdash; paradise and instrument at once.</p>
+
+    <p class="entry"><b>Oneironaut</b> &mdash; A practitioner of dreamwalking; one who traverses minds. The discipline itself is the Oneironautica. <i>(see Dreamwalking)</i></p>
+
+    <p class="entry"><b>The Rite of the Concordant Path</b> &mdash; The ceremony by which a Sinclair heir receives the inherited memory of the dynasty. <i>(see The Concordant Path)</i></p>
+
+    <p class="entry"><b>The Saints</b> &mdash; The inner circle and governing apparatus founded by Saint Cloud Sinclair &mdash; territory, treasury, the natural world, and intelligence &mdash; bound by love and functioning as a sovereign state.</p>
+
+    <p class="entry"><b>Squall</b> &mdash; A Thalassori street-level enforcement body.</p>
+
+    <p class="entry"><b>Symposionomos</b> &mdash; A formal institutional office: the figure who presides over binding agreements made over wine.</p>
+
+    <p class="entry"><b>The Vintage of the Veil</b> &mdash; The wine of the Sinclair line; generations of its consumption produce the dynasty&rsquo;s powder-white hair and the long preservation of its bearers.</p>
+
+    <p class="entry"><b>Wine of Shared Dreams / Horizons / Fates</b> &mdash; Oinomantic vintages, each storing an applied effect &mdash; synchronized perception, shared experience, bound fate.</p>
+
+  </section>
+
+  <!-- ============================================================
+       VI. THE PANTHEON, PEOPLES & BEINGS
+       Gods, titans, peoples, factions, and places of note.
+       One-line identifiers; fuller treatment lives in the codices.
+       Add here, alphabetical.
+       ============================================================ -->
+  <section class="lex-sec" id="sec6">
+    <h2><span class="dia">&#9670;</span>VI &mdash; The Pantheon, Peoples &amp; Beings</h2>
+
+    <p class="entry"><b>The Aeralithe</b> &mdash; The colossal form taken by Alciel, the Dragonson.</p>
+
+    <p class="entry"><b>Aether</b> &mdash; The God of Light; founder of the Realm of Luxania and forger of Elysium. Opposed in the cosmic polarity by Erebus, God of Darkness.</p>
+
+    <p class="entry"><b>Algol</b> &mdash; The Avatar of Lachesis, the Measurer; speaker of the Prophecy of Ultima. Predates all and will never die.</p>
+
+    <p class="entry"><b>The Allodas Quarter</b> &mdash; A quarter of the city of Salacica in Thalassor; the site of the pogrom and soul-harvest of <i>Blood of God</i>.</p>
+
+    <p class="entry"><b>Aracice</b> &mdash; The Dragon-God of Order, opposed to Raiwata; exiled to Terrae and there killed. Parent, with Salacia, of the Hydralithe.</p>
+
+    <p class="entry"><b>The Bloodless</b> &mdash; The adherents of the Cult of Sanguine, embedded within the Thalassori aristocracy.</p>
+
+    <p class="entry"><b>The Cult of Sanguine</b> &mdash; A theology rival to Salacia&rsquo;s: the belief that blessing must never flow freely, but be hoarded, accumulated, and harvested by those who deserve it by right of blood &mdash; the inverse of the Sinclair covenant.</p>
+
+    <p class="entry"><b>Dozu</b> &mdash; The god who governs the divine dispensation &mdash; the dealing of deusas and the order of the Clairgates.</p>
+
+    <p class="entry"><b>The Felidae</b> &mdash; A people of Ferridane.</p>
+
+    <p class="entry"><b>Fiacre</b> &mdash; The Goddess of Peace, opposed in the cosmic polarity to Leviathan, God of War.</p>
+
+    <p class="entry"><b>The Gonlan</b> &mdash; A lineage of dragon; the kind to which the Hydralithe belongs.</p>
+
+    <p class="entry"><b>Hestia</b> &mdash; The Goddess of Pyrthera; the Golden Flame.</p>
+
+    <p class="entry"><b>The Hydralithe</b> &mdash; A moon-sized, seven-headed Gonlan dragon of living, hyper-pressurized water; daughter of Aracice and Salacia. Her approach draws the oceans up toward the heavens. She serves the Water, not the Blood.</p>
+
+    <p class="entry"><b>Leviathan</b> &mdash; The God of War, firstborn of Dozu; blinded by the trident Elysium.</p>
+
+    <p class="entry"><b>The Lykaion</b> &mdash; The wolf-augmented clans of Ferridane.</p>
+
+    <p class="entry"><b>The Mavarrans</b> &mdash; The people of Tenebralis: shapeshifters, and the masters of Alak&rsquo;shud and the commerce of the soul.</p>
+
+    <p class="entry"><b>Raiwata</b> &mdash; The Apex Archdevil, refined into a god within Hel; the God of Chaos &mdash; and, in truth, the being who began the First War, born a god.</p>
+
+    <p class="entry"><b>Salacia</b> &mdash; The Goddess of the Tides; patron of Thalassor. She gave the Realm its waters freely, on the one condition that the gift be shared.</p>
+
+    <p class="entry"><b>Sanguine</b> &mdash; The God of Blood; the deity of the Cult of Sanguine. Slain by Saint Cloud Sinclair in <i>Blood of God</i>.</p>
+
+    <p class="entry"><b>The Sirens of Sea and Sky</b> &mdash; The peoples of the deep waters and the high winds; survivors of every prior approach of the Hydralithe, and the source of Thalassor&rsquo;s only warning of it.</p>
+
+    <p class="entry"><b>Sol&rsquo;Kheret</b> &mdash; The sovereign of Pyrthera, whose Court strips away all falsehood; keeper of the Inquisition and of Antaka. Her mercy is Hestia&rsquo;s mercy.</p>
+
+    <p class="entry"><b>Tenebralis</b> &mdash; The Realm of the Mavarrans; the abyss.</p>
+
+    <p class="entry"><b>Vex Mavarra</b> &mdash; The Sovereign of Tenebralis; the embodiment of evil as a first principle. Opposed in the cosmic polarity by Ma&rsquo;at, the principle of truth.</p>
+
+    <p class="entry"><b>The Womb</b> &mdash; Mavarra: the source from which the Mavarran people and their will issue. It bears a true name, and the name will not stay &mdash; it slips the mind and cannot be held by any mortal who is told it. A Damq&rsquo;eth is sometimes said to be animated by the Will of the Womb itself. <i>(Distinct from the Mavarrans, the people, and from Vex Mavarra, their Sovereign.)</i></p>
+
+  </section>
+
+  <footer>
+    The Moirai Lexicon &mdash; <em>Advent of Ultima</em> &middot; a living document
+  </footer>
+
+</div>
+
+<script>
+// === LIVE SEARCH FILTER ===
+(function () {
+  var input = document.getElementById('search');
+  var meta = document.getElementById('searchmeta');
+  var noresults = document.getElementById('noresults');
+  var sections = Array.prototype.slice.call(document.querySelectorAll('.lex-sec'));
+  var entries = Array.prototype.slice.call(document.querySelectorAll('.entry'));
+
+  // cache lowercase text of each entry
+  entries.forEach(function (e) { e._text = e.textContent.toLowerCase(); });
+
+  function apply() {
+    var q = input.value.trim().toLowerCase();
+    var shown = 0;
+
+    entries.forEach(function (e) {
+      var match = (q === '' || e._text.indexOf(q) !== -1);
+      e.style.display = match ? '' : 'none';
+      if (match) shown++;
+    });
+
+    // hide any section with no visible entries
+    sections.forEach(function (sec) {
+      var any = sec.querySelector('.entry:not([style*="display: none"])');
+      sec.style.display = any ? '' : 'none';
+    });
+
+    if (q === '') {
+      meta.textContent = '';
+      noresults.style.display = 'none';
+    } else {
+      meta.textContent = shown + (shown === 1 ? ' term' : ' terms') + ' matching \u201c' + input.value.trim() + '\u201d';
+      noresults.style.display = shown === 0 ? 'block' : 'none';
+    }
+  }
+
+  input.addEventListener('input', apply);
+})();
+</script>
+
+</body>
+</html>

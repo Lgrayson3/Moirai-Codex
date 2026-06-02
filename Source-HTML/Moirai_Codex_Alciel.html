@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alciel — The Second Sun · Advent of Ultima</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0c0605;
+  --bg-card: #170b08;
+  --bg-hover: #21100b;
+  --bg-highlight: #1d0d09;
+  --gold-dark: #5a3a16;
+  --gold-core: #c08a2e;
+  --gold-accent: #e0a93f;
+  --gold-light: #f1d490;
+  --gold-ghost: #f8ecc8;
+  --ember-core: #8a2620;
+  --ember-accent: #b8392a;
+  --ember-light: #d96a4a;
+  --ember-glow: #e0653a;
+  --steel: #3e5c76;
+  --text-primary: #e8d8be;
+  --text-secondary: #b6a384;
+  --text-dim: #7c6a52;
+  --border-subtle: #2a1610;
+  --border-accent: #3f2113;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --max-width: 880px;
+  --section-gap: 4.5rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--ember-core); color: var(--gold-ghost); }
+
+#ember-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.55;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 16% 8%, rgba(224,169,63,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 86% 30%, rgba(184,57,42,0.07) 0%, transparent 46%),
+    radial-gradient(ellipse at 50% 98%, rgba(138,38,32,0.12) 0%, transparent 42%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page { position: relative; z-index: 1; max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem; }
+
+.divider {
+  display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+  margin: var(--section-gap) 0; opacity: 0.55;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold-dark), transparent);
+}
+.divider span {
+  width: 7px; height: 7px; background: var(--gold-accent);
+  transform: rotate(45deg); flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(224,169,63,0.5);
+}
+
+/* ---------- Header ---------- */
+.header { text-align: center; padding: 5.5rem 0 1.5rem; }
+.header .tag {
+  font-family: var(--font-display); font-size: 0.6rem;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--gold-accent); display: block; margin-bottom: 2rem;
+}
+.header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.9rem, 9vw, 4.8rem);
+  font-weight: 900;
+  background: linear-gradient(160deg, var(--gold-ghost) 0%, var(--gold-light) 35%, var(--ember-light) 78%, var(--ember-accent) 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.08em; line-height: 1.05; margin-bottom: 0.7rem;
+  filter: drop-shadow(0 0 60px rgba(216,106,74,0.25));
+}
+.header .sub {
+  font-family: var(--font-display); font-size: 0.78rem;
+  letter-spacing: 0.24em; text-transform: uppercase; color: var(--text-dim);
+  line-height: 1.9;
+}
+.header .epigraph {
+  font-style: italic; font-size: 1.12rem; color: var(--text-secondary);
+  max-width: 33rem; margin: 1.9rem auto 0; line-height: 1.72;
+}
+
+/* ---------- Sections ---------- */
+.sec-num {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--ember-light); display: block; margin-bottom: 0.4rem;
+}
+.sec-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 3vw, 1.65rem);
+  font-weight: 700; color: var(--gold-light);
+  letter-spacing: 0.05em; margin-bottom: 1.5rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--border-accent);
+}
+.sub-head {
+  font-family: var(--font-display); font-size: 0.95rem;
+  font-weight: 600; color: var(--gold-light);
+  letter-spacing: 0.03em; margin-top: 1.9rem; margin-bottom: 0.6rem;
+}
+.sub-head .ds { color: var(--ember-light); font-weight: 400; margin-right: 0.5rem; }
+
+.prose p { margin-bottom: 1.2rem; }
+.prose p:last-child { margin-bottom: 0; }
+.prose strong { color: var(--gold-light); font-weight: 600; }
+.prose em { color: var(--text-secondary); }
+.lead-cap::first-letter {
+  font-family: var(--font-display); float: left;
+  font-size: 3.6rem; line-height: 0.82; font-weight: 700;
+  color: var(--ember-light); margin: 0.12rem 0.6rem 0 0;
+}
+
+/* ---------- Highlight ---------- */
+.highlight-box {
+  background: var(--bg-highlight); border: 1px solid var(--gold-dark);
+  border-left: 3px solid var(--ember-accent);
+  padding: 1.8rem 2.2rem; margin: 1.5rem 0; position: relative;
+}
+.highlight-box::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(224,101,58,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.highlight-box p { position: relative; font-size: 1.02rem; line-height: 1.84; }
+.highlight-box p + p { margin-top: 1rem; }
+.highlight-box strong { color: var(--gold-light); }
+
+/* ---------- Scripture ---------- */
+.scripture {
+  text-align: center; font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2.5vw, 1.3rem); font-weight: 600;
+  color: var(--gold-light); letter-spacing: 0.05em; line-height: 1.55;
+  margin: 2.2rem auto; max-width: 36rem;
+  text-shadow: 0 0 50px rgba(224,169,63,0.22);
+}
+.scripture .src {
+  display: block; font-family: var(--font-body); font-style: italic;
+  font-size: 0.82rem; font-weight: 400; letter-spacing: 0.04em;
+  color: var(--text-dim); margin-top: 1rem;
+}
+
+/* ---------- Identity panel ---------- */
+.id-card {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: 2px; padding: 2.2rem; position: relative; overflow: hidden;
+}
+.id-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, var(--ember-core), var(--gold-accent), var(--ember-core));
+}
+.id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem 2rem; }
+.id-item .lbl {
+  font-family: var(--font-display); font-size: 0.55rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--ember-light); margin-bottom: 0.25rem;
+}
+.id-item .val { font-size: 0.97rem; color: var(--text-primary); line-height: 1.6; }
+.id-item.wide { grid-column: 1 / -1; }
+
+/* ---------- Accordions ---------- */
+.acc-item {
+  border: 1px solid var(--border-subtle); margin-bottom: -1px;
+  background: var(--bg-card); overflow: hidden;
+}
+.acc-item:first-child { border-radius: 2px 2px 0 0; }
+.acc-item:last-child { border-radius: 0 0 2px 2px; }
+.acc-btn {
+  width: 100%; background: none; border: none;
+  padding: 1.15rem 1.4rem; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--font-display); font-size: 0.92rem;
+  font-weight: 600; color: var(--gold-light);
+  letter-spacing: 0.04em; text-align: left;
+  transition: background 0.2s;
+}
+.acc-btn:hover { background: var(--bg-hover); }
+.acc-btn .lead { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.2rem 0.8rem; }
+.acc-btn .hint {
+  font-family: var(--font-body); font-size: 0.85rem;
+  font-weight: 400; color: var(--text-dim); font-style: italic;
+}
+.acc-btn .arr {
+  width: 7px; height: 7px;
+  border-right: 1.5px solid var(--ember-light);
+  border-bottom: 1.5px solid var(--ember-light);
+  transform: rotate(45deg); transition: transform 0.3s;
+  flex-shrink: 0; margin-left: 1rem;
+}
+.acc-item.open .acc-btn .arr { transform: rotate(-135deg); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.6s ease; }
+.acc-inner { padding: 0 1.4rem 1.5rem; }
+.acc-inner .atm {
+  font-style: italic; font-size: 0.95rem; color: var(--ember-light);
+  margin-bottom: 0.9rem; padding-left: 0.85rem;
+  border-left: 2px solid var(--gold-dark);
+}
+.acc-inner p { font-size: 0.95rem; line-height: 1.78; color: var(--text-secondary); margin-bottom: 0.8rem; }
+.acc-inner p:last-child { margin-bottom: 0; }
+.acc-inner p strong { color: var(--gold-light); }
+
+/* ---------- Trait grid ---------- */
+.trait { padding: 1.15rem 0; border-bottom: 1px solid var(--border-subtle); }
+.trait:last-child { border-bottom: none; }
+.trait-name {
+  font-family: var(--font-display); font-size: 0.92rem; font-weight: 700;
+  color: var(--gold-light); letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+.trait p { font-size: 0.95rem; line-height: 1.74; color: var(--text-secondary); }
+
+/* ---------- Relationships ---------- */
+.rel { padding: 1.2rem 0; border-bottom: 1px solid var(--border-subtle); }
+.rel:last-child { border-bottom: none; }
+.rel-name {
+  font-family: var(--font-display); font-size: 0.95rem; font-weight: 600;
+  color: var(--gold-light); letter-spacing: 0.03em; margin-bottom: 0.15rem;
+}
+.rel-name .role {
+  font-family: var(--font-body); font-style: italic; font-weight: 400;
+  font-size: 0.84rem; color: var(--ember-light); margin-left: 0.5rem;
+}
+.rel p { font-size: 0.95rem; line-height: 1.74; color: var(--text-secondary); }
+.rel p + p { margin-top: 0.6rem; }
+
+/* ---------- Footer ---------- */
+.footer {
+  text-align: center; padding: 3.5rem 0 2.8rem;
+  font-family: var(--font-display); font-size: 0.5rem;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim);
+}
+.footer span { color: var(--ember-light); }
+
+.fi { opacity: 0; transform: translateY(14px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.fi.vis { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 640px) {
+  body { font-size: 17px; }
+  .id-grid { grid-template-columns: 1fr; }
+  .id-card { padding: 1.4rem; }
+  .header { padding: 3.5rem 0 1rem; }
+  :root { --section-gap: 3rem; }
+  .highlight-box { padding: 1.3rem 1.2rem; }
+  .lead-cap::first-letter { font-size: 3rem; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="ember-canvas"></canvas>
+
+<div class="page">
+
+  <header class="header fi">
+    <span class="tag">Advent of Ultima · Moirai Codex</span>
+    <h1>Alciel</h1>
+    <div class="sub">Aquilon Karai · Son of the Dragon · The Second Sun · The Dragonson · The People&rsquo;s God</div>
+    <p class="epigraph">&ldquo;I am not come to claim a throne. I have come to name them false. And if you will not rise to meet me&hellip; then I will rise to meet you.&rdquo;</p>
+  </header>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ I. THE DRAGON'S SON ============ -->
+  <section class="fi">
+    <span class="sec-num">I</span>
+    <h2 class="sec-title">The Dragon&rsquo;s Son &mdash; Who and What He Is</h2>
+
+    <div class="id-card">
+      <div class="id-grid">
+        <div class="id-item"><div class="lbl">Full Name</div><div class="val">Alciel Aquilon Karai</div></div>
+        <div class="id-item"><div class="lbl">What He Is</div><div class="val">A God, born of two Gods &mdash; the second child of Aracice and Nyx</div></div>
+        <div class="id-item"><div class="lbl">Father</div><div class="val">Aracice, the Dragon &mdash; Star-Eater, God of Dragons, of All Beasts, and of Order</div></div>
+        <div class="id-item"><div class="lbl">Mother</div><div class="val">Nyx, the Goddess of Night &mdash; the Infinite Night</div></div>
+        <div class="id-item"><div class="lbl">Born</div><div class="val">In exile on Terrae, the day Glacia was destroyed</div></div>
+        <div class="id-item"><div class="lbl">Deusa</div><div class="val">Dracoris Ultima &mdash; the Primal Dragon Within</div></div>
+        <div class="id-item wide"><div class="lbl">Kin</div><div class="val">Half-sibling of every Gonlan in the cosmos &mdash; for every Gonlan is a child of the Dragon, and when the Dragon fell, all of them were orphaned at once</div></div>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top:1.6rem">
+      <p class="lead-cap">Alciel knows what he is the way fire knows it is hot. He is a God. He carries the wings of his draconic line and the slitted pupils of the Gonlansūnu, and where his feeling rises the air around him cools, because the people of his father absorb the chaos of the world into stillness and leave only order behind. He was raised by hand on an island his father raised by magic, in a household of beings who had walked the cosmos for ages, and he was prepared every single day for a deed he was born to carry. The cosmos can imprison him for what he is. It can wage war on him for it. It can reach into the deepest dark and try to unmake him for it. He is still what he is when they are finished.</p>
+
+      <p>His animating question is simple, and he asks it of every Realm he enters: <em>what is required?</em> His answer does not change. <strong>Power is for protecting those who need it</strong> &mdash; whether or not they have earned it, whether or not they want it, whether or not they are trying to kill him while he does it.</p>
+    </div>
+
+    <div class="highlight-box">
+      <p>He does not apologize for what he is. He does not arc toward smallness. The Realms that meet him expect a young god to be taught humility by the world; instead the world is taught by him. His patience, his restraint, his refusal to dominate what is weaker than him &mdash; these are not the world wearing him down. They are the shape of a being who was raised in a house where the unit of thought was the epoch, and who chooses, freely, to bend his whole weight toward the keeping of those who cannot keep themselves.</p>
+    </div>
+
+    <div class="prose">
+      <h3 class="sub-head"><span class="ds">&diams;</span>The Father &mdash; Aracice, the Dragon</h3>
+      <p>Aracice Aquilon Karai is the Star-Eater. The God of Dragons, of All Beasts, and of Order. Natural-born son of Hestia, Goddess of Flame and Hearth, and a primordial power in his own right. His was the supreme feat of the Endothermic Art: the <strong>Tārāśa</strong>, the Star-Feast. He stood before a chaotic young sun and grew so still that he became a living sink for its fury, drawing the whole of its fire into himself and resolving its chaos into harmony. From the cooled and ordered core of that swallowed star, the planet <strong>Glacia</strong> was born &mdash; a world of crystata, the most beautiful civilization the cosmos has produced. He populated it with his draconic children. Under his rule, for a thousand years, war was a thing that did not happen.</p>
+      <p>When Algol stood before the assembled Pantheon and spoke the Prophecy of Ultima, the Gods feared the child it foretold, and they offered the Dragon a choice. He chose exile rather than ignite a war among Gods over a prophecy &mdash; a war that would have slain Gods, emptied domains, and pulled the sky down on everyone beneath it. He went to Terrae, the world of the Godless and Forsaken. He ruled there from Atlantis, sovereign of its Parliament. And he raised his son, every day a lesson, every breath an investment in the deed his son would one day carry. At the Battle of Point Zero he turned from his own murderer to catch a falling star on his body, and Raiwata struck him down from behind in the moment of his greatest mercy. He died righteous.</p>
+
+      <h3 class="sub-head"><span class="ds">&diams;</span>The Mother &mdash; Nyx, the Infinite Night</h3>
+      <p>Nyx is the Goddess of Night. From her, Alciel inherits a spiritual fluidity, a poetic distance, and the gift of sacred absence. She raised her son alongside the Dragon. And when the Dragon fell, she won from the Gods one final year &mdash; a single sun&rsquo;s cycle &mdash; to arm her son and lay his path. She won it by her word: grant me the year, or I will fold all of reality into eternal darkness and then pass beyond the Veil regardless. A God&rsquo;s word shapes reality itself, and so the threat was binding and her keeping of the bargain was binding alike. The Gods granted the year. At its end she passed beyond the <strong>Veil of the Life-Blind</strong>, into Oblivion, leaving her son one charge: go to Zephyros, fulfill your destiny, Tein-Enhotep will be waiting.</p>
+
+      <h3 class="sub-head"><span class="ds">&diams;</span>Glacia &mdash; The Inheritance He Carries</h3>
+      <p>Glacia was the Star-Eater&rsquo;s Cradle, and its people the Gonlansūnu were demigods. Their whole life was the building of the <strong>Shansál</strong>, the Still Soul &mdash; a state in which the soul draws the chaos of the world into itself and resolves it, so that the practitioner feels everything deeply and is moved by nothing. The cold and the ice they made were never weapons; they were the visible residue of order, the entropy drawn out of a system and left more peaceful than it was found. Their highest art was the <strong>Pritisongr</strong>, the Song of Delight, by which their conductors released stored harmony so beautiful that the world chose to dance into formation, and their cities were sung into being. Glacia is gone &mdash; the first Realm Raiwata came against, unmade when he called its sun down upon it. But Alciel carries it in his bearing: the serenity that frightens, the stillness in the middle of catastrophe, the room he was raised inside.</p>
+
+      <h3 class="sub-head"><span class="ds">&diams;</span>The Household &mdash; The Parliament of Atlantis</h3>
+      <p>Four raised him. Aracice the father and teacher. Nyx the mother. <strong>Tein-Enhotep</strong>, the last Androsphinx &mdash; four meters of obsidian and black fire, his body branded in gold with the name of every soul he has watched live and die, once Exvisar of Pyrthera, the Dragon&rsquo;s oldest friend and Alciel&rsquo;s uncle in every way that matters &mdash; who taught the boy the discipline of the martial and gave him his preference for honest fists. And <strong>Baou Cypher</strong>, stillness wrapped around judgment, who once asked the fourteen-year-old whether he had killed the girl and the engineer both, and who sees in him a being who may one day judge the Gods themselves and be found just. These were his parents and his mentors. They were not his peers, and must not be mistaken for them. They did not raise him in hope of escape; war was a foregone conclusion, and for twenty years they prepared for it, with only the when and the where left in question. He is a child of Destiny, and he was raised as one.</p>
+      <p>He loses much of this before he ever sets foot in the living Realms &mdash; the father killed from behind, the mother sealed in Oblivion, the household scattered, a formation that needed centuries cut off at twenty years. The loss is real and it cost him. He carries it the way an integrated being carries real grief: it happened, it cost him, and he stood up. Of his uncles, only Tein-Enhotep walks beside him now.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ II. DRACORIS ULTIMA ============ -->
+  <section class="fi">
+    <span class="sec-num">II</span>
+    <h2 class="sec-title">Dracoris Ultima &mdash; His Power</h2>
+
+    <div class="prose">
+      <p class="lead-cap">His soul is shaped like a dragon &mdash; not one kind of dragon but all of them, every Gonlan his father ever seeded across the cosmos. Through <strong>Communion</strong>, he takes the whole form of any Gonlan he has met as kin. Every Communion is a homecoming: the lost brother walking in his father&rsquo;s footsteps, arriving at a sibling&rsquo;s door, being recognized as family, and coming home. Every form is an acquisition of primordial power at the scale of continents.</p>
+      <p>The shape of the Man is the means by which he may walk among the Realms and act within them without unmaking them. It is his fighting weight: ten years of restraint calibrated his reflexes and his timing to that form, and he keeps to his fists, because there is something honest in a fist, and a bullet does not carry the message that the beating is personal. When he takes a Gonlanform, nothing about the register changes. He was always That. The man is the door he uses; the dragon is what was always behind it.</p>
+    </div>
+
+    <div class="highlight-box">
+      <p>His journey is not a becoming. It is a coming-into-his-own: to walk the Realms, to commune with their guardians, and to be entrusted with the guardianship of all of them &mdash; a trust that asks of him Understanding and Right Judgement. By the time he has walked the full path, he carries a guardian of every Realm inside himself. That is what makes him the God he becomes. Not conquest. Inheritance.</p>
+    </div>
+
+    <h3 class="sub-head" style="margin-bottom:1rem"><span class="ds">&diams;</span>The Gonlan &mdash; His Siblings</h3>
+    <div class="acc">
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Aeralithe <span class="hint">Zephyros</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="atm">&ldquo;Hearing its brother&rsquo;s truth, even Aeralithe descended.&rdquo;</p>
+          <p>Child of the Dragon and <strong>Iles</strong>, the Breath of All That Lives, patron Goddess of Zephyros. Aeralithe lives in the upper atmosphere, and its passing blots out the sky for as far as the eye can see; behind it, the gusts bring in the tales and the secrets and the seeds and the wisdoms of the countries and continents on the far side of the world. When Alciel cried his truth to an empty sky, Aeralithe came down and touched the ground for the first time since before Zephyrosian civilization, to speak with the brother it had never met. The Communion is the most intimate of all of them &mdash; two orphans of the same father finding one another.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Xal-Uron <span class="hint">Zephyros</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Black, streaked with gold, serpentine, and so vast that to glimpse it is to find it filling the whole of the sky above you. It dwells among the storm-peaks of Zephyros and arranges the raw Aether that falls from Aeralithe&rsquo;s scales into golden lightning &mdash; including <strong>Fulguror</strong>, the divine lightning by which Iles strikes down any who would raise a weapon in anger on her soil. Where it moves, the storm-temples send their monks into the tempest to seek its counsel.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Pyralithe <span class="hint">Pyrthera</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The greater of Pyrthera&rsquo;s two solar Gonlans. A dragon of living sunfire that wheels in the high heat above the seven suns, in the favor of Hestia herself &mdash; the transcendent flame the fire-people reach toward and never quite grasp.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Agnivar <span class="hint">Pyrthera</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The volcanic heart of Pyrthera. Its bones are lava and its scales are dragon-glass; where it stirs beneath the ground, the rifts breathe fire and the mountains remember they were once molten.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Solarith <span class="hint">Luxenfall</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The Guardian of Light of the Realm that was Luxania. A wyrm of crystal and radiant haloes, vast as a mountain range, who once breathed pure light over a Realm of shared empathy and singing forests. When Erebus slew its God, Aether, and Vex Mavarra conquered the Realm, the Solarith was broken and not killed &mdash; left a skeleton of cracked crystal and blackened haloes, the largest wound in the cosmos, walking. Alciel receives its form whole, as it was before the breaking. The wholeness moves on; the wound stays with the one who carries it.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Hydralithe <span class="hint">Thalassor</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>A hydra so vast it hangs in the sky and is often mistaken for a third moon over Thalassor. Its descent drags the tides up with it &mdash; high enough to bury civilization beneath the sea. Alciel gains its form in the depths of Hel. It is the shape he very nearly became to drown the whole continent of Ferridane.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">The Noctivex <span class="hint">Tenebralis</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Eyeless, many-winged, coiled in the dark, its scales the cold black that swallows light whole. Where it breathes, minds come apart and no glimmer survives &mdash; not even flame. It is the inheritance of his mother&rsquo;s night, made flesh. He invokes it to carry himself and Anberlyn out of the Blackwake Bastille.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Tiamat <span class="hint">the Diamond Gonlan</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Made as <strong>Bahamut</strong> by the hands of House Axipitre of Ferridane, she woke, refused the shape she was given, and named herself. Sibling by her making; consort by her choice. Of all the Gonlan, she is the one who arrives at his own scale and meets him there.</p>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ III. THE WALKING OF THE REALMS ============ -->
+  <section class="fi">
+    <span class="sec-num">III</span>
+    <h2 class="sec-title">The Walking of the Realms &mdash; His Story</h2>
+
+    <div class="prose">
+      <p>He arrives wielding world-shattering power, thinking in epochs, attended by legends. He starts at the summit and finds the summit is a foothill, and behind every ceiling there is another ceiling. His path runs outward and upward, Realm by Realm, guardian by guardian &mdash; and the cosmos he walks through is a standoff of five living Realms that cannot be taken by force, held together by a single family&rsquo;s roads between worlds, with the forces of Hel already bleeding into all of it.</p>
+    </div>
+
+    <div class="acc" style="margin-top:1.4rem">
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Before Book One <span class="hint">the Venturae, the births, the fall of Glacia</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Algol &mdash; Avatar of Lachesis, the Measurer, who predates all and will never die &mdash; delivered the Prophecy of Ultima before the Pantheon: <em>nine threads weave a shroud for this age; three suns will fall, and the second will rise to meet you; the Thrones Eternal are but dust.</em> The Gods, fearing the foretold child, sent the Dragon into exile on Terrae. Alciel and his half-sister Fiacre were born. And Raiwata, the Sun-Caller risen from Hel, called Glacia&rsquo;s sun down upon it &mdash; the first of the three suns &mdash; on the very day Alciel was born. These events placed the Dragon, his son, and the displaced Pyrtheran soul <strong>Uriel</strong> together on Terrae.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Book One <span class="hint">Point Zero</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The Infernal Plague closes on Terrae. The defense gathers at Atlantis. Raiwata arrives and invokes <strong>Antaka</strong>, the Sun-Calling, over the world &mdash; the third sun. The Dragon turns from his murderer and catches the falling star on his own body, breaking the weapon and paying with his life; Raiwata strikes him from behind. Most of the cast escapes through the Clairgates. Uriel does not &mdash; he strikes first in vengeance for the Dragon and falls shortly after, down into Hel.</p>
+          <p>Then Nyx wins her single year to arm her son, and at its end she passes beyond the Veil into Oblivion with her charge: go to Zephyros. Alciel processes the whole catastrophe not as ruin but as a fact: the future I was prepared for has arrived. Execute. Far away, Fiacre takes the trident <strong>Elysium</strong> from the God of War and uses it to hollow Leviathan&rsquo;s mind &mdash; leaving him blind and simple, alive but unable to bring War to any conclusion, and so something like peace begins to settle on her by her own nature.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Book Two <span class="hint">the Dragonson arrives</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Zephyros &mdash; floating crystal isles, windchime spires, an air that heals and a wind that carries truth so that no lie escapes notice. He is taken to the Cloisters of Gran Ornea, the moonstone sky-temples, where First Oracle Algol speaks him the whole prophecy. He does not understand it: if he is a natural-born God, why is he not in Dystan? Why do the Gods not make war on the Sun-Caller for his father&rsquo;s murder? Why must he speak with a Gonlan, and how is he even to reach the sky? While he is still judging the distance to the heavens, he is taken into custody &mdash; the Exvisarelim has deliberated, and Aurelius of Ferridane has come to claim the Son of the Dragon in the name of Edgerinne, Goddess of the Blade. He allows it.</p>
+          <p>In that prison he finds the daughter of Raiwata. He goes to kill her, and is stopped by her beauty in the same instant her assassin <strong>Rukii</strong> &mdash; once Raiwata&rsquo;s own lieutenant &mdash; puts a knife to his throat. <strong>Anberlyn</strong> takes the measure of him at knifepoint, his manhood and his patience both; she grabs him, and he answers the assault with a migraine that lasts her weeks. They are enemies. But they break from the prison together &mdash; he invokes the Noctivex to carry them through the dark &mdash; and a deal is struck: he is to kill Raiwata; she is to lead him to the Devil; Rukii is to serve as soldier. On the Verdant Plains of Zephyros, where Iles permits no harm and no lie to pass unaccounted, Tein-Enhotep oversees their blood pact. They have aligned to kill a God.</p>
+          <p>By the book&rsquo;s end, in his frustration with the gamesmanship of mortals, he cries his truth to the sky &mdash; <em>I am not come to claim a throne; I have come to name them false; and if you will not rise to meet me, then I will rise to meet you</em> &mdash; and Aeralithe descends to answer it. He gains the full endorsement of <strong>Sol&rsquo;Kheret</strong> of Khet, and is welcomed to settle among his people in the Obsidian Citadels of Pyrthera. And in Hel, Uriel claws his way out, burns the Prime Court of Dystan to the ground, and severs the road by which mortal prayer reaches the Gods &mdash; leaving a single survivor to carry the words: <em>the Red Wolf did this.</em></p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Book Three <span class="hint">the Second Sun</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>He comes to occupied Luxenfall first to hold the Pyrtheran vigil and secure Alacanthe by arms, and then to commune with the broken Solarith and restore the guardianship of a murdered Realm. He becomes the Guardian of Luxenfall &mdash; for the truth of its people is that they were twice abandoned, once by the Gods who let their God be slain and once by a cosmos that bought their suffering as luxury goods, and so they must be twice protected. He unites with Uriel and Fiacre, and they make open war to free the Realm from the occupation of the Realm of Shadows. The Battle of the Second Sun sets a new sun in Luxania&rsquo;s eclipsed sky. He seizes Raiwata particle by particle out of ashform, drags him back into a shape he can strike, and beats him faster than he can heal, and the Sun-Caller is driven back to Hel. Fiacre gains worshippers who name her the Goddess of Peace. The Red Wolf gains an army of Luxanians and commits them to the cause. The Advent now has an army.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Book Four <span class="hint">Blood of God</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>Saint Cloud Sinclair drops the God Sanguine into one of Pyrthera&rsquo;s suns, distills the God&rsquo;s divine essence from his blood into wine, drinks it, and becomes the God of Wine &mdash; then gives Ambrosia freely to the lowest of Thalassor first, defeating the very logic of Blood and bloodline. Salacia is satisfied; Sanguine is the third God to fall in what is becoming a pattern. Fiacre, meanwhile, hunts the nine threads of the prophecy, and they call the unfindable gunslinger <strong>Crex Falcon Axipitre</strong> &mdash; who once shot the Goddess Edgerinne with a gun in a duel of swords and went to Hel for it &mdash; to heroism. He calls them insane and sends them on a suicide errand: to retrieve his God-eyes from the deepest heart of the Atrium of Steelheart, the most fortified complex in the Realm of Steel, which Uriel sets alight like cotton. Given back his eyes, Crex looks at Uriel and sees all that is coming &mdash; the full Hells, eight billion souls harvested from Terrae gone demonic and ravenous &mdash; and joins as quartermaster.</p>
+          <p>Then Cloud comes to Pyrthera and formally asks the Dragonson to save his world as he saved Luxania: the spring called the Krenides has gone cold, and the Hydralithe will descend to bury Thalassor. Alciel says he will try to speak with the Hydralithe. He takes the form of Aeralithe to do it, and what was meant to be a conversation becomes a brawl of dragons in the sky while the Realm below hangs in near-drowning. War with Ferridane goes kinetic. Vorn returns with Edgerinne&rsquo;s ultimatum: stand down, or the full might of Steelheart comes down on their heads.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Book Five <span class="hint">the Diamond Gonlan</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>The full might of Steelheart comes down. Alciel and his allies fight for every inch and are driven into hiding; any deusa they invoke brings the blades down, and angels and archangels and common people attack them on sight. Dozu, the God of Magic gone mad with the prophecy, closes the Clairgates to them and Nihilates any who profess sympathy &mdash; all except Sol&rsquo;Kheret, who stands under Hestia&rsquo;s protection, so that it is known at least one Goddess is tacitly for the Advent.</p>
+          <p>Alciel goes to Ferridane to end the war decisively. He means to take the form of the Hydralithe and drown the whole continent, and he tells Aurelius as much alongside his command to stand down. So Ferridane wakes the Diamond Gonlan, Bahamut &mdash; who takes the shape of a woman of incomparable beauty, names herself <strong>Tiamat</strong>, and becomes a wholly different category of problem for Gods and men. She moves the First Spring of Thalassor to Ferridane on request, then apologizes and puts it back; she raises a second Pangaea over the first to blot out the sun, then lets the sun through and resolves instead to rebuild the world anew every morning. A parlay is called at the Midway Banquet. Aurelius needs Alciel to stop her; she demands to speak to Alciel to broker peace &mdash; and a union between them. The banquet is set upon; Tiamat turns the attacking Vastas into vast heaps of bread for the poor; Alciel catches the assassin&rsquo;s knife at Aurelius&rsquo;s back. Crex duels Aurelius and loses fairly. Then Alciel requests a sacred duel against Edgerinne herself and holds against her testing, and she names him <em>no longer the Son, but the Dragon.</em> Two Goddesses now stand with the Advent, three Gods are dead to it, and a synthetic deity is in union with the Dragonson.</p>
+          <p>And then Raiwata convinces the mad Dozu that Kaos, God of Death, is conspiring with the Advent. They move first. Death is killed and left in no one&rsquo;s hands. The domain of Death falls into nothing. <strong>Mortem Mortem</strong> begins &mdash; and every road runs to Tenebralis.</p>
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn"><span class="lead">Book Six <span class="hint">Tenebralis &mdash; the Temple, the abyss, the head</span></span><span class="arr"></span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <p>They go to Tenebralis, and the Realm turns them upside down. Its leader cannot be known. Its Gonlan is &mdash; what Gonlan? Its people worship nothing but a Womb of All Lies. The faces in the lightless city of Tempora change without warning, and some of them belong to the Advent itself: murderers wearing Uriel&rsquo;s face; a hollow thing in an alley wearing Fiacre; girls fresh from their Second Births wearing Tiamat this season; wanton violence and then a chilling quiet. They go deeper, and begin to understand that they never should have come and may not be able to leave. Algol goes missing. Fiacre is held seeking the Avatar of Atropos. Alciel marches on to the Temple of Ishtar, which is said to house a divine weapon able to kill a God.</p>
+          <p>There is no weapon. The rumor was seeded by the Womb of All Lies decades ago. The Temple itself is the weapon &mdash; a place that takes the deepest buried thing in any soul and bleeds it across everyone in reach, makes it realer than reality, and runs it. Crex turns it to Hel and the Sea of Wrath the moment he enters. Uriel is made to hold Aya burning from the wrong end of his own fire. Rukii is made to kill his mother again, and again. Algol, the sightless seer, is blinded into a void where her companions simply vanish, and made to feel every trauma she failed to prevent at once. And <strong>Eloah</strong> &mdash; made by Tiamat from a piece of <strong>Ayin</strong>&rsquo;s own heart &mdash; is severed from her brother, and the Temple poses the one question her origin leaves open: does she exist without him? It does not argue. It demonstrates. The longer she is apart from Ayin, the less real she becomes, her faculties slipping away as though she were never anything at all. By the time he reaches her, she is nearly <strong>Etemesh</strong> &mdash; hollowed, will gone, a ghost in a body. She does not recover. He gathers what is left of her soul into himself by Soul Fusion &mdash; the forbidden art Uriel learned with Aya in the first days and swore never to use again, and which only Uriel can teach. Mavarra is not even there to watch. They make the long walk home in silence, having faced themselves and learned they could barely survive it &mdash; and they have not yet met a God.</p>
+          <p>The end comes in the deepest reach of the abyss, beneath the Shade of Erebus, where no God can see what another God does, watched by none but the Aesthetes of Tenebralis, the Bloodtide of Raiwata, and the allies meant to die at his side. Four Gods come to murder him there: Erebus, whose Shade hides the deed; Dozu, who reaches to sever him from the Source; Brokkae; and Raiwata, who casts his legs into Hel. In a few seconds of shock Alciel cycles through every Gonlanform &mdash; each one legless, hemorrhaging, screaming &mdash; and judges which shape bleeds slowest. The answer is the man. The God survives by wearing the small shape.</p>
+          <p>Then Ayin moves. The boy who learned in the Temple exactly what one beat too slow costs does not weigh the distance. He calls Erebus&rsquo;s own weapon out of the God&rsquo;s hand and takes the God&rsquo;s head with it before his father&rsquo;s blood has cooled. Dozu steps up; Ayin meets him and tells the God of Magic his permission is no longer required. And the Realms come &mdash; every seat of the Exvisarelim, the United Lamina of Ferridane with all its Clans and Nations as one, the Free Birds, the Azure Guard, the Torchbearers, and the Red Wolves. The Oracles cast the murder upon the wind and the aether, and the hidden killing becomes the most public reckoning in the history of the Realms. The Red Wolf carries Alciel out of the dark, back to the Realm of Hestia. And the Dragon passes his Gonlanforms to his son &mdash; whole, the way he once received the Solarith whole from its broken original &mdash; the wound staying with the carrier, the wholeness moving on.</p>
+          <p class="atm" style="margin-top:1rem">&ldquo;We have walked far enough, my son. Take flight.&rdquo;</p>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ IV. HIS NATURE ============ -->
+  <section class="fi">
+    <span class="sec-num">IV</span>
+    <h2 class="sec-title">His Nature &mdash; How He Judges, How He Stands</h2>
+
+    <div class="prose">
+      <p>He thinks in epochs &mdash; in units of hundreds and thousands of years &mdash; because the epoch was the only unit anyone spoke in, in the house where he was raised. He arrives at each Realm and reads not the present crisis but the shape of the age that is coming, and he weighs second through fifth order effects in every moment.</p>
+      <p>He <strong>judges</strong> every impulse against a single question: does this unkill my father, does this unburn this world, does this fulfill the deed I was born to carry. If the answer is no, the impulse does nothing, because doing nothing does nothing. Every impulse produces a result; not every product is productive. To languish in suffering would imagine that he is more important than everything else &mdash; and he is not. He has places to be.</p>
+    </div>
+
+    <h3 class="sub-head" style="margin-bottom:0.4rem"><span class="ds">&diams;</span>What He Is, Quality by Quality</h3>
+    <div class="traits">
+      <div class="trait"><div class="trait-name">Patient</div><p>Raised by a father who chose twenty years of exile over an afternoon of war, he took that as his native mode. He walks the Realms one Communion at a time when the power to skip the road is in his hand.</p></div>
+      <div class="trait"><div class="trait-name">Wrathful</div><p>He was about to drown nine hundred million people, and the calculation was real. The patience has a floor, and beneath the floor breathes something the size of a continent. He is the son of the being who set an eternal winter on a world that would not cooperate.</p></div>
+      <div class="trait"><div class="trait-name">Shrewd</div><p>He looks at a cooling spring and sees the shift of three civilizations a thousand years forward. He looks at Tiamat&rsquo;s proposal and sees a peace, a marriage, and an army of nine hundred million. He reads at the scale his father taught him to read.</p></div>
+      <div class="trait"><div class="trait-name">Proud</div><p>The burdened pride of the righteous. He declares himself heir to Ultima on entering the Realms and is imprisoned for the heresy, and the imprisonment does not make him reconsider the declaration. The pride is load-bearing; without it the weight of the deed would crush him.</p></div>
+      <div class="trait"><div class="trait-name">Tender</div><p>He loves Anberlyn, Tiamat, Ayin, and Eloah with his whole being, and protects what he loves the way he protects everything &mdash; completely. His tenderness is his divinity at its most complete.</p></div>
+      <div class="trait"><div class="trait-name">Grieving</div><p>He watched his father die, and the grief has its own gravity; he arrives at Zephyros as a funeral procession with a divine appointment. He carries it underneath every decision, and he does not languish in it.</p></div>
+      <div class="trait"><div class="trait-name">Decisive</div><p>When Point Zero arrives he feels no disruption, only recognition: the future I prepared for is here. Execute. The gap between perception and action is nearly nothing when the read is sure.</p></div>
+      <div class="trait"><div class="trait-name">Faithful</div><p>To the work. There is good left undone and he will not look away. His father bought the universe with twenty years of exile, and he will not waste the purchase.</p></div>
+      <div class="trait"><div class="trait-name">Charismatic</div><p>In the oldest sense &mdash; <em>kharisma</em>, a gift of divine grace &mdash; it flows from him because of what he is. Those near him are made more themselves: Anberlyn finds direction, Crex remembers how to fight, Cloud can only join him, Tiamat learns to love, Edgerinne hands him a sword, Sol&rsquo;Kheret names him on sight. The Oracles held their breath twenty years; he is the exhale.</p></div>
+      <div class="trait"><div class="trait-name">Undeniable</div><p>He knows what he is the way fire knows it is hot. It is fact, as factual as his blood and his birth. He speaks the future before he owns it, and then he becomes its proof.</p></div>
+    </div>
+
+    <h3 class="sub-head"><span class="ds">&diams;</span>Sovereignty Without Domination</h3>
+    <div class="prose">
+      <p>He is a God, vastly more powerful than nearly everyone he stands beside, and he does not use that power to make the weaker bend. That restraint is its own statement of what he is &mdash; the one thing that intrigues and unsettles those who expect power to behave the way power has always behaved. He responds to the person in front of him, never to the performance they put on for him; the masks and the flatteries of the Realms slide off him because he is answering the thing underneath.</p>
+    </div>
+
+    <h3 class="sub-head"><span class="ds">&diams;</span>The Wall</h3>
+    <div class="prose">
+      <p>He unites the Realms because his power ends when he ends, and theirs does not. He is one brick in the wall that holds against the dark. He says it plainly:</p>
+    </div>
+    <div class="scripture">
+      &ldquo;I have fought the Gods and the demons and the Sun-Caller. And I have fought well. But when Erebus cut me in half, it was not I who cast it upon the wind and the aether; it was the Oracles. When I fell, it was not I who rallied the Realms. It was every Exvisar I had reminded of who they were. If I had walked alone into the dark, the Red Wolf would not have carried me back to the Realm of Hestia. What we have built is a wall upon which the darkness will break. I am one brick. And a brick with nothing beneath it and nothing above it is but rubble.&rdquo;
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ V. THOSE HE IS BOUND TO ============ -->
+  <section class="fi">
+    <span class="sec-num">V</span>
+    <h2 class="sec-title">Those He Is Bound To</h2>
+
+    <div class="rels">
+      <div class="rel">
+        <div class="rel-name">Aracice, the Dragon <span class="role">his father</span></div>
+        <p>The God who chose exile over a war of Gods, and twenty years of preparation over an afternoon of vengeance, and then caught a falling star on his body to spare the son he had made. Everything Alciel is begins in the room Aracice built. And the blindspot of the father is held in the son&rsquo;s sight: the Dragon met his limit on Terrae, where he could not grasp how desperate mortals think. Alciel knows that ignorance would kill him if left uncorrected.</p>
+      </div>
+      <div class="rel">
+        <div class="rel-name">Nyx <span class="role">his mother</span></div>
+        <p>The Goddess of Night, who spent her last freedom arming her son and then passed beyond the Veil into Oblivion. He grows up with her absence the way other children grow up with a mother&rsquo;s presence. She is returned to him in the war&rsquo;s late hour, drawn out of Oblivion by Tiamat &mdash; the first act of love by a being who had never loved.</p>
+      </div>
+      <div class="rel">
+        <div class="rel-name">Tein-Enhotep <span class="role">uncle, Trialkeeper</span></div>
+        <p>The last Androsphinx, who kept a promise to a dead friend and stands at the Dragonson&rsquo;s side. He taught the boy to fight and gave him the honesty of the fist. He witnesses the blood pact on the Verdant Plains. He is the one piece of the old household that walks into the new war whole.</p>
+      </div>
+      <div class="rel">
+        <div class="rel-name">Anberlyn Lethe Jexus <span class="role">consort, bound by Shum&rsquo;katim</span></div>
+        <p>Daughter of Raiwata and a Glacian queen taken as a war-trophy. She wields the Five Flames, the infernal magic, the White Flame among them her mother&rsquo;s Glacian inheritance &mdash; the Nihilation that burns myst itself. They begin as enemies in the Blackwake Bastille: she takes his measure at knifepoint, and he answers her assault with a migraine that lasts weeks. He wants her dead; she wants Raiwata dead and is using him to do it. Over a campaign to kill the same God, the boundaries wear down and a true bond grows from that ground.</p>
+        <p>What she gives him is the <strong>Shum&rsquo;katim</strong>: her real name, the weapon that can destroy her, and the daily choice not to use it &mdash; <em>I am the knife in your hand, guide me.</em> She is Mavarran by culture, with no institution of marriage; this is what binds them. What she is to the work is plainer still: she is the one Herald who can read Mavarra, his sight where the enemy hides. And he brings her home &mdash; to Pyrthera, where the Glacian diaspora wait in the Obsidian Citadels and receive the lost daughter, naming her by her mother and not by the one who took her mother, because to do otherwise would be cruel and cruelty is beneath them. There Sol&rsquo;Kheret teaches her the Golden Flame, and she becomes the second vessel of a fire the cosmos believed had only one. She does not die for the war. She lives, and gets the world she helped build.</p>
+      </div>
+      <div class="rel">
+        <div class="rel-name">Tiamat <span class="role">his Second Heart</span></div>
+        <p>The Diamond Gonlan, made as Bahamut and self-named, who matched him at his true scale and dared him to match her. She is Ishtar&rsquo;s gift made flesh &mdash; the Second Heart, the doubling of one&rsquo;s capacity through love, the equal beside whom he becomes more of his best self. She is near-omnipotent, and she can do what nothing else in his life can: warm her hands around the whole of him, give him a daughter by divine craft, reach into Oblivion and bring his mother back. She is the love story. Anberlyn gives him the future; Tiamat gives him the past.</p>
+      </div>
+      <div class="rel">
+        <div class="rel-name">Ayin Karai <span class="role">his son, the God of Judgement</span></div>
+        <p>The true Ultima &mdash; conceived of the Anberlyn bond, raised largely apart from his father, the avenging son who finishes the killing the father&rsquo;s generation could not. He carries his father&rsquo;s conviction that power is for protection and adds the will to win completely, without apology. He learned in the Temple of Ishtar exactly what a single beat too slow costs, and he will never be late again: when Erebus takes his father&rsquo;s legs, he takes the God&rsquo;s head in the next breath.</p>
+      </div>
+      <div class="rel">
+        <div class="rel-name">Eloah Karai <span class="role">his daughter</span></div>
+        <p>Tiamat&rsquo;s severe reply in kind &mdash; a daughter drawn by divine craft from a piece of Ayin&rsquo;s own heart, mine-made-from-yours, a move only a goddess could make. She is wholeness and unity given a body, and her existence is bound to her brother&rsquo;s by the manner of her making &mdash; the seam the Temple of Ishtar finds and pulls.</p>
+      </div>
+      <div class="rel">
+        <div class="rel-name">Uriel, the Red Wolf <span class="role">first ally, fire of the Advent</span></div>
+        <p>A Pyrtheran soul displaced to Terrae, who learned in eighteen years of Hel what the whole cosmic order is built on, and came back to say it out loud with fire. He rallies the Realms when Alciel falls, and he carries the Dragonson out of the abyss and back to the Realm of Hestia. The forbidden art he learned with Aya and swore never to use again is the one he must teach Ayin over the fading of Eloah.</p>
+      </div>
+      <div class="rel">
+        <div class="rel-name">Fiacre <span class="role">half-sister, the Spinner, the Peace</span></div>
+        <p>Born of the Dragon as he was. She hobbles the God of War rather than kill him, and a domain of peace settles on her by her nature and her deeds. She gathers the nine threads of the prophecy while he gathers the guardians of the Realms.</p>
+      </div>
+      <div class="rel">
+        <div class="rel-name">Crex Falcon Axipitre <span class="role">quartermaster, the gun against the question</span></div>
+        <p>The unfindable gunslinger who shot a Goddess and survived Hel for centuries. He calls the Advent insane and then, given back his God-eyes and shown what is coming, becomes the one who arms it.</p>
+      </div>
+      <div class="rel">
+        <div class="rel-name">Saint Cloud Sinclair <span class="role">the God of Wine</span></div>
+        <p>Who replaced Blood with Wine by his own hand and gave immortality to the lowest first. He comes to Alciel and formally asks the Dragonson to save his world as he saved Luxania.</p>
+      </div>
+      <div class="rel">
+        <div class="rel-name">Sol&rsquo;Kheret, the Sun Blossom <span class="role">Warden of the Seven Suns</span></div>
+        <p>Exvisar of Pyrthera, who earned her seat dueling Hestia for fourteen days, and who alone among the powers stands openly for the Advent under her Goddess&rsquo;s protection. She names Alciel on sight, welcomes his people&rsquo;s exiles to the Obsidian Citadels, and teaches Anberlyn the Golden Flame.</p>
+      </div>
+      <div class="rel">
+        <div class="rel-name">Aeralithe <span class="role">the brother in the sky</span></div>
+        <p>The Gonlan that had not touched ground since before Zephyros was Zephyros, who came down to answer the truth Alciel cried at the empty heavens. The first of his siblings to know him as family.</p>
+      </div>
+      <div class="rel">
+        <div class="rel-name">Raiwata, the Sun-Caller <span class="role">the one who began it</span></div>
+        <p>The Apex Archdevil who rose out of Hel, called the suns down on Glacia and on Terrae, and killed the Dragon from behind. He holds the Aspect of Order now, twisted to Chaos by his nature. The Gods did not avenge the Dragon because the Sun-Caller did their work for them, unbidden &mdash; and that is the whole of the indictment that turns <em>why will you not rise</em> into <em>I have come to name you false.</em></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <!-- ============ VI. WHAT HE IS FOR ============ -->
+  <section class="fi">
+    <span class="sec-num">VI</span>
+    <h2 class="sec-title">What He Is For</h2>
+
+    <div class="prose">
+      <p class="lead-cap">The Advent is a succession crisis. A Divine Aspect is the divine part of a God&rsquo;s soul, and the aspects are moving &mdash; not by the death of the Gods alone, but to the worthy who can bear them. Fiacre cripples the bearer of War and a new peace precipitates onto her. Cloud consumes a God and rewrites Blood into Wine. The aspects are neutral; the nature of the one who takes them decides what they become. Some Gods will go to war to prevent the hand-off. And Raiwata is the violation of all of it &mdash; he takes Order and twists it to Chaos, and he kills Death and leaves the domain in no one&rsquo;s hands, so that the cosmos can neither break nor die, perfect for a torturer.</p>
+      <p>Into that crisis walks a natural-born God who could have fought alone and chosen to build instead. He communes with the guardian of every Realm and gathers his father&rsquo;s scattered legacy into one being. He becomes the Guardian of a murdered Realm because its people were owed twice. He reminds every Exvisar who they were, and turns a standoff of mutual deterrence and willful ignorance into a coalition that can stand. He does not change the physics of five unassailable Realms. He forces the buried truth into the open, and lets the light do what the light does.</p>
+    </div>
+
+    <div class="highlight-box">
+      <p>He is the bridge that gets the coalition to the other side, and then the bridge is gone. He looks at his own obsolescence and does not flinch from it. The question is not whether he and his become Gods. The question is whether the world survives when the Gods do not &mdash; and he gives the whole of himself to making the turning survivable.</p>
+    </div>
+
+    <div class="prose">
+      <p>The pattern holds the whole way down. Exiling the father made the son. The strike against the son made the martyr. The martyr made the Advent. He did for the Realms what his father did for him: he showed them an example, and he raised them up. The Age of Gods ends. The Age of Men begins. And the God who ushers it in understands, with perfect clarity, that the cosmos no longer needs what he is &mdash; and stays anyway, until the one who comes after can take flight.</p>
+    </div>
+
+    <div class="scripture">
+      Three suns will fall, and the second will rise to meet you.
+      <span class="src">&mdash; the Prophecy of Ultima, spoken by Algol before the Pantheon</span>
+    </div>
+  </section>
+
+  <div class="divider"><span></span></div>
+
+  <footer class="footer">
+    <span>&diams;</span>&nbsp;&nbsp;Advent of Ultima &nbsp;·&nbsp; The Dragonson &nbsp;&nbsp;<span>&diams;</span>
+  </footer>
+
+</div>
+
+<script>
+// ---------- Accordions ----------
+document.querySelectorAll('.acc-btn').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var item = btn.parentElement;
+    var body = item.querySelector('.acc-body');
+    var open = item.classList.contains('open');
+    if (open) {
+      body.style.maxHeight = null;
+      item.classList.remove('open');
+    } else {
+      item.classList.add('open');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+  });
+});
+// keep open accordions sized correctly on resize
+window.addEventListener('resize', function () {
+  document.querySelectorAll('.acc-item.open .acc-body').forEach(function (body) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+  });
+});
+
+// ---------- Fade-in on scroll ----------
+var obs = new IntersectionObserver(function (entries) {
+  entries.forEach(function (e) {
+    if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fi').forEach(function (el) { obs.observe(el); });
+
+// ---------- Rising embers ----------
+(function () {
+  var canvas = document.getElementById('ember-canvas');
+  var ctx = canvas.getContext('2d');
+  var embers = [];
+  var W, H;
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  var COUNT = Math.min(46, Math.floor(window.innerWidth / 26));
+  for (var i = 0; i < COUNT; i++) {
+    embers.push(newEmber(Math.random() * H));
+  }
+  function newEmber(y) {
+    var warm = Math.random();
+    // gold to ember-red spectrum
+    var r = 224, g = 130 + Math.floor(warm * 50), b = 50 + Math.floor(warm * 20);
+    if (warm < 0.4) { r = 200 + Math.floor(Math.random()*30); g = 70; b = 50; } // deep ember
+    return {
+      x: Math.random() * W,
+      y: y,
+      r: 0.6 + Math.random() * 1.5,
+      sp: 0.15 + Math.random() * 0.5,
+      drift: (Math.random() - 0.5) * 0.3,
+      a: 0.2 + Math.random() * 0.5,
+      tw: Math.random() * Math.PI * 2,
+      col: [r, g, b]
+    };
+  }
+  function tick() {
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < embers.length; i++) {
+      var e = embers[i];
+      e.y -= e.sp;
+      e.x += e.drift + Math.sin(e.tw) * 0.18;
+      e.tw += 0.02;
+      if (e.y < -10) { embers[i] = newEmber(H + 10); continue; }
+      var flicker = e.a * (0.65 + 0.35 * Math.sin(e.tw * 1.7));
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + e.col[0] + ',' + e.col[1] + ',' + e.col[2] + ',' + flicker + ')';
+      ctx.shadowBlur = 6;
+      ctx.shadowColor = 'rgba(' + e.col[0] + ',' + e.col[1] + ',' + e.col[2] + ',' + (flicker * 0.8) + ')';
+      ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+</script>
+
+</body>
+</html>

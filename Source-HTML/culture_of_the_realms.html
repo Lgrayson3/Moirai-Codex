@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Texture of Days — Culture Across the Living Realms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Marcellus&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Ground & ink */
+    --paper:#FBF7EE;
+    --paper-2:#F6F0E2;
+    --ink:#2B2317;
+    --ink-soft:#5A4E3A;
+    --rule:#E4D8BE;
+
+    /* Gold */
+    --gold:#9A7B1F;
+    --gold-bright:#C9A227;
+    --gold-pale:#E9DCB0;
+    --gold-glow:rgba(201,162,39,.18);
+
+    /* The prism — one light, six (and one more) answers */
+    --zephyros:#8AA63A;   --zephyros-pale:#D8E3B0;
+    --pyrthera:#C7572B;   --pyrthera-pale:#F0C39A;
+    --thalassor:#2E6FA3;  --thalassor-pale:#A9CBE4;
+    --ferridane:#A66A2E;  --ferridane-pale:#E0C394;
+    --tenebralis:#6A3D9A; --tenebralis-pale:#C8B0E2;
+    --luxenfall:#C9A227;  --luxenfall-pale:#EBDCA6;
+    --glacia:#5C97B8;     --glacia-pale:#BDDCE8;
+
+    --prism:linear-gradient(90deg,
+      var(--tenebralis) 0%,
+      var(--thalassor) 17%,
+      var(--glacia) 30%,
+      var(--zephyros) 45%,
+      var(--luxenfall) 60%,
+      var(--ferridane) 74%,
+      var(--pyrthera) 100%);
+
+    --maxw:760px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Spectral",Georgia,serif;
+    font-weight:400;
+    font-size:19px;
+    line-height:1.72;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+
+  /* Paper light: faint warm vignette + prismatic light-leaks in the corners */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(120% 80% at 8% -5%, rgba(106,61,154,.05), transparent 45%),
+      radial-gradient(120% 80% at 105% 110%, rgba(199,87,43,.05), transparent 45%),
+      radial-gradient(140% 90% at 100% 0%, rgba(46,111,163,.04), transparent 40%),
+      radial-gradient(100% 100% at 50% 40%, transparent 60%, rgba(43,35,23,.05));
+  }
+  /* very fine grain */
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  }
+
+  /* The fixed prismatic ribbon */
+  .ribbon{
+    position:fixed;top:0;left:0;right:0;height:5px;z-index:60;
+    background:var(--prism);background-size:200% 100%;
+    animation:drift 22s linear infinite;
+  }
+  @keyframes drift{0%{background-position:0 0;}100%{background-position:200% 0;}}
+
+  /* Sticky nav */
+  nav.codex-nav{
+    position:sticky;top:5px;z-index:55;
+    background:rgba(251,247,238,.86);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--rule);
+  }
+  nav.codex-nav ul{
+    list-style:none;margin:0;padding:.55rem .9rem;
+    display:flex;flex-wrap:wrap;gap:.2rem .9rem;justify-content:center;
+    max-width:1040px;margin:0 auto;
+  }
+  nav.codex-nav a{
+    font-family:"Marcellus",serif;
+    font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--ink-soft);text-decoration:none;padding:.15rem 0;
+    border-bottom:1.5px solid transparent;transition:.25s;white-space:nowrap;
+  }
+  nav.codex-nav a:hover{color:var(--gold);border-bottom-color:currentColor;}
+
+  main{position:relative;z-index:1;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.4rem;}
+
+  /* ---- Masthead ---- */
+  header.mast{
+    text-align:center;padding:5.5rem 1.4rem 3rem;position:relative;
+  }
+  .eyebrow{
+    font-family:"Marcellus",serif;font-size:.82rem;letter-spacing:.42em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 1.6rem;
+    text-indent:.42em;
+  }
+  h1.title{
+    font-family:"Fraunces",serif;font-weight:400;
+    font-size:clamp(2.7rem,8vw,5.1rem);line-height:.98;
+    margin:0;letter-spacing:-.01em;
+    color:var(--ink);
+    font-variation-settings:"opsz" 144;
+  }
+  h1.title .gilt{
+    background:linear-gradient(95deg,var(--gold) 0%,var(--gold-bright) 45%,#EFD27A 60%,var(--gold) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    font-style:italic;
+  }
+  .subtitle{
+    font-family:"Spectral",serif;font-weight:300;font-style:italic;
+    font-size:clamp(1.05rem,2.6vw,1.35rem);
+    color:var(--ink-soft);margin:1.5rem auto 0;max-width:34ch;line-height:1.5;
+  }
+  .mast-mark{
+    margin:2.4rem auto 0;width:min(420px,80%);
+  }
+  .mast-mark .bar{height:3px;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  .mast-epi{
+    font-family:"Fraunces",serif;font-style:italic;font-weight:300;
+    font-size:clamp(1.15rem,3vw,1.6rem);color:var(--gold);
+    margin:2.6rem auto 0;max-width:30ch;line-height:1.4;
+  }
+  .mast-epi span{display:block;color:var(--ink-soft);font-size:.7em;font-style:normal;font-family:"Spectral";letter-spacing:.05em;margin-top:.5rem;}
+
+  /* ---- Diamond divider ---- */
+  .diadiv{display:flex;align-items:center;justify-content:center;gap:1rem;margin:3.4rem 0;}
+  .diadiv .line{height:1px;flex:1;max-width:120px;background:linear-gradient(90deg,transparent,var(--gold-pale),var(--gold));}
+  .diadiv .line.r{background:linear-gradient(90deg,var(--gold),var(--gold-pale),transparent);}
+  .diadiv .gem{font-size:.9rem;color:var(--gold);letter-spacing:.4em;text-indent:.4em;}
+
+  /* ---- Section scaffolding ---- */
+  section{padding:1.5rem 0;position:relative;}
+  .sec-eyebrow{
+    font-family:"Marcellus",serif;font-size:.78rem;letter-spacing:.32em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 .5rem;
+  }
+  h2{
+    font-family:"Fraunces",serif;font-weight:400;
+    font-size:clamp(1.9rem,5vw,2.9rem);line-height:1.05;
+    margin:.2rem 0 1.2rem;color:var(--ink);letter-spacing:-.01em;
+    font-variation-settings:"opsz" 80;
+  }
+  h2 .uline{
+    display:block;height:3px;width:108px;margin-top:.7rem;border-radius:2px;
+    background:var(--prism);background-size:200% 100%;animation:drift 16s linear infinite;
+  }
+  h3{
+    font-family:"Fraunces",serif;font-weight:500;font-style:italic;
+    font-size:clamp(1.25rem,3.4vw,1.6rem);margin:2.2rem 0 .6rem;color:var(--ink);
+    font-variation-settings:"opsz" 40;
+  }
+  h4{
+    font-family:"Marcellus",serif;font-weight:400;font-size:1.02rem;
+    letter-spacing:.04em;margin:1.6rem 0 .35rem;color:var(--gold);
+  }
+  p{margin:0 0 1.15rem;}
+  p a{color:var(--gold);}
+  em{font-style:italic;}
+  strong{font-weight:600;color:var(--ink);}
+
+  .lead{font-size:1.12rem;}
+  .lead::first-letter{
+    font-family:"Fraunces",serif;font-weight:400;float:left;
+    font-size:4.4rem;line-height:.72;padding:.32rem .55rem 0 0;color:var(--gold);
+    font-variation-settings:"opsz" 144;
+  }
+
+  /* Spectrum legend */
+  .spectrum{
+    margin:2rem auto;border:1px solid var(--rule);border-radius:14px;overflow:hidden;
+    background:var(--paper-2);box-shadow:0 1px 0 #fff inset, 0 14px 36px -28px rgba(43,35,23,.45);
+  }
+  .spectrum .top{height:8px;background:var(--prism);background-size:180% 100%;animation:drift 20s linear infinite;}
+  .spectrum .rows{padding:.4rem .2rem;}
+  .spec-row{
+    display:grid;grid-template-columns:14px 1fr;gap:.9rem;align-items:start;
+    padding:.7rem 1.1rem;border-bottom:1px solid var(--rule);
+  }
+  .spec-row:last-child{border-bottom:none;}
+  .spec-row .swatch{width:14px;height:14px;border-radius:50%;margin-top:.45rem;box-shadow:0 0 0 3px var(--paper-2),0 0 0 4px currentColor;}
+  .spec-row .nm{font-family:"Marcellus",serif;letter-spacing:.06em;font-size:1.05rem;}
+  .spec-row .nm small{display:block;font-family:"Spectral";font-style:italic;letter-spacing:0;color:var(--ink-soft);font-size:.86rem;margin-top:.15rem;font-weight:300;}
+
+  /* ---- Realm cards ---- */
+  .realm{
+    --accent:var(--gold);--accent-pale:var(--gold-pale);
+    margin:3rem auto;border:1px solid var(--rule);border-radius:16px;
+    background:linear-gradient(180deg,#fff,var(--paper));
+    box-shadow:0 20px 50px -40px rgba(43,35,23,.6);
+    overflow:hidden;position:relative;
+  }
+  .realm > .crown{height:7px;background:linear-gradient(90deg,var(--accent),var(--accent-pale),var(--accent));}
+  .realm-head{
+    padding:1.8rem 1.6rem 1.3rem;border-bottom:1px solid var(--rule);
+    background:
+      radial-gradient(120% 140% at 100% -20%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%);
+  }
+  .realm-head .kicker{
+    font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 .4rem;
+    display:flex;align-items:center;gap:.6rem;
+  }
+  .realm-head .kicker .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);}
+  .realm-head h2{margin:.1rem 0 .55rem;font-size:clamp(2rem,6vw,3rem);}
+  .realm-head h2 .uline{display:none;}
+  .realm-meta{
+    font-family:"Marcellus",serif;font-size:.8rem;letter-spacing:.05em;
+    color:var(--ink-soft);display:flex;flex-wrap:wrap;gap:.4rem 1.3rem;margin-top:.5rem;
+  }
+  .realm-meta b{color:var(--accent);font-weight:400;}
+  .realm-essence{font-style:italic;color:var(--ink-soft);font-weight:300;margin:.9rem 0 0;font-size:1.04rem;}
+  .realm-body{padding:.4rem 1.6rem 1.7rem;}
+
+  /* Accordion threads */
+  details.thread{border-bottom:1px solid var(--rule);}
+  details.thread:last-of-type{border-bottom:none;}
+  details.thread > summary{
+    list-style:none;cursor:pointer;padding:1.15rem .2rem 1rem;
+    display:flex;align-items:center;gap:.85rem;
+    font-family:"Fraunces",serif;font-size:1.15rem;font-weight:500;color:var(--ink);
+  }
+  details.thread > summary::-webkit-details-marker{display:none;}
+  details.thread > summary .ico{
+    flex:0 0 auto;width:30px;height:30px;border-radius:50%;
+    border:1.5px solid var(--accent);color:var(--accent);
+    display:grid;place-items:center;font-family:"Spectral";font-size:1rem;
+    transition:.3s;background:color-mix(in srgb,var(--accent) 6%,transparent);
+  }
+  details.thread[open] > summary .ico{transform:rotate(45deg);}
+  details.thread > summary .lbl small{
+    display:block;font-family:"Marcellus";font-size:.66rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);font-weight:400;margin-top:.15rem;
+  }
+  .thread-body{padding:.1rem .3rem 1.5rem 0;}
+  @media(min-width:540px){.thread-body{padding-left:3.5rem;}}
+
+  /* Vignette — "in the room" */
+  .vignette{
+    margin:1.5rem 0;padding:1.1rem 1.3rem;border-left:3px solid var(--accent);
+    background:color-mix(in srgb,var(--accent) 5%,var(--paper-2));
+    border-radius:0 10px 10px 0;
+  }
+  .vignette .tag{
+    font-family:"Marcellus";font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 .4rem;
+  }
+  .vignette p{font-style:italic;font-weight:300;margin:0;color:var(--ink);font-size:1.02rem;line-height:1.6;}
+
+  /* Pull quote */
+  .pull{
+    margin:2.4rem auto;text-align:center;max-width:30ch;
+  }
+  .pull q{
+    font-family:"Fraunces",serif;font-style:italic;font-weight:300;quotes:none;
+    font-size:clamp(1.3rem,3.6vw,1.8rem);line-height:1.34;color:var(--gold);display:block;
+  }
+  .pull cite{display:block;font-style:normal;font-family:"Marcellus";font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin-top:1rem;}
+
+  /* Inline glacian sub-card */
+  .subcard{
+    margin:1.6rem 0 .6rem;border:1px dashed color-mix(in srgb,var(--glacia) 55%,var(--rule));
+    border-radius:14px;padding:1.3rem 1.4rem;background:color-mix(in srgb,var(--glacia) 6%,var(--paper));
+  }
+  .subcard h4{color:var(--glacia);}
+  .subcard .nm{font-family:"Marcellus";letter-spacing:.06em;color:var(--glacia);}
+
+  /* Generic feature block in The Weave */
+  .feature{
+    margin:2.2rem 0;padding:1.4rem 1.5rem;border:1px solid var(--rule);border-radius:14px;
+    background:linear-gradient(180deg,#fff,var(--paper));
+    box-shadow:0 14px 40px -36px rgba(43,35,23,.5);
+  }
+  .feature h3{margin-top:.2rem;}
+
+  /* Footer */
+  footer{
+    text-align:center;padding:4rem 1.4rem 5rem;margin-top:2rem;position:relative;z-index:1;
+  }
+  footer .bar{height:3px;width:min(420px,80%);margin:0 auto 2.4rem;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  footer .candle{
+    font-family:"Fraunces",serif;font-style:italic;font-weight:300;
+    font-size:clamp(1.3rem,4vw,2rem);color:var(--gold);line-height:1.35;margin:0 auto;max-width:24ch;
+  }
+  footer .ma{font-family:"Marcellus";font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-top:2.4rem;}
+  footer .ma small{display:block;letter-spacing:.05em;text-transform:none;font-family:"Spectral";font-style:italic;font-weight:300;margin-top:.5rem;color:var(--ink-soft);}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;}
+    .ribbon,.spectrum .top,.realm>.crown,h2 .uline,.mast-mark .bar,footer .bar{animation:none;}
+  }
+
+  @media(max-width:540px){
+    body{font-size:18px;}
+    nav.codex-nav ul{gap:.15rem .7rem;}
+    .realm-body,.realm-head{padding-left:1.1rem;padding-right:1.1rem;}
+  }
+</style>
+</head>
+<body>
+<div class="ribbon" aria-hidden="true"></div>
+
+<nav class="codex-nav" aria-label="Realms">
+  <ul>
+    <li><a href="#orient">The Prism</a></li>
+    <li><a href="#zephyros">Zephyros</a></li>
+    <li><a href="#pyrthera">Pyrthera</a></li>
+    <li><a href="#thalassor">Thalassor</a></li>
+    <li><a href="#ferridane">Ferridane</a></li>
+    <li><a href="#tenebralis">Tenebralis</a></li>
+    <li><a href="#luxenfall">Luxenfall</a></li>
+    <li><a href="#weave">The Weave</a></li>
+    <li><a href="#ishtar">Ishtar</a></li>
+  </ul>
+</nav>
+
+<main>
+<header class="mast">
+  <p class="eyebrow">Moirai Codex · Cultural Architecture</p>
+  <h1 class="title">The Texture<br>of <span class="gilt">Days</span></h1>
+  <p class="subtitle">Class and hierarchy, culture and multiculture, desire and devotion, nature and the built world, and the keeping of violence — across the living Realms, at the level where people actually live.</p>
+  <div class="mast-mark"><div class="bar"></div></div>
+  <p class="mast-epi">One candle in every city. Still dark.<br>But still lit.<span>The light is one. The colors are many.</span></p>
+</header>
+
+<!-- ============ ORIENTATION ============ -->
+<section id="orient" class="reveal">
+  <div class="wrap">
+    <p class="sec-eyebrow">Orientation</p>
+    <h2>The Prism<span class="uline"></span></h2>
+    <p class="lead">Hold a single light to a cut of glass and it does not stay single. It breaks — not into pieces, but into colors, each one already present in the white, each one a true reading of the same source. The cosmos is that light. The Realms are the spectrum. Every Realm received one gift from one god and built a world to hold it, and across a thousand years the gift hardened into a way of being so total that the people inside it stopped experiencing it as one choice among many. It became simply how a life is lived: how you are born and ranked, who you may love and how you say so, what the land asks of you, and what is done with those who would do harm.</p>
+
+    <p>The codices of systems — gifts, doctrines, Exvisars, the standoff between five unassailable powers — describe the architecture. This codex goes down a level, to the floor where the architecture is inhabited. Not the Synedrion but the marble tenement that can see the Synedrion's towers across the water. Not the Sacred Braid as doctrine but the boy who drums a little differently when she walks past the fire. Not the Lightwell economy but the husband in his kitchen screaming a goddess's name because something that was supposed to be his flowed somewhere else. These are not villains and not abstractions. They are a tired mother-in-law, a nervous boy with figs, a soldier in a doorway with his boots still on. Regular people, reaching for sacred language because sacred language is the only thing large enough for what they feel.</p>
+
+    <p>Five threads run through every Realm, and each Realm braids them differently. <strong>Hierarchy and class</strong> — who stands above whom, and how the one below carries it. <strong>Nature and the built world</strong> — what the element grows, what it makes of the body, what it permits to be built. <strong>Desire, love, and marriage</strong> — the most human engine there is, and everywhere a different machine. <strong>Violence and war</strong> — held in five incompatible hands, paid for by people who are not consulted. And beneath all of them, in every Realm, in exactly one building each, <strong>love</strong> — the one jurisdiction that belongs to no patron god and answers to no doctrine, only to whether your heart breaks.</p>
+
+    <div class="spectrum" aria-label="The Realms by chromatic signature">
+      <div class="top"></div>
+      <div class="rows">
+        <div class="spec-row" style="color:var(--zephyros)"><span class="swatch"></span><span class="nm">Zephyros<small>Air · Iles · the discipline of truth. The air will not hold a lie.</small></span></div>
+        <div class="spec-row" style="color:var(--pyrthera)"><span class="swatch"></span><span class="nm">Pyrthera<small>Fire · Hestia · seven suns and the body equal to them. Use all of it.</small></span></div>
+        <div class="spec-row" style="color:var(--glacia)"><span class="swatch"></span><span class="nm">The Glacians of Rhylos<small>Ice in a furnace · the people the cosmos feared, kept by the people who feared nothing.</small></span></div>
+        <div class="spec-row" style="color:var(--thalassor)"><span class="swatch"></span><span class="nm">Thalassor<small>Water · Salacia · abundance flows freely — for as long as the strong let the weak drink.</small></span></div>
+        <div class="spec-row" style="color:var(--ferridane)"><span class="swatch"></span><span class="nm">Ferridane<small>Earth &amp; Metal · Brokkae &amp; Edgerinne · you are forged, not given. Think in lineages.</small></span></div>
+        <div class="spec-row" style="color:var(--tenebralis)"><span class="swatch"></span><span class="nm">Tenebralis<small>Shadow · Erebus &amp; Vex · everything is permitted, everything has a price.</small></span></div>
+        <div class="spec-row" style="color:var(--luxenfall)"><span class="swatch"></span><span class="nm">Luxenfall<small>Light · Aether (slain) · everything the light touched was family. The fall is ongoing.</small></span></div>
+      </div>
+    </div>
+
+    <div class="diadiv"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div>
+  </div>
+</section>
+
+<!-- ============ ZEPHYROS ============ -->
+<section id="zephyros" class="wrap reveal">
+  <article class="realm" style="--accent:var(--zephyros);--accent-pale:var(--zephyros-pale)">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>The Realm of Breath</p>
+      <h2>Zephyros</h2>
+      <div class="realm-meta"><span>Element <b>Air &amp; Wind</b></span><span>Patron <b>Iles</b></span><span>Warden <b>Aeon</b></span><span>Signature <b>Yellow-Green</b></span></div>
+      <p class="realm-essence">A world where the air rejects a lie, and so the whole society is built to make lying pointless — and to live with what honesty costs.</p>
+    </div>
+    <div class="realm-body">
+
+      <details class="thread" open>
+        <summary><span class="ico">+</span><span class="lbl">Hierarchy &amp; Class<small>The gentle order</small></span></summary>
+        <div class="thread-body">
+          <p>Zephyros keeps the softest hierarchy in the cosmos, because its hardest punishment never needs to be loud. The Mystic–Nihila line is decided once, at sixteen, in the Halls of Ascension: the whole neighborhood holds its breath while a child either opens to the Aether or walks home into a world where the air is just air. There is no shame ceremony for the one who walks home. The shame would be a lie, and the air would catch it. But the Compendium — the shared psychic network that carries every Mystic's news, scholarship, and emotional weather — is a country the Nihila cannot enter, and that absence is its own quiet sorting.</p>
+          <p>Authority is earned by attainment, not bloodline. A Wind Abbot rises through mastery of Ventus; an Oracle by walking the longest road in the world and weighing an argument against ten thousand years of context. Status here is the demonstrated fact of having already understood. The deepest punishment the Realm holds is not exile but <strong>severance</strong> from the Compendium — to be set down in silence and left to realize you cannot stay. They do not need a prison. They have an absence.</p>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Nature &amp; the Built World<small>A world without violence in it</small></span></summary>
+        <div class="thread-body">
+          <p>The ecology of Zephyros evolved in the total absence of violence, and it shows: the wildlife is peaceful and herbivorous, some of it apparently able to talk, and the worst thing most creatures do is be inconvenient. The Flambelin curls at the foot of a child's bed and shifts warm or misty with its mood. The Chanteliers are the sparrows of this world — you stop noticing them until the morning they go quiet and the silence feels wrong.</p>
+          <p>The danger that exists is the danger of indifference, not malice. A Belviper wanders into a market the way a bear wanders into a campground, and her gaze turns living tissue to permanent crystal by reflex; the town kindly asks her to wear a hat, and she complies because she finds the custom amusing and does not understand the fear, and does not care. There are clearings in the deep forest where circles of crystal figures stand. Those are graves. The forests themselves move — slowly, toward sunlight and water and each other — and when a wood drifts toward a village, the Zephyrosians do not fight it. They move the village. You do not argue with a glacier. The Realm's whole architecture of moonstone and glass and singing spires is built by a people who learned that the world will rearrange itself, and that grace is in yielding to it before it asks twice.</p>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Desire, Love &amp; Marriage<small>Terrifying honesty</small></span></summary>
+        <div class="thread-body">
+          <p>You cannot play games here. You cannot neg, you cannot feign indifference, you cannot pretend to want someone less than you do — the implication rings true or false the instant you make it, and everyone hears. So courtship is either very fast or it does not start at all. Two people who click know it immediately because neither can hide it; or they circle each other for a decade, the gardener and the scholar taking tea every morning, both of them aware, neither willing to say the thing that cannot be unsaid. A wedding is the most naked event in the cosmos: vows carried on the Wind, every word true, and if he is frightened, the whole community hears the fear, and they marry anyway, because the courage to be that exposed in front of everyone you know <em>is</em> the vow. The gift pile afterward is a map of how many lives the two of them have touched.</p>
+          <p>Coming out, in a place that cannot produce a closet, is not brave. It is just breathing. And the men carry a particular weakness: when every genuine feeling is ambient, the bedroom becomes the highest-stakes room in the house, and a nervous Zephyrosian man is audibly nervous, which makes him more nervous. The result is a Realm of sweet, attentive, careful husbands — wonderful in every sense, and not the man a woman pictures when she is alone. Divorce almost never happens, because Zephyrosians do not break promises. Which is its own kind of cage. A wife who meant her vow when she spoke it can be imprisoned inside it for life, and the only ones who escape the weight are the ones who go abroad, where the air does not listen.</p>
+          <div class="vignette">
+            <p class="tag">In the room</p>
+            <p>She is sixteen, just ascended, and the whole world is singing to her now. Somewhere in the back of all that light she is thinking about the boy at the market who always saves her the good figs, and wondering what it will sound like when she finally tells him — and he will fumble the answer, because he is a Zephyrosian boy and the pressure is enormous, and she will find that adorable. And it is.</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Violence &amp; War<small>Leverage, not arms</small></span></summary>
+        <div class="thread-body">
+          <p>Zephyros does not go to war, and not from weakness. Iles mechanically prevents violence on her soil: a person who raises a hand in malice finds the breath drawn from their lungs by a Ventus, and intent to do harm calls down Fulguror, the golden lightning that enforces divine law. The Realm cannot be touched. It does not need to touch back. What it has instead is everything — the Oracles have studied the whole of history, the Cloisters hold the account of the Luxanian fall, and Aeon knows what each Exvisar did on the worst day of his life. The Realm's power is the leverage of the neighbor who watched you dig the hole and has never once mentioned it, who tends a beautiful garden and offers thoughtful conversation, and every day you know he could speak.</p>
+          <p>The cost of this discipline is a thousand years of not acting. Zephyros knew what was being done to Luxania, held the knowing, and chose silence as a form of custody until the moment would permit its use. That is the failure honesty cannot name in itself: the truth, perfectly kept, can also be perfectly withheld.</p>
+        </div>
+      </details>
+
+    </div>
+  </article>
+</section>
+
+<!-- ============ PYRTHERA ============ -->
+<section id="pyrthera" class="wrap reveal">
+  <article class="realm" style="--accent:var(--pyrthera);--accent-pale:var(--pyrthera-pale)">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>The Unassailable Ideal</p>
+      <h2>Pyrthera</h2>
+      <div class="realm-meta"><span>Element <b>Fire</b></span><span>Patron <b>Hestia</b></span><span>Exvisar <b>Sol'Kheret</b></span><span>Signature <b>Ember &amp; Amber</b></span></div>
+      <p class="realm-essence">Seven suns, and bodies built to drink them. The conditions are extreme, the body is equal to the conditions, and the only correct response is to use all of it.</p>
+    </div>
+    <div class="realm-body">
+
+      <details class="thread" open>
+        <summary><span class="ico">+</span><span class="lbl">Hierarchy &amp; Class<small>Earned in the open</small></span></summary>
+        <div class="thread-body">
+          <p>Pyrthera is small — one to three million across three nations — and rank here is not inherited so much as displayed and re-displayed. The kafer, the brands that rise on the skin, are read as truth shining through: the Golden Flame burns away the false and leaves what is true, and your standing is the truth your body has been made to show. Sol'Kheret's own court runs on the Trial of Flame, a justice that strikes the body while the burning is of the soul, expels the ego, and ends with the same hand that administered it holding the person who remains. There is no permanent underclass because nothing is allowed to settle: a person who is whole experiences the full spectrum — pain and pleasure, combat and intimacy, discipline and abandon — and imbalance in any direction is read as spiritual sickness, not low birth.</p>
+          <p>The three nations rank each other only by lens. Khet, loud and evangelical, reads fire as judgment. Rhylos, pastoral and rhythmic, reads it as flow and relationship. The Ashen Vale, ascetic and still, reads it as information. Each names the same fire in the others, and each privately finds the other two excessive or insufficient — and that is the whole of the class friction. There is no marble district here. There is a feast, and you are at it.</p>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Nature &amp; the Built World<small>A furnace and its reverence</small></span></summary>
+        <div class="thread-body">
+          <p>Everything on Pyrthera is enormous and tuned to a heat that would kill anyone else. The food chain was never pruned. The apex predators are solar-adapted reptiles fast enough and strong enough to kill anything that exists, and they are also, cresting a dune at sunrise with seven suns behind them and their hides blazing, a religious experience. Pyrtherans hunt these things and revere them in the same breath. The Khetian hunt is sacred, sporting, commercial, and sometimes fatal; a hunter who goes for the glory and gets eaten is mourned without moralizing — someone at the feast says he always thought he was faster than he was, everyone drinks to him, and life goes on. The trial gave its answer.</p>
+          <p>Nothing is wasted, not from thrift but from honor. A warrior's armor is cut from a particular kill, and he can tell you about that animal — not as a boast, as a relationship. The hunting companions sleep against the house and keep the walls warm through the desert night; the children climb on them; when one dies, a generation grieves. And in the Freeholds of Rhylos, where rivers of magma divide the canyons, the people learned to dance — percussive, grounded movement that shapes stone and guides the flow — because the alternative was dying in the corridors between the eruptions. The theology came after, to describe what survival had already taught the body.</p>
+
+          <div class="subcard">
+            <h4>◆ The Glacians of Rhylos</h4>
+            <p>The survivors of Glacia — the <span class="nm">Gonlansunu</span>, each one a fortress of stored cold, the people the divine order feared enough to justify destroying — surveyed every Realm open to them and chose the furnace. Not from sentiment. From diagnosis: Glacia's civilizational failure was paralysis, and Pyrthera is the one place in the cosmos where paralysis is physiologically impossible. As heat-sinks, the seven suns empower them too; they cost the Realm nothing and ask it for nothing.</p>
+            <p>The Rhylian magma-dancers built them the obsidian citadels in the Ignition Rift — from their most sacred material, with their most sacred art, designed <em>cold inside</em> for the comfort of a people who have never needed cold, and asked for nothing in return. Sol'Kheret stands in open awe of them, requests their presence in her court, honors them by the terms of her own theology, and wants nothing from them. The Glacians find Pyrthera loud. They find it honest in a way they recognize as cosmically rare. This is the Pyrtheran way: a people who can end a planet, extending everything they have to refugees who can give them nothing back, because hospitality offered for advantage is not hospitality.</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Desire, Love &amp; Marriage<small>It starts with a dance</small></span></summary>
+        <div class="thread-body">
+          <p>The Sacred Braid is fighting, dancing, and lovemaking practiced as three expressions of one discipline — mastery of the body under intensity — and the strands are a sequence, not interchangeable doors. Dance is the invitation. A man sees a woman across the bonfire and starts drumming differently — not for her, near her — and the rhythm shifts and she either moves toward it or she does not, and the dance that follows is a whole conversation conducted in the body: are we matched, do you hear what I hear in this. The community watches; her mother watches; nobody says a word, because the dance is already saying everything. Combat comes later, when you trust each other enough to be trusted with violence. Intimacy comes last, earned through the other two. To start with a fight would be to skip the greeting and go straight to the test.</p>
+          <p>A wedding is enormous and communal — drums for days, an aunt cooking for an army, the groom's best friend losing a tooth sparring at the celebration and not caring — and it ends in a consummation that lasts seven days, solar-powered and functionally inexhaustible, with friends leaving food at the door and sitting a while if the energy is right, because the community surrounds the marriage rather than abandoning the couple to it. Divorce is honest and direct, often settled by a duel, and carries no shame: a relationship that has run its course is a completed thing, like an era ending. You were fire together, and now you are ash, and ash has its own dignity. Pleasure is a nutrient, not a reward; a Pyrtheran who is not having sex is malnourished the way one who is not fighting is undertrained. And the reputation that follows their men across the cosmos is not gossip — it is physiology, plus a discipline trained since adolescence, and their own women are not jealous of the foreign wives who circle the men at every Symposium so much as annoyed, the way anyone is annoyed when people treat something sacred like a tourist attraction.</p>
+          <div class="vignette">
+            <p class="tag">In the room</p>
+            <p>A man said <em>women belong at the hearth</em> at the fire in Khet — mistaking Hestia's hearth, which is the center of every home, for a woman's station. A Pyrtheran woman would beat his ass for it. Immediately. Publicly. On the obsidian floor with drums keeping time. His mother gets to him first, and his mother hits harder, because she has been practicing longer.</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Violence &amp; War<small>Sovereign and armed</small></span></summary>
+        <div class="thread-body">
+          <p>Pyrthera is not an isolationist. It is a sovereign nuclear power that has chosen not to engage on anyone else's terms. Sol'Kheret holds Antaka — the power to collapse the distance between a planet and its sun — and has publicly declared her willingness to use it against Tenebralis; the only thing staying her hand is logistics she has not yet arranged. A civilization that wants almost nothing from you and can end your world is not opted out. It is armed and waiting. What it can do now, with the tools it has, is the Inquisition: counter-operations against the Mavarran infiltration that the other Realms reasoned their way past, maintained because Pyrthera read the fall of Luxania correctly when no one else would. The correct reading produced the correct defense, and it produced the isolation too. Pyrthera is alone because it is right in a register the others experience as reproach.</p>
+          <p>At the personal scale, violence is honest combat carried to its conclusion and then set down. In Rhylos the Aestuel — ritual combat to mutual exhaustion — settles conflict, conducts courtship, and serves as conversation; you fight until there is nothing left to lie about. Pyrthera does not romanticize the dead and does not pretend the trial was gentle. It carries honor for the fallen rather than being seen to grieve them, and it keeps the hearth lit while everything else burns.</p>
+        </div>
+      </details>
+
+    </div>
+  </article>
+</section>
+
+<!-- ============ THALASSOR ============ -->
+<section id="thalassor" class="wrap reveal">
+  <article class="realm" style="--accent:var(--thalassor);--accent-pale:var(--thalassor-pale)">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>The Gilded Nexus</p>
+      <h2>Thalassor</h2>
+      <div class="realm-meta"><span>Element <b>Water</b></span><span>Patron <b>Salacia</b></span><span>Exvisar <b>Saint Leif Sinclair</b></span><span>Signature <b>Azure &amp; Silver</b></span></div>
+      <p class="realm-essence">Abundance flows freely — for as long as the strong let the weak drink. The most beautiful Realm in the cosmos, with the history kept below the sound of its fountains.</p>
+    </div>
+    <div class="realm-body">
+
+      <details class="thread" open>
+        <summary><span class="ico">+</span><span class="lbl">Hierarchy &amp; Class<small>Written into the skin</small></span></summary>
+        <div class="thread-body">
+          <p>In Thalassor the class line is visible on the body. Krenides saturation lights the Mystic aristocracy with a luminosity the Nihila do not carry, so you can see, across a plaza, who grew up inside a crystata palace and who grew up in a marble tenement. And the tenements are beautiful — white marble cascading toward the harbor, laundry strung between columns, children running the plazas, the Mediterranean dream made of the very stone empires once carved their legacy from. That is the cruelty of it: marble is the <em>floor</em> of this society, and it is lovely, and the crystata towers are always there on the hills across the water, catching light, the way you can see Manhattan from the Bronx. You live in the wealth's shadow and its reflected glow at once.</p>
+          <p>The poor do not rebel, and not because they are crushed. Patronage gives them a visible path up: talent can be noticed, sponsored, elevated; the hierarchy feels permeable; you cannot burn down the house of the man paying for your nephew's apprenticeship. The system sustains itself through just enough generosity to make revolt feel like ingratitude — and the price of receiving the current is silence. The sponsored artist cannot criticize the patron. Gratitude is performed so consistently it becomes indistinguishable from belief. The generosity has conditions, and to admit the conditions is to admit it was never generosity. It was purchase. Even the dynasty's own sacrament records this blindness: the Concordant Path, the cumulative Sinclair memory poured into sacramental wine, remembers the vintner and the owner. It does not remember the one who crushed the fruit, hauled the cask, sifted skin from wine.</p>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Nature &amp; the Built World<small>A sea that watches back</small></span></summary>
+        <div class="thread-body">
+          <p>The Krenides water has been in the food chain since before there was a civilization, and the wildlife glows blue and is more intelligent than it has any right to be. A Katos — a small luminous creature that is no one's pet — arrives in a child's life around eleven, watches for weeks, decides the person is worth its time, and one day is simply asleep on the bed, glowing faintly; the mother says <em>oh, you've got one now</em>, because it is a rite of passage. Some of them set up shops in market corners too small for a human vendor and trade in trinkets and things that fell off the back of a cart, and half of them are fences, conducted with such brazen charm that even the tax collector cannot quite manage to be angry at the glowing blue creature sitting on a pile of obviously stolen jewelry, regarding him with faint condescension.</p>
+          <p>Beneath the surface live the Sirens — two ancient sapient races with their own civilization, the Sea-Sirens who never have to chase because the fisherman steers toward the singing on his own, and the Sky-Sirens who descend on talons and take what they want and will claw your eyes out for calling them harpies. The relationship varies by coast: Amphitra has generations of practical coexistence, Salacica keeps a formal distance, and the Syndicate Isles simply endure them the way coastal villages endure hurricanes. And out past the hulls moves Archon, the great serpent older than the Sinclair claim to the gates, who mostly only looks, and decides, and lets the ship pass — and the sailors who have been regarded by it come home quieter, and look at the water differently for the rest of their lives. Children on the coast wave at the glow. Their parents tell them not to. They wave anyway. Sometimes the glow pauses. Just for a moment.</p>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Desire, Love &amp; Marriage<small>The contract and the kitchen table</small></span></summary>
+        <div class="thread-body">
+          <p>Among the highborn you court by investing — you sponsor someone's art, fund their brother's apprenticeship, send wine whose vintage states precisely how serious you are. A casual vintage is friendly; a rare one is serious; a Wine of Shared Fates appearing on the table is a proposal, and everyone at the Symposium knows it the moment the bottle arrives. Highborn marriages are mergers, house to house, portfolio to portfolio, the guest list a political document and the seating its architecture; love can live inside that, but it is not what the institution is for. A dowry is common, and selling a daughter to a Syndicate merchant is more common still — a poor marble family's one asset is a beautiful daughter with good teeth and decent manners, the merchant has crystata and no pedigree, and the transaction makes both families richer. Her feelings about it are noted, and filed under things that do not change the math. Poor men's sons, meanwhile, often never marry at all: the marriage economy prices them out.</p>
+          <p>And yet the wine does not care how rich you are. Both highborn and lowborn unions are increasingly sworn on the Wine of Shared Fates, a liquid covenant — break it and the Krenides inside you reverses into poison. The Sinclairs drink it surrounded by silk and silver; the fisherman's son who could not afford a dowry and the woman who did not care drink it at a kitchen table with her sister as the only witness, and it binds them just as completely. The Realm's genuine devotion is achingly real — Salacia's doctrine of abundance flowing freely produces a strain of romanticism that is sincere all the way down. The tragedy is that the system makes the real thing and the performance almost impossible to tell apart, and the culture has learned not to ask.</p>
+          <div class="vignette">
+            <p class="tag">In the room</p>
+            <p>A nobleman with a male lover is a scandal at the Symposium — wine flows, eyebrows rise, someone composes a cutting little poem — but nobody reaches for a blade. The gossip is the punishment, and in a Realm where reputation is everything, gossip is punishment enough. Two women living together reads as practical before it reads as anything; the framework for it was already there.</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Violence &amp; War<small>The invisible arsenal</small></span></summary>
+        <div class="thread-body">
+          <p>Thalassor is a military empire that presents itself as a trade empire, and the disguise is the doctrine. Rosorae Templar looks like a university. The Azure Guard looks like aristocracy. The war games happen in shared dream-space, leaving no scar to point at. Templar graduates move through a room with a residue of shared consciousness — passing wine bottles without looking, falling silent at the same instant — looking like old friends and moving like a fire team. Combined with the Clairgate monopoly, this produces tactics that have no honest name: strike forces that portal inside an enemy formation and vanish before the counterblow; fresh reserves rotated in through gates so the enemy faces a foe that never tires; and the Echo Knights, who portal into a rival's bedroom and leave behind a death that looks natural. No war is declared. None needs to be. The most dangerous weapon in the cosmos here is a glass of wine.</p>
+          <p>Cloud's whole moral weight is a question of tempo. He operates at investigative pace because it is never his class paying the price of his patience. The stone districts lose their minds to Poppets and memory coins while he pours another vintage. Every day without a formal confrontation is a day he can say he earned — and the bill for that patience is paid in a currency he does not have to spend.</p>
+        </div>
+      </details>
+
+    </div>
+  </article>
+</section>
+
+<!-- ============ FERRIDANE ============ -->
+<section id="ferridane" class="wrap reveal">
+  <article class="realm" style="--accent:var(--ferridane);--accent-pale:var(--ferridane-pale)">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>The Anvil of Ages</p>
+      <h2>Ferridane</h2>
+      <div class="realm-meta"><span>Element <b>Earth &amp; Metal</b></span><span>Patrons <b>Brokkae &amp; Edgerinne</b></span><span>Exvisar <b>Aurelius Vorn</b></span><span>Signature <b>Bronze &amp; Gold</b></span></div>
+      <p class="realm-essence">You are not given, not born, not inherited. You are forged — made, through pressure sustained long enough that the diamond emerges. And the work is for your great-grandchildren.</p>
+    </div>
+    <div class="realm-body">
+
+      <details class="thread" open>
+        <summary><span class="ico">+</span><span class="lbl">Hierarchy &amp; Class<small>Geological mobility</small></span></summary>
+        <div class="thread-body">
+          <p>Nine hundred million people on a single continent who think in lineages rather than lifetimes. The idea of equality is considered absurd here — of course some are stronger, of course some are born blessed, of course some can afford the best augments; the mountain does not apologize to the gravel. But the gravel can become diamond, given pressure and time. Social mobility is real and geological: a bloodline can climb from the crystal seam to the Mystic halls over generations, and so a laborer is not working for himself. He is working for descendants he will never meet, and the work is sacred because Brokkae is stone and Brokkae endures.</p>
+          <p>The clans rank by which of the three Sacred Arts they lead with. House Felidae, golden lions, practice all three in concert and consume what the others produce, transforming it into governance — they are the face the Realm shows the cosmos. House Axipitre, the engineers, lead with intelligence over force and carry the disgrace of Crex's Shot. House Lykaion holds two cultures under one name, the stone-gray Old who worship Brokkae and the gilt-bronze New who read the covenant as biological ascent and want what the Felidae hold and believe themselves owed it. And below the clans, holding everything up, is the Nihila woman who works the crystal seams alongside the men, comes home to raise the children, and pours everything into the chance her line might one day ascend. She is Brokkae's truest inheritor: the foundation no one sees and everyone stands on.</p>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Nature &amp; the Built World<small>The beasts the clans are named for</small></span></summary>
+        <div class="thread-body">
+          <p>Every native animal is crystal-integrated and Vital-Current charged, and the clans named themselves after the beasts, not the other way around. The Felicis — the great cat with a mane of living flame and lightning — is the reason House Felidae exists; the entire golden-lion identity is an attempt to become what the Felicis already is. The Lykons, wolf-packs whose howl travels through the crystal lattice in the bedrock so you feel it in your bones before you hear it, sang first, and the Old Lykaion monks in their mountain temples felt the song through the stone and answered it; the communion is call and response, not domestication. The Axipter raptors perceive the Vital Current the way a bird perceives magnetic fields, and an Axipitre engineer who bonds one gains a creature that turns its head toward the fault before any instrument registers it.</p>
+          <p>Ranching is agriculture and mining at once — livestock develop crystata deposits over a lifetime, so the meat feeds the family and the crystals sell at market. Children collect shed crystal from the stags' antler-molt the way other children collect interesting rocks, and put a still-charged fragment under the pillow to hum warm through the night. And out in the ungoverned Outlands roam the things the patrols cannot clear: the Sagittans who give one warning and then shoot, burn, or outrun you, depending on the range you chose; the Vastas, who migrate toward the Hero's Journey route the year the Midway Banquet is laid, smart enough to recognize the annual pattern of food and people converging. The perimeter security there is not ceremonial. The danger is the point.</p>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Desire, Love &amp; Marriage<small>Demonstration and covenant</small></span></summary>
+        <div class="thread-body">
+          <p>You do not tell a Ferridanian woman what you are. You show her — at the Hero's Journey, at the forge, on the battlefield — and she is not evaluating whether you are attractive, which is table stakes, but whether you are worth the investment of a lineage, running a generational calculus that would make a Thalassori merchant weep with admiration. Marriage is a covenant in the literal theological sense: you are not just promising each other, you are promising the lineage, the ancestors who spent generations of pressure to produce you and to whom you owe continuity. A Felidae wedding exchanges house records going back centuries; the marriage is romantic the way a cathedral is romantic — enormous, permanent, built to outlast the people inside it. Divorce is not an emotional catastrophe so much as a structural one: you are breaking a chain meant to stretch forward for generations.</p>
+          <p>This is also why the Realm is lethal to its own. The whole civilization runs on bloodlines, so a man who produces no heirs is read not as living a life but as a dead branch on the family tree — a betrayal of the lineage — and his own house handles it: quietly among the Felidae, not quietly at all among the Lykaion. The Outlands are the one place the covenant's exiles can stand, because sovereignty means your business is your own, and there the giant who got run out of the governed territories survives the only way the Outlands respect — by being more capable than anyone who tries him. People used to try. They stopped. It does not end well, and the one rule out there holds: don't start what you can't finish.</p>
+          <div class="vignette">
+            <p class="tag">In the room</p>
+            <p>Her husband came home from deployment, and she holds onto him in the doorway for a full minute without a word, because he is back and he is whole and tomorrow the lineage politics resume but right now it is just them and the door and his stupid heavy boots on her clean floor. The augmented hands that have no gentle setting at home learn, abroad, an entirely different vocabulary — and the gentleness is deliberate and learned and more intimate than anything done at home, because at home strength is the baseline and abroad restraint is the act of love.</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Violence &amp; War<small>War as philosophy</small></span></summary>
+        <div class="thread-body">
+          <p>A civilization that considers war a philosophy and pressure a sacrament has made itself the most dangerous conventional force in the cosmos on its own ground — nine hundred million people in perpetual war, producing the finest weapons there are. Every generation makes veterans. Every clan carries living memory of war. The premier sport is the Hero's Journey, a coast-to-Steelheart footrace through chimera and raiders and the Outlands, ending when the winner must land a single blow on Aurelius Vorn — not defeat him, no one defeats him, only prove the journey produced transformation. The race does not care who was fastest. It cares who was forged.</p>
+          <p>And Ferridane at its worst looks exactly like Ferridane at its best — same architecture, same brilliance, the suffering folded so neatly into the machinery you have to be looking for it to see it. The Luxenfallen soul-batteries are not a black-market crime; they are bought through procurement channels staffed by professionals, conscious souls racked and drained to power the engines of progress, state-sanctioned and theologically rationalized. The crystata mines where Nihila die in unsafe conditions are not criminal. They are economical — the cost of safety exceeds the cost of replacement labor. The campaigns where Nihila auxiliaries are spent as expendable screens are not illegal. They are tactical. The covenant of transformation through reverence, drained of its old names, becomes engineering through the application of force — and the outputs look the same, and that is the whole of the horror.</p>
+        </div>
+      </details>
+
+    </div>
+  </article>
+</section>
+
+<!-- ============ TENEBRALIS ============ -->
+<section id="tenebralis" class="wrap reveal">
+  <article class="realm" style="--accent:var(--tenebralis);--accent-pale:var(--tenebralis-pale)">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>The Realm of Masks</p>
+      <h2>Tenebralis</h2>
+      <div class="realm-meta"><span>Element <b>Shadow</b></span><span>Patron <b>Erebus</b> (nominal)</span><span>Sovereign <b>Vex Mavarra</b></span><span>Signature <b>Violet</b></span></div>
+      <p class="realm-essence">Everything is permitted, and everything has a price, and these two statements stand together without tension. A prey species that learned to hide from predators that hunt by knowing.</p>
+    </div>
+    <div class="realm-body">
+
+      <details class="thread" open>
+        <summary><span class="ico">+</span><span class="lbl">Hierarchy &amp; Class<small>Order by altitude</small></span></summary>
+        <div class="thread-body">
+          <p>Tempora is a single city in a lightless abyss, and its class structure is literally vertical, written in fog and crystata-light. The Upper Terraces are the social city — the symposiums, the Veiled Houses, the brightest light and the densest Luxanian crystata. This is what visitors see; this is what Tenebralis exports as its image. The Middle Terraces are residential and quieter, the fog thicker, the residences carved deeper into the rock away from social visibility — where children are kept, where the Oneironauts keep their cloisters. The Lower Terraces are the quiet, where population thins and the belladonna grows unchecked and the violet glow dominates in the absence of gold; access is not forbidden, only not publicly discussed. And below that, the Depths, where the Aesthetes work their rendering chambers, and the things that come up from the abyss are held back by the city's perimeter watch — composed entirely of Luxenfallen slaves. The lowest people in the city stand between the city and what would eat it. That is the class system: the further down you live, the closer you stand to the thing in the dark.</p>
+          <p>No laws are needed to enforce this, and no enforcement apparatus. The three schools are arranged by terrace and by theology of what shadow is, and behind all of them sits the universal understanding that attention flows downward from something that eats minds, then souls, then bodies, and that your whole life is organized around not becoming the thing it notices. The dread of being found wanting by the Aesthetes stands behind every mask.</p>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Nature &amp; the Built World<small>What knows you can eat you</small></span></summary>
+        <div class="thread-body">
+          <p>The entire ecology runs on one principle: what knows you can eat you, so be unknowable. The Mavarran culture — masks, the Pansilion, the whole Shim'zillai — is not a philosophy first. It is the behavioral adaptation of a prey species evolved inside a mountain of permanent hallucinogenic darkness, surrounded by things that hunt by perception. The Sarrith, glass-winged insects, gather on a mirror to feed on the insecurity reflected in it, and a swarm on one mirror is read as an omen that the person is coming apart underneath; Mavarrans cover unused mirrors, and the practical gesture acquired its own weight — a covered mirror means something is being hidden that is not yet ready to be known. The Pansirru, the mirror-feathered raptor, hunts liars by the stress-signature of active deception and broadcasts their secrets into the air when it shrieks, which makes it a genuine structural problem for a civilization built on lying; symposiums relocate when one is sighted.</p>
+          <p>Above all of it sits the Etemmu in the deep — a cognitive predator of incomprehensible scale, the sovereign the five hundred thousand Mavarrans serve, the reason the perimeter holds. The foundational lie of the whole civilization is that Vex manages it. She does not. She is simply the one mind in Tenebralis that never resolves into a fixed image, the one thing the Etemmu has never perceived clearly, and so the god is the mask she wears at the scale of an entire people. Their god is real. Their god is powerful. Their god runs nothing. Nobody knows.</p>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Desire, Love &amp; Marriage<small>A live grenade and a love letter</small></span></summary>
+        <div class="thread-body">
+          <p>How do you pursue someone whose face changes every night? You pursue the performance. You find someone whose mask interests you, whose game impresses you, and you trade secrets as gifts — not flowers, not wine, useful information that strengthens their position. That is a Mavarran bouquet. The escalation is not toward the body but toward identity: a glimpse of a real face, an unguarded moment, a dropped mask in a private room, each disclosure a risk that could end you, each a test of whether you used the last thing given. The sex is almost an afterthought. The real intercourse is the exchange of information, and because the Pansilion makes the body a tactical choice, attraction here organizes around power and interest rather than any configuration of flesh — to be exclusively drawn to one presentation would be to limit your operational range, which is the same thing as being bad at being Mavarran.</p>
+          <p>Marriage does not exist, not as anyone else would know it; lifelong romantic exclusivity would read as either adorably naive or clinically insane. The closest thing the Realm produces is the Shum'katim — two people who have shown each other their birth faces and their real names and survived the vulnerability. To hand someone your true name is to hand them the weapon that can unmake you and say <em>I believe you will not use it</em>, and to receive it is to hold a live grenade and a love letter at once. The keeping of that secret — the daily, active choice not to destroy each other — is the love. Not a feeling. A discipline. And it is the one thing the Lightwells cannot bottle, because what they harvest is product, and a civilization that runs entirely on the raw material of intimacy operates at half its potential, never once seeing what the ceiling looks like.</p>
+          <div class="vignette">
+            <p class="tag">In the room</p>
+            <p>On the seventh night of the Isin'sartu every crystata is extinguished and the law goes dark, and the mechanism Vex built into the festival does its work: one night of genuine, unmediated feeling, so the population does not settle into total dissociation. Two people who have exchanged real names lie in the dark, and for five minutes neither one is performing anything. Just breathing. Just being the actual person in the actual room. Then she gathers the souls that fall, and the cycle sustains.</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Violence &amp; War<small>A vector, not an army</small></span></summary>
+        <div class="thread-body">
+          <p>The other Realms do not accommodate Tenebralis because they have done the math. They accommodate it because the alternative is a door they are afraid to open. Behind all the social manipulation and shapeshifting is a thing so vicious it constantly suppresses the urge to hunt everything in the neighborhood to extinction; the soft power is the preferred expression of a species entirely capable of the direct version and finding it less interesting. Every time Sol'Kheret sent scouts, her people came back with their eyes missing, smiling as they ate their own tongues. An army that entered Tempora would not face soldiers. What walks back out is a vector.</p>
+          <p>So the violence here is not warfare. It is extraction, industrialized. The Lightwells, named so that everyone assumes they mine light-element crystata, instead render the captured Luxenfallen into Aesthete-finished product, and the cover story is suppressed not by conspiracy but by its own adequacy — nobody asks the question it was designed to prevent. The mass market is not suffering; it is harvested joy, real courage drawn from a person who no longer holds it, real bliss harvested from someone made to feel it until their ribs cracked, sold by a vendor who does not volunteer the source to a buyer who feels only the courage and the bliss. And Vex's true campaign is quieter than any army: she does not attack Realms, she gets them in trouble with their own gods, introducing one traceless compromise after another until each Exvisar drifts toward the moment his patron asks what happened to the covenant. It is the most aggressive operation in the cosmos, disguised as commerce, run from a seat at the table since the founding.</p>
+        </div>
+      </details>
+
+    </div>
+  </article>
+</section>
+
+<!-- ============ LUXENFALL ============ -->
+<section id="luxenfall" class="wrap reveal">
+  <article class="realm" style="--accent:var(--luxenfall);--accent-pale:var(--luxenfall-pale)">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>Present &amp; Counted Among the Living</p>
+      <h2>Luxenfall</h2>
+      <div class="realm-meta"><span>Element <b>Light</b></span><span>Patron <b>Aether</b> (slain)</span><span>Was <b>Luxania</b></span><span>Signature <b>Pale Gold</b></span></div>
+      <p class="realm-essence">Everything the light touched was family. The Realm has two names: Luxania is what it was, Luxenfall is what it is — and the fall is not in the past. It is ongoing, right now, by the people who are still there.</p>
+    </div>
+    <div class="realm-body">
+
+      <details class="thread" open>
+        <summary><span class="ico">+</span><span class="lbl">Hierarchy &amp; Class<small>A people split against itself</small></span></summary>
+        <div class="thread-body">
+          <p>There is no longer a hierarchy of Luxania. There is an occupation, and beneath it the population stands in three configurations, each the shape a destroyed civilization takes when the destroyer understood the original architecture and works to keep the survivors divided. The Glassen have lost the memory of what their gift even was; to them the sacred Crystata through which their ancestors rendered light into structure is just glass, the strongest feedstock available, and they mine the Ancestral Archive for ore — the forgetting is not an accident but the finished outcome of a century of induced amnesia worked by Tenebrali Oneironauts across generations. The Screaming Chorus are the empathic-network survivors whose own biology was turned against them; the Wellspring that once shared joy now carries recursive shared trauma, and their Scream is the involuntary eruption of pain cultivated in them on purpose. The Grounded operate on accurate diagnosis: reaching outward cost Luxania everything, trust admitted the infiltration, the gods met the fall with silence — and so their doctrine of Final Isolation follows from a betrayal that was real.</p>
+          <p>They are not three peoples. They are the same people, split, and the occupier's primary discipline is the maintenance of the split. The diaspora scattered across the other Realms is often invisible to those Realms' picture of themselves — present, working, here, unaccounted for in the story the host tells about who lives in it.</p>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Nature, the Body &amp; Devotion<small>The Wellspring still pulses</small></span></summary>
+        <div class="thread-body">
+          <p>The sun has not shone in a thousand years. Aether was slain, Astra was erased, and the Solarith — Luxania's primal guardian — was not killed but broken, a colossal skeletal wyrm now walking, the largest open wound in the cosmos. And still the Wellspring pulses. The crystata still responds. The memory of the original doctrine — that everything the light touched was family — survives in specific elders who have not yet died, and in fragments of cultural practice the Glassen have forgotten the meaning of but have not entirely destroyed. A civilization built on the most perfect gift any Realm received held exactly one attack surface, the empathic connection itself, and that perfection was the surface that broke it. Luxania did not fail its gift. It received it completely, and the completeness was the vulnerability.</p>
+        </div>
+      </details>
+
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Violence &amp; War<small>The staying</small></span></summary>
+        <div class="thread-body">
+          <p>The violence done to Luxenfall is not a battle that ended. It is a condition that continues — the Lightwells still operate, the occupation is active, the population is right there. Institutional ledgers in the other Realms prefer the past tense for Luxania, because past-tense framing lets them arrange around an absence rather than sit with a present. The work the series carries through Luxenfall is the refusal of that tense: the staying. Not passing through, not solving and moving on, but the slow, multi-book labor of sitting with what was done and doing what can be done about it now — through the factional hostility, the Grounded's refusal of outside help, the Chorus's recursive trauma, the Glassen's amnesia. The restoration is not the reassembly of the Realm that was. It is the population deciding, with whoever has committed to stay, what the Realm becomes next.</p>
+          <p>And it keeps producing figures the occupier cannot fully account for — what one faction makes when it organizes its anger into discipline, what another makes when the occupier's most intimate apparatus is turned into a weapon it never anticipated. That is the proof the civilization is not finished. Luxenfall is the center of the cosmos's moral reality, and it is a Realm, not an absence.</p>
+        </div>
+      </details>
+
+    </div>
+  </article>
+</section>
+
+<!-- ============ THE WEAVE ============ -->
+<section id="weave" class="wrap reveal">
+  <p class="sec-eyebrow">The Realms Meet</p>
+  <h2>The Weave<span class="uline"></span></h2>
+  <p class="lead">Each Realm is an answer complete in itself. The roads between them — the Clairgates, built by Hecate of Luxania and Juno Sinclair and now held by the Sinclairs alone — made the answers neighbors. Before those roads, every world was alone: a Pyrtheran knew Hestia and that was the whole of the divine, a Ferridanian knew Brokkae and that was everything, and each way of being was not one approach among many but reality entire. Then the roads opened, and a civilization discovered its god was one of many and its element one of many. The isolation had been the covenant's protection. The connection was its undoing. What follows is what happens at the seams — where the colors of the prism touch, and bleed, and refuse to mix.</p>
+
+  <div class="feature">
+    <h3>How the colors regard each other</h3>
+    <p>Multiculturalism in the cosmos is not a melting pot; the divine firewall sees to that. It is six (and one fallen) sovereign answers, each privately certain it has read the gift correctly, meeting answers it experiences as either deficiency or reproach. The Pyrtheran assumes the conditions of seven suns are universal because they are all Pyrthera has, and reads a Realm that cannot tolerate them as deficient rather than differently gifted — which is why Pyrthera is isolated, not for being wrong but for being correct in a register the others feel as judgment. The Ferridanian sees the soft Realms and forms opinions from the surface, mistaking a Zephyrosian's composure for compliance, a Pyrtheran woman's certainty for coarseness, until the moment one of them reveals backbone and the foreign man either falls properly in love or leaves — and she can tell which it will be before he can.</p>
+    <p>And then there is the rarest color in the cosmos: hospitality offered for nothing. The Glacian refugees, the people the divine order feared enough to destroy, chose the furnace and were met not with use but with welcome — obsidian citadels built cold for their comfort by a people who never needed cold, from their most sacred material, with their most sacred art, asking nothing in return. Set that against the Mavarran arrival, which never looks like an invasion and always looks like a solution: the right resource at the moment of greatest need, the price reasonable at first, the real cost clear only after the dependency is set and the compromises have stacked. The same cosmos holds the citadel built for a stranger and the favor that becomes a leash. The difference between them is the whole moral question of the series, rendered as two ways one Realm can treat another.</p>
+  </div>
+
+  <div class="feature">
+    <h3>The inter-Realm body</h3>
+    <p>Inter-Realm marriage is considered deeply strange. Inter-Realm sex happens constantly. Inter-Realm children happen almost never — not from taboo but from biology, or theology, or divine engineering: these populations were seeded on separate worlds by separate gods, and whatever made them humanoid enough to be compatible drew the line at reproduction. The bloodlines stay clean, the Realms stay separate, the divine architecture holds, and every encounter is consequence-free in the one way that matters to civilizational structure — which is why the party is too good for anyone to ask whether the firewall is a gift or a cage. These Mystics evolved in the same direction and remain, to each other, essentially aliens: a Pyrtheran runs a core temperature that would fever a Zephyrosian, a Ferridanian has metal woven into the muscle, a Mavarran's skin is doing something genuinely other beneath the Pansilion.</p>
+    <p>The body itself carries power differentials with no Earthly equivalent, and the magic makes consent legible in a way nothing else does. A Ferridanian's Galvaneum hands have no gentle setting, learned around people built to take it, so a man who sleeps with a non-Ferridanian woman has to learn an entirely new physical vocabulary — and the careful ones become tender in a way that would astonish anyone who has only seen them in armor, because abroad restraint is the act of love. A Pyrtheran at full capacity radiates a heat that is part of the attraction and can also burn a partner whose biology was not made for it; the good ones pace themselves not from fatigue but from care. A Thalassori with Aestus can feel the water in a lover's blood and conduct it like music. And a Mavarran can take something out of you through sustained intimacy and eye contact, so that you wake feeling fine, a little foggy, and never realize you were skimmed — because you never realize it at all. In a world where a lover can be the most artful experience of your life or remove your soul during it, the line between transcendence and atrocity is not blurry. It is a canyon, written into the physics. A lover uses their gifts to make the experience more than you knew your body could hold. A predator uses the same gifts to take what was not offered. You know which one is happening. It does not feel like good sex gone slightly wrong. It feels like dying from the inside.</p>
+    <div class="vignette" style="--accent:var(--thalassor)">
+      <p class="tag">In the room</p>
+      <p>A Ferridanian soldier on shore leave in Salacica is not thinking about lineage preservation. He is three drinks in, which for him is still basically sober, and the woman across the bar is wearing fabric he can see through and looking at him like she has never seen anyone that big. Tomorrow he will feel strange about it, because she was soft in ways he is not used to, and he will go back to the barracks and never mention it. A Thalassori noblewoman who heard the rumors and had too much wine finds out the rumors were underselling, and spends the next three days replaying it while her husband talks about grain futures, and will never tell anyone, and will think about it for the rest of her life.</p>
+    </div>
+  </div>
+
+  <div class="feature">
+    <h3>The economy of intimacy as a weapon</h3>
+    <p>Where the body crosses the Realms, so does its harvest. The most invasive trade in the cosmos runs on the genuineness of feeling, and the most honest people make the most valuable product. A Zephyrosian wife goes abroad — for the first time in her life she does not have to be honest, she can be someone else for a night — and comes home carrying the only secret she has ever held, a weight she has no framework for because the air at home reads everything. So she finds an Oneironaut, probably in Thalassor, who is so gentle about it, no judgment, and lifts the memory out like a splinter, and she walks away clean and grateful and genuinely helped. And that memory — the most private, most alive moment a composed, sheltered, honest woman has ever had — becomes a coin in a Whispermerchant's stall in Tempora, worth a fortune precisely because it is uncut, no persona, no angle, nothing like the performance-all-the-way-down of a Mavarran's own memories. This is the infiltration of the one Realm supposed to be impervious to it, accomplished entirely through a kindness the victim is grateful for. They got in by being kind.</p>
+    <p>The same logic spins the knockoff economy. Within hours of the Heralds reaching Tempora, a Poppet is seen wearing the Goddess of Peace's face in an alley with a line around the block, and the coins from that single night are secondhand approximations and still worth enough to retire on — because even a fake reading of a genuine inner life is more authentic than anything Tenebralis makes natively. It is not about the person whose face was stolen. It is about what defiling the image of something pure means in a city that does that to everything it touches. The thing they cannot have becomes the thing they sell the fantasy of having.</p>
+  </div>
+
+  <div class="feature">
+    <h3>How violence is held when no one can win by force</h3>
+    <p>Five powers stand that cannot be taken, and each holds for a different reason. Thalassor cannot be reached without Sinclair leave, because the roads are Sinclair roads. Ferridane cannot be invaded, because nine hundred million people in perpetual war are the deadliest conventional force there is, on their own ground. Pyrthera cannot be reached, because seven suns cook any army before the first settlement, and Antaka stands behind that. Tenebralis cannot be entered, because the planet and the slave army and half a million shapeshifters in the dark turn an invasion into a vector that walks back out. And Zephyros cannot be touched, because Iles prevents violence on her soil and the intent to harm draws the golden lightning. So the whole game is played everywhere except the battlefield — in leverage and trade and intelligence and the slow management of complicity.</p>
+    <p>This is why the Symposium is the real theatre of war, where beings of apocalyptic power from incompatible honor cultures perform civility, and every seating arrangement is a statement and every glass of wine a possible weapon. Even the blades are a literacy: Thalassori ornamental steel, Ferridanian functional steel worn openly, Pyrtheran weapons carried as the record of trials survived, Zephyrosian empty hands, and Mavarran ornamental blades worn precisely to belong — the performance of belonging being itself the weapon. The contemporary friction is the same logic at smaller scale: Ferridane answers the Sinclair toll by planting permanent nationals on Thalassori soil, Felidae buying land until they are too entangled to expel and Lykaion arriving and daring anyone to move them, and the Thalassori response must be calibrated to defend the territory without unifying all of Ferridane. Magic is the great equalizer — you do not outfight the stone wolf, you portal the ocean into his mine shaft — but the constraint is political, not a matter of capability. Every day without a formal confrontation is a day someone earned, in a currency the people below never agreed to spend.</p>
+  </div>
+
+  <div class="diadiv"><span class="line"></span><span class="gem">◆</span><span class="line r"></span></div>
+</section>
+
+<!-- ============ ISHTAR ============ -->
+<section id="ishtar" class="wrap reveal">
+  <p class="sec-eyebrow">The One Jurisdiction</p>
+  <h2>Ishtar's Candle<span class="uline"></span></h2>
+  <p class="lead">It is not the patron gods who govern love. They govern the conditions under which love operates — Edgerinne makes the pressure, Salacia makes the current, Hestia makes the heat, Iles makes the honesty, Erebus makes the dark. But the thing itself belongs to Ishtar, and her territory is small. On a planet of nine hundred million Ferridanians, or three hundred million Thalassorians, or three million Pyrtherans, she holds one building. One door. One set of walls where love is the law and the patron's whole horizon-to-horizon dominion does not reach. One candle in every city. Still dark.</p>
+
+  <p>And in each Realm, the one temple means the one thing that Realm's whole order cannot otherwise allow. In Ferridane, where marriage is a covenant with the lineage, the Temple of Ishtar is the one place bloodline does not apply — where the exiled man's love was recognized as real and sacred by a goddess who does not care about heirs, whatever the culture around the temple did to him afterward. In Zephyros, it is the one room where honesty is not the point, where the air does not judge, because sometimes love is confused and contradictory and ashamed of itself and not ready to be spoken aloud. In Thalassor, it is the one place love is not transactional — no patronage, no dowry, no house alliance, which makes it the most dangerous building in Salacica, because genuine love is the single thing the patronage system cannot price. In Pyrthera it integrates seamlessly with the Braid and is still distinct: the Braid is curriculum, and the temple is the thing curriculum cannot teach. And in Tenebralis the temple was meant to be the same sanctuary — the one place even Mavarrans could feel something genuine, where the masks came off for reasons that were not predatory — and Vex took it, and the Aesthetes practice soul-murder on the floor of the Goddess of Love and call it worship. Every other Realm's temple still functions. The Tenebrali one is the wound.</p>
+
+  <p>Ishtar's heart breaks when any heart breaks — all of them, everywhere, across nine worlds and a billion lives and centuries of accumulated joy and grief, the Zephyrosian wife in the Oneironaut's chair and the Thalassori husband screaming in his kitchen and every memory coin holding someone's most private moment, sold for entertainment. That is what it costs to be the Goddess of Love: not power, not worship, just feeling all of it, forever, unable to stop. And her gift, hidden inside the one thing nobody can engineer, is the most powerful force multiplier in the cosmos — <strong>true love doubles one's personal capacity for magic</strong>. You cannot fake it, cannot train it, cannot buy or steal it; the moment you pursue it for the power, it is not love and it does not work. The Mavarrans can harvest every coin in the cosmos and gain not a single drop, because what they hold is product. A civilization of people running at half their potential, never once seeing the ceiling — because the doubling belongs only to the two people standing inside it, and to the goddess who feels it, and to no one else at all.</p>
+
+  <div class="pull"><q>The gods don't care who you're loving. They care who you're failing while you do it.</q><cite>The cosmos, on desire</cite></div>
+
+  <p>For every wife carrying an extracted secret there is a Pyrtheran village turned inside out for three days to celebrate two people. For every husband secretly dreaming of a Poppet there is a girl in Gran Ornea who cannot wait to fall in true love with a soft man who knows exactly what she means. The fisherman's son and the woman who did not care, drinking the Wine of Shared Fates at a kitchen table with her sister watching. Two Mavarrans in the dark for five minutes being the actual person in the actual room. Ishtar does not only carry the grief. She carries all of it — every doorway, every kitchen table, every nervous boy with figs — and that is why she has not given up. The suffering is enormous. But so is the other thing.</p>
+</section>
+
+</main>
+
+<footer class="reveal">
+  <div class="bar"></div>
+  <p class="candle">One candle in every city.<br>Still dark.<br>But still lit.</p>
+  <p class="ma">The Laws of Ma'at apply · The Test of Iles applies
+    <small>Is this true? Not interesting, not sophisticated, not dramatic. True. — Moirai Codex · Cultural Architecture</small>
+  </p>
+</footer>
+
+<script>
+  // Scroll reveal — vanilla, no storage
+  (function(){
+    var els = document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}
+      });
+    },{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(e){io.observe(e);});
+  })();
+
+  // Active nav highlight
+  (function(){
+    var links = Array.prototype.slice.call(document.querySelectorAll('nav.codex-nav a'));
+    var map = {};
+    links.forEach(function(a){var id=a.getAttribute('href').slice(1);var t=document.getElementById(id);if(t)map[id]={a:a,t:t};});
+    function onScroll(){
+      var pos = window.scrollY + 140, cur=null;
+      for(var id in map){ if(map[id].t.offsetTop <= pos) cur=id; }
+      links.forEach(function(a){a.style.color='';a.style.borderBottomColor='transparent';});
+      if(cur&&map[cur]){map[cur].a.style.color='var(--gold)';map[cur].a.style.borderBottomColor='currentColor';}
+    }
+    window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+  })();
+</script>
+</body>
+</html>

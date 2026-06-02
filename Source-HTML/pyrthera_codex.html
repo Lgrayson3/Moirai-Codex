@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pyrthera — The Realm Codex · Advent of Ultima</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Marcellus&family=Spectral+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     THE TOKENS — copied verbatim from the house style.
+     ============================================================ */
+  :root{
+    --paper:#FBF7EE;
+    --paper-2:#F6F0E2;
+    --ink:#2B2317;
+    --ink-soft:#5A4E3A;
+    --rule:#E4D8BE;
+
+    --gold:#9A7B1F;
+    --gold-bright:#C9A227;
+    --gold-pale:#E9DCB0;
+    --gold-glow:rgba(201,162,39,.18);
+
+    --zephyros:#8AA63A;   --zephyros-pale:#D8E3B0;
+    --pyrthera:#C7572B;   --pyrthera-pale:#F0C39A;
+    --thalassor:#2E6FA3;  --thalassor-pale:#A9CBE4;
+    --ferridane:#A66A2E;  --ferridane-pale:#E0C394;
+    --tenebralis:#6A3D9A; --tenebralis-pale:#C8B0E2;
+    --luxenfall:#C9A227;  --luxenfall-pale:#EBDCA6;
+    --glacia:#5C97B8;     --glacia-pale:#BDDCE8;
+
+    --prism:linear-gradient(90deg,
+      var(--tenebralis) 0%, var(--thalassor) 17%, var(--glacia) 30%,
+      var(--zephyros) 45%, var(--luxenfall) 60%, var(--ferridane) 74%,
+      var(--pyrthera) 100%);
+
+    --maxw:760px;
+  }
+
+  /* ============================================================
+     THE SYSTEM — verbatim.
+     ============================================================ */
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Spectral",Georgia,serif;font-weight:400;
+    font-size:19px;line-height:1.72;-webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(120% 80% at 8% -5%, rgba(106,61,154,.05), transparent 45%),
+      radial-gradient(120% 80% at 105% 110%, rgba(199,87,43,.05), transparent 45%),
+      radial-gradient(140% 90% at 100% 0%, rgba(46,111,163,.04), transparent 40%),
+      radial-gradient(100% 100% at 50% 40%, transparent 60%, rgba(43,35,23,.05));
+  }
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  }
+  .ribbon{position:fixed;top:0;left:0;right:0;height:5px;z-index:60;
+    background:var(--prism);background-size:200% 100%;animation:drift 22s linear infinite;}
+  @keyframes drift{0%{background-position:0 0;}100%{background-position:200% 0;}}
+
+  nav.codex-nav{position:sticky;top:5px;z-index:55;background:rgba(251,247,238,.86);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);}
+  nav.codex-nav ul{list-style:none;margin:0 auto;padding:.55rem .9rem;display:flex;
+    flex-wrap:wrap;gap:.2rem .9rem;justify-content:center;max-width:1040px;}
+  nav.codex-nav a{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-soft);text-decoration:none;padding:.15rem 0;
+    border-bottom:1.5px solid transparent;transition:.25s;white-space:nowrap;}
+  nav.codex-nav a:hover{color:var(--gold);border-bottom-color:currentColor;}
+
+  main{position:relative;z-index:1;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.4rem;}
+
+  header.mast{text-align:center;padding:5.5rem 1.4rem 3rem;position:relative;}
+  .eyebrow{font-family:"Marcellus",serif;font-size:.82rem;letter-spacing:.42em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 1.6rem;text-indent:.42em;}
+  h1.title{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(2.7rem,8vw,5.1rem);
+    line-height:.98;margin:0;letter-spacing:-.01em;color:var(--ink);font-variation-settings:"opsz" 144;}
+  h1.title .gilt{background:linear-gradient(95deg,var(--gold) 0%,var(--gold-bright) 45%,#EFD27A 60%,var(--gold) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;}
+  .subtitle{font-family:"Spectral",serif;font-weight:300;font-style:italic;
+    font-size:clamp(1.05rem,2.6vw,1.35rem);color:var(--ink-soft);margin:1.5rem auto 0;max-width:38ch;line-height:1.5;}
+  .mast-mark{margin:2.4rem auto 0;width:min(420px,80%);}
+  .mast-mark .bar{height:3px;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  .mast-epi{font-family:"Fraunces",serif;font-style:italic;font-weight:300;
+    font-size:clamp(1.15rem,3vw,1.6rem);color:var(--gold);margin:2.6rem auto 0;max-width:32ch;line-height:1.4;}
+  .mast-epi span{display:block;color:var(--ink-soft);font-size:.7em;font-style:normal;
+    font-family:"Spectral";letter-spacing:.05em;margin-top:.5rem;}
+
+  .diadiv{display:flex;align-items:center;justify-content:center;gap:1rem;margin:3.4rem 0;}
+  .diadiv .line{height:1px;flex:1;max-width:120px;background:linear-gradient(90deg,transparent,var(--gold-pale),var(--gold));}
+  .diadiv .line.r{background:linear-gradient(90deg,var(--gold),var(--gold-pale),transparent);}
+  .diadiv .gem{font-size:.9rem;color:var(--gold);letter-spacing:.4em;text-indent:.4em;}
+
+  section{padding:1.5rem 0;position:relative;}
+  .sec-eyebrow{font-family:"Marcellus",serif;font-size:.78rem;letter-spacing:.32em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 .5rem;}
+  h2{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(1.9rem,5vw,2.9rem);
+    line-height:1.05;margin:.2rem 0 1.2rem;color:var(--ink);letter-spacing:-.01em;font-variation-settings:"opsz" 80;}
+  h2 .uline{display:block;height:3px;width:108px;margin-top:.7rem;border-radius:2px;
+    background:var(--prism);background-size:200% 100%;animation:drift 16s linear infinite;}
+  h3{font-family:"Fraunces",serif;font-weight:500;font-style:italic;font-size:clamp(1.25rem,3.4vw,1.6rem);
+    margin:2.2rem 0 .6rem;color:var(--ink);font-variation-settings:"opsz" 40;}
+  h4{font-family:"Marcellus",serif;font-weight:400;font-size:1.02rem;letter-spacing:.04em;margin:1.6rem 0 .35rem;color:var(--gold);}
+  p{margin:0 0 1.15rem;}
+  p a{color:var(--gold);}
+  strong{font-weight:600;color:var(--ink);}
+  .lead{font-size:1.12rem;}
+  .lead::first-letter{font-family:"Fraunces",serif;font-weight:400;float:left;font-size:4.4rem;
+    line-height:.72;padding:.32rem .55rem 0 0;color:var(--gold);font-variation-settings:"opsz" 144;}
+
+  .spectrum{margin:2rem auto;border:1px solid var(--rule);border-radius:14px;overflow:hidden;
+    background:var(--paper-2);box-shadow:0 1px 0 #fff inset, 0 14px 36px -28px rgba(43,35,23,.45);}
+  .spectrum .top{height:8px;background:var(--prism);background-size:180% 100%;animation:drift 20s linear infinite;}
+  .spectrum .rows{padding:.4rem .2rem;}
+  .spec-row{display:grid;grid-template-columns:14px 1fr;gap:.9rem;align-items:start;
+    padding:.7rem 1.1rem;border-bottom:1px solid var(--rule);}
+  .spec-row:last-child{border-bottom:none;}
+  .spec-row .swatch{width:14px;height:14px;border-radius:50%;margin-top:.45rem;
+    box-shadow:0 0 0 3px var(--paper-2),0 0 0 4px currentColor;}
+  .spec-row .nm{font-family:"Marcellus",serif;letter-spacing:.06em;font-size:1.05rem;}
+  .spec-row .nm small{display:block;font-family:"Spectral";font-style:italic;letter-spacing:0;
+    color:var(--ink-soft);font-size:.86rem;margin-top:.15rem;font-weight:300;}
+
+  .realm{--accent:var(--gold);--accent-pale:var(--gold-pale);margin:3rem auto;border:1px solid var(--rule);
+    border-radius:16px;background:linear-gradient(180deg,#fff,var(--paper));
+    box-shadow:0 20px 50px -40px rgba(43,35,23,.6);overflow:hidden;position:relative;}
+  .realm > .crown{height:7px;background:linear-gradient(90deg,var(--accent),var(--accent-pale),var(--accent));}
+  .realm-head{padding:1.8rem 1.6rem 1.3rem;border-bottom:1px solid var(--rule);
+    background:radial-gradient(120% 140% at 100% -20%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%);}
+  .realm-head .kicker{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 .4rem;display:flex;align-items:center;gap:.6rem;}
+  .realm-head .kicker .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);}
+  .realm-head h2{margin:.1rem 0 .55rem;font-size:clamp(2rem,6vw,3rem);}
+  .realm-head h2 .uline{display:none;}
+  .realm-meta{font-family:"Marcellus",serif;font-size:.8rem;letter-spacing:.05em;color:var(--ink-soft);
+    display:flex;flex-wrap:wrap;gap:.4rem 1.3rem;margin-top:.5rem;}
+  .realm-meta b{color:var(--accent);font-weight:400;}
+  .realm-essence{font-style:italic;color:var(--ink-soft);font-weight:300;margin:.9rem 0 0;font-size:1.04rem;}
+  .realm-body{padding:.4rem 1.6rem 1.7rem;}
+
+  details.thread{border-bottom:1px solid var(--rule);}
+  details.thread:last-of-type{border-bottom:none;}
+  details.thread > summary{list-style:none;cursor:pointer;padding:1.15rem .2rem 1rem;display:flex;
+    align-items:center;gap:.85rem;font-family:"Fraunces",serif;font-size:1.15rem;font-weight:500;color:var(--ink);}
+  details.thread > summary::-webkit-details-marker{display:none;}
+  details.thread > summary .ico{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--accent);
+    color:var(--accent);display:grid;place-items:center;font-family:"Spectral";font-size:1rem;transition:.3s;
+    background:color-mix(in srgb,var(--accent) 6%,transparent);}
+  details.thread[open] > summary .ico{transform:rotate(45deg);}
+  details.thread > summary .lbl small{display:block;font-family:"Marcellus";font-size:.66rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);font-weight:400;margin-top:.15rem;}
+  .thread-body{padding:.1rem .3rem 1.5rem 0;}
+  @media(min-width:540px){.thread-body{padding-left:3.5rem;}}
+
+  .vignette{margin:1.5rem 0;padding:1.1rem 1.3rem;border-left:3px solid var(--accent);
+    background:color-mix(in srgb,var(--accent) 5%,var(--paper-2));border-radius:0 10px 10px 0;}
+  .vignette .tag{font-family:"Marcellus";font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin:0 0 .4rem;}
+  .vignette p{font-style:italic;font-weight:300;margin:0;color:var(--ink);font-size:1.02rem;line-height:1.6;}
+
+  .pull{margin:2.4rem auto;text-align:center;max-width:32ch;}
+  .pull q{font-family:"Fraunces",serif;font-style:italic;font-weight:300;quotes:none;
+    font-size:clamp(1.3rem,3.6vw,1.8rem);line-height:1.34;color:var(--gold);display:block;}
+  .pull cite{display:block;font-style:normal;font-family:"Marcellus";font-size:.74rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ink-soft);margin-top:1rem;}
+
+  .feature{margin:2.2rem 0;padding:1.4rem 1.5rem;border:1px solid var(--rule);border-radius:14px;
+    background:linear-gradient(180deg,#fff,var(--paper));box-shadow:0 14px 40px -36px rgba(43,35,23,.5);}
+  .feature h3{margin-top:.2rem;}
+
+  .note{margin:1.5rem 0;padding:1rem 1.2rem;border-radius:10px;border:1px dashed var(--gold);
+    background:color-mix(in srgb,var(--gold) 6%,var(--paper-2));}
+  .note .t{font-family:"Marcellus";font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:0 0 .35rem;}
+  .note p{margin:0;font-size:.98rem;}
+  .note p + p{margin-top:.6rem;}
+
+  footer{text-align:center;padding:4rem 1.4rem 5rem;margin-top:2rem;position:relative;z-index:1;}
+  footer .bar{height:3px;width:min(420px,80%);margin:0 auto 2.4rem;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  footer .candle{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.3rem,4vw,2rem);
+    color:var(--gold);line-height:1.35;margin:0 auto;max-width:26ch;}
+  footer .ma{font-family:"Marcellus";font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-top:2.4rem;}
+  footer .ma small{display:block;letter-spacing:.05em;text-transform:none;font-family:"Spectral";font-style:italic;font-weight:300;margin-top:.5rem;color:var(--ink-soft);}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;}
+    .ribbon,.spectrum .top,.realm>.crown,h2 .uline,.mast-mark .bar,footer .bar{animation:none;}
+  }
+  @media(max-width:540px){body{font-size:18px;}nav.codex-nav ul{gap:.15rem .7rem;}
+    .realm-body,.realm-head{padding-left:1.1rem;padding-right:1.1rem;}}
+</style>
+</head>
+<body>
+
+<div class="ribbon"></div>
+
+<nav class="codex-nav">
+  <ul>
+    <li><a href="#realm">Realm</a></li>
+    <li><a href="#suns">Seven Suns</a></li>
+    <li><a href="#faith">Faith</a></li>
+    <li><a href="#androsphinx">Androsphinx</a></li>
+    <li><a href="#nations">Three Nations</a></li>
+    <li><a href="#society">Society</a></li>
+    <li><a href="#sunblossom">Sun Blossom</a></li>
+    <li><a href="#antaka">Antaka</a></li>
+    <li><a href="#torchbearers">Torchbearers</a></li>
+    <li><a href="#rats">Burning of Rats</a></li>
+    <li><a href="#thavriel">Thavriel</a></li>
+    <li><a href="#glacians">The Glacians</a></li>
+    <li><a href="#advent">The Advent</a></li>
+    <li><a href="#notes">Open Threads</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<header class="mast">
+  <p class="eyebrow">Moirai Codex · The Third Realm</p>
+  <h1 class="title">Pyrthera</h1>
+  <p class="subtitle">The Unassailable Ideal — the Realm of Fire, and the healthiest civilization in the known cosmos.</p>
+  <div class="mast-mark"><div class="bar"></div></div>
+  <p class="mast-epi">“What you call the Advent is a Trial of Flame for the Gods themselves. Nothing is more sacred.”
+    <span>— Sol’Kheret, the Sun Blossom</span>
+  </p>
+</header>
+
+<!-- ===================== THE REALM ===================== -->
+<section id="realm" class="wrap reveal">
+  <article class="realm" style="--accent:var(--pyrthera);--accent-pale:var(--pyrthera-pale)">
+    <div class="crown"></div>
+    <div class="realm-head">
+      <p class="kicker"><span class="dot"></span>The Third Realm · Fire</p>
+      <h2>Pyrthera</h2>
+      <div class="realm-meta">
+        <span>Element <b>Fire</b></span>
+        <span>Patron <b>Hestia</b></span>
+        <span>Exvisar <b>Sol’Kheret</b></span>
+        <span>Scale <b>1–3 million · three nations · seven suns</b></span>
+      </div>
+      <p class="realm-essence">Seven suns, and bodies built to drink them. The conditions are extreme, the body is equal to them, and the only correct answer is to use the whole of it.</p>
+    </div>
+    <div class="realm-body">
+      <details class="thread" open>
+        <summary><span class="ico">+</span><span class="lbl">The Design Thesis<small>What the Realm is for</small></span></summary>
+        <div class="thread-body">
+          <p>Pyrthera is the healthiest civilization in the cosmos, and its theology is functional. The faith produces the result it claims to produce, and the result is visible in the bodies, the relationships, and the afterlife outcomes of its people. Solar Synthesis turns lethal radiation into vitality and myst. The Golden Flame burns ego and leaves flesh. The Sacred Braid is curriculum. The discomfort all of this produces in other cultures is a feature of the work, written in on purpose.</p>
+        </div>
+      </details>
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Narrative Function<small>The compass the audience misreads</small></span></summary>
+        <div class="thread-body">
+          <p>Pyrthera is the moral compass of the series, and the one the audience is liable to misread on first encounter. It is the civilization that is correct about the fundamental questions and dismissed for the register in which it states its correctness. The dismissals — savage, simple, excessive — do not survive examination, and they serve the people who generate them, who know on some level that the loud people with the brands worked out something they have not. Every diplomat who sweats through Pyrthera behind thermal wards, watching its inhabitants lounge on stone that would cook a visitor alive, leaves with the same private report: they seem more alive than I do. It does not leave them.</p>
+        </div>
+      </details>
+      <details class="thread">
+        <summary><span class="ico">+</span><span class="lbl">Material &amp; Register<small>The look and sound of the Realm</small></span></summary>
+        <div class="thread-body">
+          <p>The chromatic signature is red-gold, from deep ember through molten amber to the liquid gold of the Golden Flame. The material hierarchy runs obsidian over sandstone over myst-glass; obsidian is sacred, the mirror-stone that holds heat, records memory, and reflects truth — the floor of every arena and court, the surface of record. The textile signature is firesilk, a semi-translucent refractive glass-fiber weave that catches and magnifies light along its threads. The cultural register draws its foundation from West and North African civilizations — communal warmth, oral tradition, the body as living text — and from Caribbean and Black American traditions in which volume is calibration rather than aggression and honesty is social currency; the combat philosophy draws on the holistic physicality of contemporary mixed martial arts.</p>
+        </div>
+      </details>
+    </div>
+  </article>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div></div>
+
+<!-- ===================== SEVEN SUNS ===================== -->
+<section id="suns" class="wrap reveal">
+  <p class="sec-eyebrow">The Environmental Reality</p>
+  <h2>The Seven Suns<span class="uline"></span></h2>
+  <p class="lead">Their sky holds seven suns — seven stellar bodies in staggered orbit, with at least three visible at any given hour and all seven blazing at peak alignment. This is the foundational physical fact from which every cultural and biological particular follows.</p>
+  <p>For non-Pyrtherans the heat is active lethality. Exposed skin burns; armored soldiers cook before they reach the first settlement. For Pyrtherans the suns are a gift that asks for no invocation and no ritual, because the gift is what they are: <strong>Solar Synthesis</strong> converts radiation that would kill any other Realm’s citizens into inexhaustible vitality and myst. An Ashbearer works hard physical labor in a furnace and does not exhaust. Hestia gave the suns and the biology to metabolize them at once. True night is rare and sacred, and the Realm gathers for it.</p>
+  <p>Abroad, a Pyrtheran is on rations. Off-world there are no suns to drink, so they generate myst through the Sacred Braid — physical intensity feeds the biology. When one of them appears somewhere far from home, it means something, because being there costs them.</p>
+</section>
+
+<!-- ===================== THE FAITH ===================== -->
+<section id="faith" class="wrap reveal">
+  <p class="sec-eyebrow">The Hestian Faith</p>
+  <h2>Becoming Through Trial<span class="uline"></span></h2>
+  <p>Hestia is the Goddess of Flame and Hearth — the fire at the center of the home, the one that feeds, warms, and gathers the family. She is the warmth that does not soothe, a parent who loves completely and will allow failure because failure is the mechanism of learning. Her champion dueled her for fourteen days; her Realm runs on seven suns; her people are the loudest civilization in existence. In her theology, Becoming has no singular shape, for if it did it would be Arriving.</p>
+  <p>The doctrine is <strong>Becoming Through Trial</strong>. The Golden Flame burns away the false and leaves what is true, and the <strong>kafer</strong> — the brands that rise on Pyrtheran skin — are that truth shining through, the light the Flame unveils. A complete person holds the full spectrum: pain and pleasure, combat and intimacy, loss and joy, discipline and abandon. Imbalance in any direction is spiritual sickness. The single sin is to harm another’s <strong>Ankpyre</strong>, the internal sacred flame of selfhood; to test it is a sacrament. Pleasure is held as a biological nutrient, and the civilization is organized around wholeness.</p>
+
+  <h3>The Sacred Braid</h3>
+  <p>The doctrine shows up as the Sacred Braid: fighting, dancing, and lovemaking practiced as three expressions of one discipline — mastery of the body under intensity. The strands are a sequence. Dance is the invitation. Combat comes when there is trust enough to be trusted with violence. Intimacy comes last, earned through the other two. To begin with a fight would be to skip the greeting and go straight to the test. The Braid is the curriculum through which Pyrtherans train, socialize, worship, and govern.</p>
+
+  <h3>The Trial of Flame</h3>
+  <p>Sol’Kheret’s justice is the Trial of Flame, and it happens on the same obsidian floor where the community was eating and sparring hours earlier. The drums stop. The silence is the loudest event the Realm produces. The invocation is two words — <strong>“Stand, or fight”</strong> — and the blow comes after either way. She strikes with fists of Golden Flame; the blows land on the body while the burning is of the soul; the kafer flares and clarifies as ego is expelled. When the Trial is finished, the same figure who administered it holds the person who remains. It is punishment, therapy, sacrament, and embrace at once, conducted in full view.</p>
+  <div class="pull"><q>Stand, or fight. The blow comes after either way.</q><cite>The invocation of the Trial</cite></div>
+
+  <h3>Heaven’s Favorite</h3>
+  <p>Pyrtherans are overrepresented in Dystan’s Exalted Host: three million people producing more souls that pass Dystan’s trials than Realms a hundred times their size. By the numbers, half the angels in the known cosmos are Pyrtheran — branded, dark-skinned, solar-forged, fighting in a style their own, deployed by the divine when it has something to communicate. For Pyrtherans death carries no dread. In a community of this size with this rate of ascension, an overwhelming proportion of the living have personally known someone now serving as an angel. Dying well is a transition to a different form of active engagement.</p>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div></div>
+
+<!-- ===================== THE ANDROSPHINX ===================== -->
+<section id="androsphinx" class="wrap reveal">
+  <p class="sec-eyebrow">The Deep History</p>
+  <h2>The Androsphinx<span class="uline"></span></h2>
+  <p class="lead">The Androsphinx were the original dominant species of Pyrthera — colossal leonine beings, four meters tall, fully sapient, present before humanoid civilization arrived. The two peoples chose coexistence, and the Androsphinx held place in Pyrtheran society as elders rather than subjects or symbols.</p>
+  <p>They are functionally extinct, and the cause is now recorded. They became severe. They became warlike. In war they did what a warlike people does and killed a great many of their own men, and then they punished the pursuit of pleasure so completely that they failed to reproduce. Below replacement, across deep time, the old ones grew old and died, and there were no young to take their place. One remains: <strong>Tein-Enhotep</strong>, the last Androsphinx, the Trialkeeper, once Exvisar of Pyrthera, the Dragon’s oldest friend.</p>
+
+  <div class="feature">
+    <h3 style="margin-top:0">The Correction</h3>
+    <p style="margin-bottom:0">The fate of the Androsphinx is the reason the contemporary culture is what it is. Pyrthera is pleasure-positive and integrated as a correction — the lesson a people learned from watching a kindred species die of its own austerity. Pleasure held as a nutrient, imbalance in any direction read as sickness, the Ankpyre kept sacred above all else: the whole living doctrine is the answer to the question the Androsphinx answered wrongly. The health was earned, and the witness still walks among them, carrying every dead name branded into his skin.</p>
+  </div>
+</section>
+
+<!-- ===================== THREE NATIONS ===================== -->
+<section id="nations" class="wrap reveal">
+  <p class="sec-eyebrow">One Faith, Three Lenses</p>
+  <h2>The Three Nations<span class="uline"></span></h2>
+  <p>All three nations worship Hestia, each through a different theological lens, and each names the same fire in the others. They unite under the <strong>Sunblossom Accord</strong> against external threats, gather at Realm-wide Bonfire Symposiums on true nights, and recognize Sol’Kheret’s authority — though her reading of the Accord is distinctly Khetian. The Torchbearers are drawn from all three to embody the synthesis.</p>
+
+  <div class="spectrum">
+    <div class="top"></div>
+    <div class="rows">
+      <div class="spec-row" style="color:var(--pyrthera)"><span class="swatch"></span><span class="nm">The Emberate of Khet<small>Becoming Through Trial — fire as judgment and memory. The purists, the heart and origin. Sunscar Desert, crimson dunes, obsidian mesas, oasis-citadels. Originators of the Golden Flame and the seat of Sol’Kheret’s power.</small></span></div>
+      <div class="spec-row" style="color:var(--ferridane)"><span class="swatch"></span><span class="nm">The Freeholds of Rhylos<small>Becoming Through Flow — fire as circulation and relationship. Magma-weavers, master architects and stonemasons, pastoral in the cooler corridors of the Ignition Rift. Mastery is moving with fire’s rhythm, not commanding it.</small></span></div>
+      <div class="spec-row" style="color:var(--gold)"><span class="swatch"></span><span class="nm">The Ashen Vale<small>Becoming Through Insight — fire as information. Ascetic and monastic; refined Solar Synthesis until food became unnecessary. Withdrawn, perceived as unsettling, and the source of the Realm’s most sought-after oracles and strategists.</small></span></div>
+    </div>
+  </div>
+  <p>Khetians read the Vale as a rejection of half the Braid and Rhylos as the pastoral middle ground; the Vale reads Khet as noise where precision would serve; Rhylos recognizes validity in both and finds the extremes of each. The three rank each other only by lens.</p>
+</section>
+
+<!-- ===================== SOCIETY ===================== -->
+<section id="society" class="wrap reveal">
+  <p class="sec-eyebrow">A Meritocracy of Proven Excellence</p>
+  <h2>Social Structure<span class="uline"></span></h2>
+  <p>Status is constituted by what a person has endured, mastered, and given. It is not inherited through bloodline, accumulated through wealth, or built through affiliation. Nothing is allowed to settle, so there is no permanent underclass.</p>
+  <p><strong>The Ashbearers</strong> are the productive ground — laborers, farmers, craftspeople, solar-fed and inexhaustible. <strong>The Perpetually Becoming</strong> are Mystics on continuous pilgrimages of self-refinement, moving between cities and schools, always testing themselves against the Flame. <strong>The Stellarchs</strong> are the judges and flamewardens who officiate duels, regulate the public braziers, and administer minor Trials — referees in a civilization that resolves its formal disputes through contest. <strong>The Torchbearers</strong> are the five.</p>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div></div>
+
+<!-- ===================== SOL'KHERET ===================== -->
+<section id="sunblossom" class="wrap reveal">
+  <p class="sec-eyebrow">The Living Embodiment</p>
+  <h2>Sol’Kheret, the Sun Blossom<span class="uline"></span></h2>
+  <p class="lead">A former Templar who underwent the Branding of the Golden Flame and survived it, then dueled the goddess Hestia for fourteen days without falling. Statuesque and dark-skinned, hair braided with sunfire and gemstones, her eyes holding seven pupils — one for each sun — her body the most extensively branded in the Realm. She governs from the floor, present on the same obsidian as everyone else, by being the most fully realized version of what her culture aspires to.</p>
+
+  <h3>The Vessel of Hestia</h3>
+  <p>What the fourteen-day duel produced is a vessel the goddess occupies. When Sol’Kheret names the Advent a Trial of Flame for the Gods themselves, she delivers Hestia’s verdict, in the only place a goddess of the hearth delivers anything: at the center, on the floor, among the family. Her reading of the cosmos is clinical diagnosis. She observes other Realms — their maintained falsehoods, their social masks, their performances of sincerity — and identifies civilizations full of people who have never been cleaned, never submitted to the Flame, never had a lie identified and removed. She has been right about Vex Mavarra for longer than most Realms have acknowledged the problem exists, and right at full volume, in language that makes rooms flinch.</p>
+
+  <h3>The Open Hand</h3>
+  <p>Where every other ruler holds the crown jewel as monopoly, Sol’Kheret gives power away. She taught the Star’s Yoke to the Seraph Fiacre over wine; she teaches the Golden Flame to Raiwata’s daughter and makes her the second living vessel of a fire the cosmos believed had only one. In her theology power is a thing you prove, not a thing you keep, and a truth is not diminished by being held twice. The instinct toward hoarding belongs to Realms that think power is scarce. By teaching Fiacre, she made a seventh holder of Antaka and widened, by her own hand, the pool of suspects in the crime she is blamed for — and did it anyway, because trust offered for advantage is not trust.</p>
+  <div class="pull"><q>Permanence is a construction of the ego’s desire for perseverance.</q><cite>Sol’Kheret</cite></div>
+  <p>She is prepared to accept her own impermanence, and that willingness is precisely why her people are the gods’ chosen. Hestia is the fire at the center of the home that you come back to. That is what Sol’Kheret holds.</p>
+</section>
+
+<!-- ===================== ANTAKA ===================== -->
+<section id="antaka" class="wrap reveal">
+  <p class="sec-eyebrow">The Star’s Yoke</p>
+  <h2>Antaka<span class="uline"></span></h2>
+  <p>Antaka collapses the distance between a planet and its sun — it forces a star out of its place and makes it fall upon a world. It is an astronomical event visited upon a target, not a spell against it. The invocation kills the one who casts it: the body nears crystallization and burns away. Six beings hold it — Sol’Kheret and her five Torchbearers — and that is nuclear deterrence held by a civilization of three million whose leader has publicly declared her willingness to use it. The Inquisition against Mavarran operators is the active campaign of a nuclear power operating below the threshold of its primary weapon.</p>
+
+  <div class="feature">
+    <h3 style="margin-top:0">The Asymmetry, and the Suspicion</h3>
+    <p>Glacia’s sun “simply fell,” which is the exact signature of Antaka — and only six known beings can do it, five of them Sol’Kheret’s. The fingers pointed at Pyrthera, and the gods sent the Seraph Fiacre to her court to judge her truth. They ate, drank, and grew drunk enough that Sol’Kheret taught Fiacre the Yoke to show her its weight, and they pulled a sun back and forth until Sol’Kheret neared crystallization and Fiacre relented. The exoneration is physical, not testimonial: anyone who had truly called a sun down would be dead, because the act kills the caster, and all six are alive.</p>
+    <p style="margin-bottom:0">The true hand was Raiwata, the Sun-Caller, whose Antaka is his own deusa and costs him nothing — the signature that should have cleared Pyrthera and did not. The suspicion stays on Sol’Kheret because Raiwata vanished after Point Zero and there is no other suspect: the alternative is the word of one Sinclair about a thing that disappeared. The matter is settled and not settled — logically dissolved, socially permanent.</p>
+  </div>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div></div>
+
+<!-- ===================== TORCHBEARERS ===================== -->
+<section id="torchbearers" class="wrap reveal">
+  <p class="sec-eyebrow">The Five</p>
+  <h2>The Torchbearers<span class="uline"></span></h2>
+  <p>There are at most five Torchbearers, so that the Pyrtherans may, should they need to, invoke Antaka upon all but one of their seven suns. That willingness and capability is the creed they take on. The path to the brand is the <strong>Trial of Torches</strong>: the challenger duels Sol’Kheret for fourteen days, during which seven torches must remain lit at all times — the mortal echo of her own fourteen days against Hestia. In Pyrthera a duel carries all three meanings of the Braid, and each Torchbearer earns the brand a different way. They are drawn from all three nations, and Sol’Kheret has practiced the full Braid with each of them, separately and together, always with the weight of genuine relationship. They are her most thoroughly known relationships, expressed through every strand of the discipline.</p>
+
+  <h3>Nahret of Rhylos</h3>
+  <p>The magma-dancer, quicker to anger, who mastered the heat and flow of molten rock and proved her excellence by challenging Sol’Kheret to the Trial. She established martial dominance early and then governed the fight — pacing it to last the full fourteen days, dancing the two of them around the arena so that she lit the torches as they moved, and effectively leading the Sun Blossom in the dance — and gave the third strand its single day at the close. Mastery, then command, then love. Her excellence outside the arena is daily: she goes out for every great hunt, takes down megafauna that dwarf her, provides the feast with her own hands, and meets the thing greater than herself at dawn with a smile, because facing it is the thing she chose to master and mastering it is a joy. Her dissent is on the Glacians — their content isolation in the citadels reads to her as flow withheld, and she wants them to integrate and to contribute.</p>
+
+  <h3>Oru of Rhylos</h3>
+  <p>Cool in a steady way, like a driving bass — calm confidence, warm eyes, a combat style that turns defense into offense and offense into defense, more dancing than striking, confident yet conservative. His lovemaking is legendary, and during his Trial he spent ten of the fourteen days attentively worshipping Sol’Kheret’s body and the torches before he would fight; when the fight came he wrestled her, and when she broke his grapple he smiled. He holds that love is stronger than war, and that making war is a labor of love. He has served at the Hearth of Thavriel, held the dying in the dark, and killed Rewritten Luxenfallen children at the wall; no one can accuse him of cowardice, because his kafer would refute it on sight. His dissent is on Thavriel — he wonders whether a thousand years is a fight well fought, and well done. His prayer is the first prayer the Dragonson answers.</p>
+
+  <h3>Kenet of the Vale</h3>
+  <p>The most certain person you will find, and the new Trialkeeper. At her Trial she took one look at the sky and breathed deep — in the Vale they live in the shade — and the fortnight she stood in the sun she knew she would never leave the radiance of Khet. She lasted twelve of the fourteen days, having fasted for years, and met the shortfall with honesty and no ego, and in that Sol’Kheret saw a wise counselor. She carries the ash-sight, which makes her the hand that leads and performs the Inquisition. She is quiet but not meek: it is said that if Kenet spots a liar, they will have an arrow through the eye before even she can blink. Her Ashbearers are among the most ferocious warriors Pyrthera offers, considered near-immortal by legend. She is loud in the dark and quiet when the feast torches are lit. She is the most deeply suspicious of the Mavarrans.</p>
+
+  <h3>Merikh</h3>
+  <p>Khetian, Sol’Kheret’s oldest and closest friend, outwardly her most devoted and loyal Torchbearer. His Trial was straightforward to the point of being procedural; he had trained his whole life for it, the whole Realm expected it, and no one doubted the outcome. In secret he lies with Poppets — Mavarran shapeshifting companions — asking them to take the shapes of women at the Court of Becoming who are already paired, so the sin is envy on top of lust, and most often asking them to take the shape of Sol’Kheret herself. He tells himself it is no lie to say he loves Sol’Kheret and loves beautiful women. The conduct is a falsehood carried in the one civilization built on the axiom that there is no concealed register, and its weight is held in the Burning of Rats below.</p>
+
+  <h3>Kharu</h3>
+  <p>Khetian, relentlessly pious to Hestia, said to be of “golden mind” for how often he passes through the Golden Flame. He wishes to become the next Exvisar, and Sol’Kheret mentors him closely. He is radiant, well-loved, trustworthy, and kind; he is also powerful and uncompromising on matters of faith, the first to stand behind Sol’Kheret when she names the Advent a Trial of Flame for the Pantheon. So much of his body is branded that to walk through the night he would be a torch himself, for all the light shining through and from him. He knows that something is off about Merikh, and has faith that it will come to light, as all things do.</p>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div></div>
+
+<!-- ===================== BURNING OF RATS ===================== -->
+<section id="rats" class="wrap reveal">
+  <p class="sec-eyebrow">The Inquisition · A Book Two Spine</p>
+  <h2>The Burning of Rats<span class="uline"></span></h2>
+  <p class="lead">At the first convening of the Exvisarelim after the death of Aracice, Sol’Kheret stood and spoke for the Son of the Dragon, raising her voice and calling the council mad for denying him his claim and trying to throw a god in a prison. As she spoke, Vex Mavarra — appearing to her as Sol’Kheret herself — laid a caress on her and a pressure just short of a squeeze, and told her to be reasonable and remain seated.</p>
+  <p>The cruelty was precise: it weaponized the exact thing Pyrthera is. To answer the phantom hand was to look as mad as the illusion was built to make her look; to sit was to be silenced. Knowing the visage was meant to break her, and feeling the hand, Sol’Kheret shut her mouth and silently declared war. Aurelius Vorn won the day, and the Son of the Dragon was sent to a prison. The war began in a single breath, over the violation of the one body the hearth-goddess speaks through.</p>
+
+  <details class="thread" open style="--accent:var(--pyrthera);--accent-pale:var(--pyrthera-pale)">
+    <summary><span class="ico">+</span><span class="lbl">The Campaign<small>What Kenet was set loose to do</small></span></summary>
+    <div class="thread-body">
+      <p>Sol’Kheret calls it the Burning of Rats — a plainer, angrier name than the Inquisition the cosmos uses for it, with no theological dignity in it at all. She set Kenet, the Trialkeeper, loose upon the Mavarrans abroad. Those who stood under the seven suns and lay with rats, stood no more. The distinction between the Trialkeeper’s two offices is exact: the old office answered defilement inside a rite, where the accused had an Ankpyre worth burning clean. For Mavarrans and the Mavarran-touched there is no rite, because there is no Ankpyre to clean, and so the arrow precedes any Trial. No Trialkeeper, no trial. The reputation goes before her into every room.</p>
+    </div>
+  </details>
+
+  <details class="thread" style="--accent:var(--pyrthera);--accent-pale:var(--pyrthera-pale)">
+    <summary><span class="ico">+</span><span class="lbl">The House Exception<small>Why Merikh still stands</small></span></summary>
+    <div class="thread-body">
+      <p>Sol’Kheret can see falsehood — it is the foundational fact of the whole civilization — so there was never a question of whether she knows what Merikh is. She has always known. What she holds is a door: the chance for him to come forward himself and submit to the Trial, where a Pyrtheran who fell may be burned clean and held, rather than a rat exposed. Kenet would have closed that door already; her restraint is deference to the prerogative Sol’Kheret reserved — the right to deal with Merikh herself. The grace is the Sun Blossom’s alone, and it costs her: she carries a permitted falsehood in the body meant to be the truth-flame’s vessel, the very imbalance her own doctrine names sickness. The duel, if it comes, belongs to her three times over: she is the only one who can survive starting it against a Torchbearer who can pull down a sun, she loved him longest, and the failure of the delay is hers to answer for.</p>
+    </div>
+  </details>
+
+  <details class="thread" style="--accent:var(--pyrthera);--accent-pale:var(--pyrthera-pale)">
+    <summary><span class="ico">+</span><span class="lbl">The Reckoning<small>On the floor of the Court of Becoming</small></span></summary>
+    <div class="thread-body">
+      <p>Nahret, who does not know there is a door being held, finds him out and calls him to court on the obsidian floor. Merikh runs; Nahret catches him; Kenet’s arrow comes a hair from his eye — and a breath before it turns into a full-blown fight, Sol’Kheret calls out: <em>Be tempered. He is mine.</em> The Trial is set, there, then, in front of the whole Court. Seven pupils meet glowing amber, and she offers him the chance even knowing he will refuse it. <em>Stand, or fight.</em> He dodges the first blow, and after that it is a fight, and she wins it because she must. As the Golden Flame burns him toward Sarcax, he reaches for the Yoke, and the whole world gasps — and finds the one line he will not cross. He sees, at last, what he has become, and stands down, and lets judgement set his own sun. The same hand that struck him holds what remains.</p>
+    </div>
+  </details>
+
+  <details class="thread" style="--accent:var(--pyrthera);--accent-pale:var(--pyrthera-pale)">
+    <summary><span class="ico">+</span><span class="lbl">The Second Trial<small>The office answers the throne</small></span></summary>
+    <div class="thread-body">
+      <p>One Trial done, a second on its heel. Sol’Kheret let a truth stand in the shade, and was held back from righteous action by her own conflict; by her own doctrine she is sick, and accountability that stops at the throne is the rot she hunts wearing a crown. The rat first, then her — she will not atone for the harboring while the harbored thing still stands. As Merikh’s blood turns from red to black, cooked in the sun, a shadow falls across it: Tein-Enhotep, who has watched since he walked the Dragonson home, returned to Pyrthera after twenty years gone. <em>It is time. You will stand.</em> He does not offer her the choice between standing and fighting, because for the Sun Blossom it was never a question. It is the first Trial the Trialkeeper has held in two decades, and its first act is to hold the Exvisar herself accountable — the office answering the throne, and then catching what remains of her. The standard he kept survived his absence, and the proof of it is that it reaches even her.</p>
+    </div>
+  </details>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div></div>
+
+<!-- ===================== THAVRIEL ===================== -->
+<section id="thavriel" class="wrap reveal">
+  <p class="sec-eyebrow">The Thousand-Year Vigil</p>
+  <h2>The Hearth at Thavriel<span class="uline"></span></h2>
+  <p class="lead">Thavriel is a major city of Luxania — the ascension-place, home of the Skysteps by which the soul rose toward the heights and of the Silent Bell, the sound of destiny, heard only by the soul. When Luxania fell and became occupied Luxenfall, Pyrthera crossed the Clairgates and planted a vigil there, and has held it as the last free ground of the murdered Realm.</p>
+  <p>The vigil is custodial. The Realms are separate worlds, and the dark cannot walk between them; Pyrthera could have washed its hands of Luxania the way every other Realm did, and bought the occupation’s goods besides. It refused. Generation after generation, it rotates its own people through a lightless front on a world that was never theirs, to keep one piece of Luxania unfallen so that the Realm is not wholly lost and may one day be taken back. Every Torchbearer has almost certainly served there. The enemy at the wall is the occupation’s product — Rewritten Luxenfallen, the enslaved made into weapons, children among them — which is the horror Oru carries: to hold the line he killed the people the vigil exists to save.</p>
+
+  <div class="feature">
+    <h3 style="margin-top:0">Book Two — The Front Extends</h3>
+    <p style="margin-bottom:0">Oru asks the Dragonson not to win Thavriel, only to see it — a plea with the desperation stripped out, a request to be the first power that ever came to look. Fresh off watching his father die at Point Zero, Alciel cannot stand before the abandoned and remain a witness. The day is won. The single point that was defensible only because it stood on the high ground of the shattered Skysteps becomes the base from which the liberation of Luxania extends, with the Son of the Dragon at its head. The vigil held a thousand years to keep a Realm from dying becomes the forward edge of bringing it back.</p>
+  </div>
+</section>
+
+<!-- ===================== GLACIANS ===================== -->
+<section id="glacians" class="wrap reveal">
+  <p class="sec-eyebrow">The Rarest Color in the Cosmos</p>
+  <h2>The Glacians in Pyrthera<span class="uline"></span></h2>
+  <p>The Gonlansūnu — survivors of Glacia, each a fortress of stored cold and catastrophic potential, the people the divine order feared enough to justify destroying — surveyed every Realm open to them and chose the furnace. The choice was diagnostic: Glacia’s civilizational failure was paralysis, and Pyrthera is the one environment where paralysis is physiologically impossible. As heat-sinks they run on the same metabolic logic as Pyrtherans; the seven suns empower them too, and they cost the Realm nothing.</p>
+  <p>The Rhylian magma-dancers built them obsidian citadels in the Ignition Rift, designed cold inside for the comfort of a people who have never needed cold, from their most sacred material and with their most sacred art, and asked for nothing in return. Sol’Kheret stands in open awe of them, requests their presence in her court, honors them by the terms of her own theology, and wants nothing from them. Hospitality offered for nothing is the rarest color in the cosmos, and it is set against the Mavarran arrival, which always looks like a solution and becomes a leash. The difference between the citadel built for a stranger and the favor that becomes a chain is the whole moral question of the series.</p>
+
+  <div class="feature">
+    <h3 style="margin-top:0">The Regalia of the Star-Eater’s Son</h3>
+    <p>The Gonlansūnu wardens have not been idle. For Alciel they forged a panoply of <strong>Hrimkristall</strong>, and give it to him to carry for the rest of his days. The <strong>Warden’s Shield</strong> is a tower shield that is never struck: strikes and projectiles lose all kinetic energy just short of it, and it grows stronger by absorbing what it negates — Glacia’s Still Soul, the Shansál, made into an object, the stillness that failed them turned to the defense of one who will act. The <strong>Pritisongr Blade</strong> rings one note, <em>cleave</em>, and the cut is made by his will that a thing be cut; it is imbued with the Pritisongr, the Song of Delight, and though no one alive knows the whole art, the blade was made before the fall and kept for this moment, and it can do more than destroy, for the song of delight is the song of creation. The <strong>armor</strong> is scale and mail of crystallized water from the Oracles’ art, and into every ring and every scale is imparted as many memories of Glacia as could be mustered and preserved — the lost world worn on the body of the one who carries its blood.</p>
+    <p style="margin-bottom:0">When Alciel is brought to the Citadels he comes home to a people he never had, and Anberlyn comes with him: half-blooded Glacian royalty, daughter of a queen taken as a war-trophy, received and named by her mother and not by the one who took her, because to do otherwise would be cruel and cruelty is beneath them.</p>
+  </div>
+</section>
+
+<div class="wrap"><div class="diadiv"><span class="line"></span><span class="gem">◆ ◆ ◆</span><span class="line r"></span></div></div>
+
+<!-- ===================== THE ADVENT ===================== -->
+<section id="advent" class="wrap reveal">
+  <p class="sec-eyebrow">Pyrthera’s Role</p>
+  <h2>Pyrthera in the Advent<span class="uline"></span></h2>
+  <p>Sol’Kheret is not mobilizing to save a cosmos that has not earned it. Her function in the Advent is Pyrthera itself: keep the suns blazing, keep the brands honest, keep the shadows out, and provide refuge to those who deserve it — the Glacians who chose her, Alciel who was born for what comes next, Uriel who is finding his way back. The Advent is Alciel’s war, conducted with Pyrthera’s endorsement and staged from its ground. Her contribution is the base that cannot be corrupted, invaded, or darkened — the hearth fire that stays lit while everything else fails. The Realm’s own guardian Gonlans are <strong>Pyralithe</strong>, the transcendent solar flame that wheels above the seven suns in Hestia’s favor, and <strong>Agnivar</strong>, the volcanic heart whose bones are lava and whose scales are dragon-glass.</p>
+
+  <div class="feature">
+    <h3 style="margin-top:0">The Prayer and the Offer</h3>
+    <p>What makes a god of a god is neither blood nor birthright. It is the answering of prayers. The opposite gesture is the answering of offers — to clasp the hand around what it desires, to take all one can get and amass it, the easy way. Every offer answered is a vote for Mavarra, whose whole craft is the offer that looks like a solution; every desire subordinated to a prayer is a step toward the divine. Pyrthera is the Realm that gives: power proven rather than hoarded, hospitality extended for nothing, a wall held a thousand years for a people who could give nothing back. It is the standing antithesis of the Tongue of the Eighth Hell, rendered as a civilization.</p>
+    <p style="margin-bottom:0">The first step of the Dragonson’s own journey is the answering of a mortal’s prayer — Oru’s heavy conscience, his quiet request to come and see. The god who arrives demanding to know why the heavens will not answer him becomes, in that moment, the one who answers. The Age of Men begins in the gesture, on the first page of his real story, before he knows that is what he is doing.</p>
+  </div>
+
+  <h3>The Audience’s Entry</h3>
+  <p>The audience meets Pyrthera through Uriel before they know that is what they are meeting — a loud, direct, constitutionally honest young man from Brooklyn, doing the Pyrtheran thing instinctively without the framework or the seven suns, read as the familiar story of a street kid at a prep school. Then Serket Ashbloom walks through a room calibrated for Thalassori aesthetics, firesilk catching light meant for crystata, brands legible, orb-bombs swaying on her belt, and tells him he is a lost son who has just found his way home. The room hears a confrontation. It is a homecoming.</p>
+  <div class="vignette" style="--accent:var(--pyrthera)">
+    <p class="tag">In the room</p>
+    <p>“I am Serket Ashbloom of the Emberate of Khet, in Pyrthera. You are a lost son looking for his way home, and you have just found it.”</p>
+  </div>
+</section>
+
+<!-- ===================== NOTES ===================== -->
+<section id="notes" class="wrap reveal">
+  <p class="sec-eyebrow">Production Status</p>
+  <h2>Open Threads<span class="uline"></span></h2>
+  <p>Flagged rather than filled, so nothing becomes canon by omission.</p>
+
+  <div class="note">
+    <p class="t">◆ The word for Tein-Enhotep and Alciel</p>
+    <p>The in-world term for what the Trialkeeper is to the Dragonson is uncoined. The shape is godfather — a promise to a dead friend made into a standing relation, sworn weight, closer to a named ward or charge-by-oath than blood or fosterage; the kafer logic suggests a brand-as-vow. The Alciel pages still read “uncle in every way that matters,” and that line should change once the true term exists.</p>
+  </div>
+
+  <div class="note">
+    <p class="t">◆ Nahret’s origin</p>
+    <p>The spine is set — the daily great hunt, the megafauna met at dawn with a smile, the hands that provide the feast — but the written origin myth is pending.</p>
+  </div>
+
+  <div class="note">
+    <p class="t">◆ The chronology of the vigil</p>
+    <p>The Hearth at Thavriel is named as a thousand-year vigil, while the Luxenfall material dates the Realm’s suffering at roughly three hundred years. The reconciliation is that these measure from different events — the slaying of Aether and the closing of the Clairgates may stand centuries apart from the day the Realm was named Luxenfall — compounded by old lore overwritten by new. To be squared before it is locked.</p>
+  </div>
+
+  <div class="note">
+    <p class="t">◆ Death and funeral rites</p>
+    <p>The afterlife dimension is richly developed — ascension, the Exalted Host, death without dread — but the ceremony itself, how Pyrthera buries and mourns and sends off its dead, is a gap.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="reveal">
+  <div class="bar"></div>
+  <p class="candle">The Flame burns away the false<br>and leaves what is true.</p>
+  <p class="ma">Moirai Codex · Pyrthera, the Unassailable Ideal
+    <small>Compiled under the Laws of Ma’at — the air does not permit lies.</small>
+  </p>
+</footer>
+
+<script>
+  (function(){
+    var els=document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(e){io.observe(e);});
+  })();
+  (function(){
+    var links=[].slice.call(document.querySelectorAll('nav.codex-nav a')),map={};
+    links.forEach(function(a){var id=a.getAttribute('href').slice(1),t=document.getElementById(id);if(t)map[id]={a:a,t:t};});
+    function s(){var pos=window.scrollY+140,cur=null;for(var id in map){if(map[id].t.offsetTop<=pos)cur=id;}
+      links.forEach(function(a){a.style.color='';a.style.borderBottomColor='transparent';});
+      if(cur&&map[cur]){map[cur].a.style.color='var(--gold)';map[cur].a.style.borderBottomColor='currentColor';}}
+    window.addEventListener('scroll',s,{passive:true});s();
+  })();
+</script>
+</body>
+</html>
