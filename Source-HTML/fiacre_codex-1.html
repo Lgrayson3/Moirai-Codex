@@ -57,7 +57,7 @@
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.4rem;}
   header.mast{text-align:center;padding:5.5rem 1.4rem 3rem;position:relative;}
   .eyebrow{font-family:"Marcellus",serif;font-size:.82rem;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);margin:0 0 1.6rem;text-indent:.42em;}
-  h1.title{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(2.7rem,8vw,5.1rem);line-height:.98;margin:0;letter-spacing:-.01em;color:var(--ink);font-variation-settings:"opsz" 144;}
+  h1.title{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(2.7rem,8vw,5.1rem);line-height:.98;margin:0;letter-spacing:-.01em;color:var(--ink);font-variation-settings:"opsz" 144;word-wrap:break-word;overflow-wrap:break-word;word-break:break-word;}
   h1.title .gilt{background:linear-gradient(95deg,var(--gold) 0%,var(--gold-bright) 45%,#EFD27A 60%,var(--gold) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;}
   .subtitle{font-family:"Spectral",serif;font-weight:300;font-style:italic;font-size:clamp(1.05rem,2.6vw,1.35rem);color:var(--ink-soft);margin:1.5rem auto 0;max-width:38ch;line-height:1.5;}
   .mast-mark{margin:2.4rem auto 0;width:min(420px,80%);}
@@ -123,7 +123,15 @@
   .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
   .reveal.in{opacity:1;transform:none;}
   @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;}.ribbon,.spectrum .top,.realm>.crown,h2 .uline,.mast-mark .bar,footer .bar{animation:none;}}
-  @media(max-width:540px){body{font-size:18px;}nav.codex-nav ul{gap:.15rem .7rem;}.realm-body,.realm-head{padding-left:1.1rem;padding-right:1.1rem;}}
+  @media(max-width:540px){
+    body{font-size:18px;}
+    nav.codex-nav ul{gap:.15rem .7rem;}
+    .realm-body,.realm-head{padding-left:1.1rem;padding-right:1.1rem;}
+    h1.title{font-size:clamp(2rem, 10vw, 3.2rem); word-wrap:break-word; overflow-wrap:break-word; word-break:break-word;}
+    header.mast{padding:3.5rem 1rem 2rem;}
+    .diadiv{margin:2rem 0;}
+    .realm{margin:1.5rem auto;}
+  }
 
   /* ============================================================
      COMPATIBILITY SHIMS — Accordions, ID Cards, list rows
@@ -167,12 +175,16 @@
   .fi { opacity: 0; transform: translateY(14px); transition: opacity 0.7s ease, transform 0.7s ease; }
   .fi.vis { opacity: 1; transform: translateY(0); }
 </style>
+
+
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Marcellus&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="ribbon" aria-hidden="true"></div>
+
 
 <canvas id="mote-canvas"></canvas>
 
@@ -706,6 +718,7 @@
   </div>
 
 </div>
+
 
 
 <script>

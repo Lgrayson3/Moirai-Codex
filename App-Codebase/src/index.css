@@ -319,6 +319,7 @@ body::after {
 .active-doc-info {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .active-doc-title {
@@ -326,6 +327,10 @@ body::after {
   font-size: 1.25rem;
   color: var(--accent);
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 280px;
 }
 
 .nav-tabs {
@@ -941,8 +946,24 @@ body.theme-dark .lore-render-container section {
     border-radius: 12px;
   }
 
+  .lore-render-container h1.title {
+    font-size: clamp(1.8rem, 9vw, 3rem) !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .lore-render-container header.mast {
+    padding: 3.5rem 1rem 2rem !important;
+  }
+
   .header-bar {
     padding: 0 1rem;
+  }
+
+  .active-doc-title {
+    font-size: 1rem !important;
+    max-width: 130px !important;
   }
 
   .nav-tabs {
