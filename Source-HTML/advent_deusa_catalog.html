@@ -4,86 +4,174 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Advent of Ultima — Deusa & Abilities Catalog</title>
+<style>exactly as it is. That is the system.
+    2. Replace the visible TEXT between tags with your content.
+    3. Duplicate a component block to add more of it.
+    4. To recolor a card or vignette, change ONE thing: its --accent.
+       e.g.  style="--accent:var(--pyrthera);--accent-pale:var(--pyrthera-pale)"
+       Available hues: zephyros, pyrthera, thalassor, ferridane,
+                       tenebralis, luxenfall, glacia.  Default = gold.
+    5. Update the <title>, the nav links, and the #ids to match sections.
+  Each component is labeled with an HTML comment. Delete what you don't need.
+  ════════════════════════════════════════════════════════════════════
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TITLE GOES HERE — Moirai Codex</title>
+
+
+
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap');
+  /* ===== THE TOKENS — change these, the whole document changes ===== */
+  :root{
+    --paper:#FBF7EE; --paper-2:#F6F0E2;
+    --ink:#2B2317; --ink-soft:#5A4E3A; --rule:#E4D8BE;
+    --gold:#9A7B1F; --gold-bright:#C9A227; --gold-pale:#E9DCB0; --gold-glow:rgba(201,162,39,.18);
+    --zephyros:#8AA63A; --zephyros-pale:#D8E3B0;
+    --pyrthera:#C7572B; --pyrthera-pale:#F0C39A;
+    --thalassor:#2E6FA3; --thalassor-pale:#A9CBE4;
+    --ferridane:#A66A2E; --ferridane-pale:#E0C394;
+    --tenebralis:#6A3D9A; --tenebralis-pale:#C8B0E2;
+    --luxenfall:#C9A227; --luxenfall-pale:#EBDCA6;
+    --glacia:#5C97B8; --glacia-pale:#BDDCE8;
+    --prism:linear-gradient(90deg,var(--tenebralis) 0%,var(--thalassor) 17%,var(--glacia) 30%,var(--zephyros) 45%,var(--luxenfall) 60%,var(--ferridane) 74%,var(--pyrthera) 100%);
+    --maxw:760px;
+  }
 
-:root {
-  --bg-primary: #0a0a0f;
-  --bg-card: #12121a;
-  --bg-card-hover: #1a1a26;
-  --bg-surface: #16161f;
-  --text-primary: #e8e6e1;
-  --text-secondary: #9a9890;
-  --text-tertiary: #5c5a55;
-  --border: rgba(255,255,255,0.06);
-  --border-hover: rgba(255,255,255,0.12);
-  --border-active: rgba(255,255,255,0.2);
-  --accent: #8b2d2d;
-  --accent-light: #c44040;
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body: 'Outfit', -apple-system, sans-serif;
-}
+  /* ===== THE SYSTEM — do not edit ===== */
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Spectral",Georgia,serif;font-weight:400;font-size:19px;line-height:1.72;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(120% 80% at 8% -5%,rgba(106,61,154,.05),transparent 45%),radial-gradient(120% 80% at 105% 110%,rgba(199,87,43,.05),transparent 45%),radial-gradient(140% 90% at 100% 0%,rgba(46,111,163,.04),transparent 40%),radial-gradient(100% 100% at 50% 40%,transparent 60%,rgba(43,35,23,.05));}
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");}
+  .ribbon{position:fixed;top:0;left:0;right:0;height:5px;z-index:60;background:var(--prism);background-size:200% 100%;animation:drift 22s linear infinite;}
+  @keyframes drift{0%{background-position:0 0;}100%{background-position:200% 0;}}
+  nav.codex-nav{position:sticky;top:5px;z-index:55;background:rgba(251,247,238,.86);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);}
+  nav.codex-nav ul{list-style:none;margin:0 auto;padding:.55rem .9rem;display:flex;flex-wrap:wrap;gap:.2rem .9rem;justify-content:center;max-width:1040px;}
+  nav.codex-nav a{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;padding:.15rem 0;border-bottom:1.5px solid transparent;transition:.25s;white-space:nowrap;}
+  nav.codex-nav a:hover{color:var(--gold);border-bottom-color:currentColor;}
+  main{position:relative;z-index:1;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.4rem;}
+  header.mast{text-align:center;padding:5.5rem 1.4rem 3rem;position:relative;}
+  .eyebrow{font-family:"Marcellus",serif;font-size:.82rem;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);margin:0 0 1.6rem;text-indent:.42em;}
+  h1.title{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(2.7rem,8vw,5.1rem);line-height:.98;margin:0;letter-spacing:-.01em;color:var(--ink);font-variation-settings:"opsz" 144;}
+  h1.title .gilt{background:linear-gradient(95deg,var(--gold) 0%,var(--gold-bright) 45%,#EFD27A 60%,var(--gold) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;}
+  .subtitle{font-family:"Spectral",serif;font-weight:300;font-style:italic;font-size:clamp(1.05rem,2.6vw,1.35rem);color:var(--ink-soft);margin:1.5rem auto 0;max-width:38ch;line-height:1.5;}
+  .mast-mark{margin:2.4rem auto 0;width:min(420px,80%);}
+  .mast-mark .bar{height:3px;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  .mast-epi{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.15rem,3vw,1.6rem);color:var(--gold);margin:2.6rem auto 0;max-width:32ch;line-height:1.4;}
+  .mast-epi span{display:block;color:var(--ink-soft);font-size:.7em;font-style:normal;font-family:"Spectral";letter-spacing:.05em;margin-top:.5rem;}
+  .diadiv{display:flex;align-items:center;justify-content:center;gap:1rem;margin:3.4rem 0;}
+  .diadiv .line{height:1px;flex:1;max-width:120px;background:linear-gradient(90deg,transparent,var(--gold-pale),var(--gold));}
+  .diadiv .line.r{background:linear-gradient(90deg,var(--gold),var(--gold-pale),transparent);}
+  .diadiv .gem{font-size:.9rem;color:var(--gold);letter-spacing:.4em;text-indent:.4em;}
+  section{padding:1.5rem 0;position:relative;}
+  .sec-eyebrow{font-family:"Marcellus",serif;font-size:.78rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin:0 0 .5rem;}
+  h2{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(1.9rem,5vw,2.9rem);line-height:1.05;margin:.2rem 0 1.2rem;color:var(--ink);letter-spacing:-.01em;font-variation-settings:"opsz" 80;}
+  h2 .uline{display:block;height:3px;width:108px;margin-top:.7rem;border-radius:2px;background:var(--prism);background-size:200% 100%;animation:drift 16s linear infinite;}
+  h3{font-family:"Fraunces",serif;font-weight:500;font-style:italic;font-size:clamp(1.25rem,3.4vw,1.6rem);margin:2.2rem 0 .6rem;color:var(--ink);font-variation-settings:"opsz" 40;}
+  h4{font-family:"Marcellus",serif;font-weight:400;font-size:1.02rem;letter-spacing:.04em;margin:1.6rem 0 .35rem;color:var(--gold);}
+  p{margin:0 0 1.15rem;}
+  p a{color:var(--gold);}
+  strong{font-weight:600;color:var(--ink);}
+  .lead{font-size:1.12rem;}
+  .lead::first-letter{font-family:"Fraunces",serif;font-weight:400;float:left;font-size:4.4rem;line-height:.72;padding:.32rem .55rem 0 0;color:var(--gold);font-variation-settings:"opsz" 144;}
+  .spectrum{margin:2rem auto;border:1px solid var(--rule);border-radius:14px;overflow:hidden;background:var(--paper-2);box-shadow:0 1px 0 #fff inset,0 14px 36px -28px rgba(43,35,23,.45);}
+  .spectrum .top{height:8px;background:var(--prism);background-size:180% 100%;animation:drift 20s linear infinite;}
+  .spectrum .rows{padding:.4rem .2rem;}
+  .spec-row{display:grid;grid-template-columns:14px 1fr;gap:.9rem;align-items:start;padding:.7rem 1.1rem;border-bottom:1px solid var(--rule);}
+  .spec-row:last-child{border-bottom:none;}
+  .spec-row .swatch{width:14px;height:14px;border-radius:50%;margin-top:.45rem;box-shadow:0 0 0 3px var(--paper-2),0 0 0 4px currentColor;}
+  .spec-row .nm{font-family:"Marcellus",serif;letter-spacing:.06em;font-size:1.05rem;}
+  .spec-row .nm small{display:block;font-family:"Spectral";font-style:italic;letter-spacing:0;color:var(--ink-soft);font-size:.86rem;margin-top:.15rem;font-weight:300;}
+  .realm{--accent:var(--gold);--accent-pale:var(--gold-pale);margin:3rem auto;border:1px solid var(--rule);border-radius:16px;background:linear-gradient(180deg,#fff,var(--paper));box-shadow:0 20px 50px -40px rgba(43,35,23,.6);overflow:hidden;position:relative;}
+  .realm > .crown{height:7px;background:linear-gradient(90deg,var(--accent),var(--accent-pale),var(--accent));}
+  .realm-head{padding:1.8rem 1.6rem 1.3rem;border-bottom:1px solid var(--rule);background:radial-gradient(120% 140% at 100% -20%,color-mix(in srgb,var(--accent) 9%,transparent),transparent 60%);}
+  .realm-head .kicker{font-family:"Marcellus",serif;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin:0 0 .4rem;display:flex;align-items:center;gap:.6rem;}
+  .realm-head .kicker .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);}
+  .realm-head h2{margin:.1rem 0 .55rem;font-size:clamp(2rem,6vw,3rem);}
+  .realm-head h2 .uline{display:none;}
+  .realm-meta{font-family:"Marcellus",serif;font-size:.8rem;letter-spacing:.05em;color:var(--ink-soft);display:flex;flex-wrap:wrap;gap:.4rem 1.3rem;margin-top:.5rem;}
+  .realm-meta b{color:var(--accent);font-weight:400;}
+  .realm-essence{font-style:italic;color:var(--ink-soft);font-weight:300;margin:.9rem 0 0;font-size:1.04rem;}
+  .realm-body{padding:.4rem 1.6rem 1.7rem;}
+  details.thread{border-bottom:1px solid var(--rule);}
+  details.thread:last-of-type{border-bottom:none;}
+  details.thread > summary{list-style:none;cursor:pointer;padding:1.15rem .2rem 1rem;display:flex;align-items:center;gap:.85rem;font-family:"Fraunces",serif;font-size:1.15rem;font-weight:500;color:var(--ink);}
+  details.thread > summary::-webkit-details-marker{display:none;}
+  details.thread > summary .ico{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--accent);color:var(--accent);display:grid;place-items:center;font-family:"Spectral";font-size:1rem;transition:.3s;background:color-mix(in srgb,var(--accent) 6%,transparent);}
+  details.thread[open] > summary .ico{transform:rotate(45deg);}
+  details.thread > summary .lbl small{display:block;font-family:"Marcellus";font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:400;margin-top:.15rem;}
+  .thread-body{padding:.1rem .3rem 1.5rem 0;}
+  @media(min-width:540px){.thread-body{padding-left:3.5rem;}}
+  .vignette{margin:1.5rem 0;padding:1.1rem 1.3rem;border-left:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 5%,var(--paper-2));border-radius:0 10px 10px 0;}
+  .vignette .tag{font-family:"Marcellus";font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin:0 0 .4rem;}
+  .vignette p{font-style:italic;font-weight:300;margin:0;color:var(--ink);font-size:1.02rem;line-height:1.6;}
+  .pull{margin:2.4rem auto;text-align:center;max-width:32ch;}
+  .pull q{font-family:"Fraunces",serif;font-style:italic;font-weight:300;quotes:none;font-size:clamp(1.3rem,3.6vw,1.8rem);line-height:1.34;color:var(--gold);display:block;}
+  .pull cite{display:block;font-style:normal;font-family:"Marcellus";font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin-top:1rem;}
+  .feature{margin:2.2rem 0;padding:1.4rem 1.5rem;border:1px solid var(--rule);border-radius:14px;background:linear-gradient(180deg,#fff,var(--paper));box-shadow:0 14px 40px -36px rgba(43,35,23,.5);}
+  .feature h3{margin-top:.2rem;}
+  footer{text-align:center;padding:4rem 1.4rem 5rem;margin-top:2rem;position:relative;z-index:1;}
+  footer .bar{height:3px;width:min(420px,80%);margin:0 auto 2.4rem;border-radius:2px;background:var(--prism);background-size:180% 100%;animation:drift 18s linear infinite;}
+  footer .candle{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(1.3rem,4vw,2rem);color:var(--gold);line-height:1.35;margin:0 auto;max-width:26ch;}
+  footer .ma{font-family:"Marcellus";font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-top:2.4rem;}
+  footer .ma small{display:block;letter-spacing:.05em;text-transform:none;font-family:"Spectral";font-style:italic;font-weight:300;margin-top:.5rem;color:var(--ink-soft);}
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;}.ribbon,.spectrum .top,.realm>.crown,h2 .uline,.mast-mark .bar,footer .bar{animation:none;}}
+  @media(max-width:540px){body{font-size:18px;}nav.codex-nav ul{gap:.15rem .7rem;}.realm-body,.realm-head{padding-left:1.1rem;padding-right:1.1rem;}}
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-body); line-height: 1.6; min-height: 100vh; }
-.page { max-width: 1100px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+  /* ============================================================
+     COMPATIBILITY SHIMS — Accordions, ID Cards, list rows
+     ============================================================ */
+  .acc-item { border: 1px solid var(--rule); margin-bottom: -1px; background: var(--paper-2); overflow: hidden; }
+  .acc-item:first-child { border-radius: 4px 4px 0 0; }
+  .acc-item:last-child { border-radius: 0 0 4px 4px; }
+  .acc-btn { width: 100%; background: none; border: none; padding: 1.15rem 1.4rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-display); font-size: 0.92rem; font-weight: 600; color: var(--gold); letter-spacing: 0.04em; text-align: left; transition: background 0.2s; }
+  .acc-btn:hover { background: var(--paper); }
+  .acc-btn .lead { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.2rem 0.8rem; }
+  .acc-btn .hint { font-family: "Spectral", serif; font-size: 0.85rem; font-weight: 400; color: var(--ink-soft); font-style: italic; }
+  .acc-btn .arr { width: 7px; height: 7px; border-right: 1.5px solid var(--gold); border-bottom: 1.5px solid var(--gold); transform: rotate(45deg); transition: transform 0.3s; flex-shrink: 0; margin-left: 1rem; }
+  .acc-item.open .acc-btn .arr { transform: rotate(-135deg); }
+  .acc-body { max-height: 0; overflow: hidden; transition: max-height 0.6s ease; }
+  .acc-inner { padding: 0 1.4rem 1.5rem; }
+  .acc-inner .atm { font-style: italic; font-size: 0.95rem; color: var(--ink-soft); margin-bottom: 0.9rem; padding-left: 0.85rem; border-left: 2px solid var(--gold-pale); }
+  .acc-inner p { font-size: 0.95rem; line-height: 1.78; color: var(--ink-soft); margin-bottom: 0.8rem; }
+  .acc-inner p:last-child { margin-bottom: 0; }
+  .acc-inner p strong { color: var(--ink); }
 
-header { text-align: center; margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
-header h1 { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 400; letter-spacing: 0.04em; }
-header h1 span { color: var(--accent-light); }
-header .subtitle { font-family: var(--font-display); font-size: 1.1rem; font-style: italic; color: var(--text-tertiary); font-weight: 400; letter-spacing: 0.06em; }
+  .id-card { background: var(--paper-2); border: 1px solid var(--rule); border-radius: 4px; padding: 2.2rem; position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(43,35,23,0.05); }
+  .id-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, var(--gold), var(--gold-bright), var(--gold)); }
+  .id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem 2rem; }
+  .id-item .lbl { font-family: var(--font-interface); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.25rem; }
+  .id-item .val { font-size: 0.97rem; color: var(--ink); line-height: 1.6; }
+  .id-item.wide { grid-column: 1 / -1; }
+  @media (max-width: 640px) { .id-grid { grid-template-columns: 1fr; } .id-card { padding: 1.4rem; } }
 
-.controls { display: flex; flex-direction: column; gap: 12px; margin-bottom: 1.5rem; }
-.search-wrap { position: relative; }
-.search-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; stroke: var(--text-tertiary); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.search-wrap input { width: 100%; padding: 10px 14px 10px 40px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-family: var(--font-body); font-size: 14px; outline: none; transition: border-color 0.2s; }
-.search-wrap input::placeholder { color: var(--text-tertiary); }
-.search-wrap input:focus { border-color: var(--border-active); }
+  .row, .trait, .rel { padding: 1.05rem 0; border-bottom: 1px solid var(--rule); }
+  .row:last-child, .trait:last-child, .rel:last-child { border-bottom: none; }
+  .row-name, .trait-name, .rel-name { font-family: var(--font-interface); font-size: 0.92rem; font-weight: 600; color: var(--gold); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.25rem; }
+  .row-name .gloss, .rel-name .role { font-family: "Spectral", serif; font-style: italic; font-weight: 400; font-size: 0.82rem; color: var(--ink-soft); margin-left: 0.45rem; text-transform: none; }
+  .row p, .trait p, .rel p { font-size: 0.95rem; line-height: 1.72; color: var(--ink-soft); margin: 0; }
 
-.tier-filters { display: flex; gap: 6px; flex-wrap: wrap; }
-.tbtn { background: transparent; border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-family: var(--font-body); font-size: 12px; font-weight: 400; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-.tbtn:hover { border-color: var(--border-hover); color: var(--text-primary); background: var(--bg-card); }
-.tbtn.active { background: var(--accent); border-color: var(--accent); color: #e8e6e1; }
+  .divider { display: flex; align-items: center; justify-content: center; gap: 0.8rem; margin: 3.4rem 0; opacity: 0.55; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold-pale), transparent); }
+  .divider span { width: 7px; height: 7px; background: var(--gold); transform: rotate(45deg); flex-shrink: 0; }
 
-.count { font-size: 13px; color: var(--text-tertiary); margin-bottom: 1rem; }
-
-.domain-section { margin-bottom: 2.5rem; }
-.domain-header { display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
-.domain-header:hover .domain-title { color: var(--text-primary); }
-.domain-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.domain-title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 500; color: var(--text-secondary); letter-spacing: 0.04em; transition: color 0.15s; }
-.domain-god { font-family: var(--font-display); font-size: 0.9rem; font-style: italic; color: var(--text-tertiary); }
-.domain-count { font-size: 12px; color: var(--text-tertiary); margin-left: auto; }
-.domain-chevron { color: var(--text-tertiary); font-size: 14px; transition: transform 0.2s; }
-.domain-section.collapsed .domain-chevron { transform: rotate(-90deg); }
-.domain-section.collapsed .grid { display: none; }
-
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
-
-.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
-.card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; opacity: 0; transition: opacity 0.2s; }
-.card:hover { background: var(--bg-card-hover); border-color: var(--border-hover); }
-.card:hover::before { opacity: 0.5; }
-.card.open { border-color: var(--border-active); background: var(--bg-card-hover); }
-.card.open::before { opacity: 1; }
-
-.card-top { display: flex; align-items: baseline; gap: 8px; }
-.aname { font-size: 14px; font-weight: 500; color: var(--text-primary); }
-.atier { font-size: 11px; padding: 1px 7px; border-radius: 4px; background: rgba(255,255,255,0.05); color: var(--text-tertiary); white-space: nowrap; }
-.awielder { font-family: var(--font-display); font-size: 12px; font-style: italic; color: var(--text-tertiary); margin-top: 2px; }
-.adesc { font-size: 13px; color: var(--text-secondary); margin-top: 10px; line-height: 1.6; font-weight: 300; display: none; }
-.card.open .adesc { display: block; }
-.adesc .tag { display: inline-block; font-size: 11px; color: var(--text-tertiary); margin-top: 6px; padding: 2px 8px; background: rgba(255,255,255,0.04); border-radius: 4px; letter-spacing: 0.04em; margin-right: 4px; }
-
-footer { text-align: center; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-tertiary); letter-spacing: 0.06em; font-weight: 300; }
-
-@media (max-width: 600px) {
-  .page { padding: 2rem 1rem 3rem; }
-  .grid { grid-template-columns: 1fr; }
-}
+  .footer { text-align: center; padding: 3.5rem 0 2.8rem; font-family: var(--font-display); font-size: 0.5rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ink-soft); }
+  .footer span { color: var(--gold); }
+  .fi { opacity: 0; transform: translateY(14px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fi.vis { opacity: 1; transform: translateY(0); }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Marcellus&display=swap" rel="stylesheet">
 </head>
 <body>
+<div class="ribbon" aria-hidden="true"></div>
 <div class="page">
   <header>
     <h1>Advent of <span>Ultima</span></h1>
@@ -100,260 +188,23 @@ footer { text-align: center; margin-top: 4rem; padding-top: 2rem; border-top: 1p
   <div id="out"></div>
   <footer>ADVENT OF ULTIMA &middot; MOIRAI CODEX &middot; DEUSA ARCHITECTURE</footer>
 </div>
+
 <script>
-const domainColors = {
-  "Fire — Hestia":"#c4453a",
-  "Water — Salacia":"#3a7bc8",
-  "Earth & Metal — Edgerinne / Brokkae":"#b8861b",
-  "Air & Wind — Iles":"#4a8a2a",
-  "Light — Luxania (Aether)":"#d4a840",
-  "Ice & Cold — Glacia":"#7a8fa0",
-  "Shadow — Erebus":"#6b5aad",
-  "Mind & Memory — Wizaer":"#2a8a6a",
-  "Love — Ishtar":"#b84a70",
-  "Truth & Law — Ma'at":"#c8a050",
-  "Death & Afterlife — Kaos / Thanatos":"#6a6860",
-  "Magic Itself — Dozu":"#8a5ab0",
-  "Time — Chronos":"#5080a0",
-  "Fate — The Moirai / Ananke":"#9a7ab0",
-  "Infernal — Hel / Raiwata":"#8a3a1a",
-  "Divine Functions — Tier Five":"#2a8a6a",
-  "Oinomantic Vintages — Cloud's Inventions":"#3a6090",
-  "Gestalt & Invented — Cross-Domain":"#888070"
-};
-
-const A = [
-  // FIRE
-  {n:"Ignis",w:"Uriel",t:"T3",dom:"Fire — Hestia",d:"Pure elemental pyrokinesis at massive capacity. Standard thermodynamic rules apply. More fire costs more myst. Replenishment through Solar Synthesis on Pyrthera, Sacred Braid off-world."},
-  {n:"Ifris I",w:"Uriel & Aya",t:"T4",dom:"Fire — Hestia",d:"Invented discipline. Fire-ice closed thermodynamic loop. Exothermic combustion feeds endothermic consumption feeds combustion. Self-sustaining after ignition. The flame is free; precision is expensive."},
-  {n:"Ifris II",w:"Uriel",t:"T4+",dom:"Fire — Hestia",d:"The original Ifris loop mutated by Hel. Instant combustion. The hunger of the abyss and the wrath of the Sea of Wrath folded into the circuit. Cost: ignition, and the strength to hold the leash."},
-  {n:"Violet Fire / Immolation",w:"Uriel",t:"T5",dom:"Fire — Hestia",d:"Everything burns. Stone, flesh, air. The Atrium of Steelheart reduced to smoking ruin by one man. Post-Hel infernal magic at zero ongoing myst cost — the cost was paid in full through suffering."},
-  {n:"Antaka",w:"Sol'Kheret, Fiacre (learned)",t:"T3+",dom:"Fire — Hestia",d:"The capacity to redirect a sun — to collapse the distance between a planet and its star. Six people in the universe hold this power. Nuclear deterrence. Fiacre learned it from Sol'Kheret."},
-  {n:"Solar Synthesis",w:"All Pyrtherans",t:"T1",dom:"Fire — Hestia",d:"Converts lethal solar radiation into vitality and myst. The metabolic foundation of Pyrtheran civilization. Off-world, Pyrtherans operate on rations, making the Sacred Braid nutritionally essential."},
-  {n:"The Sacred Braid",w:"All Pyrtherans",t:"T2",dom:"Fire — Hestia",d:"Fighting, dancing, lovemaking — three expressions of a single discipline. Not metaphor. Curriculum. Off-world, functions as essential myst replenishment pathway when Solar Synthesis is insufficient."},
-  {n:"The Golden Flame",w:"Sol'Kheret, Anberlyn (Yellow Flame)",t:"T3+",dom:"Fire — Hestia",d:"Burns ego, not flesh. The Trial of Flame burns away what is false in a person, leaving only what is true. Anberlyn's Yellow Flame is the same fire."},
-  {n:"Pyrokinesis (Pure Expression)",w:"Fire-domain Mystics",t:"T3",dom:"Fire — Hestia",d:"Unilateral creation and control of fire from nothing. The baseline fire-domain Deusa."},
-  {n:"Stellar Energy Manipulation",w:"Sol'Kheret, Torchbearers",t:"T3+",dom:"Fire — Hestia",d:"Touching the fire domain at a depth where stellar forces become accessible. The path that leads to Antaka."},
-  {n:"Heat Vision",w:"Various",t:"T3",dom:"Fire — Hestia",d:"Eye-channeled thermal projection. Narrow application of the fire domain."},
-  {n:"Smoke Manipulation",w:"Various",t:"T3",dom:"Fire — Hestia",d:"Combustion byproduct control. Narrow application."},
-  {n:"Ash-Sight",w:"Various",t:"T3",dom:"Fire — Hestia",d:"Derivative perception. Reading heat signatures as spiritual auras carrying the kafer."},
-
-  // WATER
-  {n:"Aestus (Water Mastery)",w:"Saint Cloud Sinclair",t:"T3",dom:"Water — Salacia",d:"Control over water in all forms, including within living bodies. Blood manipulation, mist creation, pressurized cutting. On the battlefield, conducted soldiers by manipulating their bloodflow."},
-  {n:"Aesta-Mitiga (Healing Manipulation)",w:"Saint Cloud Sinclair",t:"T3",dom:"Water — Salacia",d:"Myst redistribution through fluid medium. Accelerated regeneration or stripping opponents of their ability to heal."},
-  {n:"Clairmancy (Portal Control)",w:"Sinclair Dynasty",t:"T3",dom:"Water — Salacia",d:"Hereditary soul-Deusa. The ability to open and control the Clairgates. Revealed to be a stolen Luxanian power. Awakened by the Vintage of the Veil."},
-  {n:"Dancaelet Salacia",w:"Saint Cloud Sinclair",t:"T2",dom:"Water — Salacia",d:"Divine water-based martial art. Cloud fights with the fluidity of the ocean itself."},
-  {n:"Hydrokinesis (Pure Expression)",w:"Water-domain Mystics",t:"T3",dom:"Water — Salacia",d:"Unilateral creation and control of water. The baseline water-domain Deusa."},
-  {n:"Hydromancy",w:"Various Thalassorians",t:"T3",dom:"Water — Salacia",d:"Derivative perception. Experiencing memories held in deep waters. A fisherman who tastes poison in water from twenty yards."},
-
-  // OINOMANTIC VINTAGES
-  {n:"Oinomancy",w:"Saint Cloud Sinclair (invented)",t:"T4",dom:"Oinomantic Vintages — Cloud's Inventions",d:"Reverse-engineered the Concordant Path, combined with Aestus. The art of distilling experience, emotion, Deusa, and essence into wine. An entirely new category of power."},
-  {n:"Wine of Shared Dreams (Oinos Koines Oneiron)",w:"Cloud / Oinomancers",t:"T4",dom:"Oinomantic Vintages — Cloud's Inventions",d:"Hyper-realistic shared combat simulations. Zero physical risk. Produces the best-trained forces in the cosmos. Technology stolen from Ferridane via Dorado Casanova."},
-  {n:"Wine of Shared Horizons (Oinos Koines Horizontes)",w:"Cloud / Oinomancers",t:"T4",dom:"Oinomantic Vintages — Cloud's Inventions",d:"Synchronizes the consciousness of a strike force into a single tactical mind. The ultimate military advantage."},
-  {n:"Wine of Shared Fates (Oinos Koines Moiras)",w:"Cloud / Oinomancers",t:"T4",dom:"Oinomantic Vintages — Cloud's Inventions",d:"Liquid covenant. Break the agreement after drinking, and the Krenides inside you reverses into poison."},
-  {n:"Vintage of the Veil (Oinos Tes Kalypsos)",w:"Sinclair Dynasty",t:"T4",dom:"Oinomantic Vintages — Cloud's Inventions",d:"Brewed once per generation for the Sinclair heir. Contains the cumulative memory of every preceding Exvisar. Awakens Clairmancy. The Sinclair powder-white hair is the visible residue."},
-  {n:"The Concordant Path",w:"Sinclair Dynasty",t:"T4",dom:"Oinomantic Vintages — Cloud's Inventions",d:"The full memory inheritance of every Sinclair patriarch stored in sacramental wine. Cloud's carries only Titus's memories — not Juno's. The ancestral wisdom does not stop whispering."},
-  {n:"Haemoinos (Bloodwine)",w:"Thalassori nobility",t:"T4",dom:"Oinomantic Vintages — Cloud's Inventions",d:"Haima (blood) + oinos (wine). Fortified vintage brewed from Krenides water and soul-elixirs from Luxenfallen myst. To drink haemoinos is to taste a life. The complete corruption of Salacia's gift."},
-
-  // EARTH & METAL
-  {n:"Art of the True Name (Transfiguration)",w:"Ferridanian Namers, Crex",t:"T2-T4",dom:"Earth & Metal — Edgerinne / Brokkae",d:"Speak a True Name over a thing and the thing becomes the Name. Reality editing. The original sacred art; 'Transfiguration' is the Axipitre's secular renaming that drained the theology."},
-  {n:"True Name: Gold (Un De Octogina)",w:"Crex Falcon Axipitre",t:"T4",dom:"Earth & Metal — Edgerinne / Brokkae",d:"Atomic number 79. Most Namers peak at a coin. Crex transmutes a person every sixth round in combat as a counting mechanism. The distance between a coin and a person is the distance between a stone and a mountain."},
-  {n:"True Name: Iron",w:"Ferridanian Namers",t:"T2",dom:"Earth & Metal — Edgerinne / Brokkae",d:"Speak it over a stone. The stone is iron. Not iron-like. Iron. Molecular structure, weight, conductivity — all of it. Instantaneous."},
-  {n:"True Name: Static",w:"Ferridanian Namers",t:"T2",dom:"Earth & Metal — Edgerinne / Brokkae",d:"Speak it over Galvaneum. The life drains out. The counter to Living Steel."},
-  {n:"True Name: Hollow",w:"Ferridanian Namers",t:"T2",dom:"Earth & Metal — Edgerinne / Brokkae",d:"Severs a Mystic's connection to their power entirely. One of the most feared Names in the Realms."},
-  {n:"True Name: [CLASSIFIED] — Galvaneum Creation",w:"Classified",t:"T3+",dom:"Earth & Metal — Edgerinne / Brokkae",d:"Speak it over steel. The steel comes alive. It thinks, regenerates, reforms autonomously. How Living Steel is created. One of Ferridane's most guarded secrets."},
-  {n:"Art of the Vital Current (Transfusion)",w:"Ferridanian practitioners",t:"T2",dom:"Earth & Metal — Edgerinne / Brokkae",d:"Channeling essence between things. The art of tending sacred flow became the art of capturing and redirecting power. Stewardship became logistics. Endpoint: soul-batteries."},
-  {n:"Art of the Forged Self (Transcension)",w:"Ferridanian warriors",t:"T2",dom:"Earth & Metal — Edgerinne / Brokkae",d:"Integrating materials into living flesh. Soma-Weaving Galvaneum along skeletal system, musculature, and nervous system. The sacred art became self-optimization."},
-  {n:"The Heraldic Path",w:"Ferridanian warriors",t:"T2",dom:"Earth & Metal — Edgerinne / Brokkae",d:"Living metal woven into the body, tracing the musculature, catching light. Integration of clan sacred beast characteristics. Biological symbiosis with Galvaneum."},
-  {n:"Compressed Technology",w:"Axipitre engineers",t:"T4",dom:"Earth & Metal — Edgerinne / Brokkae",d:"Stores a full powered armor suit in a ring. Axipitre engineering marvel. 'And then they put on the ring.'"},
-  {n:"Synthetic Deusas",w:"Axipitre clans",t:"T4",dom:"Earth & Metal — Edgerinne / Brokkae",d:"Manufactured using Crystata. The cosmic lottery broken open, portable, consumable. A genuine theological crime: creating the sacred without the sacred. Tolerated in life, punished in Hel."},
-  {n:"True Name: Gun",w:"Crex Falcon Axipitre",t:"T4",dom:"Earth & Metal — Edgerinne / Brokkae",d:"The conceptual Deusa. Kinetic projection severing cause from effect. Air Ripper (soul-less, Crystata-powered) evolves to Ghost Punch (soul-restored, pure myst). A decision and a consequence with nothing in between."},
-  {n:"Geokinesis (Pure Expression)",w:"Earth-domain Mystics",t:"T3",dom:"Earth & Metal — Edgerinne / Brokkae",d:"Control over earth, rock, soil, and tectonic forces. The baseline earth-domain Deusa."},
-  {n:"Biological Transmutation",w:"Ferridanian bio-engineers",t:"T3",dom:"Earth & Metal — Edgerinne / Brokkae",d:"Altering cellular or biological structure of living beings. Combined with Axipitre engineering, this is how Synthetic Deusas and augmentations get manufactured."},
-  {n:"Bio-Tech Manipulation",w:"Axipitre engineers",t:"T3",dom:"Earth & Metal — Edgerinne / Brokkae",d:"Seamlessly fusing biological and technological components. The Axipitre clans' entire engineering tradition expressed as individual power."},
-
-  // AIR & WIND
-  {n:"Aero Manipulation / Ventus",w:"Zephyrosian Mystics",t:"T3",dom:"Air & Wind — Iles",d:"Unilateral control of wind and atmospheric pressure. The baseline air-domain Deusa in Zephyrian tradition."},
-  {n:"Bio-Weather Manipulation",w:"Stormcallers of Uronoia",t:"T3+",dom:"Air & Wind — Iles",d:"Directing weather phenomena through one's own biological energy. The Stormcallers mimic a fraction of a fraction of Xal-Uron's work."},
-  {n:"Harmonic Wind-Barrier Warding",w:"Fiacre Athena Chevalier",t:"T4",dom:"Air & Wind — Iles",d:"Densely layered wind-barriers that resound with healing. A soldier swings a sword and hits her aegis and the air forgives them for it. Harmonic tradition from the Crystal Isles."},
-  {n:"Fulguror",w:"Xal-Uron (divine lightning)",t:"T5",dom:"Air & Wind — Iles",d:"The golden lightning that enforces divine law against the gravest sins. Xal-Uron arranges Aeralithe's raw Aetheric energy into this form. The entire Stormcaller tradition is an echo of an echo of an echo."},
-  {n:"The Aether (network)",w:"Zephyros (civilization-wide)",t:"System",dom:"Air & Wind — Iles",d:"Radio-frequency model: innumerable simultaneous channels, mind as receiver. Works off-world. Knowledge gardens are live storage. Flowers are self-destructing encrypted dead drops. A two-way medium."},
-
-  // LIGHT
-  {n:"Crystaturgy (Hegemony)",w:"Crystalline Hegemony of Luxania",t:"T3",dom:"Light — Luxania (Aether)",d:"The art of giving form and permanence to light and emotion. Structured light channeled through precisely cut Crystata to create stable constructs: memory-records, light-bridges, defensive wards, hard-light tools."},
-  {n:"Lex Aeterna (Hegemony)",w:"Crystalline Hegemony",t:"T3",dom:"Light — Luxania (Aether)",d:"A deusa that encodes a law into a Crystata, creating a zone of empathic enforcement. The Eternal Law made literal."},
-  {n:"Pathos-Kinesis (Dynasties)",w:"Choral Dynasties of Luxania",t:"T3",dom:"Light — Luxania (Aether)",d:"The deusa of shaping and projecting emotions. The Dynasty art of resonant light. Rukii weaponizes his empathic sense — the same art inverted into a tool for a lone predator."},
-  {n:"Symphotheosis (Dynasties)",w:"Choral Dynasties",t:"T4",dom:"Light — Luxania (Aether)",d:"Divinization through Harmony. A ritual where multiple souls temporarily merge for transcendent creativity or problem-solving."},
-  {n:"Phonourgy (Dynasties)",w:"Choral Dynasties / Rukii",t:"T3",dom:"Light — Luxania (Aether)",d:"Sound-Working. The art of weaving light into emotion and sound. Rukii is the Silent Phonourge — the absolute rejection of what the Dynasties stood for."},
-  {n:"Viatoris Lumen (Navigators)",w:"Astral Navigators of Luxania",t:"T3",dom:"Light — Luxania (Aether)",d:"Traveler's Light. The foundational deusa that allows creation of leylines. The basis of inter-realm travel before the Clairgates."},
-  {n:"Aether-Blade (Navigators)",w:"Astral Navigators",t:"T3",dom:"Light — Luxania (Aether)",d:"A personal tool/weapon that performs a localized, short-range Viatoris Lumen cut."},
-  {n:"Mnemosyne's Embrace",w:"Luxanian archivists",t:"T3",dom:"Light — Luxania (Aether)",d:"A deusa allowing one to fully experience a memory stored in a Crystata. The basis of the Ancestral Archive."},
-  {n:"Light-Based Teleportation",w:"Fiacre Athena Chevalier",t:"T4",dom:"Light — Luxania (Aether)",d:"Navigator lineage expression. Authors her own pathways. Does not require Clairgates. Fiacre reclaims the Navigator legacy through her own expression."},
-  {n:"Healing (Light as Renewal)",w:"Fiacre Athena Chevalier",t:"T4",dom:"Light — Luxania (Aether)",d:"Through her own blood and tears. Dynasty resonance expression. Light as Renewal and Life — the fourth Luxanian expression, combining all three Luminacies."},
-
-  // ICE
-  {n:"Cryokinesis / The Endothermic Art",w:"Glacian Mystics",t:"T3",dom:"Ice & Cold — Glacia",d:"The entire destroyed Realm of Glacia's magical tradition. Surviving expressions appear in half-Glacian descendants scattered across the Realms."},
-  {n:"White Flame (Nihilation)",w:"Anberlyn Lethe Jexus",t:"T4",dom:"Ice & Cold — Glacia",d:"Burns myst, renders Mystics mortal. A Glacian Deusa expressing itself through fire's visual language. She has been doing Glacian magic in a Tenebrali accent her entire life — her mother's heritage."},
-
-  // SHADOW
-  {n:"The Shade (Divine Signal Dampening)",w:"Erebus (provided to Tenebralis)",t:"T5",dom:"Shadow — Erebus",d:"Makes Tenebralis invisible to other gods' surveillance. A divine function, not a mortal Deusa. The foundational condition that allows everything Vex builds."},
-
-  // MIND & MEMORY
-  {n:"The God-Eyes (Deusaex-Wizaer)",w:"Crex Falcon Axipitre",t:"T5",dom:"Mind & Memory — Wizaer",d:"Total knowledge absorption through eye contact. Deusaex-class power in a mortal body. Ripped from his skull by the Archangels. Restored post-Hel, distributed across two thousand clones."},
-  {n:"Oneironautica",w:"Arabella Swain",t:"T3",dom:"Mind & Memory — Wizaer",d:"Induce sleep, project into dreams, reshape inner worlds, alter emotional architecture. The primary Deusa of the Oneironauts of Tenebralis."},
-  {n:"Unselfing",w:"Arabella Swain",t:"T4",dom:"Mind & Memory — Wizaer",d:"Secret deusa. Psychological surgery where no one remembers her touch and no one can prove it happened. The epistemological ground beneath Cloud is gone and he does not know it."},
-  {n:"Oneiric Architecture",w:"Dorado Casanova (family deusa)",t:"T3",dom:"Mind & Memory — Wizaer",d:"Crafting bespoke shared pocket-realities. The Oneiron — the simulation space where reality dissolves into something more permissive. The Michelangelo to Cloud's Medici."},
-  {n:"Memory Erasure",w:"Tenebrali Curators",t:"T3",dom:"Mind & Memory — Wizaer",d:"Removing specific or total memories from a target's mind. The mechanism of forgetting as a personal power. Born with this in Tenebralis: recruited or disappeared."},
-  {n:"Emotion Erasure (Apathy)",w:"Various",t:"T3",dom:"Mind & Memory — Wizaer",d:"Complete suppression of emotions in oneself or others. Terrifying in any Realm. Weaponized in Tenebralis. Potentially therapeutic in Zephyros. Direction determines function."},
-  {n:"Formless Mind",w:"Various",t:"T3",dom:"Mind & Memory — Wizaer",d:"A mind that cannot be read, controlled, tracked, or defined by others. In Zephyros where the Aether carries truth, deeply unsettling. In Tenebralis, invaluable."},
-  {n:"Precognition",w:"Oracles of Zephyros, Algol",t:"T3-T5",dom:"Mind & Memory — Wizaer",d:"The soul interfaces with time rather than an element. Algol exists at a depth of this domain that exceeds the architecture used to classify all other beings."},
-  {n:"Encyclopedic Knowledge",w:"Various",t:"T3",dom:"Mind & Memory — Wizaer",d:"A vast internal database of factual information. Not learned — innate. The soul interfaces with recorded information as a medium."},
-  {n:"Intuitive Aptitude",w:"Various (esp. Axipitre)",t:"T3",dom:"Mind & Memory — Wizaer",d:"Instantly understanding how complex systems or mechanics work by observation. An Axipitre engineer born with this is worth their weight in Crystata."},
-  {n:"Efficacy Intuition",w:"Various",t:"T3",dom:"Mind & Memory — Wizaer",d:"Knowing exactly how effective any action, plan, or tool will be before attempting it. A battlefield commander's dream Deusa."},
-  {n:"Detail Detection",w:"Various",t:"T3",dom:"Mind & Memory — Wizaer",d:"Perceiving every microscopic, hidden, or out-of-place detail. Law enforcement, security, quality control, espionage."},
-  {n:"Chemical Intuition",w:"Various",t:"T3",dom:"Mind & Memory — Wizaer",d:"Innate understanding of molecular interaction and compound properties. Invaluable in alchemy, medicine, poison-craft, industrial chemistry."},
-  {n:"Mathematical Intuition",w:"Various",t:"T3",dom:"Mind & Memory — Wizaer",d:"Instantly solving complex equations and predicting outcomes via calculation. Strategic, architectural, engineering applications."},
-
-  // LOVE
-  {n:"Second Heart (Ishtar's Gift)",w:"Universal",t:"System",dom:"Love — Ishtar",d:"True love doubles one's personal magical capacity. Losing your Second Heart halves you. A Temple of Ishtar in every Realm. Ishtar's heart breaks when any heart breaks."},
-  {n:"Potential Realization",w:"Ishtar (divine function)",t:"T5",dom:"Love — Ishtar",d:"Instantly unlocking the absolute maximum capability of a being. Ishtar's Second Heart mechanic operates at this level: a Goddess granting potential realization to every soul that finds its match."},
-
-  // TRUTH
-  {n:"Ma'at's Seat (Occupied/Emptied)",w:"Vex Mavarra (usurped)",t:"System",dom:"Truth & Law — Ma'at",d:"Vex surgically removed absolute Truth from Ma'at's domain and replaced it with jurisdiction over subjective, fragmented Secrets. The Court of Masks operates from Ma'at's physical space on antithetical principles."},
-
-  // DEATH
-  {n:"Thanatonautica",w:"Tenebrali Aesthetes",t:"T3+",dom:"Death & Afterlife — Kaos / Thanatos",d:"Pushing at the boundaries of what Dozu permits regarding death and necromancy. The Aesthetes walk this line precisely."},
-
-  // MAGIC ITSELF
-  {n:"Meta Ability Creation",w:"Dozu (divine function)",t:"T5",dom:"Magic Itself — Dozu",d:"The power to invent, generate, and bestow new Deusas. Dozu assigns every fingerprint. He is watching mortals build power outside his permission and it is driving him mad."},
-
-  // TIME
-  {n:"Chronostitch",w:"Algol",t:"Beyond",dom:"Time — Chronos",d:"Stitches moments in time. After defeating Chronos, no longer bound by linearity. Time itself bends to her presence."},
-
-  // FATE / MOIRAI
-  {n:"Verba Absoluta (The Spoken Absolute)",w:"Algol",t:"Beyond",dom:"Fate — The Moirai / Ananke",d:"Her words restructure causal chains. She Names a thing and the universe agrees. Crex learned the mortal-scale version. For Algol, this is simply opening her mouth."},
-  {n:"Verba Ubique (The Everywhere Word)",w:"Algol",t:"Beyond",dom:"Fate — The Moirai / Ananke",d:"Her voice manifests anywhere, anytime, regardless of distance. Not projection — presence."},
-  {n:"Eidolon Marionette",w:"Algol",t:"Beyond",dom:"Fate — The Moirai / Ananke",d:"Reshapes reality so people act in alignment with their nature, believing they chose. Does not override free will. Makes any other path inconceivable."},
-  {n:"Tapestry Vision",w:"Algol",t:"Beyond",dom:"Fate — The Moirai / Ananke",d:"Perception of all threads simultaneously. Every living being visible as a thread or a flame. The weave of fate made visible."},
-  {n:"Imperium in Omnia",w:"Algol",t:"Beyond",dom:"Fate — The Moirai / Ananke",d:"Immunity to banishment, death, silence, dislocation, and reality collapse. Her presence is conceptual, not physical."},
-  {n:"Omnipresence",w:"Algol",t:"Beyond",dom:"Fate — The Moirai / Ananke",d:"Exists within the weave the way the Higgs field exists within space. Condenses upon a form at will. This costs her nothing."},
-  {n:"The Odachi",w:"Algol",t:"Beyond",dom:"Fate — The Moirai / Ananke",d:"A projected cut. One swing and everything in a line goes down. She does not need the sword. She enjoys it."},
-  {n:"The Book",w:"Algol",t:"Beyond",dom:"Fate — The Moirai / Ananke",d:"Her cognitive offload. Others who touch it experience all of reality unfiltered. It does not attack them. They simply are not her."},
-
-  // INFERNAL
-  {n:"Agony Mantle",w:"Ex-Nihila (Wrath)",t:"Infernal",dom:"Infernal — Hel / Raiwata",d:"Induce unbearable pain. Infernal manifestation of Wrath."},
-  {n:"Hellrain",w:"Ex-Nihila (Wrath)",t:"Infernal",dom:"Infernal — Hel / Raiwata",d:"Burning flakes of fire from the sky. Infernal manifestation of Wrath."},
-  {n:"Crown of Compulsion",w:"Ex-Nihila (Pride)",t:"Infernal",dom:"Infernal — Hel / Raiwata",d:"Enforce will, partial possession. Infernal manifestation of Pride."},
-  {n:"Perfect Counter",w:"Ex-Nihila (Pride)",t:"Infernal",dom:"Infernal — Hel / Raiwata",d:"Nullify attacks through sheer hubris. Infernal manifestation of Pride."},
-  {n:"Ravager's Embrace",w:"Ex-Nihila (Lust)",t:"Infernal",dom:"Infernal — Hel / Raiwata",d:"Bind through touch and pleasure. Infernal manifestation of Lust."},
-  {n:"Carnal Bloom",w:"Ex-Nihila (Lust)",t:"Infernal",dom:"Infernal — Hel / Raiwata",d:"Spawn infernal jungles of delirium. Infernal manifestation of Lust."},
-  {n:"Traitor's Bargain",w:"Ex-Nihila (Betrayal)",t:"Infernal",dom:"Infernal — Hel / Raiwata",d:"Redirect harm onto bound allies. Infernal manifestation of Betrayal."},
-  {n:"False Oath",w:"Ex-Nihila (Betrayal)",t:"Infernal",dom:"Infernal — Hel / Raiwata",d:"Drain myst secretly from pact followers. Infernal manifestation of Betrayal."},
-  {n:"Glutton's Maw",w:"Ex-Nihila (Greed)",t:"Infernal",dom:"Infernal — Hel / Raiwata",d:"Devour matter, magic, or life for power. Infernal manifestation of Greed."},
-  {n:"Thief's Chain",w:"Ex-Nihila (Greed)",t:"Infernal",dom:"Infernal — Hel / Raiwata",d:"Leech wealth or vitality from afar. Infernal manifestation of Greed."},
-  {n:"Veil of the Forsaken",w:"Ex-Nihila (Cowardice)",t:"Infernal",dom:"Infernal — Hel / Raiwata",d:"Invisibility in moments of threat. Infernal manifestation of Cowardice."},
-
-  // DIVINE FUNCTIONS
-  {n:"Cosmic Creation",w:"Tiamat (purpose-built)",t:"T5",dom:"Divine Functions — Tier Five",d:"Spawning galaxies, stars, nebulas, and celestial bodies. Tiamat was purpose-built for this exact function."},
-  {n:"Grand Design Construction",w:"Ma'at, Erebus",t:"T5",dom:"Divine Functions — Tier Five",d:"Shaping the overarching blueprint or destiny of the universe. Ma'at and Erebus designing Hel's punishments. The judicial architecture of consequence."},
-  {n:"Existential Plane Creation",w:"Divine-only",t:"T5",dom:"Divine Functions — Tier Five",d:"Establishing entirely new planes of existence. The creation of Hel, Dystan, and the afterlife architecture."},
-  {n:"Absolute Destruction / Erasure",w:"Divine-only",t:"T5",dom:"Divine Functions — Tier Five",d:"Complete removal from existence. The snap-to-oblivion power. No mortal body can survive channeling annihilation at this scale."},
-  {n:"Absolute Life Creation",w:"Divine-only",t:"T5",dom:"Divine Functions — Tier Five",d:"Generating life from nothingness. A primordial divine function."},
-  {n:"Concept Creation",w:"Divine-only",t:"T5",dom:"Divine Functions — Tier Five",d:"Inventing entirely new concepts or redefining fundamental rules of reality."},
-  {n:"Subjective Reality / Mentifery",w:"Divine-only",t:"T5",dom:"Divine Functions — Tier Five",d:"Making personal thoughts become objective reality. Thoughts become real. Divine-only."},
-  {n:"Omni-Telepathy / Perception / Detection",w:"Iles, Algol",t:"T5",dom:"Divine Functions — Tier Five",d:"At fullest simultaneous expression, only two beings operate here: Iles, whose nature is the medium; and Algol, whose nature and classification remain their own subject."},
-
-  // GESTALT / CROSS-DOMAIN
-  {n:"The Five Flames (Gestalt)",w:"Anberlyn Lethe Jexus",t:"T4-T5",dom:"Gestalt & Invented — Cross-Domain",d:"Orange (matter), Yellow (ego dissolution/Golden Flame), White (Nihilation/Glacian), Blue (passage/space — unaccessed), Black (annihilation — taught to Ayin). Glacian inheritance, infernal survival, Tenebrali accent."},
-  {n:"Dracoris Ultima",w:"Alciel Aquilon Karai",t:"T5",dom:"Gestalt & Invented — Cross-Domain",d:"Transformation into Gonlan forms acquired through communion with Aracice's children. Seven confirmed forms. Continental-scale genre shifts. The son gathering his father's scattered legacy into one being."},
-  {n:"The Multiplicity Protocol",w:"Crex Falcon Axipitre",t:"T4",dom:"Gestalt & Invented — Cross-Domain",d:"Synthetic Deusa. Two thousand active clones operating simultaneously. Each autonomous, sharing information. Installed at sixteen. A theological crime, an intelligence network, a workforce, a statement."},
-  {n:"Fiacre's Light Suite (Integrated)",w:"Fiacre Athena Chevalier",t:"T5+",dom:"Gestalt & Invented — Cross-Domain",d:"Navigator teleportation + Dynasty healing + harmonic wind-barrier warding + Antaka. Multiple expressions of light combined with foreign traditions. What identifies her as Avatar-tier."},
-  {n:"Magnivelocia",w:"Rukii",t:"T5",dom:"Gestalt & Invented — Cross-Domain",d:"The visual: a man who could dodge lightning, standing still. God of the Storm. Grounded heritage. The details of this ability remain to be fully excavated."},
-  {n:"The Hyper Complex (Baseline)",w:"All Mystics",t:"T1",dom:"Gestalt & Invented — Cross-Domain",d:"Every Mystic's birth package. Increased strength, durability, regeneration, lifespan, cognitive processing, reflexes. A Ferridanian legionnaire with nothing else is still superhuman by Terrae standards."},
-  {n:"Paint Manipulation (Eccentric)",w:"Various artisan Mystics",t:"T3",dom:"Gestalt & Invented — Cross-Domain",d:"Controlling pigment, bringing painted things to life. Domain intersection: water, light, earth. A paint Mystic in Tenebralis does commissions. In Zephyros, illustrates knowledge gardens. The Deusa is a trade."}
-];
-
-const domainOrder = Object.keys(domainColors);
-const allTiers = [...new Set(A.map(a=>a.t))].sort();
-let activeTier = "All";
-let openCard = null;
-let collapsedDomains = new Set();
-
-function render() {
-  const q = document.getElementById("q").value.toLowerCase();
-  let filtered = A.filter(a => {
-    if (activeTier !== "All" && a.t !== activeTier) return false;
-    if (q && !a.n.toLowerCase().includes(q) && !a.w.toLowerCase().includes(q) && !a.d.toLowerCase().includes(q) && !a.dom.toLowerCase().includes(q)) return false;
-    return true;
-  });
-  document.getElementById("count").textContent = filtered.length + " abilit" + (filtered.length !== 1 ? "ies" : "y") + " across " + new Set(filtered.map(a=>a.dom)).size + " domains";
-  const grouped = {};
-  filtered.forEach(a => { if (!grouped[a.dom]) grouped[a.dom] = []; grouped[a.dom].push(a); });
-  let h = "";
-  domainOrder.forEach(dom => {
-    if (!grouped[dom]) return;
-    const dc = domainColors[dom];
-    const collapsed = collapsedDomains.has(dom);
-    const parts = dom.split(" — ");
-    h += '<div class="domain-section' + (collapsed ? ' collapsed' : '') + '" data-dom="' + dom + '">';
-    h += '<div class="domain-header" data-dom="' + dom + '"><span class="domain-dot" style="background:' + dc + '"></span>';
-    h += '<span class="domain-title">' + parts[0] + '</span>';
-    if (parts[1]) h += '<span class="domain-god">' + parts[1] + '</span>';
-    h += '<span class="domain-count">' + grouped[dom].length + '</span>';
-    h += '<span class="domain-chevron">&#9662;</span></div>';
-    h += '<div class="grid">';
-    grouped[dom].forEach(a => {
-      const isOpen = openCard === a.n + a.w;
-      h += '<div class="card' + (isOpen ? ' open' : '') + '" data-key="' + (a.n + a.w).replace(/"/g,'&quot;') + '" style="--dc:' + dc + '">';
-      h += '<div style="position:absolute;top:0;left:0;width:3px;height:100%;background:' + dc + ';opacity:' + (isOpen ? '1' : '0') + ';transition:opacity .2s"></div>';
-      h += '<div class="card-top"><span class="aname">' + a.n + '</span><span class="atier">' + a.t + '</span></div>';
-      h += '<div class="awielder">' + a.w + '</div>';
-      h += '<div class="adesc">' + a.d + '</div>';
-      h += '</div>';
-    });
-    h += '</div></div>';
-  });
-  if (!filtered.length) h = '<div style="color:var(--text-tertiary);text-align:center;padding:3rem;font-family:var(--font-display);font-size:1.1rem;font-style:italic">No abilities found</div>';
-  document.getElementById("out").innerHTML = h;
-  bindEvents();
-}
-
-function bindEvents() {
-  document.querySelectorAll(".domain-header").forEach(dh => {
-    dh.addEventListener("click", () => {
-      const dom = dh.getAttribute("data-dom");
-      if (collapsedDomains.has(dom)) collapsedDomains.delete(dom); else collapsedDomains.add(dom);
-      render();
-    });
-  });
-  document.querySelectorAll(".card").forEach(card => {
-    const key = card.getAttribute("data-key");
-    card.addEventListener("click", e => { e.stopPropagation(); openCard = openCard === key ? null : key; render(); });
-    card.addEventListener("mouseenter", () => { const b = card.querySelector("div:first-child"); if (b && !card.classList.contains("open")) b.style.opacity = "0.5"; });
-    card.addEventListener("mouseleave", () => { const b = card.querySelector("div:first-child"); if (b && !card.classList.contains("open")) b.style.opacity = "0"; });
-  });
-}
-
-function initTiers() {
-  const tiers = ["All","T1","T2","T2-T4","T3","T3+","T3-T5","T4","T4+","T4-T5","T5","T5+","Beyond","Infernal","System"];
-  let h = "";
-  tiers.forEach(t => { h += '<button class="tbtn' + (t === "All" ? ' active' : '') + '" data-t="' + t + '">' + t + '</button>'; });
-  const el = document.getElementById("tiers");
-  el.innerHTML = h;
-  el.querySelectorAll(".tbtn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      activeTier = btn.getAttribute("data-t");
-      openCard = null;
-      el.querySelectorAll(".tbtn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      render();
-    });
-  });
-}
-
-document.getElementById("q").addEventListener("input", () => { openCard = null; render(); });
-initTiers();
-render();
+  (function(){
+    var els=document.querySelectorAll('.reveal, .fi, .rv');
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in'); e.classList.add('vis');});return;}
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in'); en.target.classList.add('vis'); io.unobserve(en.target);}});},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(e){io.observe(e);});
+  })();
+  (function(){
+    var links=[].slice.call(document.querySelectorAll('nav.codex-nav a')),map={};
+    links.forEach(function(a){var id=a.getAttribute('href').slice(1),t=document.getElementById(id);if(t)map[id]={a:a,t:t};});
+    function s(){var pos=window.scrollY+140,cur=null;for(var id in map){if(map[id].t.offsetTop<=pos)cur=id;}
+      links.forEach(function(a){a.style.color='';a.style.borderBottomColor='transparent';});
+      if(cur&&map[cur]){map[cur].a.style.color='var(--gold)';map[cur].a.style.borderBottomColor='currentColor';}}
+    window.addEventListener('scroll',s,{passive:true});s();
+  })();
 </script>
+
 </body>
 </html>

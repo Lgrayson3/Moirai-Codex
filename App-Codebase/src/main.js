@@ -135,7 +135,19 @@ function init() {
               <div class="ai-title">
                 <span class="gem">◆</span> AI Creative Assistant
               </div>
-              <button class="ai-close-btn" id="btn-close-ai">&times;</button>
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <button class="graph-control-btn" id="btn-ai-settings" style="padding: 0.15rem 0.35rem; font-size: 0.65rem;" title="API Settings">🔑 Settings</button>
+                <button class="ai-close-btn" id="btn-close-ai">&times;</button>
+              </div>
+            </div>
+            <!-- API Key Setup Modal -->
+            <div id="ai-settings-modal" style="display: none; padding: 1rem; background: var(--bg-card); border-bottom: 1px solid var(--border); font-size: 0.8rem; flex-direction: column; gap: 0.5rem;">
+              <div>To use the AI Assistant serverless, provide your Gemini API key (stored locally):</div>
+              <div style="display: flex; gap: 0.5rem;">
+                <input type="password" id="gemini-api-key-input" class="editor-input" style="padding: 0.3rem; font-size: 0.8rem;" placeholder="AI Studio Key...">
+                <button class="btn-primary" id="btn-save-api-key" style="width: auto; padding: 0.3rem 0.8rem; font-size: 0.75rem;">Save</button>
+              </div>
+              <div style="font-size: 0.7rem; color: var(--text-dim);">Get a key from <a href="https://aistudio.google.com/" target="_blank" style="color: var(--accent);">Google AI Studio</a>.</div>
             </div>
             <div class="ai-messages" id="ai-messages-container"></div>
             <div class="ai-input-area">
@@ -181,6 +193,10 @@ function cacheElements() {
   el.btnThemeToggle = document.getElementById('btn-theme-toggle');
   el.btnToggleAi = document.getElementById('btn-toggle-ai');
   el.btnCloseAi = document.getElementById('btn-close-ai');
+  el.btnAiSettings = document.getElementById('btn-ai-settings');
+  el.aiSettingsModal = document.getElementById('ai-settings-modal');
+  el.geminiApiKeyInput = document.getElementById('gemini-api-key-input');
+  el.btnSaveApiKey = document.getElementById('btn-save-api-key');
   el.graphCanvas = document.getElementById('graph-canvas');
   el.btnMenuToggle = document.getElementById('btn-menu-toggle');
   el.sidebar = document.querySelector('.sidebar');
@@ -255,6 +271,31 @@ function bindEvents() {
       el.sidebar.classList.remove('open');
     }
   });
+
+  // AI API settings listeners
+  if (el.btnAiSettings) {
+    // Populate input with existing key if saved
+    const savedKey = localStorage.getItem('gemini_api_key') || '';
+    el.geminiApiKeyInput.value = savedKey;
+
+    el.btnAiSettings.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isHidden = el.aiSettingsModal.style.display === 'none';
+      el.aiSettingsModal.style.display = isHidden ? 'flex' : 'none';
+    });
+
+    el.btnSaveApiKey.addEventListener('click', () => {
+      const newKey = el.geminiApiKeyInput.value.trim();
+      if (newKey) {
+        localStorage.setItem('gemini_api_key', newKey);
+        alert('Gemini API key saved locally!');
+      } else {
+        localStorage.removeItem('gemini_api_key');
+        alert('Gemini API key cleared.');
+      }
+      el.aiSettingsModal.style.display = 'none';
+    });
+  }
 }
 
 function toggleAiPanel() {
@@ -286,7 +327,16 @@ function switchTab(tabName) {
     renderActiveDocument();
   } else if (tabName === 'editor') {
     el.tabEditor.classList.add('active');
-    renderEditor();
+    if (state.isReadOnly) {
+      el.editorFormContainer.innerHTML = `
+        <div style="text-align: center; padding-top: 5rem; color: var(--text-secondary);">
+          <h2 style="font-family: var(--font-display); font-weight: normal; font-size: 1.5rem; margin-bottom: 1rem; color: var(--accent);">Local Editor Mode Only</h2>
+          <p style="max-width: 500px; margin: 0 auto; line-height: 1.6;">Editing and creating lore pages is only supported when running the app locally with the backend server. To run locally, run <code>npm start</code> in your terminal.</p>
+        </div>
+      `;
+    } else {
+      renderEditor();
+    }
   }
 }
 
@@ -296,15 +346,32 @@ async function fetchLoreFiles() {
     const res = await fetch('http://localhost:3000/api/lore');
     if (!res.ok) throw new Error('API server returned error');
     state.files = await res.json();
+    state.isReadOnly = false;
+    el.btnNewPage.style.display = 'block';
+    
     filterFiles();
     renderRealmFilters();
     initGraphData();
   } catch (err) {
-    el.fileListContainer.innerHTML = `
-      <div style="color: var(--pyrthera); padding: 1rem; font-size: 0.8rem; text-align: center;">
-        Failed to connect to local Express server at port 3000. Run <b>npm start</b> in App-Codebase.
-      </div>
-    `;
+    console.log('Local Express server not running. Falling back to static lore_db.json.');
+    try {
+      state.isReadOnly = true;
+      el.btnNewPage.style.display = 'none'; // Disable editing creation in static mode
+      
+      const res = await fetch('lore_db.json');
+      if (!res.ok) throw new Error('Failed to load lore database json');
+      state.files = await res.json();
+      
+      filterFiles();
+      renderRealmFilters();
+      initGraphData();
+    } catch (dbErr) {
+      el.fileListContainer.innerHTML = `
+        <div style="color: var(--pyrthera); padding: 1rem; font-size: 0.8rem; text-align: center;">
+          Failed to load lore archives: ${dbErr.message}
+        </div>
+      `;
+    }
   }
 }
 
@@ -392,9 +459,15 @@ async function loadDocument(filename) {
   `;
 
   try {
-    const res = await fetch(`http://localhost:3000/api/lore/${filename}`);
-    if (!res.ok) throw new Error('Failed to load file');
-    const data = await res.json();
+    let data;
+    if (!state.isReadOnly) {
+      const res = await fetch(`http://localhost:3000/api/lore/${filename}`);
+      if (!res.ok) throw new Error('Failed to load file');
+      data = await res.json();
+    } else {
+      data = state.files.find(f => f.id === filename);
+      if (!data) throw new Error('Document not found in static package');
+    }
     state.activeFileData = data;
 
     // Set doc titles
@@ -408,7 +481,7 @@ async function loadDocument(filename) {
     if (state.activeTab === 'codex') {
       renderActiveDocument();
     } else if (state.activeTab === 'editor') {
-      renderEditor();
+      switchTab('editor'); // Enforce read-only display update
     }
   } catch (err) {
     el.docViewerContent.innerHTML = `
@@ -1056,34 +1129,129 @@ async function sendAiMessage() {
   el.aiMessagesContainer.scrollTop = el.aiMessagesContainer.scrollHeight;
 
   try {
-    const res = await fetch('http://localhost:3000/api/ai/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        messages: state.aiMessages.slice(-8), // Send last 8 turns of context
-        currentDocContext: state.activeFileData
-      })
-    });
+    let replyText = '';
+    if (!state.isReadOnly) {
+      const res = await fetch('http://localhost:3000/api/ai/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          messages: state.aiMessages.slice(-8), // Send last 8 turns of context
+          currentDocContext: state.activeFileData
+        })
+      });
 
-    // Remove loading bubble
-    const loader = document.getElementById(loaderId);
-    if (loader) loader.remove();
+      // Remove loading bubble
+      const loader = document.getElementById(loaderId);
+      if (loader) loader.remove();
 
-    if (!res.ok) {
-      const errData = await res.json();
-      throw new Error(errData.error || 'Server error');
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || 'Server error');
+      }
+
+      const data = await res.json();
+      replyText = data.reply;
+    } else {
+      // Direct browser-to-Gemini API call (Serverless Fallback)
+      const apiKey = localStorage.getItem('gemini_api_key') || '';
+      if (!apiKey) {
+        throw new Error('Please set your Gemini API key in the settings panel (🔑 Settings button in the AI panel header) to use the assistant on GitHub Pages.');
+      }
+      
+      // Perform local client-side RAG selection
+      const db = state.files;
+      let contextItems = [];
+      const keywords = query.toLowerCase().split(/\s+/).filter(w => w.length > 3);
+      
+      db.forEach(item => {
+        let score = 0;
+        keywords.forEach(kw => {
+          if (item.title.toLowerCase().includes(kw)) score += 10;
+          if (item.mentions) {
+            item.mentions.forEach(m => {
+              if (m.name.toLowerCase().includes(kw)) score += 5;
+            });
+          }
+        });
+        if (score > 0) {
+          contextItems.push({ id: item.id, title: item.title, score, rawHtml: item.rawHtml });
+        }
+      });
+
+      contextItems.sort((a, b) => b.score - a.score);
+      const topContextDocs = contextItems.slice(0, 3);
+
+      let contextText = '';
+      topContextDocs.forEach(doc => {
+        contextText += `--- LORE SOURCE: ${doc.title} (${doc.id}) ---\n${stripHtml(doc.rawHtml).substring(0, 2000)}\n\n`;
+      });
+
+      if (state.activeFileData && state.activeFileData.rawHtml) {
+        contextText += `--- CURRENT DOCUMENT: ${state.activeFileData.title} (${state.activeFileData.id}) ---\n${stripHtml(state.activeFileData.rawHtml).substring(0, 3000)}\n\n`;
+      }
+
+      // Format for Gemini API (contents parameter)
+      // Note: We only send the message text in the prompt context
+      const geminiContents = state.aiMessages.slice(-8).map(msg => {
+        return {
+          role: msg.role === 'user' ? 'user' : 'model',
+          parts: [{ text: msg.content }]
+        };
+      });
+
+      const systemPrompt = `You are the Moirai Codex Creative AI Assistant. 
+You are an expert on the user's creative writing series "Advent of Ultima", which involves themes of mythology, gods, dragons, and multi-realm exploration (Zephyros, Pyrthera, Thalassor, Ferridane, Tenebralis, Luxania, Glacia).
+Use the following local lore context to answer user questions, brainstorm new plotlines, connect characters, write text matching the tone, and offer creative advice. 
+If the user asks to write a new character description, lore beat, or realm details, format it in a way that matches the "Gold on White" or "Obsidian/Ember" aesthetic.
+
+--- LOCAL LORE CONTEXT ---
+${contextText || 'No specific lore files matched the current query keywords. Answer using overall series knowledge.'}
+------------------------`;
+
+      const requestBody = {
+        contents: geminiContents,
+        systemInstruction: {
+          parts: [{ text: systemPrompt }]
+        },
+        generationConfig: {
+          temperature: 0.7,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 2048,
+        }
+      };
+
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody)
+      });
+
+      // Remove loading bubble
+      const loader = document.getElementById(loaderId);
+      if (loader) loader.remove();
+
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(`Gemini API Error (${response.status}): ${errText}`);
+      }
+
+      const data = await response.json();
+      replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response generated.';
     }
 
-    const data = await res.json();
-    state.aiMessages.push({ role: 'assistant', content: data.reply });
+    state.aiMessages.push({ role: 'assistant', content: replyText });
   } catch (err) {
     const loader = document.getElementById(loaderId);
     if (loader) loader.remove();
     state.aiMessages.push({ 
       role: 'assistant', 
-      content: `❌ Connect failed: ${err.message}. Make sure your Gemini API key is set in .env as GEMINI_API_KEY=xxx inside your App-Codebase directory.` 
+      content: `❌ Request failed: ${err.message}` 
     });
   } finally {
     state.isAiLoading = false;

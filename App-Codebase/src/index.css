@@ -962,3 +962,85 @@ body.theme-dark .lore-render-container section {
     padding: 0.3rem 0.6rem;
   }
 }
+
+/* ============================================================
+   COMPATIBILITY SHIMS — Accordions, ID Cards, list rows, dividers
+   ============================================================ */
+.acc-item { 
+  border: 1px solid var(--border); 
+  margin-bottom: -1px; 
+  background: var(--bg-card); 
+  overflow: hidden; 
+}
+.acc-item:first-child { border-radius: 4px 4px 0 0; }
+.acc-item:last-child { border-radius: 0 0 4px 4px; }
+.acc-btn { 
+  width: 100%; 
+  background: none; 
+  border: none; 
+  padding: 1.15rem 1.4rem; 
+  cursor: pointer; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  font-family: var(--font-display); 
+  font-size: 0.92rem; 
+  font-weight: 600; 
+  color: var(--accent); 
+  letter-spacing: 0.04em; 
+  text-align: left; 
+  transition: background 0.2s; 
+}
+.acc-btn:hover { background: var(--bg-app); }
+.acc-btn .lead { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.2rem 0.8rem; }
+.acc-btn .hint { font-family: var(--font-body); font-size: 0.85rem; font-weight: 400; color: var(--text-secondary); font-style: italic; }
+.acc-btn .arr { 
+  width: 7px; 
+  height: 7px; 
+  border-right: 1.5px solid var(--accent); 
+  border-bottom: 1.5px solid var(--accent); 
+  transform: rotate(45deg); 
+  transition: transform 0.3s; 
+  flex-shrink: 0; 
+  margin-left: 1rem; 
+}
+.acc-item.open .acc-btn .arr, .acc-item.active .acc-btn .arr { transform: rotate(-135deg); }
+.acc-body, .acc-bd { max-height: 0; overflow: hidden; transition: max-height 0.6s ease; }
+.acc-inner { padding: 1.5rem; }
+.acc-inner .atm { font-style: italic; font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 0.9rem; padding-left: 0.85rem; border-left: 2px solid var(--accent-pale); }
+.acc-inner p { font-size: 0.95rem; line-height: 1.78; color: var(--text-secondary); margin-bottom: 0.8rem; }
+.acc-inner p:last-child { margin-bottom: 0; }
+.acc-inner p strong { color: var(--text-primary); }
+
+.id-card { 
+  background: var(--bg-card); 
+  border: 1px solid var(--border); 
+  border-radius: 4px; 
+  padding: 2.2rem; 
+  position: relative; 
+  overflow: hidden; 
+  box-shadow: 0 4px 20px rgba(43,35,23,0.05); 
+}
+.id-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, var(--accent), var(--accent-bright), var(--accent)); }
+.id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem 2rem; }
+.id-item, .id-label, .id-val { padding: 0.5rem 0; border-bottom: 1px solid rgba(154, 123, 31, 0.08); }
+.id-item .lbl, .id-label { font-family: var(--font-interface); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.25rem; }
+.id-item .val, .id-val { font-size: 0.97rem; color: var(--text-primary); line-height: 1.6; }
+.id-item.wide, .id-item.fw { grid-column: 1 / -1; }
+@media (max-width: 640px) { .id-grid { grid-template-columns: 1fr; } .id-card { padding: 1.4rem; } }
+
+.row, .trait, .rel { padding: 1.05rem 0; border-bottom: 1px solid var(--border); }
+.row:last-child, .trait:last-child, .rel:last-child { border-bottom: none; }
+.row-name, .trait-name, .rel-name { font-family: var(--font-interface); font-size: 0.92rem; font-weight: 600; color: var(--accent); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.25rem; }
+.row-name .gloss, .rel-name .role { font-family: var(--font-body); font-style: italic; font-weight: 400; font-size: 0.82rem; color: var(--text-secondary); margin-left: 0.45rem; text-transform: none; }
+.row p, .trait p, .rel p { font-size: 0.95rem; line-height: 1.72; color: var(--text-secondary); margin: 0; }
+
+.divider, .dd { display: flex; align-items: center; justify-content: center; gap: 0.8rem; margin: 3.4rem 0; opacity: 0.55; }
+.divider::before, .divider::after, .dd::before, .dd::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--accent-pale), transparent); }
+.divider span, .dd i { width: 7px; height: 7px; background: var(--accent); transform: rotate(45deg); flex-shrink: 0; }
+
+.footer, .foot { text-align: center; padding: 3.5rem 0 2.8rem; font-family: var(--font-display); font-size: 0.5rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-secondary); }
+.footer span, .foot span { color: var(--accent); }
+.fi { opacity: 0; transform: translateY(14px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.fi.vis { opacity: 1; transform: translateY(0); }
+
